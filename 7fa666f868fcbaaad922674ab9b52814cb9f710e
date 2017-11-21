@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a068aa5b_b404cd60",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/config/SwaggerConfiguration.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2017-11-21T20:29:13Z",
+      "side": 1,
+      "message": "One last occurrence - please change to acumos.org/...",
+      "revId": "7fa666f868fcbaaad922674ab9b52814cb9f710e",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
