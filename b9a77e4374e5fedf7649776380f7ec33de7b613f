@@ -1,0 +1,180 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2b0845f4_4904085d",
+        "filename": "cmn-data-svc-client/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2017-11-21T20:09:08Z",
+      "side": 1,
+      "message": "Please change this to http://to-be-determined.org:8081",
+      "revId": "b9a77e4374e5fedf7649776380f7ec33de7b613f",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "183cb355_8e20ce57",
+        "filename": "cmn-data-svc-client/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2017-11-21T20:09:08Z",
+      "side": 1,
+      "message": "Please change this to repository/repo_snapshot_to_be_determined",
+      "range": {
+        "startLine": 14,
+        "startChar": 1,
+        "endLine": 14,
+        "endChar": 2
+      },
+      "revId": "b9a77e4374e5fedf7649776380f7ec33de7b613f",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c6f99fad_beb4dbd4",
+        "filename": "cmn-data-svc-client/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2017-11-21T20:09:08Z",
+      "side": 1,
+      "message": "Please change this to repository/repo_to_be_determined",
+      "revId": "b9a77e4374e5fedf7649776380f7ec33de7b613f",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fc0ed756_734bac92",
+        "filename": "cmn-data-svc-client/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2017-11-21T20:09:08Z",
+      "side": 1,
+      "message": "Please change to acumos-snapshots",
+      "revId": "b9a77e4374e5fedf7649776380f7ec33de7b613f",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bad9bee9_ada78def",
+        "filename": "cmn-data-svc-client/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2017-11-21T20:09:08Z",
+      "side": 1,
+      "message": "Please change to acumos-snapshots",
+      "revId": "b9a77e4374e5fedf7649776380f7ec33de7b613f",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "02e5c07e_6abdb296",
+        "filename": "cmn-data-svc-server/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2017-11-21T20:09:08Z",
+      "side": 1,
+      "message": "Please change this to http://to-be-determined:8081",
+      "revId": "b9a77e4374e5fedf7649776380f7ec33de7b613f",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "026623f9_bd882b1b",
+        "filename": "cmn-data-svc-server/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2017-11-21T20:09:08Z",
+      "side": 1,
+      "message": "Please change to repository/repo_snapshot_to_be_determined",
+      "revId": "b9a77e4374e5fedf7649776380f7ec33de7b613f",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e4e512d3_20964a0a",
+        "filename": "cmn-data-svc-server/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2017-11-21T20:09:08Z",
+      "side": 1,
+      "message": "Please change to repository/repo_to_be_determined",
+      "revId": "b9a77e4374e5fedf7649776380f7ec33de7b613f",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "48d046ff_6e122728",
+        "filename": "docs/client.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2017-11-21T20:09:08Z",
+      "side": 1,
+      "message": "Please change to http://to-be-determined.org:8081/..",
+      "revId": "b9a77e4374e5fedf7649776380f7ec33de7b613f",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "21a77aed_751aff8d",
+        "filename": "docs/client.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2017-11-21T20:09:08Z",
+      "side": 1,
+      "message": "Please change to http://to-be-determined.org:8081/..",
+      "revId": "b9a77e4374e5fedf7649776380f7ec33de7b613f",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
