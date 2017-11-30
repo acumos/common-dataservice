@@ -45,6 +45,7 @@ import org.acumos.cds.domain.MLPTag;
 import org.acumos.cds.domain.MLPUser;
 import org.acumos.cds.domain.MLPUserLoginProvider;
 import org.acumos.cds.domain.MLPValidationSequence;
+import org.acumos.cds.query.SearchCriteria;
 import org.acumos.cds.transport.RestPageRequest;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -141,7 +142,7 @@ public class ClientMethodTest {
 			logger.info("Client failed as expected: {}", ex.toString());
 		}
 		try {
-			client.searchSolutions(new HashMap<String, Object>(), true);
+			client.searchSolutions(new SearchCriteria("a:b"), new RestPageRequest());
 		} catch (ResourceAccessException ex) {
 			logger.info("Client failed as expected: {}", ex.toString());
 		}
@@ -553,6 +554,11 @@ public class ClientMethodTest {
 		}
 		try {
 			client.createSolutionRating(new MLPSolutionRating());
+		} catch (ResourceAccessException ex) {
+			logger.info("Client failed as expected: {}", ex.toString());
+		}
+		try {
+			client.getSolutionRating("solutionId", "userId");
 		} catch (ResourceAccessException ex) {
 			logger.info("Client failed as expected: {}", ex.toString());
 		}

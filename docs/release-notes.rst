@@ -5,6 +5,12 @@ Release Notes
 The server and client are released together.  The server is deployed within a Docker image
 in the Docker registry.  The client is deployed as a jar file to a Maven Nexus repository.
 
+Version 1.9.1, 30 November 2017
+-------------------------------
+
+* Add method to get rating by key fields solution ID and user ID
+* Revise searchSolutions method to accept complex query criteria
+
 Version 1.9.0, 16 November 2017
 -------------------------------
 
