@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.acumos.cds.transport.CommentTransport;
 import org.acumos.cds.transport.CountTransport;
 import org.acumos.cds.transport.ErrorTransport;
 import org.acumos.cds.transport.LoginTransport;
@@ -50,6 +51,26 @@ public class TransportTest extends AbstractModelTest {
 		t = new CountTransport(l1);
 		t.setCount(l1);
 		Assert.assertEquals(l1, t.getCount());
+		logger.info(t.toString());
+	}
+
+	@Test
+	public void testCommentTransport() {
+		CommentTransport t = new CommentTransport();
+		t = new CommentTransport();
+		t.setCommentId(s1);
+		List<CommentTransport> l = new ArrayList<CommentTransport>();
+		t.setReplies(l);
+		t.setText(s2);
+		t.setThreadId(s3);
+		t.setUrl(s4);
+		t.setUserId(s5);
+		Assert.assertEquals(s1, t.getCommentId());
+		Assert.assertEquals(s2, t.getText());
+		Assert.assertEquals(s3, t.getThreadId());
+		Assert.assertEquals(s4, t.getUrl());
+		Assert.assertEquals(s5, t.getUserId());
+		Assert.assertEquals(l, t.getReplies());
 		logger.info(t.toString());
 	}
 
