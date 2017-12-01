@@ -25,12 +25,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.acumos.cds.transport.CommentTransport;
 import org.acumos.cds.transport.CountTransport;
 import org.acumos.cds.transport.ErrorTransport;
 import org.acumos.cds.transport.LoginTransport;
 import org.acumos.cds.transport.RestPageRequest;
 import org.acumos.cds.transport.RestPageResponse;
 import org.acumos.cds.transport.SuccessTransport;
+import org.acumos.cds.transport.ThreadCommentsTransport;
 import org.acumos.cds.transport.UsersRoleRequest;
 import org.junit.Assert;
 import org.junit.Test;
@@ -50,6 +52,26 @@ public class TransportTest extends AbstractModelTest {
 		t = new CountTransport(l1);
 		t.setCount(l1);
 		Assert.assertEquals(l1, t.getCount());
+		logger.info(t.toString());
+	}
+
+	@Test
+	public void testCommentTransport() {
+		CommentTransport t = new CommentTransport();
+		t = new CommentTransport();
+		t.setCommentId(s1);
+		List<CommentTransport> l = new ArrayList<CommentTransport>();
+		t.setReplies(l);
+		t.setText(s2);
+		t.setThreadId(s3);
+		t.setUrl(s4);
+		t.setUserId(s5);
+		Assert.assertEquals(s1, t.getCommentId());
+		Assert.assertEquals(s2, t.getText());
+		Assert.assertEquals(s3, t.getThreadId());
+		Assert.assertEquals(s4, t.getUrl());
+		Assert.assertEquals(s5, t.getUserId());
+		Assert.assertEquals(l, t.getReplies());
 		logger.info(t.toString());
 	}
 
@@ -149,6 +171,22 @@ public class TransportTest extends AbstractModelTest {
 		Assert.assertEquals(false, t.isAdd());
 		Assert.assertEquals(s1, t.getRoleId());
 		Assert.assertEquals(l, t.getUserIds());
+		logger.info(t.toString());
+	}
+
+	@Test
+	public void testThreadComments() {
+		ThreadCommentsTransport t = new ThreadCommentsTransport();
+		List<CommentTransport> l = new ArrayList<>();
+		t = new ThreadCommentsTransport(1L, "title", "url");
+		t.setComments(l);
+		t.setCount(l1);
+		t.setTitle(s1);
+		t.setUrl(s2);
+		Assert.assertEquals(l, t.getComments());
+		Assert.assertEquals(l1, t.getCount());
+		Assert.assertEquals(s1, t.getTitle());
+		Assert.assertEquals(s2, t.getUrl());
 		logger.info(t.toString());
 	}
 
