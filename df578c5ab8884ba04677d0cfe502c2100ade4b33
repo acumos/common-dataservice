@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "48f124bf_8352c00c",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/query/SearchOperation.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2017-12-01T18:59:50Z",
+      "side": 1,
+      "message": "Search operation \"Not In\" not supported?",
+      "revId": "df578c5ab8884ba04677d0cfe502c2100ade4b33",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
