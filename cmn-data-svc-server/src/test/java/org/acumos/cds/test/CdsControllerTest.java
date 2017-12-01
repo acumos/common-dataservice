@@ -534,7 +534,7 @@ public class CdsControllerTest {
 			List<String> codeList = new ArrayList<>();
 			codeList.add(AccessTypeCode.PB.name());
 			codeList.add(AccessTypeCode.PR.name());
-			// Cover query parser
+			// Cover query parser as much as possible
 			SearchCriteria criteria = new SearchCriteria(
 					new SearchCriterion("accessTypeCode", SearchOperation.EQUALS, AccessTypeCode.PB.name()))
 							.or(new SearchCriterion("accessTypeCode", SearchOperation.NOT_EQUALS, "Y"))
@@ -543,7 +543,8 @@ public class CdsControllerTest {
 							.or(new SearchCriterion("accessTypeCode", SearchOperation.IN, codeList))
 							.or(new SearchCriterion("accessTypeCode", SearchOperation.LIKE, "X"))
 							.or(new SearchCriterion("accessTypeCode", SearchOperation.LTE, "X"))
-							.or(new SearchCriterion("accessTypeCode", SearchOperation.GTE, "X"));
+							.or(new SearchCriterion("accessTypeCode", SearchOperation.GTE, "X"))
+							.or(new SearchCriterion("created", SearchOperation.EQUALS, new Date()));
 			RestPageResponse<MLPSolution> sols = client.searchSolutions(criteria, new RestPageRequest(0, 1));
 			Assert.assertTrue(sols != null && sols.getSize() > 0);
 			logger.info("Active PB solution count {}", sols.getSize());
@@ -969,6 +970,15 @@ public class CdsControllerTest {
 		client.deleteUser(cu.getUserId());
 	}
 
+	@Test
+	public void testCommentsThreads() throws Exception {
+		MLPUser cu = new MLPUser("commentUser", true);
+		cu = client.createUser(cu);
+		Assert.assertNotNull(cu.getUserId());
+
+		client.deleteUser(cu.getUserId());
+	}
+	
 	@Test
 	public void testErrorConditions() throws Exception {
 
