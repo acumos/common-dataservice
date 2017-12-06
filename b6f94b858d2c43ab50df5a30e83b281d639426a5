@@ -87,6 +87,24 @@
     },
     {
       "key": {
+        "uuid": "d29711de_b19eb7ee",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPComment.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2017-12-06T16:28:39Z",
+      "side": 1,
+      "message": "TEXT is a very different thing, and affects database portability, so I\u0027m avoiding for now.",
+      "parentUuid": "3d262bcb_453ff7bd",
+      "revId": "b6f94b858d2c43ab50df5a30e83b281d639426a5",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3cf921e5_d3a55e76",
         "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPComment.java",
         "patchSetId": 7
@@ -98,6 +116,24 @@
       "writtenOn": "2017-12-06T16:17:41Z",
       "side": 1,
       "message": "This should be a non null field, right?",
+      "revId": "b6f94b858d2c43ab50df5a30e83b281d639426a5",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9e654696_5c18b5ab",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPComment.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2017-12-06T16:28:39Z",
+      "side": 1,
+      "message": "They specified it as optional originally, so I stuck with that.",
+      "parentUuid": "3cf921e5_d3a55e76",
       "revId": "b6f94b858d2c43ab50df5a30e83b281d639426a5",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
