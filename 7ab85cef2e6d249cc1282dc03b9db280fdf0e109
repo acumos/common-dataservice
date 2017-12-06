@@ -16,6 +16,40 @@
       "revId": "7ab85cef2e6d249cc1282dc03b9db280fdf0e109",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d9872909_1552774f",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPComment.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2017-12-06T16:26:45Z",
+      "side": 1,
+      "message": "May be change the data type to TEXT?",
+      "revId": "7ab85cef2e6d249cc1282dc03b9db280fdf0e109",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "10d93feb_1d27974b",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPComment.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2017-12-06T16:26:45Z",
+      "side": 1,
+      "message": "This column should be not null, right?",
+      "revId": "7ab85cef2e6d249cc1282dc03b9db280fdf0e109",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
