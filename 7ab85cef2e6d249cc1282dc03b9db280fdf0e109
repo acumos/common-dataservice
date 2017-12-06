@@ -138,6 +138,41 @@
       "revId": "7ab85cef2e6d249cc1282dc03b9db280fdf0e109",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3b35f21e_2693fe2f",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/ThreadController.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2017-12-06T16:58:35Z",
+      "side": 1,
+      "message": "Yes, but the catch block is more of a generic one. But its ok for now if you want to leave it to a generic catch block.",
+      "parentUuid": "a11fe867_60085ddb",
+      "revId": "7ab85cef2e6d249cc1282dc03b9db280fdf0e109",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d15daf99_f19f3b18",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/ThreadController.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2017-12-06T16:58:35Z",
+      "side": 1,
+      "message": "catch is missing here",
+      "revId": "7ab85cef2e6d249cc1282dc03b9db280fdf0e109",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
