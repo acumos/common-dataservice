@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b53d0b6b_e4e06594",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/CommonDataServiceRestClientImpl.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1538,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2017-12-06T16:10:41Z",
+      "side": 1,
+      "message": "In that case, should all the CRUD operations method names on Comment be prefixed with the word \"Thread\"?",
+      "revId": "7ab85cef2e6d249cc1282dc03b9db280fdf0e109",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
