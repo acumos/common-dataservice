@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "73e4840a_6ec74cb4",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/CommonDataServiceRestClientImpl.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 1510,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2017-12-06T15:44:09Z",
+      "side": 1,
+      "message": "may be rename method name to getCommentCountForThread?",
+      "revId": "b6f94b858d2c43ab50df5a30e83b281d639426a5",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
