@@ -173,6 +173,24 @@
       "revId": "7ab85cef2e6d249cc1282dc03b9db280fdf0e109",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "536955ab_9a2d3f8d",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/ThreadController.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2017-12-06T17:06:36Z",
+      "side": 1,
+      "message": "Because if the thread ID is not known, the result is zero.",
+      "parentUuid": "d15daf99_f19f3b18",
+      "revId": "7ab85cef2e6d249cc1282dc03b9db280fdf0e109",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
