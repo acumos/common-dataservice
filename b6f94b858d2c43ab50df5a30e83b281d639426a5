@@ -16,6 +16,57 @@
       "revId": "b6f94b858d2c43ab50df5a30e83b281d639426a5",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6160b436_50c5c530",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/CommonDataServiceRestClientImpl.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 1529,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2017-12-06T15:55:50Z",
+      "side": 1,
+      "message": "May be rename method name to getCommentForThread",
+      "revId": "b6f94b858d2c43ab50df5a30e83b281d639426a5",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "db0a56ef_af4c9c7d",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/ICommonDataServiceRestClient.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 1320,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2017-12-06T15:55:50Z",
+      "side": 1,
+      "message": "you want to keep the return type as long instead of int?",
+      "revId": "b6f94b858d2c43ab50df5a30e83b281d639426a5",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "102d53ea_d6fe006a",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/ICommonDataServiceRestClient.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 1373,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2017-12-06T15:55:50Z",
+      "side": 1,
+      "message": "may be return type as int instead of long?",
+      "revId": "b6f94b858d2c43ab50df5a30e83b281d639426a5",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
