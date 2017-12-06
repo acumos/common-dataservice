@@ -103,6 +103,23 @@
       "revId": "7ab85cef2e6d249cc1282dc03b9db280fdf0e109",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3e894dca_63d3ce32",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/ThreadController.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2017-12-06T16:49:16Z",
+      "side": 1,
+      "message": "May be add the check for a missing threadID?",
+      "revId": "7ab85cef2e6d249cc1282dc03b9db280fdf0e109",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
