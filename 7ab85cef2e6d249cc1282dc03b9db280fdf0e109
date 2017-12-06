@@ -85,6 +85,24 @@
       "revId": "7ab85cef2e6d249cc1282dc03b9db280fdf0e109",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f85d322_3a66f7db",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/ThreadController.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2017-12-06T16:45:06Z",
+      "side": 1,
+      "message": "the database repository method returns long, so I just pass it on thru",
+      "parentUuid": "22a0e532_1319ba4a",
+      "revId": "7ab85cef2e6d249cc1282dc03b9db280fdf0e109",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
