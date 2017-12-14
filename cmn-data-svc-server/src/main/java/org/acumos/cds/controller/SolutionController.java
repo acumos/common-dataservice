@@ -355,14 +355,15 @@ public class SolutionController extends AbstractController {
 					return result;
 				}
 			}
+			// Discard any stats that were submitted
+			solution.setWebStats(new MLPSolutionWeb());
 			// Create a new row
 			// ALSO send back the model for client convenience
-			result = solutionRepository.save(solution);
-			// Cascade the create manually to the stats table
-			solutionWebRepository.save(new MLPSolutionWeb(solution.getSolutionId()));
+			MLPSolution persisted = solutionRepository.save(solution);
 			response.setStatus(HttpServletResponse.SC_CREATED);
 			// This is a hack to create the location path.
 			response.setHeader(HttpHeaders.LOCATION, CCDSConstants.SOLUTION_PATH + "/" + solution.getSolutionId());
+			result = persisted;
 		} catch (Exception ex) {
 			Exception cve = findConstraintViolationException(ex);
 			logger.warn(EELFLoggerDelegate.errorLogger, "createSolution", cve.toString());
@@ -398,6 +399,8 @@ public class SolutionController extends AbstractController {
 		try {
 			// Use the path-parameter id; don't trust the one in the object
 			solution.setSolutionId(solutionId);
+			// Discard any stats object; updates don't happen via this interface
+			solution.setWebStats(null);
 			// Update the existing row
 			solutionRepository.save(solution);
 			// Answer "OK"
@@ -426,7 +429,7 @@ public class SolutionController extends AbstractController {
 	public Object incrementViewCount(@PathVariable("solutionId") String solutionId, HttpServletResponse response) {
 		logger.debug(EELFLoggerDelegate.debugLogger, "incrementViewCount: id {} ", solutionId);
 		// Get the existing one
-		MLPSolution existing = solutionRepository.findOne(solutionId);
+		MLPSolutionWeb existing = solutionWebRepository.findOne(solutionId);
 		if (existing == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "No solution with id " + solutionId,
@@ -434,6 +437,7 @@ public class SolutionController extends AbstractController {
 		}
 		MLPTransportModel result = null;
 		try {
+			// Have the database do the increment to avoid race conditions
 			solutionWebRepository.incrementViewCount(solutionId);
 			result = new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
@@ -460,6 +464,12 @@ public class SolutionController extends AbstractController {
 	@ResponseBody
 	public MLPTransportModel deleteSolution(@PathVariable("solutionId") String solutionId,
 			HttpServletResponse response) {
+		MLPSolution existing = solutionRepository.findOne(solutionId);
+		if (existing == null) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "No solution with id " + solutionId,
+					null);
+		}
 		try {
 			// Manually cascade the delete
 			// what about composite solutions?
@@ -470,6 +480,9 @@ public class SolutionController extends AbstractController {
 			solutionValidationRepository.deleteBySolutionId(solutionId);
 			solUserAccMapRepository.deleteUsersForSolution(solutionId);
 			solutionFavoriteRepository.deleteBySolutionId(solutionId);
+			// Drop reference to child
+			existing.getWebStats().setSolution(null);
+			existing.setWebStats(null);
 			solutionWebRepository.delete(solutionId);
 			for (MLPSolutionRevision r : solutionRevisionRepository.findBySolution(new String[] { solutionId })) {
 				for (MLPArtifact a : artifactRepository.findByRevision(r.getRevisionId()))

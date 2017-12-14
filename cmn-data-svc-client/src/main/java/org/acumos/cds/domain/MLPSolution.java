@@ -25,13 +25,16 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -118,11 +121,28 @@ public class MLPSolution extends MLPTimestampedEntity implements Serializable {
 	/**
 	 * Tags assigned to the solution via a join table.
 	 */
-	@ManyToMany /* no cascade: (cascade = { CascadeType.ALL }) */
+	@ManyToMany(fetch = FetchType.EAGER) /* no cascade */
 	@JoinTable(name = MLPSolTagMap.TABLE_NAME, //
 			joinColumns = { @JoinColumn(name = MLPSolTagMap.SOL_ID_COL_NAME) }, //
 			inverseJoinColumns = { @JoinColumn(name = MLPSolTagMap.TAG_COL_NAME) })
 	private Set<MLPTag> tags = new HashSet<>(0);
+
+	/**
+	 * Statistics about downloads, ratings etc. Should always exist, but don't mark
+	 * as required.
+	 * 
+	 * Mapped by the "solution" field in the MLPSolutionWeb class.
+	 * 
+	 * Did not want to cascade ANY operations. But with no cascade property the
+	 * controller test takes an exception on delete:
+	 * 
+	 * <pre>
+	 * org.hibernate.TransientPropertyValueException: object
+	 * references an unsaved transient instance
+	 * </pre>
+	 */
+	@OneToOne(cascade = { CascadeType.ALL }, mappedBy = "solution", fetch = FetchType.EAGER, optional = true)
+	private MLPSolutionWeb webStats;
 
 	/**
 	 * No-arg constructor
@@ -264,6 +284,16 @@ public class MLPSolution extends MLPTimestampedEntity implements Serializable {
 		this.tags = tags;
 	}
 
+	public MLPSolutionWeb getWebStats() {
+		return webStats;
+	}
+
+	public void setWebStats(MLPSolutionWeb webStats) {
+		this.webStats = webStats;
+		if (this.webStats != null)
+			webStats.setSolution(this);
+	}
+
 	@Override
 	public boolean equals(Object that) {
 		if (that == null)
@@ -283,9 +313,8 @@ public class MLPSolution extends MLPTimestampedEntity implements Serializable {
 	public String toString() {
 		return this.getClass().getName() + "[solutionId=" + solutionId + ", ownerId=" + ownerId + ", name=" + name
 				+ ", desc=" + description + ", active=" + active + ", accessTypeCode=" + accessTypeCode
-				+ ", modelTypeCode=" + modelTypeCode + ", validationStatusCode=" + validationStatusCode 
-				+ ", provider=" + provider + ", created=" + getCreated() + ", modified=" + getModified()
-				+ "]";
+				+ ", modelTypeCode=" + modelTypeCode + ", validationStatusCode=" + validationStatusCode + ", provider="
+				+ provider + ", created=" + getCreated() + ", modified=" + getModified() + "]";
 	}
 
 }
