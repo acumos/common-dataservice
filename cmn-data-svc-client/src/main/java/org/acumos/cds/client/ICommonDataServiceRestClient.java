@@ -179,22 +179,17 @@ public interface ICommonDataServiceRestClient {
 	RestPageResponse<MLPSolution> findSolutionsByTag(String tag, RestPageRequest pageRequest);
 
 	/**
-	 * Searches solutions for matches on every specified condition. Special-purpose
-	 * method to support the dynamic search on the portal interface.
+	 * Finds solutions that match every specified condition. Special-purpose method
+	 * to support the dynamic search page on the portal interface.
 	 * 
-	 * TODO: Return a solution DTO with related information such as download count.
-	 * 
-	 * @param nameKeyword
-	 *            Keyword to perform "LIKE" search in Name field; ignored if null or
-	 *            empty
-	 * @param descriptionKeyword
-	 *            Keyword to perform "LIKE" search in Description field; ignored if
+	 * @param nameKeywords
+	 *            Keywords to perform "LIKE" search in Name field; ignored if null
+	 *            or empty
+	 * @param descriptionKeywords
+	 *            Keywords to perform "LIKE" search in Description field; ignored if
 	 *            null or empty
-	 * @param authorKeyword
-	 *            Keyword to perform "LIKE" search in user name; ignored if null or
-	 *            empty; TODO not implemented yet
 	 * @param active
-	 *            Solution active status (required)
+	 *            Solution active status; true for active, false for inactive
 	 * @param accessTypeCodes
 	 *            Access type codes; use four-letter sequence "null" to match a null
 	 *            value; ignored if null or empty
@@ -210,9 +205,9 @@ public interface ICommonDataServiceRestClient {
 	 *            Page index, page size, sort information; ignored if null.
 	 * @return Page of solution objects.
 	 */
-	RestPageResponse<MLPSolution> findPortalSolutions(String nameKeyword, String descriptionKeyword,
-			String authorKeyword, boolean active, String[] accessTypeCodes, String[] modelTypeCodes,
-			String[] validationStatusCodes, String[] tags, RestPageRequest pageRequest);
+	RestPageResponse<MLPSolution> findPortalSolutions(String[] nameKeywords, String[] descriptionKeywords,
+			boolean active, String[] accessTypeCodes, String[] modelTypeCodes, String[] validationStatusCodes,
+			String[] tags, RestPageRequest pageRequest);
 
 	/**
 	 * Searches the solutions.
