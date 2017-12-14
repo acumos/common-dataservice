@@ -47,37 +47,37 @@ public interface SolutionSearchService {
 	/**
 	 * Gets a page of instances matching all query parameters.
 	 * 
-	 * @param nameKeyword
-	 *            Searches the name field for the keyword using case-insensitive
+	 * @param nameKeywords
+	 *            Searches the name field for the keywords using case-insensitive
 	 *            LIKE after surrounding with wildcard '%' characters; ignored if
-	 *            null or empty.
-	 * @param descriptionKeyword
-	 *            Searches the description field for the keyword using
+	 *            null or empty
+	 * @param descriptionKeywords
+	 *            Searches the description field for the keywords using
 	 *            case-insensitive LIKE after surrounding with wildcard '%'
-	 *            characters; ignored if null or empty.
-	 * @param authorKeyword
+	 *            characters; ignored if null or empty
+	 * @param authorKeywords
 	 *            Not implemented
 	 * @param active
 	 *            Active status: true or false; required.
 	 * @param accessTypeCodes
 	 *            Limits match to solutions with one of the specified values
 	 *            including null (not the 4-character sequence "null"); ignored if
-	 *            null or empty.
+	 *            null or empty
 	 * @param modelTypeCodes
 	 *            Limits match to solutions with one of the specified values
 	 *            including null (not the 4-character sequence "null"); ignored if
-	 *            null or empty.
+	 *            null or empty
 	 * @param validationStatusCodes
 	 *            Limits match to solutions with one of the specified values
 	 *            including null (not the 4-character sequence "null"); ignored if
-	 *            null or empty.
+	 *            null or empty
 	 * @param tags
 	 *            Not implemented
 	 * @param pageable
 	 *            Page and sort info
 	 * @return Page of matches
 	 */
-	Page<MLPSolution> findPortalSolutions(String nameKeyword, String descriptionKeyword, String authorKeyword,
+	Page<MLPSolution> findPortalSolutions(String[] nameKeywords, String[] descriptionKeywords, String[] authorKeywords,
 			boolean active, String[] accessTypeCodes, String[] modelTypeCodes, String[] validationStatusCodes,
 			String[] tags, Pageable pageable);
 

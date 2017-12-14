@@ -434,9 +434,9 @@ public class CdsRepositoryServiceTest {
 			Assert.assertNotNull(messyResult);
 
 			logger.info("Finding portal solutions");
-			String solKw = solName;
-			String descKw = solDesc;
-			String authorKw = null;
+			String [] solKw = { solName };
+			String [] descKw = { solDesc };
+			String [] authorKw = null;
 			boolean active = true;
 			String[] accessTypeCodes = { null, AccessTypeCode.PB.name() };
 			String[] modelTypeCodes = { ModelTypeCode.CL.name() };
@@ -778,7 +778,9 @@ public class CdsRepositoryServiceTest {
 
 			MLPSolutionWeb stats = new MLPSolutionWeb();
 			stats.setSolutionId(cs.getSolutionId());
-			solutionWebRepository.save(stats);
+			stats.setSolution(cs);
+			stats = solutionWebRepository.save(stats);
+			Assert.assertNotNull(stats);
 			final Long countBefore = stats.getViewCount();
 			logger.info("Solution view count before: " + countBefore);
 			solutionWebRepository.incrementViewCount(cs.getSolutionId());
@@ -791,12 +793,11 @@ public class CdsRepositoryServiceTest {
 			MLPSolTagMap solTagMap1 = new MLPSolTagMap(cs.getSolutionId(), tag1.getTag());
 			solTagMapRepository.save(solTagMap1);
 
-			// add user to access control list
-			MLPSolUserAccMap solUserAccMap = new MLPSolUserAccMap(cs.getSolutionId(), cu.getUserId());
-			solUserAccMapRepository.save(solUserAccMap);
-			Iterable<MLPUser> usersWithAccess = solUserAccMapRepository.getUsersForSolution(cs.getSolutionId());
-			Assert.assertTrue(usersWithAccess.iterator().hasNext());
-
+			// Get the solution by ID
+			MLPSolution solById = solutionRepository.findOne(cs.getSolutionId());
+			Assert.assertTrue(solById != null && !solById.getTags().isEmpty());
+			logger.info("Fetched solution: " + solById);
+			
 			// Query for tags on the solution
 			Iterable<MLPTag> solTags = solutionTagRepository.findBySolution(cs.getSolutionId());
 			Assert.assertTrue(solTags.iterator().hasNext());
@@ -804,6 +805,12 @@ public class CdsRepositoryServiceTest {
 			// Find solution by tag
 			Page<MLPSolution> taggedSolutions = solutionRepository.findByTag(tag1.getTag(), null);
 			Assert.assertTrue(taggedSolutions.getNumberOfElements() > 0);
+
+			// add user to access control list
+			MLPSolUserAccMap solUserAccMap = new MLPSolUserAccMap(cs.getSolutionId(), cu.getUserId());
+			solUserAccMapRepository.save(solUserAccMap);
+			Iterable<MLPUser> usersWithAccess = solUserAccMapRepository.getUsersForSolution(cs.getSolutionId());
+			Assert.assertTrue(usersWithAccess.iterator().hasNext());
 
 			MLPSolution cs2 = new MLPSolution();
 			cs2.setName("solution name");

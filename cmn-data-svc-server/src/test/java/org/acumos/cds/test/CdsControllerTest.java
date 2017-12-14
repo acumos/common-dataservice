@@ -189,7 +189,7 @@ public class CdsControllerTest {
 			client.deleteSolution(cs.getSolutionId());
 			client.deleteUser(cu.getUserId());
 		} catch (HttpStatusCodeException ex) {
-			logger.error("basicSequenceDemo failed", ex);
+			logger.error("basicSequenceDemo failed: " + ex.getResponseBodyAsString());
 			throw ex;
 		}
 	}
@@ -514,8 +514,14 @@ public class CdsControllerTest {
 
 			logger.info("Fetching back newly created solution");
 			MLPSolution s = client.getSolution(cs.getSolutionId());
-			Assert.assertTrue(s != null);
+			Assert.assertTrue(s != null && !s.getTags().isEmpty() && s.getWebStats() != null);
 			logger.info("Solution {}", s);
+
+			cs.setDescription("some description");
+			client.updateSolution(cs);
+			logger.info("Fetching back updated solution");
+			MLPSolution updated = client.getSolution(cs.getSolutionId());
+			Assert.assertTrue(updated != null && !updated.getTags().isEmpty() && updated.getWebStats() != null && updated.getWebStats().getViewCount() > 0);
 
 			logger.info("Querying for active PB solutions");
 			Map<String, Object> queryParameters = new HashMap<>();
@@ -563,9 +569,9 @@ public class CdsControllerTest {
 			*/
 
 			// Portal dynamic search
-			String nameKw = null;
-			String descKw = null;
-			String authKw = null;
+			String [] nameKw = null;
+			String [] descKw = null;
+			String [] authKw = null;
 			String [] accessTypeCodes = { AccessTypeCode.PB.name() };
 			String [] modelTypeCodes = null;
 			String [] valStatusCodes = { ValidationStatusCode.IP.name(), "null" };
@@ -742,8 +748,8 @@ public class CdsControllerTest {
 				client.deleteUser(cu.getUserId());
 
 				try {
-					client.getSolution(cs.getSolutionId());
-					throw new Exception("Found a deleted solution: " + cs.getSolutionId());
+					MLPSolution deleted = client.getSolution(cs.getSolutionId());
+					throw new Exception("Found a deleted solution: " + deleted);
 				} catch (HttpClientErrorException ex) {
 					// this is expected, the item should not exist
 					logger.info("Caught expected exception: " + ex.getResponseBodyAsString());
