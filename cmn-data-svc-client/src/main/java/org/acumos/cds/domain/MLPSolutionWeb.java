@@ -27,10 +27,14 @@ import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.MapsId;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Type;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Model for solution website metadata. In a one:one relationship with solution.
@@ -67,6 +71,20 @@ public class MLPSolutionWeb implements MLPEntity, Serializable {
 	@Column(name = "FEATURED_YN", columnDefinition = "CHAR(1)")
 	@Type(type = "yes_no")
 	private boolean featured;
+
+	/**
+	 * Annotations required for Hibernate. 
+	 * 
+	 * Tell Jackson not to serialize the parent object.
+	 * 
+	 * Have not defined cascade here because this is the child; never cascade to parent.
+	 * 
+	 * MapsId requires Cascade.PERSIST (at least) on the parent.
+	 */
+	@OneToOne
+	@MapsId
+	@JsonIgnore
+	private MLPSolution solution;
 
 	/**
 	 * No-arg constructor
@@ -141,6 +159,14 @@ public class MLPSolutionWeb implements MLPEntity, Serializable {
 	public void setFeatured(boolean featured) {
 		this.featured = featured;
 	}
+	
+	public MLPSolution getSolution() {
+		return solution;
+	}
+	
+	public void setSolution(MLPSolution solution) {
+		this.solution = solution;
+	}
 
 	@Override
 	public boolean equals(Object that) {
@@ -159,8 +185,8 @@ public class MLPSolutionWeb implements MLPEntity, Serializable {
 
 	@Override
 	public String toString() {
-		return this.getClass().getName() + "[solutionId=" + solutionId + ", views=" + viewCount + ", downloads=" + downloadCount + ", ratings="
-				+ ratingCount + ", ..]";
+		return this.getClass().getName() + "[solutionId=" + solutionId + ", views=" + viewCount + ", downloads="
+				+ downloadCount + ", ratings=" + ratingCount + ", ..]";
 	}
 
 }
