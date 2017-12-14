@@ -189,7 +189,7 @@ public class CdsControllerTest {
 			client.deleteSolution(cs.getSolutionId());
 			client.deleteUser(cu.getUserId());
 		} catch (HttpStatusCodeException ex) {
-			logger.error("basicSequenceDemo failed", ex);
+			logger.error("basicSequenceDemo failed: " + ex.getResponseBodyAsString(), ex);
 			throw ex;
 		}
 	}
@@ -503,6 +503,11 @@ public class CdsControllerTest {
 			client.addSolutionTag(cs.getSolutionId(), tagName2);
 			client.dropSolutionTag(cs.getSolutionId(), tagName2);
 
+			logger.info("Fetching back newly created solution");
+			MLPSolution s = client.getSolution(cs.getSolutionId());
+			Assert.assertTrue(s != null && !s.getTags().isEmpty() && s.getWebStats() != null);
+			logger.info("Solution {}", s);
+
 			// Query for tags
 			List<MLPTag> solTags = client.getSolutionTags(cs.getSolutionId());
 			Assert.assertTrue(solTags.size() > 0);
@@ -512,10 +517,11 @@ public class CdsControllerTest {
 			RestPageResponse<MLPSolution> page = client.getSolutions(new RestPageRequest(0, 2));
 			Assert.assertTrue(page != null && page.getNumberOfElements() > 0);
 
-			logger.info("Fetching back newly created solution");
-			MLPSolution s = client.getSolution(cs.getSolutionId());
-			Assert.assertTrue(s != null);
-			logger.info("Solution {}", s);
+			cs.setDescription("some description");
+			client.updateSolution(cs);
+			logger.info("Fetching back updated solution");
+			MLPSolution updated = client.getSolution(cs.getSolutionId());
+			Assert.assertTrue(updated != null && !updated.getTags().isEmpty() && updated.getWebStats() != null && updated.getWebStats().getViewCount() > 0);
 
 			logger.info("Querying for active PB solutions");
 			Map<String, Object> queryParameters = new HashMap<>();
@@ -563,14 +569,13 @@ public class CdsControllerTest {
 			*/
 
 			// Portal dynamic search
-			String nameKw = null;
-			String descKw = null;
-			String authKw = null;
+			String [] nameKw = null;
+			String [] descKw = null;
 			String [] accessTypeCodes = { AccessTypeCode.PB.name() };
 			String [] modelTypeCodes = null;
 			String [] valStatusCodes = { ValidationStatusCode.IP.name(), "null" };
 			String [] searchTags = null;
-			RestPageResponse<MLPSolution> portalMatches = client.findPortalSolutions(nameKw, descKw, authKw, true, accessTypeCodes, modelTypeCodes, valStatusCodes, searchTags, 
+			RestPageResponse<MLPSolution> portalMatches = client.findPortalSolutions(nameKw, descKw, true, accessTypeCodes, modelTypeCodes, valStatusCodes, searchTags, 
 					new RestPageRequest(0, 1));
 			Assert.assertTrue(portalMatches != null && portalMatches.getNumberOfElements() > 0);
 			
@@ -742,8 +747,8 @@ public class CdsControllerTest {
 				client.deleteUser(cu.getUserId());
 
 				try {
-					client.getSolution(cs.getSolutionId());
-					throw new Exception("Found a deleted solution: " + cs.getSolutionId());
+					MLPSolution deleted = client.getSolution(cs.getSolutionId());
+					throw new Exception("Found a deleted solution: " + deleted);
 				} catch (HttpClientErrorException ex) {
 					// this is expected, the item should not exist
 					logger.info("Caught expected exception: " + ex.getResponseBodyAsString());
