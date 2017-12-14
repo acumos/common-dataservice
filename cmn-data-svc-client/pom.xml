@@ -3,26 +3,35 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.acumos.common-dataservice</groupId>
 	<artifactId>cmn-data-svc-client</artifactId>
-	<version>1.10.1-SNAPSHOT</version>
+	<version>1.10.2-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>Acumos Common Data Service Client</name>
 	<description>Client library for the Acumos Common Data Service</description>
 
 	<properties>
-		<acumos.nexus.url>Set by Jenkins</acumos.nexus.url>
-		<acumos.nexus.snapshot.path>Set by Jenkins</acumos.nexus.snapshot.path>
-		<acumos.nexus.release.path>Set by Jenkins</acumos.nexus.release.path>
-		<springframework.version>4.2.0.RELEASE</springframework.version>
-		<slf4j.version>1.7.21</slf4j.version>
-		<jackson.version>2.8.8</jackson.version>
-		<hibernate.version>5.2.1.Final</hibernate.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<!-- Jenkins invokes mvn with argument -Dbuild.number=${BUILD_NUMBER} -->
 		<build.number>0</build.number>
+		<!-- Begin versions set by spring-boot in POM spring-boot-dependencies -->
+		<hibernate.version>5.0.12.Final</hibernate.version>
+        <hibernate-validator.version>5.3.5.Final</hibernate-validator.version>
+		<httpcomponents.version>4.5.3</httpcomponents.version>
+		<jackson.version>2.8.10</jackson.version>
+		<javax-validation.version>1.1.0.Final</javax-validation.version>
+		<slf4j.version>1.7.25</slf4j.version>
+        <spring.version>4.3.11.RELEASE</spring.version>
+		<spring-data-jpa.version>1.11.7.RELEASE</spring-data-jpa.version>
+		<spring-data-commons.version>1.13.7.RELEASE</spring-data-commons.version>
+		<!-- End versions set by spring-boot in POM spring-boot-dependencies -->
+		<jacoco.version>0.7.6.201602180812</jacoco.version>
+		<acumos.nexus.url>URL set by Jenkins</acumos.nexus.url>
+		<acumos.nexus.snapshot.path>Snapshot set by Jenkins</acumos.nexus.snapshot.path>
+		<acumos.nexus.release.path>Release by Jenkins</acumos.nexus.release.path>
 	</properties>
 
 	<dependencies>
+
 		<!-- Code to SLF4J shims -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -51,7 +60,7 @@
 		<dependency>
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>
-			<version>1.1.0.Final</version>
+			<version>${javax-validation.version}</version>
 		</dependency>
 
 		<!-- Hibernate annotation "GenericGenerator" -->
@@ -64,20 +73,20 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
-			<version>${hibernate.version}</version>
+			<version>${hibernate-validator.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator-annotation-processor</artifactId>
-			<version>${hibernate.version}</version>
+			<version>${hibernate-validator.version}</version>
 		</dependency>
 
 		<!-- For using HTTP Basic Auth in uService REST client -->
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
-			<version>4.3.5</version>
+			<version>${httpcomponents.version}</version>
 		</dependency>
 
 		<!-- JPA annotations -->
@@ -90,7 +99,7 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
-			<version>${springframework.version}</version>
+			<version>${spring.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>commons-logging</groupId>
@@ -99,24 +108,22 @@
 			</exclusions>
 		</dependency>
 
-		<!-- org.springframework.data artifacts have different versions -->
-		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-commons</artifactId>
-			<version>1.13.9.RELEASE</version>
-		</dependency>
-
-		<!-- org.springframework.data artifacts have different versions -->
-		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-jpa</artifactId>
-			<version>1.11.9.RELEASE</version>
-		</dependency>
-
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
-			<version>${springframework.version}</version>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-commons</artifactId>
+			<version>${spring-data-commons.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-jpa</artifactId>
+			<version>${spring-data-jpa.version}</version>
 		</dependency>
 
 		<!-- Test dependencies -->
@@ -124,7 +131,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.11</version>
+			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -132,7 +139,7 @@
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
-			<version>1.1.1</version>
+			<version>1.1.11</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -228,7 +235,7 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.7.6.201602180812</version>
+				<version>${jacoco.version}</version>
 				<executions>
 					<execution>
 						<id>default-prepare-agent</id>
