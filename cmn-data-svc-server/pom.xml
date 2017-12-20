@@ -25,54 +25,24 @@
 		<springfox.version>2.7.0</springfox.version>
 		<!-- Jenkins invokes mvn with argument -Dbuild.number=${BUILD_NUMBER} -->
 		<build.number>0</build.number>
-		<!-- EELF jar is in ONAP nexus repo -->
-		<onap.nexus.url>https://nexus.onap.org</onap.nexus.url>
-		<!-- Azure Docker settings are overriden by Jenkins settings -->
-		<docker.host.url>set by Jenkins</docker.host.url>
-		<docker.registry.url>set by Jenkins</docker.registry.url>
-		<docker.registry.login>set by Jenkins</docker.registry.login>
-		<docker.registry.password>set by Jenkins</docker.registry.password>
-		<!-- LF Docker coordinates -->
+		<!-- LF Docker registry -->
 		<docker.registry>nexus3.acumos.org:10003</docker.registry>
-		<!-- All acumos.nexus.* are overridden by Azure Jenkins settings -->
-		<acumos.nexus.url>http://cognita-nexus01.eastus.cloudapp.azure.com:8081</acumos.nexus.url>
-		<acumos.nexus.snapshot.path>repository/repo_cognita_platform_maven_snapshots</acumos.nexus.snapshot.path>
-		<acumos.nexus.release.path>repository/repo_cognita_platform_maven</acumos.nexus.release.path>
 	</properties>
 
 	<repositories>
-		<!-- begin Azure repositories -->
+		<!-- https://stackoverflow.com/questions/2225535/where-is-the-best-place-to-specify-maven-repositories-pom-xml-or-settings-xml -->
+		<!-- Specify repositories here to avoid coordination of ~/.m2/settings.xml 
+			Do the IDs need to match Jenkins template values? -->
 		<repository>
-			<id>acumos-snapshots</id>
-			<name>acumos-repository-snapshots</name>
-			<url>${acumos.nexus.url}/${acumos.nexus.snapshot.path}</url>
+			<id>releases</id>
+			<name>Acumos Release Repository</name>
+			<url>https://nexus.acumos.org/content/repositories/releases</url>
 		</repository>
 		<repository>
-			<id>acumos-releases</id>
-			<name>acumos-repository-releases</name>
-			<url>${acumos.nexus.url}/${acumos.nexus.release.path}</url>
+			<id>snapshots</id>
+			<name>Acumos Snapshot Repository</name>
+			<url>https://nexus.acumos.org/content/repositories/snapshots</url>
 		</repository>
-		<!-- end Azure repositories -->
-		<!-- LF: Specify repositories here to avoid coordination of ~/.m2/settings.xml 
-			files among developers. Use values (not properties) so oparent can be resolved. 
-			The IDs should match Jenkins template values. -->
-		<!-- LF <repository> <id>releases</id> <name>Acumos Release Repository</name> 
-			<url>https://nexus.acumos.org/content/repositories/releases</url> </repository> 
-			<repository> <id>snapshots</id> <name>Acumos Snapshot Repository</name> <url>https://nexus.acumos.org/content/repositories/snapshots</url> 
-			</repository> <repository> <id>public</id> <url>https://nexus.acumos.org/content/groups/public</url> 
-			</repository> LF -->
-		<!-- begin ONAP repositories for EELF -->
-		<repository>
-			<id>onap-snapshots</id>
-			<name>ONAP Snapshot Repository</name>
-			<url>${onap.nexus.url}/${onap.nexus.snapshot.path}</url>
-		</repository>
-		<repository>
-			<id>onap-releases</id>
-			<name>ONAP Release Repository</name>
-			<url>${onap.nexus.url}/${onap.nexus.release.path}</url>
-		</repository>
-		<!-- end ONAP repositories for EELF -->
 	</repositories>
 
 	<dependencies>
@@ -266,16 +236,12 @@
 				<version>0.22.1</version>
 				<configuration>
 					<verbose>true</verbose>
-					<dockerHost>${docker.host.url}</dockerHost>
 					<!-- docker runs on the LF build machine -->
-					<!-- LF <dockerHost>unix:///var/run/docker.sock</dockerHost> LF -->
-					<registry>${docker.registry.url}</registry>
-					<!-- begin azure credentials -->
-					<authConfig>
-						<username>${docker.registry.login}</username>
-						<password>${docker.registry.password}</password>
-					</authConfig>
-					<!-- end azure credentials -->
+					<dockerHost>unix:///var/run/docker.sock</dockerHost>
+					<registry>${docker.registry}</registry>
+					<!-- In LF credentials are in settings.xml, not env vars nor properties. 
+						<authConfig> <username>${docker.registry.login}</username> <password>${docker.registry.password}</password> 
+						</authConfig> -->
 					<images>
 						<image>
 							<name>common-dataservice:${project.version}</name>
@@ -295,9 +261,15 @@
 						</image>
 					</images>
 				</configuration>
-				<!-- build Docker images in install phase, push in deploy phase -->
-				<!-- TODO <executions> <execution> <goals> <goal>build</goal> <goal>push</goal> 
-					</goals> </execution> </executions> TODO -->
+				<!-- build Docker images in install phase; push images in deploy phase -->
+				<executions>
+					<execution>
+						<goals>
+							<goal>build</goal>
+							<goal>push</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
