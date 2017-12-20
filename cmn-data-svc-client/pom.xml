@@ -29,14 +29,7 @@
 		<acumos.nexus.release.path>content/repositories/releases</acumos.nexus.release.path>
 		<acumos.nexus.snapshot.path>content/repositories/snapshots</acumos.nexus.snapshot.path>
 	</properties>
-	<!-- Specify repositories here to avoid coordination of ~/.m2/settings.xml 
-		without using variables -->
-	<repositories>
-		<repository>
-			<id>public</id>
-			<url>https://nexus.acumos.org/content/groups/public</url>
-		</repository>
-	</repositories>
+	<!-- No repositories specified here.  Only needs Maven central, aka public. -->
 	<dependencies>
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -233,26 +226,17 @@
 					</execution>
 				</executions>
 			</plugin>
-
 		</plugins>
 	</build>
-
-	<!-- The client jar must be deployed to Nexus. The IDs must match Jenkins settings for credentials. -->
+	<!-- The client jar must be deployed to Nexus. The IDs must match Jenkins 
+		settings for credentials. -->
 	<distributionManagement>
-		<snapshotRepository>
-			<id>acumos-nexus</id>
-			<name>acumos-repository-snapshots</name>
-			<url>${acumos.nexus.url}/${acumos.nexus.snapshot.path}</url>
-		</snapshotRepository>
-		<repository>
-			<id>acumos-nexus</id>
-			<name>acumos-repository-releases</name>
-			<url>${acumos.nexus.url}/${acumos.nexus.release.path}</url>
-		</repository>
-	</distributionManagement>
-	
-	<!-- LF. The IDs must match Jenkins settings for credentials
-	<distributionManagement>
+		<!-- Azure <snapshotRepository> <id>acumos-nexus</id> <name>acumos-repository-snapshots</name> 
+			<url>${acumos.nexus.url}/${acumos.nexus.snapshot.path}</url> </snapshotRepository> 
+			<repository> <id>acumos-nexus</id> <name>acumos-repository-releases</name> 
+			<url>${acumos.nexus.url}/${acumos.nexus.release.path}</url> </repository> 
+			Azure -->
+		<!-- LF. The IDs must match Jenkins settings for credentials -->
 		<repository>
 			<id>releases</id>
 			<url>${acumos.nexus.url}/${acumos.nexus.release.path}</url>
@@ -266,6 +250,4 @@
 			<url>dav:${acumos.nexus.url}/content/sites/site/${project.groupId}/${project.artifactId}/${project.version}</url>
 		</site>
 	</distributionManagement>
- 	-->
-
- </project>
+</project>
