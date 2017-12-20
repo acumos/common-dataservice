@@ -25,42 +25,44 @@
 		<springfox.version>2.7.0</springfox.version>
 		<!-- Jenkins invokes mvn with argument -Dbuild.number=${BUILD_NUMBER} -->
 		<build.number>0</build.number>
+		<!-- All acumos.nexus.* are overridden by Azure Jenkins settings -->
+		<!-- Azure <acumos.nexus.url>http://cognita-nexus01.eastus.cloudapp.azure.com:8081</acumos.nexus.url> 
+			<acumos.nexus.snapshot.path>repository/repo_cognita_platform_maven_snapshots</acumos.nexus.snapshot.path> 
+			<acumos.nexus.release.path>repository/repo_cognita_platform_maven</acumos.nexus.release.path> 
+			Azure -->
 		<!-- EELF jar is in ONAP nexus repo -->
 		<onap.nexus.url>https://nexus.onap.org</onap.nexus.url>
 		<!-- Azure Docker settings are overriden by Jenkins settings -->
-		<docker.host.url>set by Jenkins</docker.host.url>
-		<docker.registry.url>set by Jenkins</docker.registry.url>
-		<docker.registry.login>set by Jenkins</docker.registry.login>
-		<docker.registry.password>set by Jenkins</docker.registry.password>
-		<!-- LF Docker coordinates -->
+		<!-- Azure <docker.host.url>set by Jenkins</docker.host.url> <docker.registry.url>set 
+			by Jenkins</docker.registry.url> <docker.registry.login>set by Jenkins</docker.registry.login> 
+			<docker.registry.password>set by Jenkins</docker.registry.password> Azure -->
+		<!-- LF Docker registry -->
 		<docker.registry>nexus3.acumos.org:10003</docker.registry>
-		<!-- All acumos.nexus.* are overridden by Azure Jenkins settings -->
-		<acumos.nexus.url>http://cognita-nexus01.eastus.cloudapp.azure.com:8081</acumos.nexus.url>
-		<acumos.nexus.snapshot.path>repository/repo_cognita_platform_maven_snapshots</acumos.nexus.snapshot.path>
-		<acumos.nexus.release.path>repository/repo_cognita_platform_maven</acumos.nexus.release.path>
 	</properties>
 
 	<repositories>
-		<!-- begin Azure repositories -->
-		<repository>
-			<id>acumos-snapshots</id>
-			<name>acumos-repository-snapshots</name>
-			<url>${acumos.nexus.url}/${acumos.nexus.snapshot.path}</url>
-		</repository>
-		<repository>
-			<id>acumos-releases</id>
-			<name>acumos-repository-releases</name>
-			<url>${acumos.nexus.url}/${acumos.nexus.release.path}</url>
-		</repository>
-		<!-- end Azure repositories -->
+		<!-- Azure repositories <repository> <id>acumos-snapshots</id> <name>acumos-repository-snapshots</name> 
+			<url>${acumos.nexus.url}/${acumos.nexus.snapshot.path}</url> </repository> 
+			<repository> <id>acumos-releases</id> <name>acumos-repository-releases</name> 
+			<url>${acumos.nexus.url}/${acumos.nexus.release.path}</url> </repository> 
+			Azure -->
 		<!-- LF: Specify repositories here to avoid coordination of ~/.m2/settings.xml 
 			files among developers. Use values (not properties) so oparent can be resolved. 
 			The IDs should match Jenkins template values. -->
-		<!-- LF <repository> <id>releases</id> <name>Acumos Release Repository</name> 
-			<url>https://nexus.acumos.org/content/repositories/releases</url> </repository> 
-			<repository> <id>snapshots</id> <name>Acumos Snapshot Repository</name> <url>https://nexus.acumos.org/content/repositories/snapshots</url> 
-			</repository> <repository> <id>public</id> <url>https://nexus.acumos.org/content/groups/public</url> 
-			</repository> LF -->
+		<repository>
+			<id>releases</id>
+			<name>Acumos Release Repository</name>
+			<url>https://nexus.acumos.org/content/repositories/releases</url>
+		</repository>
+		<repository>
+			<id>snapshots</id>
+			<name>Acumos Snapshot Repository</name>
+			<url>https://nexus.acumos.org/content/repositories/snapshots</url>
+		</repository>
+		<repository>
+			<id>public</id>
+			<url>https://nexus.acumos.org/content/groups/public</url>
+		</repository>
 		<!-- begin ONAP repositories for EELF -->
 		<repository>
 			<id>onap-snapshots</id>
@@ -266,16 +268,12 @@
 				<version>0.22.1</version>
 				<configuration>
 					<verbose>true</verbose>
-					<dockerHost>${docker.host.url}</dockerHost>
+					<!-- Azure <dockerHost>${docker.host.url}</dockerHost> Azure -->
 					<!-- docker runs on the LF build machine -->
-					<!-- LF <dockerHost>unix:///var/run/docker.sock</dockerHost> LF -->
+					<dockerHost>unix:///var/run/docker.sock</dockerHost>
 					<registry>${docker.registry.url}</registry>
-					<!-- begin azure credentials -->
-					<authConfig>
-						<username>${docker.registry.login}</username>
-						<password>${docker.registry.password}</password>
-					</authConfig>
-					<!-- end azure credentials -->
+					<!-- Azure <authConfig> <username>${docker.registry.login}</username> 
+						<password>${docker.registry.password}</password> </authConfig> Azure -->
 					<images>
 						<image>
 							<name>common-dataservice:${project.version}</name>
@@ -295,9 +293,15 @@
 						</image>
 					</images>
 				</configuration>
-				<!-- build Docker images in install phase, push in deploy phase -->
-				<!-- TODO <executions> <execution> <goals> <goal>build</goal> <goal>push</goal> 
-					</goals> </execution> </executions> TODO -->
+				<!-- build Docker images in install phase; push images in deploy phase -->
+				<executions>
+					<execution>
+						<goals>
+							<goal>build</goal>
+							<goal>push</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
