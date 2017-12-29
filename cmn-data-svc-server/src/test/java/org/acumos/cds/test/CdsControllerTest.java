@@ -970,25 +970,27 @@ public class CdsControllerTest {
 		}
 		final String key = "myKey";
 		try {
-			client.createSiteConfig(new MLPSiteConfig(key, "{ 'some' : 'json' }", "bogus"));
+			MLPSiteConfig sc = new MLPSiteConfig(key, "{ 'some' : 'json' }");
+			sc.setUserId("bogus");
+			client.createSiteConfig(sc);
 			throw new Exception("Unexpected success");
 		} catch (HttpStatusCodeException ex) {
 			logger.info("Failed to create config with bad user as expected {}", ex.getResponseBodyAsString());
 		}
 		try {
-			client.createSiteConfig(new MLPSiteConfig(s64, "{ 'some' : 'json' }", cu.getUserId()));
+			client.createSiteConfig(new MLPSiteConfig(s64, "{ 'some' : 'json' }"));
 			throw new Exception("Unexpected success");
 		} catch (HttpStatusCodeException ex) {
 			logger.info("Failed to create config with long key as expected {}", ex.getResponseBodyAsString());
 		}
 		try {
-			client.updateSiteConfig(new MLPSiteConfig(key, "{ 'some' : 'json' }", s64));
+			client.updateSiteConfig(new MLPSiteConfig(key, "{ 'some' : 'json' }"));
 			throw new Exception("Unexpected success");
 		} catch (HttpStatusCodeException ex) {
 			logger.info("Failed to update config as expected {}", ex.getResponseBodyAsString());
 		}
 		// this should work
-		MLPSiteConfig config = new MLPSiteConfig(key, "{ 'some' : 'json' }", cu.getUserId());
+		MLPSiteConfig config = new MLPSiteConfig(key, "{ 'some' : 'json' }");
 		config = client.createSiteConfig(config);
 		Assert.assertNotNull(config.getCreated());
 		logger.info("Created site config {}", config);
@@ -1026,13 +1028,24 @@ public class CdsControllerTest {
 		cu = client.createUser(cu);
 		Assert.assertNotNull(cu.getUserId());
 
-		MLPThread thread = client.createThread(new MLPThread("url"));
+		MLPSolution cs = new MLPSolution("solution name", cu.getUserId(), true);
+		cs = client.createSolution(cs);
+		Assert.assertNotNull(cs.getSolutionId());
+
+		MLPSolutionRevision cr = new MLPSolutionRevision(cs.getSolutionId(), "1.0", cu.getUserId());
+		cr = client.createSolutionRevision(cr);
+		Assert.assertNotNull(cr.getRevisionId());
+			
+		MLPThread thread = client.createThread(new MLPThread(cs.getSolutionId(), cr.getRevisionId()));
 		Assert.assertTrue(thread != null && thread.getThreadId() != null);
 		RestPageResponse<MLPThread> threads = client.getThreads(new RestPageRequest(0, 1));
 		Assert.assertTrue(threads != null && threads.getNumberOfElements() > 0);
 
 		MLPThread retrieved = client.getThread(thread.getThreadId());
 		Assert.assertNotNull(retrieved);
+		
+		RestPageResponse<MLPThread> threadsById = client.getThreads(cs.getSolutionId(), cr.getRevisionId(), new RestPageRequest(0, 1));
+		Assert.assertTrue(threadsById != null && threadsById.getNumberOfElements() > 0);
 
 		long threadCount = client.getThreadCount();
 		Assert.assertTrue(threadCount > 0);
@@ -1042,7 +1055,7 @@ public class CdsControllerTest {
 
 		// Violate contraints
 		try {
-			MLPThread t = new MLPThread("too large");
+			MLPThread t = new MLPThread();
 			t.setTitle(s64 + s64);
 			client.createThread(t);
 			throw new Exception("Unexpected success");
@@ -1066,7 +1079,7 @@ public class CdsControllerTest {
 		} catch (HttpStatusCodeException ex) {
 			logger.info("Failed to create dupe as expected {}", ex.getResponseBodyAsString());
 		}
-		MLPThread bogus = new MLPThread("bogus");
+		MLPThread bogus = new MLPThread();
 		bogus.setThreadId("bogus");
 		try {
 			client.getThread("bogus");
@@ -1112,6 +1125,9 @@ public class CdsControllerTest {
 				new RestPageRequest(0, 1));
 		Assert.assertTrue(threadComments != null && threadComments.hasContent());
 
+		RestPageResponse<MLPComment> commentsById = client.getSolutionRevisionComments(cs.getSolutionId(), cr.getRevisionId(), new RestPageRequest(0, 1));
+		Assert.assertTrue(commentsById != null && commentsById.getNumberOfElements() > 0);
+
 		try {
 			client.getComment("bogus", "bogus");
 			throw new Exception("Unexpected success");
@@ -1138,13 +1154,17 @@ public class CdsControllerTest {
 		} catch (HttpStatusCodeException ex) {
 			logger.info("Failed to create comment bad user as expected {}", ex.getResponseBodyAsString());
 		}
+		char [] verylong = new char[8193];
+		for (int i = 0; i < verylong.length; ++i)
+			verylong[i] = 'x';
+		String veryLongString = new String(verylong);
 		try {
 			MLPComment large = new MLPComment(thread.getThreadId(), cu.getUserId(), "text");
-			large.setUrl(s64 + s64 + s64 + s64 + s64 + s64 + s64 + s64 + s64 + s64);
+			large.setText(veryLongString);
 			client.createComment(large);
 			throw new Exception("Unexpected success");
 		} catch (HttpStatusCodeException ex) {
-			logger.info("Failed to create comment with large URL as expected {}", ex.getResponseBodyAsString());
+			logger.info("Failed to create comment with large text as expected {}", ex.getResponseBodyAsString());
 		}
 		try {
 			client.createComment(reply);
@@ -1186,13 +1206,13 @@ public class CdsControllerTest {
 			reply.setUserId(cu.getUserId());
 		}
 		try {
-			reply.setUrl(s64 + s64 + s64 + s64 + s64 + s64 + s64 + s64 + s64 + s64);
+			reply.setText(veryLongString);
 			client.updateComment(reply);
 			throw new Exception("Unexpected success");
 		} catch (HttpStatusCodeException ex) {
-			logger.info("Failed to update existing comment with large URL as expected {}",
+			logger.info("Failed to update existing comment with large text as expected {}",
 					ex.getResponseBodyAsString());
-			reply.setUrl("short");
+			reply.setText("short");
 		}
 		try {
 			client.updateComment(new MLPComment(thread.getThreadId(), "bogus", "text"));
@@ -1210,6 +1230,8 @@ public class CdsControllerTest {
 		client.deleteComment(thread.getThreadId(), parent.getCommentId());
 		client.deleteComment(thread.getThreadId(), reply.getCommentId());
 		client.deleteThread(thread.getThreadId());
+		client.deleteSolutionRevision(cs.getSolutionId(), cr.getRevisionId());
+		client.deleteSolution(cs.getSolutionId());
 		client.deleteUser(cu.getUserId());
 	}
 

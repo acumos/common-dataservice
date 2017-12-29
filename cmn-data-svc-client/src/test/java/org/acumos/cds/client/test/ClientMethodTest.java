@@ -770,12 +770,12 @@ public class ClientMethodTest {
 			logger.info("Client failed as expected: {}", ex.toString());
 		}
 		try {
-			client.createThread(new MLPThread("a"));
+			client.createThread(new MLPThread());
 		} catch (ResourceAccessException ex) {
 			logger.info("Client failed as expected: {}", ex.toString());
 		}
 		try {
-			client.updateThread(new MLPThread("a"));
+			client.updateThread(new MLPThread());
 		} catch (ResourceAccessException ex) {
 			logger.info("Client failed as expected: {}", ex.toString());
 		}
