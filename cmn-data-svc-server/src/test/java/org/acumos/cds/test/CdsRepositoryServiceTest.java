@@ -398,8 +398,8 @@ public class CdsRepositoryServiceTest {
 			Assert.assertTrue(cs.getTags().size() == 1);
 			logger.info("Created solution " + cs.getSolutionId());
 
-			Map<String,String> solParms = new HashMap<>();
-			solParms.put("name",  cs.getName());
+			Map<String, String> solParms = new HashMap<>();
+			solParms.put("name", cs.getName());
 			List<MLPSolution> searchSols = solutionSearchService.getSolutions(solParms, false);
 			Assert.assertTrue(searchSols.size() == 1);
 
@@ -434,16 +434,16 @@ public class CdsRepositoryServiceTest {
 			Assert.assertNotNull(messyResult);
 
 			logger.info("Finding portal solutions");
-			String [] solKw = { solName };
-			String [] descKw = { solDesc };
+			String[] solKw = { solName };
+			String[] descKw = { solDesc };
 			boolean active = true;
 			String[] ownerIds = { cu.getUserId() };
 			String[] accessTypeCodes = { null, AccessTypeCode.PB.name() };
 			String[] modelTypeCodes = { ModelTypeCode.CL.name() };
 			String[] valStatusCodes = { ValidationStatusCode.SB.name() };
 			String[] searchTags = { solTag1.getTag() };
-			Page<MLPSolution> portalSearchResult = solutionSearchService.findPortalSolutions(solKw, descKw,
-					active, ownerIds, accessTypeCodes, modelTypeCodes, valStatusCodes, searchTags,
+			Page<MLPSolution> portalSearchResult = solutionSearchService.findPortalSolutions(solKw, descKw, active,
+					ownerIds, accessTypeCodes, modelTypeCodes, valStatusCodes, searchTags,
 					new PageRequest(0, 2, Direction.ASC, "name"));
 			Assert.assertTrue(portalSearchResult != null && portalSearchResult.getNumberOfElements() > 0);
 			logger.info("Found portal solution total " + portalSearchResult.getTotalElements());
@@ -566,12 +566,16 @@ public class CdsRepositoryServiceTest {
 			solRevArtMapRepository.delete(new MLPSolRevArtMap.SolRevArtMapPK(cr.getRevisionId(), ca.getArtifactId()));
 			logger.info("Dropped" + cr.getRevisionId() + " and " + ca.getArtifactId());
 
-			MLPSiteConfig cc = new MLPSiteConfig("myKey", " { 'json' : 'block' }", cu.getUserId());
+			MLPSiteConfig cc = new MLPSiteConfig("myKey", " { 'json' : 'block' }");
 			cc = siteConfigRepository.save(cc);
 			Assert.assertNotNull(cc);
 			logger.info("Created site config {}", cc);
 
-			MLPThread thread = threadRepository.save(new MLPThread("a"));
+			MLPThread thread = threadRepository.save(new MLPThread(cs.getSolutionId(), cr.getRevisionId()));
+			Page<MLPThread> threads = threadRepository.findBySolutionIdAndRevisionId(cs.getSolutionId(),
+					cr.getRevisionId(), new PageRequest(0, 5, null));
+			Assert.assertTrue(threads != null && threads.hasContent());
+
 			MLPComment mc = commentRepository.save(new MLPComment(thread.getThreadId(), "b", "c"));
 			long crc = commentRepository.count();
 			Assert.assertTrue(crc > 0);
@@ -580,6 +584,10 @@ public class CdsRepositoryServiceTest {
 			Page<MLPComment> commentList = commentRepository.findByThreadId(thread.getThreadId(),
 					new PageRequest(0, 5));
 			Assert.assertTrue(commentList != null && commentList.hasContent());
+			Page<MLPComment> solRevComments = commentRepository.findBySolutionIdAndRevisionId(cs.getSolutionId(),
+					cr.getRevisionId(), new PageRequest(0, 5, null));
+			Assert.assertTrue(solRevComments != null && solRevComments.hasContent());
+
 			commentRepository.delete(mc.getCommentId());
 			threadRepository.delete(thread.getThreadId());
 
@@ -796,7 +804,7 @@ public class CdsRepositoryServiceTest {
 			MLPSolution solById = solutionRepository.findOne(cs.getSolutionId());
 			Assert.assertTrue(solById != null && !solById.getTags().isEmpty());
 			logger.info("Fetched solution: " + solById);
-			
+
 			// Query for tags on the solution
 			Iterable<MLPTag> solTags = solutionTagRepository.findBySolution(cs.getSolutionId());
 			Assert.assertTrue(solTags.iterator().hasNext());
