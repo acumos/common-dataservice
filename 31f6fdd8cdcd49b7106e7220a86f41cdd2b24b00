@@ -86,6 +86,23 @@
       "revId": "31f6fdd8cdcd49b7106e7220a86f41cdd2b24b00",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "005e7bc3_2bea6ee1",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/ThreadController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-01-02T17:29:24Z",
+      "side": 1,
+      "message": "Just to keep it consistent with other method names, won\u0027t the COMMENT_PATH appear earlier in the Request, before the solution and revision path?",
+      "revId": "31f6fdd8cdcd49b7106e7220a86f41cdd2b24b00",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
