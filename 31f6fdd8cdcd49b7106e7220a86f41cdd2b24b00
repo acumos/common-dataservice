@@ -34,6 +34,23 @@
       "revId": "31f6fdd8cdcd49b7106e7220a86f41cdd2b24b00",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "68df8b45_25ca0bd7",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPComment.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-01-02T15:37:39Z",
+      "side": 1,
+      "message": "Is this text comment description? May be rename the column name to description?",
+      "revId": "31f6fdd8cdcd49b7106e7220a86f41cdd2b24b00",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
