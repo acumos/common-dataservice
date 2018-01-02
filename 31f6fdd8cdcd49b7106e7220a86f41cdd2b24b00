@@ -103,6 +103,23 @@
       "revId": "31f6fdd8cdcd49b7106e7220a86f41cdd2b24b00",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dd2f4036_374a119f",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/UserController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 804,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-01-02T18:02:39Z",
+      "side": 1,
+      "message": "Do we have to check if this word \"PageOf\" is consistently removed from the relevant method names of other controllers as well?",
+      "revId": "31f6fdd8cdcd49b7106e7220a86f41cdd2b24b00",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
