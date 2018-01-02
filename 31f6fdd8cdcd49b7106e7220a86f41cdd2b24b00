@@ -69,6 +69,23 @@
       "revId": "31f6fdd8cdcd49b7106e7220a86f41cdd2b24b00",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "868698ec_b1ca8864",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPSiteConfig.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-01-02T15:44:33Z",
+      "side": 1,
+      "message": "Why is this field optional?",
+      "revId": "31f6fdd8cdcd49b7106e7220a86f41cdd2b24b00",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
