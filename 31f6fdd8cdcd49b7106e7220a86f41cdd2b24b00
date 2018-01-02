@@ -16,6 +16,24 @@
       "revId": "31f6fdd8cdcd49b7106e7220a86f41cdd2b24b00",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e74038f9_9bc33a94",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/ICommonDataServiceRestClient.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1396,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-01-02T15:19:45Z",
+      "side": 1,
+      "message": "Indeed they are, but this method existed before, further I don\u0027t think changing the name adds value that exceeds the cost of the churn.",
+      "parentUuid": "10d972c5_3d205ed2",
+      "revId": "31f6fdd8cdcd49b7106e7220a86f41cdd2b24b00",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
