@@ -51,6 +51,24 @@
       "revId": "31f6fdd8cdcd49b7106e7220a86f41cdd2b24b00",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bad1b2a7_cc5ba84b",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPComment.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-01-02T15:40:33Z",
+      "side": 1,
+      "message": "This is the text of the comment.  It\u0027s not exactly a description, it IS the comment written by the user.  So I\u0027m not much in favor of renaming it.",
+      "parentUuid": "68df8b45_25ca0bd7",
+      "revId": "31f6fdd8cdcd49b7106e7220a86f41cdd2b24b00",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
