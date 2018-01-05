@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4982902e_ac9ed924",
+        "filename": "cmn-data-svc-client/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 85
+      },
+      "writtenOn": "2018-01-05T23:25:52Z",
+      "side": 1,
+      "message": "The server-ids have been named in a more generic way. \nLet\u0027s change this to just \"site\"",
+      "range": {
+        "startLine": 241,
+        "startChar": 7,
+        "endLine": 241,
+        "endChar": 18
+      },
+      "revId": "22748d4ab6d339309071b9f6911761518b99eb78",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
