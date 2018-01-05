@@ -15,7 +15,6 @@
 		<!-- silence warning about parent relative path -->
 		<relativePath />
 	</parent>
-	<!-- No repositories section. -->
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -26,20 +25,10 @@
 		<springfox.version>2.7.0</springfox.version>
 		<!-- Jenkins invokes mvn with argument -Dbuild.number=${BUILD_NUMBER} -->
 		<build.number>0</build.number>
-		<!-- EELF jar is in ONAP nexus repo -->
-		<onap.nexus.url>https://nexus.onap.org</onap.nexus.url>
-		<!-- Azure Docker settings are overriden by Jenkins settings -->
-		<docker.host.url>set by Jenkins</docker.host.url>
-		<docker.registry.url>set by Jenkins</docker.registry.url>
-		<docker.registry.login>set by Jenkins</docker.registry.login>
-		<docker.registry.password>set by Jenkins</docker.registry.password>
 		<!-- LF Docker coordinates -->
-		<docker.registry>nexus3.acumos.org:10003</docker.registry>
-		<!-- All acumos.nexus.* are overridden by Azure Jenkins settings -->
-		<acumos.nexus.url>http://cognita-nexus01.eastus.cloudapp.azure.com:8081</acumos.nexus.url>
-		<acumos.nexus.snapshot.path>repository/repo_cognita_platform_maven_snapshots</acumos.nexus.snapshot.path>
-		<acumos.nexus.release.path>repository/repo_cognita_platform_maven</acumos.nexus.release.path>
+		<docker.registry>nexus3.acumos.org:10001</docker.registry>
 	</properties>
+	<!-- No repositories section. -->
 	<dependencies>
 		<dependency>
 			<groupId>org.acumos.common-dataservice</groupId>
@@ -231,16 +220,14 @@
 				<version>0.22.1</version>
 				<configuration>
 					<verbose>true</verbose>
-					<dockerHost>${docker.host.url}</dockerHost>
-					<!-- docker runs on the LF build machine -->
+					<!-- docker runs on the LF build minion so the default value is ok -->
 					<!-- LF <dockerHost>unix:///var/run/docker.sock</dockerHost> LF -->
-					<registry>${docker.registry.url}</registry>
-					<!-- begin azure credentials -->
+					<registry>${docker.registry}</registry>
+					<!-- LF test: supply r/o credentials -->
 					<authConfig>
-						<username>${docker.registry.login}</username>
-						<password>${docker.registry.password}</password>
+						<username>docker</username>
+						<password>docker</password>
 					</authConfig>
-					<!-- end azure credentials -->
 					<images>
 						<image>
 							<name>common-dataservice:${project.version}</name>
