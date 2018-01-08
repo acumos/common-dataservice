@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8f266d0f_189d3f49",
+        "filename": "cmn-data-svc-client/pom.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 85
+      },
+      "writtenOn": "2018-01-08T22:53:55Z",
+      "side": 1,
+      "message": "This should be just \"site\"",
+      "range": {
+        "startLine": 241,
+        "startChar": 7,
+        "endLine": 241,
+        "endChar": 18
+      },
+      "revId": "de6cae0d6d8f9de6fb790d70bfc05f538b6b1600",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "266cc08d_65969b92",
+        "filename": "cmn-data-svc-client/pom.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 85
+      },
+      "writtenOn": "2018-01-08T22:53:55Z",
+      "side": 1,
+      "message": "The dav protocol will need the wagon dependency defined in the pom file:\nhttps://maven.apache.org/plugins/maven-site-plugin/examples/adding-deploy-protocol.html",
+      "range": {
+        "startLine": 242,
+        "startChar": 8,
+        "endLine": 242,
+        "endChar": 11
+      },
+      "revId": "de6cae0d6d8f9de6fb790d70bfc05f538b6b1600",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
