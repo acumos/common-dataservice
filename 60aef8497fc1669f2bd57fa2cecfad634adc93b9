@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7c83a7cf_0ee2a423",
+        "filename": "cmn-data-svc-server/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 89
+      },
+      "writtenOn": "2018-01-08T22:42:54Z",
+      "side": 1,
+      "message": "Can you hard code this to:\nnexus3.acumos.org:10001\n? The error looks like its trying to connect to the registry over 80/443",
+      "revId": "60aef8497fc1669f2bd57fa2cecfad634adc93b9",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
