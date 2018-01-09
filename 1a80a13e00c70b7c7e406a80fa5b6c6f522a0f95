@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "241835f3_c3f2f2b3",
+        "filename": "cmn-data-svc-client/pom.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-01-09T15:23:18Z",
+      "side": 1,
+      "message": "Do you want to bump up the version for this change?",
+      "revId": "1a80a13e00c70b7c7e406a80fa5b6c6f522a0f95",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
