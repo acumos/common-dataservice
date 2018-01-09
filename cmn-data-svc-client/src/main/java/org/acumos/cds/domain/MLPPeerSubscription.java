@@ -52,6 +52,10 @@ public class MLPPeerSubscription extends MLPTimestampedEntity implements Seriali
 	@Size(max = 36)
 	private String peerId;
 
+	@Column(name = "USER_ID", nullable = false, columnDefinition = "CHAR(36)")
+	@Size(max = 36)
+	private String userId;
+
 	// JSON
 	@Column(name = "SELECTOR", columnDefinition = "VARCHAR(1024)")
 	@Size(max = 1024)
@@ -81,11 +85,14 @@ public class MLPPeerSubscription extends MLPTimestampedEntity implements Seriali
 	 * 
 	 * @param peerId
 	 *            Peer ID
+	 * @param userId
+	 *            User ID, the operator
 	 */
-	public MLPPeerSubscription(String peerId) {
-		if (peerId == null)
+	public MLPPeerSubscription(String peerId, String userId) {
+		if (peerId == null || userId == null)
 			throw new IllegalArgumentException("Null not permitted");
 		this.peerId = peerId;
+		this.userId = userId;
 	}
 
 	public Long getSubId() {
@@ -102,6 +109,14 @@ public class MLPPeerSubscription extends MLPTimestampedEntity implements Seriali
 
 	public void setPeerId(String peerId) {
 		this.peerId = peerId;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 
 	public String getSelector() {

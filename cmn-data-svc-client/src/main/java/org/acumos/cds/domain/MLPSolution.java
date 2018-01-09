@@ -73,7 +73,7 @@ public class MLPSolution extends MLPTimestampedEntity implements Serializable {
 	@Size(max = 36)
 	private String ownerId;
 
-	@Column(name = "PROVIDER", columnDefinition = "CHAR(64)")
+	@Column(name = "PROVIDER", columnDefinition = "VARCHAR(64)")
 	@Size(max = 64)
 	private String provider;
 
@@ -116,6 +116,13 @@ public class MLPSolution extends MLPTimestampedEntity implements Serializable {
 	@Column(name = "VALIDATION_STATUS_CD", columnDefinition = "CHAR(2)")
 	@Size(max = 2)
 	private String validationStatusCode;
+
+	/**
+	 * Source of the solution; null indicates local.
+	 */
+	@Column(name = "PEER_ID", columnDefinition = "CHAR(36)")
+	@Size(max = 36)
+	private String peerId;
 
 	/**
 	 * Tags assigned to the solution via a join table. Tags can be reused by many
@@ -285,6 +292,14 @@ public class MLPSolution extends MLPTimestampedEntity implements Serializable {
 	 */
 	public void setValidationStatusCode(String validationStatusCode) {
 		this.validationStatusCode = validationStatusCode;
+	}
+
+	public String getPeerId() {
+		return peerId;
+	}
+
+	public void setPeerId(String peerId) {
+		this.peerId = peerId;
 	}
 
 	/**
