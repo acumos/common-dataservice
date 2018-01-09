@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a445c5e0_d025b45d",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPSolution.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-01-09T20:48:49Z",
+      "side": 1,
+      "message": "Wasn\u0027t there a request to keep this column name as SOURCE_ID?",
+      "revId": "cb684bf5f6334fd7544bec02d8ed86a81382be0c",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
