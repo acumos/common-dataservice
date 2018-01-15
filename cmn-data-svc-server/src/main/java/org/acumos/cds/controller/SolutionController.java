@@ -175,7 +175,7 @@ public class SolutionController extends AbstractController {
 	 *            Sort and page criteria
 	 * @param response
 	 *            HttpServletResponse
-	 * @return List of artifacts, for serialization as JSON
+	 * @return Page of solutions
 	 */
 	@ApiOperation(value = "Gets a page of solutions, optionally sorted on fields.", response = MLPSolution.class, responseContainer = "Page")
 	@RequestMapping(method = RequestMethod.GET)
@@ -191,7 +191,7 @@ public class SolutionController extends AbstractController {
 	 *            Page and sort criteria
 	 * @param response
 	 *            HttpServletResponse
-	 * @return List of solutions
+	 * @return Page of solutions
 	 */
 	@ApiOperation(value = "Searches for solutions with names or descriptions that contain the search term", response = MLPSolution.class, responseContainer = "Page")
 	@RequestMapping(value = "/" + CCDSConstants.SEARCH_PATH + "/" + CCDSConstants.LIKE_PATH, method = RequestMethod.GET)
@@ -209,7 +209,7 @@ public class SolutionController extends AbstractController {
 	 *            Page and sort criteria
 	 * @param response
 	 *            HttpServletResponse
-	 * @return List of solutions
+	 * @return Page of solutions
 	 */
 	@ApiOperation(value = "Gets a page of solutions matching the specified tag.", response = MLPSolution.class, responseContainer = "Page")
 	@RequestMapping(value = "/" + CCDSConstants.SEARCH_PATH + "/" + CCDSConstants.TAG_PATH, method = RequestMethod.GET)
@@ -221,6 +221,22 @@ public class SolutionController extends AbstractController {
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "Failed to find tag " + tag, null);
 		}
 		return solutionRepository.findByTag(tag, pageRequest);
+	}
+
+	/**
+	 * 
+	 * @param dateMillis
+	 *            Date expressed in milliseconds since the epoch
+	 * @param pageRequest
+	 *            Page and sort criteria
+	 * @return Page of solutions
+	 */
+	@ApiOperation(value = "Gets a page of solutions modified after the specified time, expressed in milliseconds since the Epoch.", response = MLPSolution.class, responseContainer = "Page")
+	@RequestMapping(value = "/" + CCDSConstants.SEARCH_PATH + "/" + CCDSConstants.DATE_PATH, method = RequestMethod.GET)
+	@ResponseBody
+	public Page<MLPSolution> findByUpdateDate(@RequestParam("date") Long dateMillis, Pageable pageRequest) {
+		Date date = new Date(dateMillis);
+		return solutionRepository.findModifiedAfter(date, pageRequest);
 	}
 
 	/**
@@ -507,7 +523,7 @@ public class SolutionController extends AbstractController {
 	 *            Array of solution IDs (comma-separated values - the name should be
 	 *            plural but it's declared above). Spring will split the list if the
 	 *            path variable is declared as String array or List of String.
-	 * @return List of solutions
+	 * @return List of revisions
 	 */
 	@ApiOperation(value = "Gets a list of revisions for the specified solution IDs.", response = MLPSolutionRevision.class, responseContainer = "List")
 	@RequestMapping(value = "/{solutionId}/" + CCDSConstants.REVISION_PATH, method = RequestMethod.GET)
@@ -1102,7 +1118,7 @@ public class SolutionController extends AbstractController {
 	 *            Solution ID
 	 * @return List of users
 	 */
-	@ApiOperation(value = "Gets ACL of users for the specified solution.", response = MLPUser.class, responseContainer = "List")
+	@ApiOperation(value = "Gets access-control list of users for the specified solution.", response = MLPUser.class, responseContainer = "List")
 	@RequestMapping(value = "/{solutionId}/" + CCDSConstants.USER_PATH + "/"
 			+ CCDSConstants.ACCESS_PATH, method = RequestMethod.GET)
 	@ResponseBody

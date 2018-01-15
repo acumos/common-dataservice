@@ -20,6 +20,7 @@
 
 package org.acumos.cds.client;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -177,6 +178,19 @@ public interface ICommonDataServiceRestClient {
 	 * @return Page of solution objects.
 	 */
 	RestPageResponse<MLPSolution> findSolutionsByTag(String tag, RestPageRequest pageRequest);
+
+	/**
+	 * Finds solutions modified after the specified date, including modifications to
+	 * the solution, the revisions for the solution, and the artifacts in the
+	 * revisions.
+	 * 
+	 * @param date
+	 *            Date threshold
+	 * @param pageRequest
+	 *            Page index, page size, sort information; ignored if null.
+	 * @return Page of solution objects.
+	 */
+	RestPageResponse<MLPSolution> findSolutionsByModifiedDate(Date date, RestPageRequest pageRequest);
 
 	/**
 	 * Finds solutions that match every specified condition. Special-purpose method

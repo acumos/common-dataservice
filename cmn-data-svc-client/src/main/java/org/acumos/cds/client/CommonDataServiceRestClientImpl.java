@@ -124,7 +124,7 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 	 * @param pass
 	 *            password; ignored if null
 	 */
-	public CommonDataServiceRestClientImpl(String webapiUrl, String user, String pass) {
+	public CommonDataServiceRestClientImpl(final String webapiUrl, final String user, final String pass) {
 		if (webapiUrl == null)
 			throw new IllegalArgumentException("Null URL not permitted");
 
@@ -157,7 +157,32 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 	}
 
 	/**
-	 * Gets an instance to access a remote endpoint using the specified credentials.
+	 * Creates an instance to access the remote endpoint using the specified
+	 * template, which allows HTTP credentials, choice of route, etc.
+	 * 
+	 * Clients should use the static method
+	 * {@link #getInstance(String, RestTemplate)} instead of this constructor.
+	 * 
+	 * @param webapiUrl
+	 *            URL of the web endpoint
+	 * @param restTemplate
+	 *            REST template to use for connections
+	 */
+	public CommonDataServiceRestClientImpl(final String webapiUrl, final RestTemplate restTemplate) {
+		if (webapiUrl == null || restTemplate == null)
+			throw new IllegalArgumentException("Null not permitted");
+		URL url = null;
+		try {
+			url = new URL(webapiUrl);
+			baseUrl = url.toExternalForm();
+		} catch (MalformedURLException ex) {
+			throw new IllegalArgumentException("Failed to parse URL", ex);
+		}
+		this.restTemplate = restTemplate;
+	}
+
+	/**
+	 * Gets an instance to access a remote endpoint using the specified template.
 	 * This factory method is the preferred usage.
 	 * 
 	 * @param webapiUrl
@@ -170,6 +195,19 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 	 */
 	public static ICommonDataServiceRestClient getInstance(String webapiUrl, String user, String pass) {
 		return new CommonDataServiceRestClientImpl(webapiUrl, user, pass);
+	}
+
+	/**
+	 * Gets an instance to access a remote endpoint using the specified template.
+	 * 
+	 * @param webapiUrl
+	 *            URL of the web endpoint
+	 * @param restTemplate
+	 *            REST template
+	 * @return Instance of ICommonDataServiceRestClient
+	 */
+	public static ICommonDataServiceRestClient getInstance(String webapiUrl, RestTemplate restTemplate) {
+		return new CommonDataServiceRestClientImpl(webapiUrl, restTemplate);
 	}
 
 	/**
@@ -379,6 +417,20 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 				new String[] { CCDSConstants.SOLUTION_PATH, CCDSConstants.SEARCH_PATH, CCDSConstants.TAG_PATH }, parms,
 				pageRequest);
 		logger.debug("findSolutionsByTag: uri {}", uri);
+		ResponseEntity<RestPageResponse<MLPSolution>> response = restTemplate.exchange(uri, HttpMethod.GET, null,
+				new ParameterizedTypeReference<RestPageResponse<MLPSolution>>() {
+				});
+		return response.getBody();
+	}
+
+	@Override
+	public RestPageResponse<MLPSolution> findSolutionsByModifiedDate(Date date, RestPageRequest pageRequest) {
+		HashMap<String, Object> parms = new HashMap<>();
+		parms.put(CCDSConstants.DATE_PATH, new Long(date.getTime()));
+		URI uri = buildUri(
+				new String[] { CCDSConstants.SOLUTION_PATH, CCDSConstants.SEARCH_PATH, CCDSConstants.DATE_PATH }, parms,
+				pageRequest);
+		logger.debug("findSolutionsByUpdateDate: uri {}", uri);
 		ResponseEntity<RestPageResponse<MLPSolution>> response = restTemplate.exchange(uri, HttpMethod.GET, null,
 				new ParameterizedTypeReference<RestPageResponse<MLPSolution>>() {
 				});
