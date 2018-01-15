@@ -179,6 +179,19 @@ public interface ICommonDataServiceRestClient {
 	RestPageResponse<MLPSolution> findSolutionsByTag(String tag, RestPageRequest pageRequest);
 
 	/**
+	 * Finds solutions modified after the specified date, including modifications to
+	 * the solution, the revisions for the solution, and the artifacts in the
+	 * revisions.
+	 * 
+	 * @param date
+	 *            Date threshold
+	 * @param pageRequest
+	 *            Page index, page size, sort information; ignored if null.
+	 * @return Page of solution objects.
+	 */
+	// TODO RestPageResponse<MLPSolution> findSolutionsByModifiedDate(Date date, RestPageRequest pageRequest);
+
+	/**
 	 * Finds solutions that match every specified condition. Special-purpose method
 	 * to support the dynamic search page on the portal interface.
 	 * 
@@ -216,7 +229,8 @@ public interface ICommonDataServiceRestClient {
 	 * 
 	 * @param queryParameters
 	 *            Map of field-name, field-value pairs to use as query criteria.
-	 *            Accepts Boolean, Date, Integer, Long, String.
+	 *            Accepts Boolean, Date, Integer, Long, String values; also Array of
+	 *            those types.
 	 * @param isOr
 	 *            If true, finds matches on any field-value pair (conditions are
 	 *            OR-ed together); otherwise finds matches on all field-value pairs
@@ -464,7 +478,8 @@ public interface ICommonDataServiceRestClient {
 	 * 
 	 * @param queryParameters
 	 *            Map of field-name, field-value pairs to use as query criteria.
-	 *            Accepts Boolean, Date, Integer, Long, String.
+	 *            Accepts Boolean, Date, Integer, Long, String values; also Array of
+	 *            those types.
 	 * @param isOr
 	 *            If true, finds matches on any field-value pair (conditions are
 	 *            OR-ed together); otherwise finds matches on all field-value pairs
@@ -542,7 +557,8 @@ public interface ICommonDataServiceRestClient {
 	 * 
 	 * @param queryParameters
 	 *            Map of field-name, field-value pairs to use as query criteria.
-	 *            Accepts Boolean, Date, Integer, Long, String.
+	 *            Accepts Boolean, Date, Integer, Long, String values; also Array of
+	 *            those types.
 	 * @param isOr
 	 *            If true, finds matches on any field-value pair (conditions are
 	 *            OR-ed together); otherwise finds matches on all field-value pairs
@@ -729,7 +745,8 @@ public interface ICommonDataServiceRestClient {
 	 * 
 	 * @param queryParameters
 	 *            Map of field-name, field-value pairs to use as query criteria.
-	 *            Accepts Boolean, Date, Integer, Long, String.
+	 *            Accepts Boolean, Date, Integer, Long, String values; also Array of
+	 *            those types.
 	 * @param isOr
 	 *            If true, finds matches on any field-value pair (conditions are
 	 *            OR-ed together); otherwise finds matches on all field-value pairs
@@ -844,7 +861,8 @@ public interface ICommonDataServiceRestClient {
 	 * 
 	 * @param queryParameters
 	 *            Map of field-name, field-value pairs to use as query criteria.
-	 *            Accepts Boolean, Date, Integer, Long, String.
+	 *            Accepts Boolean, Date, Integer, Long, String values; also Array of
+	 *            those types.
 	 * @param isOr
 	 *            If true, finds matches on any field-value pair (conditions are
 	 *            OR-ed together); otherwise finds matches on all field-value pairs
