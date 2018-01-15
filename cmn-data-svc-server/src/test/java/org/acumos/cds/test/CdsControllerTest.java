@@ -541,7 +541,7 @@ public class CdsControllerTest {
 
 			logger.info("Querying for active PB solutions");
 			Map<String, Object> activePb = new HashMap<>();
-			activePb.put("accessTypeCode", AccessTypeCode.PB.name());
+			activePb.put("accessTypeCode", new String [] {AccessTypeCode.PB.name(), AccessTypeCode.OR.name()});
 			activePb.put("active", Boolean.TRUE);
 			List<MLPSolution> activePbList = client.searchSolutions(activePb, false);
 			Assert.assertTrue(activePbList != null && !activePbList.isEmpty());
@@ -557,6 +557,8 @@ public class CdsControllerTest {
 			logger.info("Querying for solutions with similar names");
 			RestPageResponse<MLPSolution> sl1 = client.findSolutionsBySearchTerm("solution", new RestPageRequest(0, 1));
 			Assert.assertTrue(sl1 != null && sl1.getNumberOfElements() > 0);
+
+			logger.info("Querying for solutions by tag");
 			RestPageResponse<MLPSolution> sl2 = client.findSolutionsByTag(tagName1, new RestPageRequest(0, 1));
 			Assert.assertTrue(sl2 != null && sl2.getNumberOfElements() > 0);
 
