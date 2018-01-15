@@ -21,6 +21,7 @@
 package org.acumos.cds.controller;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -67,6 +68,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -175,7 +177,7 @@ public class SolutionController extends AbstractController {
 	 *            Sort and page criteria
 	 * @param response
 	 *            HttpServletResponse
-	 * @return List of artifacts, for serialization as JSON
+	 * @return Page of solutions
 	 */
 	@ApiOperation(value = "Gets a page of solutions, optionally sorted on fields.", response = MLPSolution.class, responseContainer = "Page")
 	@RequestMapping(method = RequestMethod.GET)
@@ -191,7 +193,7 @@ public class SolutionController extends AbstractController {
 	 *            Page and sort criteria
 	 * @param response
 	 *            HttpServletResponse
-	 * @return List of solutions
+	 * @return Page of solutions
 	 */
 	@ApiOperation(value = "Searches for solutions with names or descriptions that contain the search term", response = MLPSolution.class, responseContainer = "Page")
 	@RequestMapping(value = "/" + CCDSConstants.SEARCH_PATH + "/" + CCDSConstants.LIKE_PATH, method = RequestMethod.GET)
@@ -209,7 +211,7 @@ public class SolutionController extends AbstractController {
 	 *            Page and sort criteria
 	 * @param response
 	 *            HttpServletResponse
-	 * @return List of solutions
+	 * @return Page of solutions
 	 */
 	@ApiOperation(value = "Gets a page of solutions matching the specified tag.", response = MLPSolution.class, responseContainer = "Page")
 	@RequestMapping(value = "/" + CCDSConstants.SEARCH_PATH + "/" + CCDSConstants.TAG_PATH, method = RequestMethod.GET)
@@ -222,6 +224,27 @@ public class SolutionController extends AbstractController {
 		}
 		return solutionRepository.findByTag(tag, pageRequest);
 	}
+
+	/**
+	 * 
+	 * @param dateMillis
+	 *            Date expressed in milliseconds since the epoch
+	 * @param pageRequest
+	 *            Page and sort criteria
+	 * @return Page of solutions
+	 */
+	// TODO
+	// @ApiOperation(value = "Gets a page of solutions modified after the specified
+	// time, expressed in milliseconds since the Epoch.", response =
+	// MLPSolution.class, responseContainer = "Page")
+	// @RequestMapping(value = "/" + CCDSConstants.SEARCH_PATH + "/" +
+	// CCDSConstants.DATE_PATH, method = RequestMethod.GET)
+	// @ResponseBody
+	// public Page<MLPSolution> findByUpdateDate(@RequestParam("date") Long
+	// dateMillis, Pageable pageRequest) {
+	// Date date = new Date(dateMillis);
+	// return solutionRepository.findModifiedAfter(date, pageRequest);
+	// }
 
 	/**
 	 * Fetches the value, splits on comma, and converts the four-letter sequence
@@ -252,16 +275,17 @@ public class SolutionController extends AbstractController {
 	 *            HttpServletResponse
 	 * @return List of solutions
 	 */
-	@ApiOperation(value = "Gets a list of solutions, optionally restricted by field name - field value pairs specified as query parameters.", response = MLPSolution.class, responseContainer = "List")
+	@ApiOperation(value = "Gets a list of solutions, optionally restricted by field name - field value pairs specified as query parameters. Defaults to and (conjunction); send junction query parameter = o for or (disunction).", response = MLPSolution.class, responseContainer = "List")
 	@RequestMapping(value = "/" + CCDSConstants.SEARCH_PATH, method = RequestMethod.GET)
 	@ResponseBody
-	public Object searchSolutions(@RequestParam Map<String, String> queryParameters, HttpServletResponse response) {
+	public Object searchSolutions(@RequestParam MultiValueMap<String, String> queryParameters,
+			HttpServletResponse response) {
 		try {
 			Map<String, Object> convertedQryParm = null;
 			boolean isOr = false;
 			if (queryParameters != null && queryParameters.size() > 0) {
-				String junction = queryParameters.remove(CCDSConstants.JUNCTION_QUERY_PARAM);
-				isOr = junction != null && "o".equals(junction);
+				List<String> junction = queryParameters.remove(CCDSConstants.JUNCTION_QUERY_PARAM);
+				isOr = junction != null && junction.size() == 1 && "o".equals(junction.get(0));
 				convertedQryParm = convertQueryParameters(MLPSolution.class, queryParameters);
 			}
 			return solutionSearchService.getSolutions(convertedQryParm, isOr);
@@ -507,7 +531,7 @@ public class SolutionController extends AbstractController {
 	 *            Array of solution IDs (comma-separated values - the name should be
 	 *            plural but it's declared above). Spring will split the list if the
 	 *            path variable is declared as String array or List of String.
-	 * @return List of solutions
+	 * @return List of revisions
 	 */
 	@ApiOperation(value = "Gets a list of revisions for the specified solution IDs.", response = MLPSolutionRevision.class, responseContainer = "List")
 	@RequestMapping(value = "/{solutionId}/" + CCDSConstants.REVISION_PATH, method = RequestMethod.GET)
@@ -1102,7 +1126,7 @@ public class SolutionController extends AbstractController {
 	 *            Solution ID
 	 * @return List of users
 	 */
-	@ApiOperation(value = "Gets ACL of users for the specified solution.", response = MLPUser.class, responseContainer = "List")
+	@ApiOperation(value = "Gets access-control list of users for the specified solution.", response = MLPUser.class, responseContainer = "List")
 	@RequestMapping(value = "/{solutionId}/" + CCDSConstants.USER_PATH + "/"
 			+ CCDSConstants.ACCESS_PATH, method = RequestMethod.GET)
 	@ResponseBody
