@@ -31,7 +31,8 @@ import org.acumos.cds.domain.MLPArtifact;
 public interface ArtifactSearchService {
 
 	/**
-	 * Gets all instances matching the specified query parameters.
+	 * Gets all instances matching the query parameters. Depending on the isOr
+	 * value, either all parameters or any parameter must match.
 	 * 
 	 * @param queryParameters
 	 *            field-name, field-value pairs; ignored if null or empty.

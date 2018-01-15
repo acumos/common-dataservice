@@ -39,8 +39,8 @@ public abstract class AbstractSearchServiceImpl {
 	 *            Criteria object to extend
 	 * @param queryParameters
 	 *            Map of field name - field value pairs; ignored if null or empty.
-	 *            An "equals" criterion is created, unless the field value is n
-	 *            array, in which case a "in" criterion is created.
+	 *            Value may be a scalar or array. An "equals" criterion is created
+	 *            for scalar values. An "in" criterion is created for array values.
 	 * @param isOr
 	 *            If true, treat the query as a disjunction; else as a conjunction.
 	 */
