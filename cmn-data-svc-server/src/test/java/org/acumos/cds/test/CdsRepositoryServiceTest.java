@@ -526,8 +526,15 @@ public class CdsRepositoryServiceTest {
 			Assert.assertTrue(sul != null && sul.iterator().hasNext());
 			logger.info("User list: {}", sul);
 
-			Iterable<MLPSolution> solbytag = solutionRepository.findByTag("Java", new PageRequest(0, 5, null));
-			logger.info("Solutions by tag: {}", solbytag);
+			Iterable<MLPSolution> solByTag = solutionRepository.findByTag("Java", new PageRequest(0, 5, null));
+			logger.info("Solutions by tag: {}", solByTag);
+			Assert.assertTrue(solByTag != null && solByTag.iterator().hasNext());
+
+			Date anHourAgo = new java.util.Date();
+			anHourAgo.setTime(new Date().getTime() - (1000L * 60 * 60));
+			Iterable<MLPSolution> solByDate = solutionRepository.findModifiedAfter(anHourAgo, new PageRequest(0, 5, null));
+			logger.info("Solutions by date: {}", solByDate);
+			Assert.assertTrue(solByDate != null && solByDate.iterator().hasNext());
 
 			MLPUser founduser = userRepository.findByLoginOrEmail("test_user7");
 			logger.info("Found user: {}", founduser);
