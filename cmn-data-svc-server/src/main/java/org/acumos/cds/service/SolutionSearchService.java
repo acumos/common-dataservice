@@ -33,10 +33,13 @@ import org.springframework.data.domain.Pageable;
 public interface SolutionSearchService {
 
 	/**
-	 * Gets all instances matching all query parameters.
+	 * Gets all instances matching the query parameters. Depending on the isOr
+	 * value, either all parameters or any parameter must match.
 	 * 
 	 * @param queryParameters
-	 *            field-name, field-value pairs; ignored if null or empty.
+	 *            field-name, field-value pairs; ignored if null or empty. An array
+	 *            may be used instead of a single value to check for a match in a
+	 *            set of values.
 	 * @param isOr
 	 *            If true, the query is a disjunction ("or"); otherwise the query is
 	 *            a conjunction ("and").

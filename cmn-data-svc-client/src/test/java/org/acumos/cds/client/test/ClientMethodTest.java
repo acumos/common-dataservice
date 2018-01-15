@@ -169,6 +169,12 @@ public class ClientMethodTest {
 		} catch (ResourceAccessException ex) {
 			logger.info("Client failed as expected: {}", ex.toString());
 		}
+		// TODO
+		// try {
+		// client.findSolutionsByModifiedDate(new Date(), new RestPageRequest());
+		// } catch (ResourceAccessException ex) {
+		// logger.info("Client failed as expected: {}", ex.toString());
+		// }
 		try {
 			client.searchSolutions(new HashMap<String, Object>(), true);
 		} catch (ResourceAccessException ex) {
