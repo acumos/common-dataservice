@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e085ee42_46fa4397",
+        "filename": "docs/release-notes.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 94
+      },
+      "writtenOn": "2018-01-16T16:19:09Z",
+      "side": 1,
+      "message": "I think there should be another - here, to make the dash line the same length as the line above. Is the RST validation job running?",
+      "range": {
+        "startLine": 9,
+        "startChar": 29,
+        "endLine": 9,
+        "endChar": 30
+      },
+      "revId": "85e176c79311d9ef3286bc8816d7e8e7e859b6f4",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
