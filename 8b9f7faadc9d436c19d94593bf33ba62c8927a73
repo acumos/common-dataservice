@@ -67,6 +67,23 @@
       "revId": "8b9f7faadc9d436c19d94593bf33ba62c8927a73",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c57e0810_b9a173eb",
+        "filename": "cmn-data-svc-server/src/test/java/org/acumos/cds/test/CdsControllerTest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 628,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-01-17T22:25:28Z",
+      "side": 1,
+      "message": "Clean up the commented lines",
+      "revId": "8b9f7faadc9d436c19d94593bf33ba62c8927a73",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
