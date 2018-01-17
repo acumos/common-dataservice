@@ -33,6 +33,40 @@
       "revId": "8b9f7faadc9d436c19d94593bf33ba62c8927a73",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c9ce1e60_78b8a219",
+        "filename": "cmn-data-svc-client/src/test/java/org/acumos/cds/client/test/ClientMethodTest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-01-17T22:11:40Z",
+      "side": 1,
+      "message": "Clean up the comments",
+      "revId": "8b9f7faadc9d436c19d94593bf33ba62c8927a73",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2e1403c6_50fc7158",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/SolutionController.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-01-17T22:11:40Z",
+      "side": 1,
+      "message": "Clean up the commented lines",
+      "revId": "8b9f7faadc9d436c19d94593bf33ba62c8927a73",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
