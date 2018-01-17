@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6a4f58c6_4482e1e1",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/CommonDataServiceRestClientImpl.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-01-17T21:50:47Z",
+      "side": 1,
+      "message": "May be clean up the commented lines?",
+      "revId": "8b9f7faadc9d436c19d94593bf33ba62c8927a73",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
