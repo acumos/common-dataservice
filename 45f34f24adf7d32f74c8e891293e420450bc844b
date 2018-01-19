@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0a46cdeb_01e37f02",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/CodeTableController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-01-19T16:17:01Z",
+      "side": 1,
+      "message": "Any reason you are removing the throwing of exceptions from various places?",
+      "revId": "45f34f24adf7d32f74c8e891293e420450bc844b",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
