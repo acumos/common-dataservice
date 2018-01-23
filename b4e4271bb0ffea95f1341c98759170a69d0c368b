@@ -16,6 +16,24 @@
       "revId": "b4e4271bb0ffea95f1341c98759170a69d0c368b",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "88d774b2_445d726d",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/DeploymentStatusCode.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-01-23T15:20:00Z",
+      "side": 1,
+      "message": "The trailing slashes prevent the Eclipse code formatter from joining the lines - I like the one-per-line appearance much better.",
+      "parentUuid": "8e44709a_3c85dd42",
+      "revId": "b4e4271bb0ffea95f1341c98759170a69d0c368b",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
