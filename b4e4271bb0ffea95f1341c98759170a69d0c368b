@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8e44709a_3c85dd42",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/DeploymentStatusCode.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-01-23T15:18:15Z",
+      "side": 1,
+      "message": "please clean up the slashes",
+      "revId": "b4e4271bb0ffea95f1341c98759170a69d0c368b",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
