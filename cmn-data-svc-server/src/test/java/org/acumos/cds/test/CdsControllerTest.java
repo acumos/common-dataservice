@@ -60,6 +60,9 @@ import org.acumos.cds.domain.MLPSolutionRating;
 import org.acumos.cds.domain.MLPSolutionRevision;
 import org.acumos.cds.domain.MLPSolutionValidation;
 import org.acumos.cds.domain.MLPSolutionWeb;
+import org.acumos.cds.domain.MLPStepResult;
+import org.acumos.cds.domain.MLPStepStatus;
+import org.acumos.cds.domain.MLPStepType;
 import org.acumos.cds.domain.MLPTag;
 import org.acumos.cds.domain.MLPThread;
 import org.acumos.cds.domain.MLPToolkitType;
@@ -249,6 +252,16 @@ public class CdsControllerTest {
 		Assert.assertTrue(tt.size() > 0);
 		for (MLPValidationType m : vt)
 			logger.info("Validation type {}", m);
+	
+		List<MLPStepStatus> ss = client.getStepStatuses();
+		Assert.assertTrue(ss.size() > 0);
+		for (MLPStepStatus s : ss)
+			logger.info("Step Status {}", s);
+	
+		List<MLPStepType> st = client.getStepTypes();
+		Assert.assertTrue(st.size() > 0);
+		for (MLPStepType s : st)
+			logger.info("Step Type {}", s);
 	}
 
 	@Test
@@ -474,7 +487,6 @@ public class CdsControllerTest {
 			RestPageResponse<MLPTag> tags = client.getTags(new RestPageRequest(0, 100));
 			Assert.assertTrue(tags.getNumberOfElements() > 0);
 
-			// public solution
 			MLPSolution cs = new MLPSolution();
 			cs.setName("solution name");
 			cs.setOwnerId(cu.getUserId());
@@ -595,14 +607,13 @@ public class CdsControllerTest {
 			String [] nameKw = null;
 			String [] descKw = null;
 			String [] owners = { cu.getUserId() };
-			String [] accessTypeCodes = { AccessTypeCode.PB.name(), AccessTypeCode.OR.name() };
+			String [] accessTypeCodes = { AccessTypeCode.PB.name() };
 			String [] modelTypeCodes = null;
 			String [] valStatusCodes = { ValidationStatusCode.IP.name(), "null" };
 			searchTags = null;
-			// find active solutions
 			RestPageResponse<MLPSolution> portalActiveMatches = client.findPortalSolutions(nameKw, descKw, true, owners, accessTypeCodes, modelTypeCodes, valStatusCodes, searchTags, 
-					new RestPageRequest(0, 9));
-			Assert.assertTrue(portalActiveMatches != null && portalActiveMatches.getNumberOfElements() > 1);
+					new RestPageRequest(0, 1));
+			Assert.assertTrue(portalActiveMatches != null && portalActiveMatches.getNumberOfElements() > 0);
 
 			// Add user access
 			client.addSolutionUserAccess(cs.getSolutionId(), cu.getUserId());
@@ -983,6 +994,52 @@ public class CdsControllerTest {
 		}
 
 	}
+
+	@Test
+	public void testStepResult() throws Exception {
+		try {
+			
+			MLPStepResult sr = new MLPStepResult();
+			if (client.getStepTypes().size() > 0) {
+				sr.setStepCode(client.getStepTypes().get(0).getStepCode());
+			}
+			else 
+				sr.setStepCode("");
+			
+			sr.setName("Soultion ID creation");
+			if (client.getStepStatuses().size() > 0) {
+				sr.setStatusCode(client.getStepStatuses().get(0).getStatusCode()); 
+			}
+			else 
+				sr.setStatusCode("");
+			
+			Date now = new Date();
+			sr.setStartDate(new Date(now.getTime() - 60 * 1000));
+			
+			sr = client.createStepResult(sr);
+			Assert.assertNotNull(sr.getStepResultId());
+
+			sr.setResult("New stack trace");
+			client.updateStepResult(sr);
+
+			long srCountTrans = client.getStepResultCount();
+			Assert.assertTrue(srCountTrans > 0);
+
+			RestPageResponse<MLPStepResult> stepResults = client.getStepResults(new RestPageRequest(0, 100));
+			Assert.assertTrue(stepResults.getNumberOfElements() == srCountTrans);
+			Assert.assertTrue(stepResults.iterator().hasNext());
+			logger.info("First step result {}", stepResults.iterator().next());
+
+			client.deleteStepResult(sr.getStepResultId());
+			
+		} catch (HttpStatusCodeException ex) {
+			logger.error("testStepResults got response {}", ex.getResponseBodyAsString());
+			logger.error("testStepResults failed", ex);
+			throw ex;
+		}
+
+	}	
+
 
 	@Test
 	public void testSiteConfig() throws Exception {

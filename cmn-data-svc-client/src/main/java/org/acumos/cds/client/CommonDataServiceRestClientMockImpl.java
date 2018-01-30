@@ -54,6 +54,9 @@ import org.acumos.cds.domain.MLPSolutionRating;
 import org.acumos.cds.domain.MLPSolutionRevision;
 import org.acumos.cds.domain.MLPSolutionValidation;
 import org.acumos.cds.domain.MLPSolutionWeb;
+import org.acumos.cds.domain.MLPStepResult;
+import org.acumos.cds.domain.MLPStepStatus;
+import org.acumos.cds.domain.MLPStepType;
 import org.acumos.cds.domain.MLPTag;
 import org.acumos.cds.domain.MLPThread;
 import org.acumos.cds.domain.MLPToolkitType;
@@ -144,6 +147,8 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 	private RestPageResponse<MLPNotification> notifications;
 	private MLPNotification notification;
 	private RestPageResponse<MLPUserNotification> userNotifications;
+	private MLPStepResult stepResult;
+	private long stepResultCount = 0;
 	private MLPSolutionWeb solutionWeb = new MLPSolutionWeb();
 	private List<MLPUser> solutionAccessUsers;
 	private RestPageResponse<MLPSolution> userAccessSolutions;
@@ -1353,6 +1358,48 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 	public RestPageResponse<MLPComment> getSolutionRevisionComments(String solutionId, String revisionId,
 			RestPageRequest pageRequest) {
 		return this.solutionRevisionComments;
+	}
+
+	@Override
+	public RestPageResponse<MLPStepResult> getStepResults(RestPageRequest pageRequest) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public MLPStepResult createStepResult(MLPStepResult stepResult) {
+		// TODO Auto-generated method stub
+		return this.stepResult;
+	}
+
+	@Override
+	public void updateStepResult(MLPStepResult stepResult) {
+		this.stepResult = stepResult;
+		
+	}
+
+	@Override
+	public void deleteStepResult(Long stepResultId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<MLPStepStatus> getStepStatuses() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<MLPStepType> getStepTypes() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public long getStepResultCount() {
+		// TODO Auto-generated method stub
+		return this.stepResultCount;
 	}
 
 }

@@ -55,6 +55,7 @@ import org.acumos.cds.domain.MLPSolutionRating;
 import org.acumos.cds.domain.MLPSolutionRating.SolutionRatingPK;
 import org.acumos.cds.domain.MLPSolutionRevision;
 import org.acumos.cds.domain.MLPSolutionWeb;
+import org.acumos.cds.domain.MLPStepResult;
 import org.acumos.cds.domain.MLPTag;
 import org.acumos.cds.domain.MLPThread;
 import org.acumos.cds.domain.MLPToolkitType;
@@ -84,6 +85,7 @@ import org.acumos.cds.repository.SolutionRatingRepository;
 import org.acumos.cds.repository.SolutionRepository;
 import org.acumos.cds.repository.SolutionRevisionRepository;
 import org.acumos.cds.repository.SolutionWebRepository;
+import org.acumos.cds.repository.StepResultRepository;
 import org.acumos.cds.repository.TagRepository;
 import org.acumos.cds.repository.ThreadRepository;
 import org.acumos.cds.repository.ToolkitTypeRepository;
@@ -96,6 +98,8 @@ import org.acumos.cds.service.PeerSearchService;
 import org.acumos.cds.service.RoleSearchService;
 import org.acumos.cds.service.SolutionSearchService;
 import org.acumos.cds.service.UserSearchService;
+import org.acumos.cds.transport.RestPageRequest;
+import org.acumos.cds.transport.RestPageResponse;
 import org.acumos.cds.util.EELFLoggerDelegate;
 import org.junit.Assert;
 import org.junit.Test;
@@ -184,6 +188,9 @@ public class CdsRepositoryServiceTest {
 	private SolutionSearchService solutionSearchService;
 	@Autowired
 	private UserSearchService userService;
+	@Autowired
+	private StepResultRepository stepResultRepository;
+
 
 	@Test
 	public void testingRepositories() throws Exception {
@@ -1040,6 +1047,38 @@ public class CdsRepositoryServiceTest {
 			notifUserMapRepository.delete(nm);
 			notificationRepository.delete(no);
 			userRepository.delete(cu);
+		} catch (Exception ex) {
+			logger.error("Failed", ex);
+			throw ex;
+		}
+
+	}
+
+	@Test
+	public void testStepResults() throws Exception {
+		try {
+			MLPStepResult sr = new MLPStepResult();
+			
+			sr.setStepCode("OB");
+			sr.setName("Soultion ID creation");
+			sr.setStatusCode("FA");
+			
+			Date now = new Date();
+			sr.setStartDate(new Date(now.getTime() - 60 * 1000));
+
+			sr = stepResultRepository.save(sr);
+			Assert.assertNotNull(sr.getStepResultId());
+
+			long srCountTrans = stepResultRepository.count();
+			Assert.assertTrue(srCountTrans > 0);
+			Assert.assertNotNull(stepResultRepository.findOne(sr.getStepResultId()));
+			logger.info("First step result {}", stepResultRepository.findOne(sr.getStepResultId()));
+						
+			sr.setResult("New stack trace1");
+			stepResultRepository.save(sr);
+			Assert.assertNotNull(stepResultRepository.findOne(sr.getStepResultId()).getResult());
+			//client.deleteStepResult(sr.getStepResultId());
+
 		} catch (Exception ex) {
 			logger.error("Failed", ex);
 			throw ex;

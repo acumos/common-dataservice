@@ -45,6 +45,9 @@ import org.acumos.cds.domain.MLPSolutionRating;
 import org.acumos.cds.domain.MLPSolutionRevision;
 import org.acumos.cds.domain.MLPSolutionValidation;
 import org.acumos.cds.domain.MLPSolutionWeb;
+import org.acumos.cds.domain.MLPStepResult;
+import org.acumos.cds.domain.MLPStepStatus;
+import org.acumos.cds.domain.MLPStepType;
 import org.acumos.cds.domain.MLPTag;
 import org.acumos.cds.domain.MLPThread;
 import org.acumos.cds.domain.MLPToolkitType;
@@ -1490,5 +1493,21 @@ public interface ICommonDataServiceRestClient {
 	 *            comment ID
 	 */
 	void deleteComment(String threadId, String commentId);
+
+	RestPageResponse<MLPStepResult> getStepResults(RestPageRequest pageRequest);
+
+	MLPStepResult createStepResult(MLPStepResult stepResult);
+
+	void updateStepResult(MLPStepResult stepResult);
+
+	void deleteStepResult(Long stepResultId);
+
+	List<MLPStepStatus> getStepStatuses();
+
+	List<MLPStepType> getStepTypes();
+
+	long getStepResultCount();
+	
+	
 
 }
