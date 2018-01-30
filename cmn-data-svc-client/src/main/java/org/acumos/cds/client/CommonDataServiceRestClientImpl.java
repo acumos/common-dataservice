@@ -53,6 +53,9 @@ import org.acumos.cds.domain.MLPSolutionRating;
 import org.acumos.cds.domain.MLPSolutionRevision;
 import org.acumos.cds.domain.MLPSolutionValidation;
 import org.acumos.cds.domain.MLPSolutionWeb;
+import org.acumos.cds.domain.MLPStepResult;
+import org.acumos.cds.domain.MLPStepStatus;
+import org.acumos.cds.domain.MLPStepType;
 import org.acumos.cds.domain.MLPTag;
 import org.acumos.cds.domain.MLPThread;
 import org.acumos.cds.domain.MLPToolkitType;
@@ -111,8 +114,8 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 	 * Creates an instance to access the remote endpoint using the specified
 	 * credentials.
 	 * 
-	 * If user and pass are both supplied, uses basic HTTP authentication; if either
-	 * one is missing, no authentication is used.
+	 * If user and pass are both supplied, uses basic HTTP authentication; if
+	 * either one is missing, no authentication is used.
 	 * 
 	 * Clients should use the static method
 	 * {@link #getInstance(String, String, String)} instead of this constructor.
@@ -182,8 +185,8 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 	}
 
 	/**
-	 * Gets an instance to access a remote endpoint using the specified template.
-	 * This factory method is the preferred usage.
+	 * Gets an instance to access a remote endpoint using the specified
+	 * template. This factory method is the preferred usage.
 	 * 
 	 * @param webapiUrl
 	 *            URL of the web endpoint
@@ -198,7 +201,8 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 	}
 
 	/**
-	 * Gets an instance to access a remote endpoint using the specified template.
+	 * Gets an instance to access a remote endpoint using the specified
+	 * template.
 	 * 
 	 * @param webapiUrl
 	 *            URL of the web endpoint
@@ -220,16 +224,17 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 	}
 
 	/**
-	 * Builds URI by adding specified path segments and query parameters to the base
-	 * URL. Converts an array of values to a series of parameters with the same
-	 * name; e.g., "find foo in list [a,b]" becomes request parameters
+	 * Builds URI by adding specified path segments and query parameters to the
+	 * base URL. Converts an array of values to a series of parameters with the
+	 * same name; e.g., "find foo in list [a,b]" becomes request parameters
 	 * "foo=a&foo=b".
 	 * 
 	 * @param path
 	 *            Array of path segments
 	 * @param queryParams
-	 *            key-value pairs; ignored if null or empty. Gives special treatment
-	 *            to Date-type values, Array values, and null values inside arrays.
+	 *            key-value pairs; ignored if null or empty. Gives special
+	 *            treatment to Date-type values, Array values, and null values
+	 *            inside arrays.
 	 * @param restPageRequest
 	 *            page, size and sort specification; ignored if null.
 	 * @return
@@ -369,6 +374,26 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 		logger.debug("getDeploymentStatuses: uri {}", uri);
 		ResponseEntity<List<MLPDeploymentStatus>> response = restTemplate.exchange(uri, HttpMethod.GET, null,
 				new ParameterizedTypeReference<List<MLPDeploymentStatus>>() {
+				});
+		return response.getBody();
+	}
+
+	@Override
+	public List<MLPStepStatus> getStepStatuses() {
+		URI uri = buildUri(new String[] { CCDSConstants.STEP_STAT_PATH }, null, null);
+		logger.debug("getStepStatuses: uri {}", uri);
+		ResponseEntity<List<MLPStepStatus>> response = restTemplate.exchange(uri, HttpMethod.GET, null,
+				new ParameterizedTypeReference<List<MLPStepStatus>>() {
+				});
+		return response.getBody();
+	}
+
+	@Override
+	public List<MLPStepType> getStepTypes() {
+		URI uri = buildUri(new String[] { CCDSConstants.STEP_TYPE_PATH }, null, null);
+		logger.debug("getStepTypes: uri {}", uri);
+		ResponseEntity<List<MLPStepType>> response = restTemplate.exchange(uri, HttpMethod.GET, null,
+				new ParameterizedTypeReference<List<MLPStepType>>() {
 				});
 		return response.getBody();
 	}
@@ -1662,6 +1687,38 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 		URI uri = buildUri(new String[] { CCDSConstants.THREAD_PATH, threadId, CCDSConstants.COMMENT_PATH, commentId },
 				null, null);
 		logger.debug("deleteComment: url {}", uri);
+		restTemplate.delete(uri);
+	}
+
+	@Override
+	public RestPageResponse<MLPStepResult> getStepResults(RestPageRequest pageRequest) {
+		URI uri = buildUri(new String[] { CCDSConstants.STEP_RESULT_PATH }, null, pageRequest);
+		logger.debug("getStepResults: uri {}", uri);
+		ResponseEntity<RestPageResponse<MLPStepResult>> response = restTemplate.exchange(uri, HttpMethod.GET, null,
+				new ParameterizedTypeReference<RestPageResponse<MLPStepResult>>() {
+				});
+		return response.getBody();
+	}
+
+	@Override
+	public MLPStepResult createStepResult(MLPStepResult stepResult) {
+		URI uri = buildUri(new String[] { CCDSConstants.STEP_RESULT_PATH }, null, null);
+		logger.debug("createStepResult: uri {}", uri);
+		return restTemplate.postForObject(uri, stepResult, MLPStepResult.class);
+	}
+
+	@Override
+	public void updateStepResult(MLPStepResult stepResult) {
+		URI uri = buildUri(new String[] { CCDSConstants.STEP_RESULT_PATH, Long.toString(stepResult.getStepResultId()) },
+				null, null);
+		logger.debug("updateStepResult: url {}", uri);
+		restTemplate.put(uri, stepResult);
+	}
+
+	@Override
+	public void deleteStepResult(Long stepResultId) {
+		URI uri = buildUri(new String[] { CCDSConstants.STEP_RESULT_PATH, Long.toString(stepResultId) }, null, null);
+		logger.debug("deleteStepResult: url {}", uri);
 		restTemplate.delete(uri);
 	}
 
