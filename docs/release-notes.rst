@@ -5,6 +5,10 @@ Release Notes
 The client and server are released together.  The client is deployed as a jar file to a
 Maven Nexus repository. The server is deployed as a Docker image to a Docker registry.
 
+Version 1.14.0, ? February 2018
+-------------------------------
+* Add peer group, solution group and mapping features for federation access control (ACUMOS-62)
+
 Version 1.13.1, 9 February 2018
 -------------------------------
 
@@ -15,7 +19,7 @@ Version 1.13.1, 9 February 2018
 Version 1.13.0, 7 February 2018
 -------------------------------
 
-* Add features for workflow step results (ACUMOS-56)
+* Add workflow step feature for onboarding and validation result persistence (ACUMOS-56)
 * Add origin attribute to solution and revision entities (ACUMOS-59)
 * Revise search methods to return a page of results
 * Revise peer and peer subscription attributes (ACUMOS-60, ACUMOS-167)
