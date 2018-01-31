@@ -34,12 +34,15 @@ import org.acumos.cds.domain.MLPArtifact;
 import org.acumos.cds.domain.MLPArtifactType;
 import org.acumos.cds.domain.MLPComment;
 import org.acumos.cds.domain.MLPDeploymentStatus;
+import org.acumos.cds.domain.MLPGrpPeerMap;
+import org.acumos.cds.domain.MLPGrpPeerSolMap;
 import org.acumos.cds.domain.MLPLoginProvider;
 import org.acumos.cds.domain.MLPModelType;
 import org.acumos.cds.domain.MLPNotifUserMap;
 import org.acumos.cds.domain.MLPNotification;
 import org.acumos.cds.domain.MLPPasswordChangeRequest;
 import org.acumos.cds.domain.MLPPeer;
+import org.acumos.cds.domain.MLPPeerGroup;
 import org.acumos.cds.domain.MLPPeerSubscription;
 import org.acumos.cds.domain.MLPRole;
 import org.acumos.cds.domain.MLPRoleFunction;
@@ -49,6 +52,7 @@ import org.acumos.cds.domain.MLPSolution;
 import org.acumos.cds.domain.MLPSolutionDeployment;
 import org.acumos.cds.domain.MLPSolutionDownload;
 import org.acumos.cds.domain.MLPSolutionFavorite;
+import org.acumos.cds.domain.MLPSolutionGroup;
 import org.acumos.cds.domain.MLPSolutionRating;
 import org.acumos.cds.domain.MLPSolutionRevision;
 import org.acumos.cds.domain.MLPSolutionValidation;
@@ -1717,6 +1721,163 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 	public void deleteStepResult(Long stepResultId) {
 		URI uri = buildUri(new String[] { CCDSConstants.STEP_RESULT_PATH, Long.toString(stepResultId) }, null, null);
 		logger.debug("deleteStepResult: url {}", uri);
+		restTemplate.delete(uri);
+	}
+
+	@Override
+	public RestPageResponse<MLPPeerGroup> getPeerGroups(RestPageRequest pageRequest) {
+		URI uri = buildUri(new String[] { CCDSConstants.GROUP_PATH, CCDSConstants.PEER_PATH }, null, pageRequest);
+		logger.debug("getPeerGroups: uri {}", uri);
+		ResponseEntity<RestPageResponse<MLPPeerGroup>> response = restTemplate.exchange(uri, HttpMethod.GET, null,
+				new ParameterizedTypeReference<RestPageResponse<MLPPeerGroup>>() {
+				});
+		return response.getBody();
+	}
+
+	@Override
+	public MLPPeerGroup createPeerGroup(MLPPeerGroup peerGroup) {
+		URI uri = buildUri(new String[] { CCDSConstants.GROUP_PATH, CCDSConstants.PEER_PATH }, null, null);
+		logger.debug("createPeerGroup: uri {}", uri);
+		return restTemplate.postForObject(uri, peerGroup, MLPPeerGroup.class);
+	}
+
+	@Override
+	public void updatePeerGroup(MLPPeerGroup peerGroup) {
+		URI uri = buildUri(new String[] { CCDSConstants.GROUP_PATH, Long.toString(peerGroup.getGroupId()),
+				CCDSConstants.PEER_PATH }, null, null);
+		logger.debug("updatePeerGroup: url {}", uri);
+		restTemplate.put(uri, peerGroup);
+	}
+
+	@Override
+	public void deletePeerGroup(Long peerGroupId) {
+		URI uri = buildUri(
+				new String[] { CCDSConstants.GROUP_PATH, Long.toString(peerGroupId), CCDSConstants.PEER_PATH }, null,
+				null);
+		logger.debug("deletePeerGroup: url {}", uri);
+		restTemplate.delete(uri);
+	}
+
+	@Override
+	public RestPageResponse<MLPSolutionGroup> getSolutionGroups(RestPageRequest pageRequest) {
+		URI uri = buildUri(new String[] { CCDSConstants.GROUP_PATH, CCDSConstants.SOLUTION_PATH }, null, pageRequest);
+		logger.debug("getSolutionGroups: uri {}", uri);
+		ResponseEntity<RestPageResponse<MLPSolutionGroup>> response = restTemplate.exchange(uri, HttpMethod.GET, null,
+				new ParameterizedTypeReference<RestPageResponse<MLPSolutionGroup>>() {
+				});
+		return response.getBody();
+	}
+
+	@Override
+	public MLPSolutionGroup createSolutionGroup(MLPSolutionGroup solutionGroup) {
+		URI uri = buildUri(new String[] { CCDSConstants.GROUP_PATH, CCDSConstants.SOLUTION_PATH }, null, null);
+		logger.debug("createSolutionGroup: uri {}", uri);
+		return restTemplate.postForObject(uri, solutionGroup, MLPSolutionGroup.class);
+	}
+
+	@Override
+	public void updateSolutionGroup(MLPSolutionGroup solutionGroup) {
+		URI uri = buildUri(new String[] { CCDSConstants.GROUP_PATH, Long.toString(solutionGroup.getGroupId()),
+				CCDSConstants.SOLUTION_PATH }, null, null);
+		logger.debug("updateSolutionGroup: url {}", uri);
+		restTemplate.put(uri, solutionGroup);
+	}
+
+	@Override
+	public void deleteSolutionGroup(Long solutionGroupId) {
+		URI uri = buildUri(
+				new String[] { CCDSConstants.GROUP_PATH, Long.toString(solutionGroupId), CCDSConstants.SOLUTION_PATH },
+				null, null);
+		logger.debug("deleteSolutionGroup: url {}", uri);
+		restTemplate.delete(uri);
+	}
+
+	@Override
+	public RestPageResponse<MLPPeer> getPeersInGroup(Long peerGroupId, RestPageRequest pageRequest) {
+		URI uri = buildUri(
+				new String[] { CCDSConstants.GROUP_PATH, Long.toString(peerGroupId), CCDSConstants.PEER_PATH }, null,
+				pageRequest);
+		logger.debug("getPeersInGroup: uri {}", uri);
+		ResponseEntity<RestPageResponse<MLPPeer>> response = restTemplate.exchange(uri, HttpMethod.GET, null,
+				new ParameterizedTypeReference<RestPageResponse<MLPPeer>>() {
+				});
+		return response.getBody();
+	}
+
+	@Override
+	public void addPeerToGroup(String peerId, Long peerGroupId) {
+		URI uri = buildUri(
+				new String[] { CCDSConstants.GROUP_PATH, Long.toString(peerGroupId), CCDSConstants.PEER_PATH, peerId },
+				null, null);
+		logger.debug("addPeerToGroup: url {}", uri);
+		MLPGrpPeerMap map = new MLPGrpPeerMap(peerGroupId, peerId);
+		restTemplate.postForObject(uri, map, SuccessTransport.class);
+	}
+
+	@Override
+	public void dropPeerFromGroup(String peerId, Long peerGroupId) {
+		URI uri = buildUri(
+				new String[] { CCDSConstants.GROUP_PATH, Long.toString(peerGroupId), CCDSConstants.PEER_PATH, peerId },
+				null, null);
+		logger.debug("dropPeerFromGroup: url {}", uri);
+		restTemplate.delete(uri);
+	}
+
+	@Override
+	public RestPageResponse<MLPSolution> getSolutionsInGroup(Long solutionGroupId, RestPageRequest pageRequest) {
+		URI uri = buildUri(
+				new String[] { CCDSConstants.GROUP_PATH, Long.toString(solutionGroupId), CCDSConstants.SOLUTION_PATH },
+				null, pageRequest);
+		logger.debug("getSolutionsInGroup: uri {}", uri);
+		ResponseEntity<RestPageResponse<MLPSolution>> response = restTemplate.exchange(uri, HttpMethod.GET, null,
+				new ParameterizedTypeReference<RestPageResponse<MLPSolution>>() {
+				});
+		return response.getBody();
+	}
+
+	@Override
+	public void addSolutionToGroup(String solutionId, Long solutionGroupId) {
+		URI uri = buildUri(new String[] { CCDSConstants.GROUP_PATH, Long.toString(solutionGroupId),
+				CCDSConstants.SOLUTION_PATH, solutionId }, null, null);
+		logger.debug("addSolutionToGroup: url {}", uri);
+		MLPGrpPeerMap map = new MLPGrpPeerMap(solutionGroupId, solutionId);
+		restTemplate.postForObject(uri, map, SuccessTransport.class);
+	}
+
+	@Override
+	public void dropSolutionFromGroup(String solutionId, Long solutionGroupId) {
+		URI uri = buildUri(new String[] { CCDSConstants.GROUP_PATH, Long.toString(solutionGroupId),
+				CCDSConstants.SOLUTION_PATH, solutionId }, null, null);
+		logger.debug("dropSolutionFromGroup: url {}", uri);
+		restTemplate.delete(uri);
+	}
+
+	@Override
+	public RestPageResponse<MLPGrpPeerSolMap> getPeerSolutionGroupMaps(RestPageRequest pageRequest) {
+		URI uri = buildUri(
+				new String[] { CCDSConstants.GROUP_PATH, CCDSConstants.PEER_PATH, CCDSConstants.SOLUTION_PATH }, null,
+				pageRequest);
+		logger.debug("getPeerSolutionGroupMaps: uri {}", uri);
+		ResponseEntity<RestPageResponse<MLPGrpPeerSolMap>> response = restTemplate.exchange(uri, HttpMethod.GET, null,
+				new ParameterizedTypeReference<RestPageResponse<MLPGrpPeerSolMap>>() {
+				});
+		return response.getBody();
+	}
+
+	@Override
+	public void mapPeerSolutionGroups(Long peerGroupId, Long solutionGroupId) {
+		URI uri = buildUri(new String[] { CCDSConstants.GROUP_PATH, CCDSConstants.PEER_PATH, Long.toString(peerGroupId),
+				CCDSConstants.SOLUTION_PATH, Long.toString(solutionGroupId) }, null, null);
+		logger.debug("mapPeerSolutionGroups: url {}", uri);
+		MLPGrpPeerSolMap map = new MLPGrpPeerSolMap(peerGroupId, solutionGroupId);
+		restTemplate.postForObject(uri, map, SuccessTransport.class);
+	}
+
+	@Override
+	public void unmapPeerSolutionGroups(Long peerGroupId, Long solutionGroupId) {
+		URI uri = buildUri(new String[] { CCDSConstants.GROUP_PATH, CCDSConstants.PEER_PATH, Long.toString(peerGroupId),
+				CCDSConstants.SOLUTION_PATH, Long.toString(solutionGroupId) }, null, null);
+		logger.debug("unmapPeerSolutionGroups: url {}", uri);
 		restTemplate.delete(uri);
 	}
 

@@ -41,11 +41,16 @@ import org.acumos.cds.domain.MLPAccessType;
 import org.acumos.cds.domain.MLPArtifact;
 import org.acumos.cds.domain.MLPArtifactType;
 import org.acumos.cds.domain.MLPComment;
+import org.acumos.cds.domain.MLPGrpPeerMap;
+import org.acumos.cds.domain.MLPGrpPeerPeerMap;
+import org.acumos.cds.domain.MLPGrpPeerSolMap;
+import org.acumos.cds.domain.MLPGrpSolMap;
 import org.acumos.cds.domain.MLPLoginProvider;
 import org.acumos.cds.domain.MLPModelType;
 import org.acumos.cds.domain.MLPNotifUserMap;
 import org.acumos.cds.domain.MLPNotification;
 import org.acumos.cds.domain.MLPPeer;
+import org.acumos.cds.domain.MLPPeerGroup;
 import org.acumos.cds.domain.MLPPeerSubscription;
 import org.acumos.cds.domain.MLPRole;
 import org.acumos.cds.domain.MLPRoleFunction;
@@ -55,6 +60,7 @@ import org.acumos.cds.domain.MLPSolTagMap;
 import org.acumos.cds.domain.MLPSolUserAccMap;
 import org.acumos.cds.domain.MLPSolution;
 import org.acumos.cds.domain.MLPSolutionDownload;
+import org.acumos.cds.domain.MLPSolutionGroup;
 import org.acumos.cds.domain.MLPSolutionRating;
 import org.acumos.cds.domain.MLPSolutionRating.SolutionRatingPK;
 import org.acumos.cds.domain.MLPSolutionRevision;
@@ -72,10 +78,15 @@ import org.acumos.cds.repository.AccessTypeRepository;
 import org.acumos.cds.repository.ArtifactRepository;
 import org.acumos.cds.repository.ArtifactTypeRepository;
 import org.acumos.cds.repository.CommentRepository;
+import org.acumos.cds.repository.GrpPeerMapRepository;
+import org.acumos.cds.repository.GrpPeerPeerMapRepository;
+import org.acumos.cds.repository.GrpPeerSolMapRepository;
+import org.acumos.cds.repository.GrpSolMapRepository;
 import org.acumos.cds.repository.LoginProviderRepository;
 import org.acumos.cds.repository.ModelTypeRepository;
 import org.acumos.cds.repository.NotifUserMapRepository;
 import org.acumos.cds.repository.NotificationRepository;
+import org.acumos.cds.repository.PeerGroupRepository;
 import org.acumos.cds.repository.PeerRepository;
 import org.acumos.cds.repository.PeerSubscriptionRepository;
 import org.acumos.cds.repository.RoleFunctionRepository;
@@ -85,6 +96,7 @@ import org.acumos.cds.repository.SolRevArtMapRepository;
 import org.acumos.cds.repository.SolTagMapRepository;
 import org.acumos.cds.repository.SolUserAccMapRepository;
 import org.acumos.cds.repository.SolutionDownloadRepository;
+import org.acumos.cds.repository.SolutionGroupRepository;
 import org.acumos.cds.repository.SolutionRatingRepository;
 import org.acumos.cds.repository.SolutionRepository;
 import org.acumos.cds.repository.SolutionRevisionRepository;
@@ -192,6 +204,18 @@ public class CdsRepositoryServiceTest {
 	private UserSearchService userService;
 	@Autowired
 	private StepResultRepository stepResultRepository;
+	@Autowired
+	private PeerGroupRepository peerGroupRepository;
+	@Autowired
+	private SolutionGroupRepository solutionGroupRepository;
+	@Autowired
+	private GrpPeerMapRepository groupPeerMapRepository;
+	@Autowired
+	private GrpSolMapRepository groupSolMapRepository;
+	@Autowired
+	private GrpPeerSolMapRepository groupPeerSolMapRepository;
+	@Autowired
+	private GrpPeerPeerMapRepository groupPeerPeerMapRepository;
 
 	@Test
 	public void testingRepositories() throws Exception {
@@ -1056,7 +1080,6 @@ public class CdsRepositoryServiceTest {
 			logger.error("Failed", ex);
 			throw ex;
 		}
-
 	}
 
 	@Test
@@ -1088,7 +1111,83 @@ public class CdsRepositoryServiceTest {
 			logger.error("Failed", ex);
 			throw ex;
 		}
+	}
 
+	@Test
+	public void testPeerSolutionGroups() {
+		// Need a user to create a solution
+		MLPUser cu = null;
+		cu = new MLPUser();
+		cu.setActive(true);
+		final String loginName = "test_user_" + Long.toString(new Date().getTime());
+		cu.setLoginName(loginName);
+		cu = userRepository.save(cu);
+		Assert.assertNotNull("User ID", cu.getUserId());
+		logger.info("Created user " + cu);
+
+		MLPSolution cs = new MLPSolution("solutionName", cu.getUserId(), false);
+		cs = solutionRepository.save(cs);
+		Assert.assertNotNull("Solution ID", cs.getSolutionId());
+		logger.info("Created solution " + cs);
+
+		final String peerName = "Peer-" + Long.toString(new Date().getTime());
+		MLPPeer pr = new MLPPeer(peerName, "x.509", "http://peer-api", true, "contact", PeerStatusCode.AC.name(),
+				ValidationStatusCode.FA.name());
+		pr = peerRepository.save(pr);
+		logger.info("Created peer " + pr);
+
+		MLPPeerGroup pg1 = new MLPPeerGroup("peer group 1");
+		pg1 = peerGroupRepository.save(pg1);
+		Assert.assertNotNull(pg1.getGroupId());
+		logger.info("Created peer group " + pg1);
+
+		MLPPeerGroup pg2 = new MLPPeerGroup("peer group 2");
+		pg2 = peerGroupRepository.save(pg2);
+		Assert.assertNotNull(pg2.getGroupId());
+		logger.info("Created peer group " + pg2);
+
+		MLPSolutionGroup sg = new MLPSolutionGroup("solution group");
+		sg = solutionGroupRepository.save(sg);
+		Assert.assertNotNull(sg.getGroupId());
+		logger.info("Created solution group " + sg);
+
+		PageRequest pageable = new PageRequest(0, 3);
+
+		MLPGrpPeerMap gpm = new MLPGrpPeerMap(pg1.getGroupId(), pr.getPeerId());
+		gpm = groupPeerMapRepository.save(gpm);
+		logger.info("Created peer group map " + gpm);
+		Page<MLPPeer> peers = groupPeerMapRepository.findPeersByGroupId(pg1.getGroupId(), pageable);
+		Assert.assertTrue(peers != null && peers.getNumberOfElements() > 0);
+
+		MLPGrpSolMap gsm = new MLPGrpSolMap(sg.getGroupId(), cs.getSolutionId());
+		gsm = groupSolMapRepository.save(gsm);
+		logger.info("Created solution group map " + gsm);
+		Page<MLPSolution> sols = groupSolMapRepository.findSolutionsByGroupId(pg1.getGroupId(), pageable);
+		Assert.assertTrue(sols != null && sols.getNumberOfElements() > 0);
+
+		MLPGrpPeerSolMap gpsm = new MLPGrpPeerSolMap(pg1.getGroupId(), sg.getGroupId());
+		gpsm = groupPeerSolMapRepository.save(gpsm);
+		logger.info("Created peer group - sol group map " + gpsm);
+		MLPGrpPeerSolMap.GrpPeerSolMapPK pk = new MLPGrpPeerSolMap.GrpPeerSolMapPK(pg1.getGroupId(), sg.getGroupId());
+		MLPGrpPeerSolMap map = groupPeerSolMapRepository.findOne(pk);
+		Assert.assertNotNull(map);
+
+		MLPGrpPeerPeerMap gppm = new MLPGrpPeerPeerMap(pg1.getGroupId(), pg2.getGroupId());
+		gppm = groupPeerPeerMapRepository.save(gppm);
+		logger.info("Created peer group - peer group map " + gppm);
+		MLPGrpPeerPeerMap.GrpPeerPeerMapPK ppKey = new MLPGrpPeerPeerMap.GrpPeerPeerMapPK(pg1.getGroupId(),
+				pg2.getGroupId());
+		MLPGrpPeerPeerMap ppMap = groupPeerPeerMapRepository.findOne(ppKey);
+		Assert.assertNotNull(ppMap);
+
+		groupPeerPeerMapRepository.delete(gppm);
+		groupPeerSolMapRepository.delete(gpsm);
+		groupSolMapRepository.delete(gsm);
+		groupPeerMapRepository.delete(gpm);
+		solutionGroupRepository.delete(sg);
+		peerGroupRepository.delete(pg1);
+		solutionRepository.delete(cs);
+		userRepository.delete(cu);
 	}
 
 	@Test

@@ -8,9 +8,10 @@ Maven Nexus repository. The server is deployed as a Docker image to a Docker reg
 Version 1.13.0, 5 February 2018
 -------------------------------
 
-* Add features for workflow step results (ACUMOS-56)
+* Add workflow step feature for onboarding and validation result persistence (ACUMOS-56)
 * Add origin attribute to solution and revision entities (ACUMOS-59)
-* Revise peer attributes (ACUMOS-60)
+* Revise peer and peer subscription attributes (ACUMOS-60)
+* Add peer group, solution group and mapping features for federation access control (ACUMOS-62)
 * Requires database schema version 1.13
 
 Version 1.12.1, 26 January 2018
