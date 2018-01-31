@@ -25,6 +25,10 @@ import org.acumos.cds.domain.MLPArtifact;
 import org.acumos.cds.domain.MLPArtifactType;
 import org.acumos.cds.domain.MLPComment;
 import org.acumos.cds.domain.MLPDeploymentStatus;
+import org.acumos.cds.domain.MLPGrpPeerMap;
+import org.acumos.cds.domain.MLPGrpPeerPeerMap;
+import org.acumos.cds.domain.MLPGrpPeerSolMap;
+import org.acumos.cds.domain.MLPGrpSolMap;
 import org.acumos.cds.domain.MLPLoginProvider;
 import org.acumos.cds.domain.MLPModelType;
 import org.acumos.cds.domain.MLPNotifUserMap;
@@ -32,6 +36,7 @@ import org.acumos.cds.domain.MLPNotification;
 import org.acumos.cds.domain.MLPPasswordChangeRequest;
 import org.acumos.cds.domain.MLPPeer;
 import org.acumos.cds.domain.MLPPeerStatus;
+import org.acumos.cds.domain.MLPPeerGroup;
 import org.acumos.cds.domain.MLPPeerSubscription;
 import org.acumos.cds.domain.MLPRole;
 import org.acumos.cds.domain.MLPRoleFunction;
@@ -43,6 +48,7 @@ import org.acumos.cds.domain.MLPSolution;
 import org.acumos.cds.domain.MLPSolutionDeployment;
 import org.acumos.cds.domain.MLPSolutionDownload;
 import org.acumos.cds.domain.MLPSolutionFavorite;
+import org.acumos.cds.domain.MLPSolutionGroup;
 import org.acumos.cds.domain.MLPSolutionRating;
 import org.acumos.cds.domain.MLPSolutionRevision;
 import org.acumos.cds.domain.MLPSolutionValidation;
@@ -179,6 +185,118 @@ public class DomainTest extends AbstractModelTest {
 		Assert.assertTrue(m.equals(m));
 		Assert.assertNotNull(m.hashCode());
 		logger.info(m.toString());
+	}
+
+	@Test
+	public void testMLPGrpPeerMap() {
+		MLPGrpPeerMap m = new MLPGrpPeerMap(l1, s1);
+		m = new MLPGrpPeerMap();
+		m.setGroupId(l1);
+		m.setPeerId(s1);
+		Assert.assertEquals(l1, m.getGroupId());
+		Assert.assertEquals(s1, m.getPeerId());
+		Assert.assertFalse(m.equals(null));
+		Assert.assertFalse(m.equals(new Object()));
+		Assert.assertTrue(m.equals(m));
+		Assert.assertNotNull(m.hashCode());
+		try {
+			new MLPGrpPeerMap(null, null);
+			Assert.assertTrue("Unexpected success", false);
+		} catch (IllegalArgumentException iae) {
+			// null arg is rejected
+		}
+		logger.info(m.toString());
+		MLPGrpPeerMap.GrpPeerMapPK pk = new MLPGrpPeerMap.GrpPeerMapPK();
+		pk = new MLPGrpPeerMap.GrpPeerMapPK(l1, s1);
+		Assert.assertFalse(pk.equals(null));
+		Assert.assertFalse(pk.equals(new Object()));
+		Assert.assertTrue(pk.equals(pk));
+		Assert.assertFalse(pk.hashCode() == 0);
+		logger.info(pk.toString());
+	}
+
+	@Test
+	public void testMLPGrpPeerPeerMap() {
+		MLPGrpPeerPeerMap m = new MLPGrpPeerPeerMap(l1, l2);
+		m = new MLPGrpPeerPeerMap();
+		m.setPrincipalPeerGroupId(l1);
+		m.setResourcePeerGroupId(l2);
+		Assert.assertEquals(l1, m.getPrincipalPeerGroupId());
+		Assert.assertEquals(l2, m.getResourcePeerGroupId());
+		Assert.assertFalse(m.equals(null));
+		Assert.assertFalse(m.equals(new Object()));
+		Assert.assertTrue(m.equals(m));
+		Assert.assertNotNull(m.hashCode());
+		try {
+			new MLPGrpPeerPeerMap(null, null);
+			Assert.assertTrue("Unexpected success", false);
+		} catch (IllegalArgumentException iae) {
+			// null arg is rejected
+		}
+		logger.info(m.toString());
+		MLPGrpPeerPeerMap.GrpPeerPeerMapPK pk = new MLPGrpPeerPeerMap.GrpPeerPeerMapPK();
+		pk = new MLPGrpPeerPeerMap.GrpPeerPeerMapPK(l1, l2);
+		Assert.assertFalse(pk.equals(null));
+		Assert.assertFalse(pk.equals(new Object()));
+		Assert.assertTrue(pk.equals(pk));
+		Assert.assertFalse(pk.hashCode() == 0);
+		logger.info(pk.toString());
+	}
+
+	@Test
+	public void testMLPGrpPeerSolMap() {
+		MLPGrpPeerSolMap m = new MLPGrpPeerSolMap(l1, l2);
+		m = new MLPGrpPeerSolMap();
+		m.setPeerGroupId(l1);
+		m.setSolutionGroupId(l2);
+		Assert.assertEquals(l1, m.getPeerGroupId());
+		Assert.assertEquals(l2, m.getSolutionGroupId());
+		Assert.assertFalse(m.equals(null));
+		Assert.assertFalse(m.equals(new Object()));
+		Assert.assertTrue(m.equals(m));
+		Assert.assertNotNull(m.hashCode());
+		try {
+			new MLPGrpPeerSolMap(null, null);
+			Assert.assertTrue("Unexpected success", false);
+		} catch (IllegalArgumentException iae) {
+			// null arg is rejected
+		}
+		logger.info(m.toString());
+		MLPGrpPeerSolMap.GrpPeerSolMapPK pk = new MLPGrpPeerSolMap.GrpPeerSolMapPK();
+		pk = new MLPGrpPeerSolMap.GrpPeerSolMapPK(l1, l2);
+		Assert.assertFalse(pk.equals(null));
+		Assert.assertFalse(pk.equals(new Object()));
+		Assert.assertTrue(pk.equals(pk));
+		Assert.assertFalse(pk.hashCode() == 0);
+		logger.info(pk.toString());
+	}
+
+	@Test
+	public void testMLPGrpSolMap() {
+		MLPGrpSolMap m = new MLPGrpSolMap(l1, s1);
+		m = new MLPGrpSolMap();
+		m.setGroupId(l1);
+		m.setSolutionId(s1);
+		Assert.assertEquals(l1, m.getGroupId());
+		Assert.assertEquals(s1, m.getSolutionId());
+		Assert.assertFalse(m.equals(null));
+		Assert.assertFalse(m.equals(new Object()));
+		Assert.assertTrue(m.equals(m));
+		Assert.assertNotNull(m.hashCode());
+		try {
+			new MLPGrpSolMap(null, null);
+			Assert.assertTrue("Unexpected success", false);
+		} catch (IllegalArgumentException iae) {
+			// null arg is rejected
+		}
+		logger.info(m.toString());
+		MLPGrpSolMap.GrpSolMapPK pk = new MLPGrpSolMap.GrpSolMapPK();
+		pk = new MLPGrpSolMap.GrpSolMapPK(l1, s1);
+		Assert.assertFalse(pk.equals(null));
+		Assert.assertFalse(pk.equals(new Object()));
+		Assert.assertTrue(pk.equals(pk));
+		Assert.assertFalse(pk.hashCode() == 0);
+		logger.info(pk.toString());
 	}
 
 	@Test
@@ -328,6 +446,21 @@ public class DomainTest extends AbstractModelTest {
 		logger.info(m.toString());
 		try {
 			new MLPPeer(null, null, null, b1, null, null, null);
+			Assert.assertTrue("Unexpected success", false);
+		} catch (IllegalArgumentException iae) {
+			// null arg is rejected
+		}
+	}
+
+	@Test
+	public void testMLPPeerGroup() {
+		MLPPeerGroup m = new MLPPeerGroup(s1);
+		m = new MLPPeerGroup();
+		m.setName(s1);
+		Assert.assertEquals(s1, m.getName());
+		logger.info(m.toString());
+		try {
+			new MLPPeerGroup(null);
 			Assert.assertTrue("Unexpected success", false);
 		} catch (IllegalArgumentException iae) {
 			// null arg is rejected
@@ -684,6 +817,24 @@ public class DomainTest extends AbstractModelTest {
 		Assert.assertTrue(pk.equals(pk));
 		Assert.assertFalse(pk.hashCode() == 0);
 		logger.info(pk.toString());
+	}
+
+	@Test
+	public void testMLPSolutionGroup() {
+		MLPSolutionGroup m = new MLPSolutionGroup(s1);
+		m = new MLPSolutionGroup();
+		m.setName(s1);
+		Assert.assertEquals(s1, m.getName());
+		Assert.assertFalse(m.equals(null));
+		Assert.assertFalse(m.equals(new Object()));
+		Assert.assertTrue(m.equals(m));
+		logger.info(m.toString());
+		try {
+			new MLPSolutionGroup(null);
+			Assert.assertTrue("Unexpected success", false);
+		} catch (IllegalArgumentException iae) {
+			// null arg is rejected
+		}
 	}
 
 	@Test

@@ -28,11 +28,13 @@ import org.acumos.cds.domain.MLPArtifact;
 import org.acumos.cds.domain.MLPArtifactType;
 import org.acumos.cds.domain.MLPComment;
 import org.acumos.cds.domain.MLPDeploymentStatus;
+import org.acumos.cds.domain.MLPGrpPeerSolMap;
 import org.acumos.cds.domain.MLPLoginProvider;
 import org.acumos.cds.domain.MLPModelType;
 import org.acumos.cds.domain.MLPNotification;
 import org.acumos.cds.domain.MLPPasswordChangeRequest;
 import org.acumos.cds.domain.MLPPeer;
+import org.acumos.cds.domain.MLPPeerGroup;
 import org.acumos.cds.domain.MLPPeerSubscription;
 import org.acumos.cds.domain.MLPRole;
 import org.acumos.cds.domain.MLPRoleFunction;
@@ -41,6 +43,7 @@ import org.acumos.cds.domain.MLPSolution;
 import org.acumos.cds.domain.MLPSolutionDeployment;
 import org.acumos.cds.domain.MLPSolutionDownload;
 import org.acumos.cds.domain.MLPSolutionFavorite;
+import org.acumos.cds.domain.MLPSolutionGroup;
 import org.acumos.cds.domain.MLPSolutionRating;
 import org.acumos.cds.domain.MLPSolutionRevision;
 import org.acumos.cds.domain.MLPSolutionValidation;
@@ -143,6 +146,20 @@ public interface ICommonDataServiceRestClient {
 	 */
 	List<MLPDeploymentStatus> getDeploymentStatuses();
 
+	/**
+	 * Gets all step statuses.
+	 * 
+	 * @return List of step status objects.
+	 */
+	List<MLPStepStatus> getStepStatuses();
+
+	/**
+	 * Gets all step types.
+	 * 
+	 * @return List of step type objects.
+	 */
+	List<MLPStepType> getStepTypes();
+	
 	/**
 	 * Gets count of solutions.
 	 * 
@@ -1529,17 +1546,164 @@ public interface ICommonDataServiceRestClient {
 	void deleteStepResult(Long stepResultId);
 
 	/**
-	 * Gets all step statuses.
+	 * Gets a page of peer groups.
 	 * 
-	 * @return List of step status objects.
+	 * @param pageRequest
+	 *            Page index, page size, sort information; ignored if null.
+	 * @return Page of objects.
 	 */
-	List<MLPStepStatus> getStepStatuses();
+	RestPageResponse<MLPPeerGroup> getPeerGroups(RestPageRequest pageRequest);
 
 	/**
-	 * Gets all step types.
+	 * Creates a peer group.
 	 * 
-	 * @return List of step type objects.
+	 * @param peerGroup
+	 *            Group name
+	 * @return Complete object, with generated information such as ID
 	 */
-	List<MLPStepType> getStepTypes();
+	MLPPeerGroup createPeerGroup(MLPPeerGroup peerGroup);
+
+	/**
+	 * Updates a peer group.
+	 * 
+	 * @param peerGroup
+	 *            Instance to update
+	 */
+	void updatePeerGroup(MLPPeerGroup peerGroup);
+
+	/**
+	 * Deletes a peer group. A group can be deleted if is not associated with any
+	 * peers; if associations remain the delete will fail.
+	 * 
+	 * @param peerGroupId
+	 *            ID of instance to delete
+	 */
+	void deletePeerGroup(Long peerGroupId);
+
+	/**
+	 * Gets the solution groups.
+	 * 
+	 * @param pageRequest
+	 *            Page index, page size, sort information; ignored if null.
+	 * @return Page of objects.
+	 */
+	RestPageResponse<MLPSolutionGroup> getSolutionGroups(RestPageRequest pageRequest);
+
+	/**
+	 * Creates a solution group.
+	 * 
+	 * @param solutionGroup
+	 *            Group name
+	 * @return Complete object, with generated information such as ID
+	 */
+	MLPSolutionGroup createSolutionGroup(MLPSolutionGroup solutionGroup);
+
+	/**
+	 * Updates a solution group.
+	 * 
+	 * @param solutionGroup
+	 *            Instance to update
+	 */
+	void updateSolutionGroup(MLPSolutionGroup solutionGroup);
+
+	/**
+	 * Deletes a solution group. A group can be deleted if is not associated with
+	 * any solutions; if associations remain the delete will fail.
+	 * 
+	 * @param solutionGroupId
+	 *            ID of instance to delete
+	 */
+	void deleteSolutionGroup(Long solutionGroupId);
+
+	/**
+	 * Gets a page of peers in the specified peer group.
+	 * 
+	 * @param peerGroupId
+	 *            Peer group ID
+	 * @param pageRequest
+	 *            Page index, page size, sort information; ignored if null.
+	 * @return Page of objects.
+	 */
+	RestPageResponse<MLPPeer> getPeersInGroup(Long peerGroupId, RestPageRequest pageRequest);
+
+	/**
+	 * Adds the specified peer as a member of the specified peer group.
+	 * 
+	 * @param peerId
+	 *            peer ID
+	 * @param peerGroupId
+	 *            Peer group ID
+	 */
+	void addPeerToGroup(String peerId, Long peerGroupId);
+
+	/**
+	 * Drops the specified peer as a member of the specified peer group.
+	 * 
+	 * @param peerId
+	 *            peer ID
+	 * @param peerGroupId
+	 *            Peer group ID
+	 */
+	void dropPeerFromGroup(String peerId, Long peerGroupId);
+
+	/**
+	 * Gets a page of solutions in the specified solution group.
+	 * 
+	 * @param solutionGroupId
+	 *            Solution group ID
+	 * @param pageRequest
+	 *            Page index, page size, sort information; ignored if null.
+	 * @return Page of objects.
+	 */
+	RestPageResponse<MLPSolution> getSolutionsInGroup(Long solutionGroupId, RestPageRequest pageRequest);
+
+	/**
+	 * Adds the specified solution as a member of the specified solution group.
+	 * 
+	 * @param solutionId
+	 *            Solution ID
+	 * @param solutionGroupId
+	 *            Solution group ID
+	 */
+	void addSolutionToGroup(String solutionId, Long solutionGroupId);
+
+	/**
+	 * Drops the specified solution as a member of the specified solution group.
+	 * 
+	 * @param solutionId
+	 *            Solution ID
+	 * @param solutionGroupId
+	 *            Solution group ID
+	 */
+	void dropSolutionFromGroup(String solutionId, Long solutionGroupId);
+
+	/**
+	 * Gets a page of peer group - solution group mappings.
+	 * 
+	 * @param pageRequest
+	 *            Page index, page size, sort information; ignored if null.
+	 * @return Page of objects.
+	 */
+	RestPageResponse<MLPGrpPeerSolMap> getPeerSolutionGroupMaps(RestPageRequest pageRequest);
+
+	/**
+	 * Adds the mapping between the specified peer and solution groups.
+	 * 
+	 * @param peerGroupId
+	 *            Peer group ID
+	 * @param solutionGroupId
+	 *            Solution group ID
+	 */
+	void mapPeerSolutionGroups(Long peerGroupId, Long solutionGroupId);
+
+	/**
+	 * Drops the mapping between the specified peer and solution groups.
+	 * 
+	 * @param peerGroupId
+	 *            Peer group ID
+	 * @param solutionGroupId
+	 *            Solution group ID
+	 */
+	void unmapPeerSolutionGroups(Long peerGroupId, Long solutionGroupId);
 
 }

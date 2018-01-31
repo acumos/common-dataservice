@@ -39,11 +39,13 @@ import org.acumos.cds.domain.MLPArtifact;
 import org.acumos.cds.domain.MLPArtifactType;
 import org.acumos.cds.domain.MLPComment;
 import org.acumos.cds.domain.MLPDeploymentStatus;
+import org.acumos.cds.domain.MLPGrpPeerSolMap;
 import org.acumos.cds.domain.MLPLoginProvider;
 import org.acumos.cds.domain.MLPModelType;
 import org.acumos.cds.domain.MLPNotification;
 import org.acumos.cds.domain.MLPPasswordChangeRequest;
 import org.acumos.cds.domain.MLPPeer;
+import org.acumos.cds.domain.MLPPeerGroup;
 import org.acumos.cds.domain.MLPPeerSubscription;
 import org.acumos.cds.domain.MLPRole;
 import org.acumos.cds.domain.MLPRoleFunction;
@@ -52,6 +54,7 @@ import org.acumos.cds.domain.MLPSolution;
 import org.acumos.cds.domain.MLPSolutionDeployment;
 import org.acumos.cds.domain.MLPSolutionDownload;
 import org.acumos.cds.domain.MLPSolutionFavorite;
+import org.acumos.cds.domain.MLPSolutionGroup;
 import org.acumos.cds.domain.MLPSolutionRating;
 import org.acumos.cds.domain.MLPSolutionRevision;
 import org.acumos.cds.domain.MLPSolutionValidation;
@@ -177,6 +180,13 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 	private RestPageResponse<MLPThread> solutionRevisionThreads;
 	private RestPageResponse<MLPComment> solutionRevisionComments;
 	private RestPageResponse<MLPStepResult> stepResults;
+	private RestPageResponse<MLPPeerGroup> peerGroups;
+	private MLPPeerGroup peerGroup;
+	private RestPageResponse<MLPSolutionGroup> solutionGroups;
+	private MLPSolutionGroup solutionGroup;
+	private RestPageResponse<MLPPeer> peersInGroup;
+	private RestPageResponse<MLPSolution> solutionsInGroup;
+	private RestPageResponse<MLPGrpPeerSolMap> peerSolutionGroupMaps;
 
 	/**
 	 * No-argument constructor.
@@ -1412,6 +1422,119 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 
 	@Override
 	public void deleteStepResult(Long stepResultId) {
+		// How to mock?
+	}
+
+	public void setPeerGroups(RestPageResponse<MLPPeerGroup> peerGroups) {
+		this.peerGroups = peerGroups;
+	}
+
+	@Override
+	public RestPageResponse<MLPPeerGroup> getPeerGroups(RestPageRequest pageRequest) {
+		return peerGroups;
+	}
+
+	public void setPeerGroup(MLPPeerGroup peerGroup) {
+		this.peerGroup = peerGroup;
+	}
+
+	@Override
+	public MLPPeerGroup createPeerGroup(MLPPeerGroup peerGroup) {
+		return this.peerGroup;
+	}
+
+	@Override
+	public void updatePeerGroup(MLPPeerGroup peerGroup) {
+		this.peerGroup = peerGroup;
+	}
+
+	@Override
+	public void deletePeerGroup(Long peerGroupId) {
+		// How to mock?
+	}
+
+	public void setSolutionGroups(RestPageResponse<MLPSolutionGroup> solutionGroups) {
+		this.solutionGroups = solutionGroups;
+	}
+
+	@Override
+	public RestPageResponse<MLPSolutionGroup> getSolutionGroups(RestPageRequest pageRequest) {
+		return this.solutionGroups;
+	}
+
+	public void setSolutionGroup(MLPSolutionGroup solutionGroup) {
+		this.solutionGroup = solutionGroup;
+	}
+
+	@Override
+	public MLPSolutionGroup createSolutionGroup(MLPSolutionGroup solutionGroup) {
+		return this.solutionGroup;
+	}
+
+	@Override
+	public void updateSolutionGroup(MLPSolutionGroup solutionGroup) {
+		this.solutionGroup = solutionGroup;
+	}
+
+	@Override
+	public void deleteSolutionGroup(Long solutionGroupId) {
+		// How to mock?
+	}
+
+	public void setPeersInGroup(RestPageResponse<MLPPeer> peersInGroup) {
+		this.peersInGroup = peersInGroup;
+	}
+
+	@Override
+	public RestPageResponse<MLPPeer> getPeersInGroup(Long peerGroupId, RestPageRequest pageRequest) {
+		return peersInGroup;
+	}
+
+	@Override
+	public void addPeerToGroup(String peerId, Long peerGroupId) {
+		// How to mock?
+	}
+
+	@Override
+	public void dropPeerFromGroup(String peerId, Long peerGroupId) {
+		// How to mock?
+	}
+
+	public void setSolutionsInGroup(RestPageResponse<MLPSolution> solutionsInGroup) {
+		this.solutionsInGroup = solutionsInGroup;
+	}
+
+	@Override
+	public RestPageResponse<MLPSolution> getSolutionsInGroup(Long solutionGroupId, RestPageRequest pageRequest) {
+		return solutionsInGroup;
+	}
+
+	@Override
+	public void addSolutionToGroup(String solutionId, Long solutionGroupId) {
+		// How to mock?
+	}
+
+	@Override
+	public void dropSolutionFromGroup(String solutionId, Long solutionGroupId) {
+		// How to mock?
+	}
+
+	public void setPeerSolutionGroupMaps(RestPageResponse<MLPGrpPeerSolMap> peerSolutionGroupMaps) {
+		this.peerSolutionGroupMaps = peerSolutionGroupMaps;
+	}
+
+	@Override
+	public RestPageResponse<MLPGrpPeerSolMap> getPeerSolutionGroupMaps(RestPageRequest pageRequest) {
+		return peerSolutionGroupMaps;
+	}
+
+	@Override
+	public void mapPeerSolutionGroups(Long peerGroupId, Long solutionGroupId) {
+		// How to mock?
+	}
+
+	@Override
+	public void unmapPeerSolutionGroups(Long peerGroupId, Long solutionGroupId) {
 		// How to mock?
 	}
 
