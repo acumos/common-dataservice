@@ -33,6 +33,8 @@ import org.acumos.cds.domain.MLPModelType;
 import org.acumos.cds.domain.MLPNotification;
 import org.acumos.cds.domain.MLPPasswordChangeRequest;
 import org.acumos.cds.domain.MLPPeer;
+import org.acumos.cds.domain.MLPPeerGroup;
+import org.acumos.cds.domain.MLPPeerSolAccMap;
 import org.acumos.cds.domain.MLPPeerSubscription;
 import org.acumos.cds.domain.MLPRole;
 import org.acumos.cds.domain.MLPRoleFunction;
@@ -41,6 +43,7 @@ import org.acumos.cds.domain.MLPSolution;
 import org.acumos.cds.domain.MLPSolutionDeployment;
 import org.acumos.cds.domain.MLPSolutionDownload;
 import org.acumos.cds.domain.MLPSolutionFavorite;
+import org.acumos.cds.domain.MLPSolutionGroup;
 import org.acumos.cds.domain.MLPSolutionRating;
 import org.acumos.cds.domain.MLPSolutionRevision;
 import org.acumos.cds.domain.MLPSolutionValidation;
@@ -144,6 +147,20 @@ public interface ICommonDataServiceRestClient {
 	List<MLPDeploymentStatus> getDeploymentStatuses();
 
 	/**
+	 * Gets all step statuses.
+	 * 
+	 * @return List of step status objects.
+	 */
+	List<MLPStepStatus> getStepStatuses();
+
+	/**
+	 * Gets all step types.
+	 * 
+	 * @return List of step type objects.
+	 */
+	List<MLPStepType> getStepTypes();
+
+	/**
 	 * Gets count of solutions.
 	 * 
 	 * @return Count of solutions.
@@ -154,7 +171,8 @@ public interface ICommonDataServiceRestClient {
 	 * Gets a page of solutions.
 	 * 
 	 * @param pageRequest
-	 *            Page index, page size, sort information; ignored if null.
+	 *            Page index, page size and sort information; defaults to page 0 of
+	 *            size 20 if null.
 	 * @return Page of objects.
 	 */
 	RestPageResponse<MLPSolution> getSolutions(RestPageRequest pageRequest);
@@ -165,7 +183,8 @@ public interface ICommonDataServiceRestClient {
 	 * @param searchTerm
 	 *            String to find
 	 * @param pageRequest
-	 *            Page index, page size, sort information; ignored if null.
+	 *            Page index, page size and sort information; defaults to page 0 of
+	 *            size 20 if null.
 	 * @return Page of solution objects.
 	 */
 	RestPageResponse<MLPSolution> findSolutionsBySearchTerm(String searchTerm, RestPageRequest pageRequest);
@@ -176,7 +195,8 @@ public interface ICommonDataServiceRestClient {
 	 * @param tag
 	 *            Tag to find
 	 * @param pageRequest
-	 *            Page index, page size, sort information; ignored if null.
+	 *            Page index, page size and sort information; defaults to page 0 of
+	 *            size 20 if null.
 	 * @return Page of solution objects.
 	 */
 	RestPageResponse<MLPSolution> findSolutionsByTag(String tag, RestPageRequest pageRequest);
@@ -207,7 +227,8 @@ public interface ICommonDataServiceRestClient {
 	 * @param tags
 	 *            Solution tag names; ignored if null or empty
 	 * @param pageRequest
-	 *            Page index, page size, sort information; ignored if null.
+	 *            Page index, page size and sort information; defaults to page 0 of
+	 *            size 20 if null.
 	 * @return Page of solution objects.
 	 */
 	RestPageResponse<MLPSolution> findPortalSolutions(String[] nameKeywords, String[] descriptionKeywords,
@@ -226,10 +247,12 @@ public interface ICommonDataServiceRestClient {
 	 *            OR-ed together); otherwise finds matches on all field-value pairs
 	 *            (conditions are AND-ed together).
 	 * @param pageRequest
-	 *            Page index, page size, sort information; ignored if null.
+	 *            Page index, page size, sort information; defaults to page 0 of
+	 *            size 20 if null.
 	 * @return Page of solution objects
 	 */
-	RestPageResponse<MLPSolution> searchSolutions(Map<String, Object> queryParameters, boolean isOr, RestPageRequest pageRequest);
+	RestPageResponse<MLPSolution> searchSolutions(Map<String, Object> queryParameters, boolean isOr,
+			RestPageRequest pageRequest);
 
 	/**
 	 * Gets the solution with the specified ID.
@@ -386,7 +409,8 @@ public interface ICommonDataServiceRestClient {
 	 * Gets a page of solution tags.
 	 *
 	 * @param pageRequest
-	 *            Page index, page size, sort information; ignored if null.
+	 *            Page index, page size and sort information; defaults to page 0 of
+	 *            size 20 if null.
 	 * @return Page of solution tag objects
 	 */
 	RestPageResponse<MLPTag> getTags(RestPageRequest pageRequest);
@@ -449,7 +473,8 @@ public interface ICommonDataServiceRestClient {
 	 * Gets a page of artifacts.
 	 * 
 	 * @param pageRequest
-	 *            Page index, page size, sort information; ignored if null.
+	 *            Page index, page size and sort information; defaults to page 0 of
+	 *            size 20 if null.
 	 * @return Page of artifact objects.
 	 */
 	RestPageResponse<MLPArtifact> getArtifacts(RestPageRequest pageRequest);
@@ -460,7 +485,8 @@ public interface ICommonDataServiceRestClient {
 	 * @param searchTerm
 	 *            String to find
 	 * @param pageRequest
-	 *            Page index, page size, sort information; ignored if null.
+	 *            Page index, page size and sort information; defaults to page 0 of
+	 *            size 20 if null.
 	 * @return Page of artifact objects.
 	 */
 	RestPageResponse<MLPArtifact> findArtifactsBySearchTerm(String searchTerm, RestPageRequest pageRequest);
@@ -477,10 +503,12 @@ public interface ICommonDataServiceRestClient {
 	 *            OR-ed together); otherwise finds matches on all field-value pairs
 	 *            (conditions are AND-ed together).
 	 * @param pageRequest
-	 *            Page index, page size, sort information; ignored if null.
+	 *            Page index, page size and sort information; defaults to page 0 of
+	 *            size 20 if null.
 	 * @return Page of artifact objects.
 	 */
-	RestPageResponse<MLPArtifact> searchArtifacts(Map<String, Object> queryParameters, boolean isOr, RestPageRequest pageRequest);
+	RestPageResponse<MLPArtifact> searchArtifacts(Map<String, Object> queryParameters, boolean isOr,
+			RestPageRequest pageRequest);
 
 	/**
 	 * Gets the artifact with the specified ID.
@@ -529,7 +557,8 @@ public interface ICommonDataServiceRestClient {
 	 * Gets a page of users.
 	 * 
 	 * @param pageRequest
-	 *            Page index, page size, sort information; ignored if null.
+	 *            Page index, page size and sort information; defaults to page 0 of
+	 *            size 20 if null.
 	 * @return Page of objects.
 	 */
 	RestPageResponse<MLPUser> getUsers(RestPageRequest pageRequest);
@@ -541,7 +570,8 @@ public interface ICommonDataServiceRestClient {
 	 * @param searchTerm
 	 *            String to find
 	 * @param pageRequest
-	 *            Page index, page size, sort information; ignored if null.
+	 *            Page index, page size and sort information; defaults to page 0 of
+	 *            size 20 if null.
 	 * @return Page of user objects.
 	 */
 	RestPageResponse<MLPUser> findUsersBySearchTerm(String searchTerm, RestPageRequest pageRequest);
@@ -558,10 +588,12 @@ public interface ICommonDataServiceRestClient {
 	 *            OR-ed together); otherwise finds matches on all field-value pairs
 	 *            (conditions are AND-ed together).
 	 * @param pageRequest
-	 *            Page index, page size, sort information; ignored if null.
+	 *            Page index, page size and sort information; defaults to page 0 of
+	 *            size 20 if null.
 	 * @return Page of user objects
 	 */
-	RestPageResponse<MLPUser> searchUsers(Map<String, Object> queryParameters, boolean isOr, RestPageRequest pageRequest);
+	RestPageResponse<MLPUser> searchUsers(Map<String, Object> queryParameters, boolean isOr,
+			RestPageRequest pageRequest);
 
 	/**
 	 * Searches for user with the specified credentials.
@@ -571,8 +603,6 @@ public interface ICommonDataServiceRestClient {
 	 * @param pass
 	 *            clear-text password
 	 * @return User object if a match is found
-	 * 
-	 *         If no match is found
 	 */
 	MLPUser loginUser(String name, String pass);
 
@@ -748,16 +778,19 @@ public interface ICommonDataServiceRestClient {
 	 *            OR-ed together); otherwise finds matches on all field-value pairs
 	 *            (conditions are AND-ed together).
 	 * @param pageRequest
-	 *            Page index, page size, sort information; ignored if null.
+	 *            Page index, page size and sort information; defaults to page 0 of
+	 *            size 20 if null.
 	 * @return Page of role objects
 	 */
-	RestPageResponse<MLPRole> searchRoles(Map<String, Object> queryParameters, boolean isOr, RestPageRequest pageRequest);
+	RestPageResponse<MLPRole> searchRoles(Map<String, Object> queryParameters, boolean isOr,
+			RestPageRequest pageRequest);
 
 	/**
 	 * Gets the roles.
 	 * 
 	 * @param pageRequest
-	 *            Page index, page size, sort information; ignored if null.
+	 *            Page index, page size and sort information; defaults to page 0 of
+	 *            size 20 if null.
 	 * @return Page of MLPRoles
 	 */
 	RestPageResponse<MLPRole> getRoles(RestPageRequest pageRequest);
@@ -849,7 +882,8 @@ public interface ICommonDataServiceRestClient {
 	 * Gets a page of peers.
 	 * 
 	 * @param pageRequest
-	 *            Page index, page size, sort information; ignored if null.
+	 *            Page index, page size and sort information; defaults to page 0 of
+	 *            size 20 if null.
 	 * @return Page of peer objects.
 	 */
 	RestPageResponse<MLPPeer> getPeers(RestPageRequest pageRequest);
@@ -866,10 +900,12 @@ public interface ICommonDataServiceRestClient {
 	 *            OR-ed together); otherwise finds matches on all field-value pairs
 	 *            (conditions are AND-ed together).
 	 * @param pageRequest
-	 *            Page index, page size, sort information; ignored if null.
+	 *            Page index, page size and sort information; defaults to page 0 of
+	 *            size 20 if null.
 	 * @return Page of peer objects
 	 */
-	RestPageResponse<MLPPeer> searchPeers(Map<String, Object> queryParameters, boolean isOr, RestPageRequest pageRequest);
+	RestPageResponse<MLPPeer> searchPeers(Map<String, Object> queryParameters, boolean isOr,
+			RestPageRequest pageRequest);
 
 	/**
 	 * Gets the peer with the specified ID.
@@ -956,7 +992,8 @@ public interface ICommonDataServiceRestClient {
 	 * @param solutionId
 	 *            Instance ID
 	 * @param pageRequest
-	 *            Page index, page size, sort information; ignored if null.
+	 *            Page index, page size and sort information; defaults to page 0 of
+	 *            size 20 if null.
 	 * @return Page of solution downloads
 	 */
 	RestPageResponse<MLPSolutionDownload> getSolutionDownloads(String solutionId, RestPageRequest pageRequest);
@@ -986,7 +1023,8 @@ public interface ICommonDataServiceRestClient {
 	 * @param userId
 	 *            Instance ID
 	 * @param pageRequest
-	 *            Page index, page size, sort information; ignored if null.
+	 *            Page index, page size and sort information; defaults to page 0 of
+	 *            size 20 if null.
 	 * @return Page of solutions that are favorites of the user; might be empty.
 	 */
 	RestPageResponse<MLPSolution> getFavoriteSolutions(String userId, RestPageRequest pageRequest);
@@ -1016,7 +1054,8 @@ public interface ICommonDataServiceRestClient {
 	 * @param solutionId
 	 *            Instance ID
 	 * @param pageRequest
-	 *            Page index, page size, sort information; ignored if null.
+	 *            Page index, page size and sort information; defaults to page 0 of
+	 *            size 20 if null.
 	 * @return Page of solution ratings
 	 */
 	RestPageResponse<MLPSolutionRating> getSolutionRatings(String solutionId, RestPageRequest pageRequest);
@@ -1068,7 +1107,8 @@ public interface ICommonDataServiceRestClient {
 	 * Gets a page of notifications.
 	 * 
 	 * @param pageRequest
-	 *            Page index, page size, sort information; ignored if null.
+	 *            Page index, page size and sort information; defaults to page 0 of
+	 *            size 20 if null.
 	 * @return Page of objects.
 	 */
 	RestPageResponse<MLPNotification> getNotifications(RestPageRequest pageRequest);
@@ -1109,7 +1149,8 @@ public interface ICommonDataServiceRestClient {
 	 * @param userId
 	 *            User ID
 	 * @param pageRequest
-	 *            Page index, page size, sort information; ignored if null.
+	 *            Page index, page size and sort information; defaults to page 0 of
+	 *            size 20 if null.
 	 * @return Page of objects.
 	 */
 	RestPageResponse<MLPUserNotification> getUserNotifications(String userId, RestPageRequest pageRequest);
@@ -1169,7 +1210,8 @@ public interface ICommonDataServiceRestClient {
 	 * @param userId
 	 *            User ID
 	 * @param pageRequest
-	 *            Page index, page size, sort information; ignored if null.
+	 *            Page index, page size and sort information; defaults to page 0 of
+	 *            size 20 if null.
 	 * @return Page of solutions
 	 */
 	RestPageResponse<MLPSolution> getUserAccessSolutions(String userId, RestPageRequest pageRequest);
@@ -1195,7 +1237,7 @@ public interface ICommonDataServiceRestClient {
 	void dropSolutionUserAccess(String solutionId, String userId);
 
 	/**
-	 * Updates the password for the specified user. Returns an error if the old
+	 * Updates the password for the specified user. Throws an exception if the old
 	 * password does not match.
 	 * 
 	 * @param user
@@ -1271,7 +1313,8 @@ public interface ICommonDataServiceRestClient {
 	 * @param userId
 	 *            User ID
 	 * @param pageRequest
-	 *            Page index, page size, sort information; ignored if null.
+	 *            Page index, page size and sort information; defaults to page 0 of
+	 *            size 20 if null.
 	 * @return Page of solution deployments
 	 */
 	RestPageResponse<MLPSolutionDeployment> getUserDeployments(String userId, RestPageRequest pageRequest);
@@ -1284,7 +1327,8 @@ public interface ICommonDataServiceRestClient {
 	 * @param revisionId
 	 *            Revision ID
 	 * @param pageRequest
-	 *            Page index, page size, sort information; ignored if null.
+	 *            Page index, page size and sort information; defaults to page 0 of
+	 *            size 20 if null.
 	 * @return Page of solution deployments
 	 */
 	RestPageResponse<MLPSolutionDeployment> getSolutionDeployments(String solutionId, String revisionId,
@@ -1300,7 +1344,8 @@ public interface ICommonDataServiceRestClient {
 	 * @param userId
 	 *            User ID
 	 * @param pageRequest
-	 *            Page index, page size, sort information; ignored if null.
+	 *            Page index, page size and sort information; defaults to page 0 of
+	 *            size 20 if null.
 	 * @return Page of solution deployments
 	 */
 	RestPageResponse<MLPSolutionDeployment> getUserSolutionDeployments(String solutionId, String revisionId,
@@ -1376,7 +1421,8 @@ public interface ICommonDataServiceRestClient {
 	 * Gets a page of threads.
 	 * 
 	 * @param pageRequest
-	 *            Page index, page size, sort information; ignored if null.
+	 *            Page index, page size and sort information; defaults to page 0 of
+	 *            size 20 if null.
 	 * @return Page of threads.
 	 */
 	RestPageResponse<MLPThread> getThreads(RestPageRequest pageRequest);
@@ -1389,7 +1435,8 @@ public interface ICommonDataServiceRestClient {
 	 * @param revisionId
 	 *            Revision ID
 	 * @param pageRequest
-	 *            Page index, page size, sort information; ignored if null.
+	 *            Page index, page size and sort information; defaults to page 0 of
+	 *            size 20 if null.
 	 * @return Page of threads.
 	 */
 	RestPageResponse<MLPThread> getSolutionRevisionThreads(String solutionId, String revisionId,
@@ -1445,7 +1492,8 @@ public interface ICommonDataServiceRestClient {
 	 * @param threadId
 	 *            Thread ID
 	 * @param pageRequest
-	 *            Page index, page size, sort information; ignored if null.
+	 *            Page index, page size and sort information; defaults to page 0 of
+	 *            size 20 if null.
 	 * @return One page of comments in the thread, sorted as specified.
 	 */
 	RestPageResponse<MLPComment> getThreadComments(String threadId, RestPageRequest pageRequest);
@@ -1459,7 +1507,8 @@ public interface ICommonDataServiceRestClient {
 	 * @param revisionId
 	 *            Revision ID
 	 * @param pageRequest
-	 *            Page index, page size, sort information; ignored if null.
+	 *            Page index, page size and sort information; defaults to page 0 of
+	 *            size 20 if null.
 	 * @return One page of comments for the specified IDs, sorted as specified.
 	 */
 	RestPageResponse<MLPComment> getSolutionRevisionComments(String solutionId, String revisionId,
@@ -1508,7 +1557,8 @@ public interface ICommonDataServiceRestClient {
 	 * Gets a page of step results.
 	 * 
 	 * @param pageRequest
-	 *            Page index, page size, sort information; ignored if null.
+	 *            Page index, page size and sort information; defaults to page 0 of
+	 *            size 20 if null.
 	 * @return Page of step result objects.
 	 */
 	RestPageResponse<MLPStepResult> getStepResults(RestPageRequest pageRequest);
@@ -1525,10 +1575,12 @@ public interface ICommonDataServiceRestClient {
 	 *            OR-ed together); otherwise finds matches on all field-value pairs
 	 *            (conditions are AND-ed together).
 	 * @param pageRequest
-	 *            Page index, page size, sort information; ignored if null.
+	 *            Page index, page size and sort information; defaults to page 0 of
+	 *            size 20 if null.
 	 * @return Page of step result objects
 	 */
-	RestPageResponse<MLPStepResult> searchStepResults(Map<String, Object> queryParameters, boolean isOr, RestPageRequest pageRequest);
+	RestPageResponse<MLPStepResult> searchStepResults(Map<String, Object> queryParameters, boolean isOr,
+			RestPageRequest pageRequest);
 
 	/**
 	 * Creates a step result.
@@ -1556,17 +1608,211 @@ public interface ICommonDataServiceRestClient {
 	void deleteStepResult(Long stepResultId);
 
 	/**
-	 * Gets all step statuses.
+	 * Gets a page of peer groups.
 	 * 
-	 * @return List of step status objects.
+	 * @param pageRequest
+	 *            Page index, page size and sort information; defaults to page 0 of
+	 *            size 20 if null.
+	 * @return Page of objects.
 	 */
-	List<MLPStepStatus> getStepStatuses();
+	RestPageResponse<MLPPeerGroup> getPeerGroups(RestPageRequest pageRequest);
 
 	/**
-	 * Gets all step types.
+	 * Creates a peer group.
 	 * 
-	 * @return List of step type objects.
+	 * @param peerGroup
+	 *            Group name
+	 * @return Complete object, with generated information such as ID
 	 */
-	List<MLPStepType> getStepTypes();
+	MLPPeerGroup createPeerGroup(MLPPeerGroup peerGroup);
+
+	/**
+	 * Updates a peer group.
+	 * 
+	 * @param peerGroup
+	 *            Instance to update
+	 */
+	void updatePeerGroup(MLPPeerGroup peerGroup);
+
+	/**
+	 * Deletes a peer group. A group can be deleted if is not associated with any
+	 * peers; if associations remain the delete will fail.
+	 * 
+	 * @param peerGroupId
+	 *            ID of instance to delete
+	 */
+	void deletePeerGroup(Long peerGroupId);
+
+	/**
+	 * Gets the solution groups.
+	 * 
+	 * @param pageRequest
+	 *            Page index, page size and sort information; defaults to page 0 of
+	 *            size 20 if null.
+	 * @return Page of objects.
+	 */
+	RestPageResponse<MLPSolutionGroup> getSolutionGroups(RestPageRequest pageRequest);
+
+	/**
+	 * Creates a solution group.
+	 * 
+	 * @param solutionGroup
+	 *            Group name
+	 * @return Complete object, with generated information such as ID
+	 */
+	MLPSolutionGroup createSolutionGroup(MLPSolutionGroup solutionGroup);
+
+	/**
+	 * Updates a solution group.
+	 * 
+	 * @param solutionGroup
+	 *            Instance to update
+	 */
+	void updateSolutionGroup(MLPSolutionGroup solutionGroup);
+
+	/**
+	 * Deletes a solution group. A group can be deleted if is not associated with
+	 * any solutions; if associations remain the delete will fail.
+	 * 
+	 * @param solutionGroupId
+	 *            ID of instance to delete
+	 */
+	void deleteSolutionGroup(Long solutionGroupId);
+
+	/**
+	 * Gets a page of peers in the specified peer group.
+	 * 
+	 * @param peerGroupId
+	 *            Peer group ID
+	 * @param pageRequest
+	 *            Page index, page size and sort information; defaults to page 0 of
+	 *            size 20 if null.
+	 * @return Page of objects.
+	 */
+	RestPageResponse<MLPPeer> getPeersInGroup(Long peerGroupId, RestPageRequest pageRequest);
+
+	/**
+	 * Adds the specified peer as a member of the specified peer group.
+	 * 
+	 * @param peerId
+	 *            peer ID
+	 * @param peerGroupId
+	 *            Peer group ID
+	 */
+	void addPeerToGroup(String peerId, Long peerGroupId);
+
+	/**
+	 * Drops the specified peer as a member of the specified peer group.
+	 * 
+	 * @param peerId
+	 *            peer ID
+	 * @param peerGroupId
+	 *            Peer group ID
+	 */
+	void dropPeerFromGroup(String peerId, Long peerGroupId);
+
+	/**
+	 * Gets a page of solutions in the specified solution group.
+	 * 
+	 * @param solutionGroupId
+	 *            Solution group ID
+	 * @param pageRequest
+	 *            Page index, page size and sort information; defaults to page 0 of
+	 *            size 20 if null.
+	 * @return Page of objects.
+	 */
+	RestPageResponse<MLPSolution> getSolutionsInGroup(Long solutionGroupId, RestPageRequest pageRequest);
+
+	/**
+	 * Adds the specified solution as a member of the specified solution group.
+	 * 
+	 * @param solutionId
+	 *            Solution ID
+	 * @param solutionGroupId
+	 *            Solution group ID
+	 */
+	void addSolutionToGroup(String solutionId, Long solutionGroupId);
+
+	/**
+	 * Drops the specified solution as a member of the specified solution group.
+	 * 
+	 * @param solutionId
+	 *            Solution ID
+	 * @param solutionGroupId
+	 *            Solution group ID
+	 */
+	void dropSolutionFromGroup(String solutionId, Long solutionGroupId);
+
+	/**
+	 * Gets a page of peer group - solution group mappings.
+	 * 
+	 * @param pageRequest
+	 *            Page index, page size and sort information; defaults to page 0 of
+	 *            size 20 if null.
+	 * @return Page of objects.
+	 */
+	RestPageResponse<MLPPeerSolAccMap> getPeerSolutionGroupMaps(RestPageRequest pageRequest);
+
+	/**
+	 * Adds the mapping between the specified peer and solution groups.
+	 * 
+	 * @param peerGroupId
+	 *            Peer group ID
+	 * @param solutionGroupId
+	 *            Solution group ID
+	 */
+	void mapPeerSolutionGroups(Long peerGroupId, Long solutionGroupId);
+
+	/**
+	 * Drops the mapping between the specified peer and solution groups.
+	 * 
+	 * @param peerGroupId
+	 *            Peer group ID
+	 * @param solutionGroupId
+	 *            Solution group ID
+	 */
+	void unmapPeerSolutionGroups(Long peerGroupId, Long solutionGroupId);
+
+	/**
+	 * Adds the mapping between the specified principal and resource peer groups.
+	 * 
+	 * @param principalGroupId
+	 *            Peer group ID
+	 * @param resourceGroupId
+	 *            Peer group ID
+	 */
+	void mapPeerPeerGroups(Long principalGroupId, Long resourceGroupId);
+
+	/**
+	 * Drops the mapping between the specified principal and resource peer groups.
+	 * 
+	 * @param principalGroupId
+	 *            Peer group ID
+	 * @param resourceGroupId
+	 *            Peer group ID
+	 */
+	void unmapPeerPeerGroups(Long principalGroupId, Long resourceGroupId);
+
+	/**
+	 * Checks whether the specified peer ID may access the specified solution ID via
+	 * peer group, solution group and so on.
+	 * 
+	 * @param peerId
+	 *            Peer ID
+	 * @param solutionId
+	 *            Solution ID
+	 * @return Nonzero positive number if yes; zero if no; throws an exception if
+	 *         invalid peer or solution ID values are used.
+	 */
+	long checkPeerSolutionAccess(String peerId, String solutionId);
+
+	/**
+	 * Gets peers accessible to the specified peer.
+	 * 
+	 * @param peerId
+	 *            Peer ID
+	 * @return List of accessible peers
+	 */
+	List<MLPPeer> getPeerAccess(String peerId);
 
 }
