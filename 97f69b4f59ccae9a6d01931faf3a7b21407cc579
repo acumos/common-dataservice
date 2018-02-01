@@ -1,0 +1,458 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5674a7d4_f361b825",
+        "filename": "cmn-data-svc-client/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-01T19:39:17Z",
+      "side": 1,
+      "message": "pls remove this line, it\u0027s not required",
+      "revId": "97f69b4f59ccae9a6d01931faf3a7b21407cc579",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a5c331da_f3297eae",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/StepStatusCode.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-01T19:39:17Z",
+      "side": 1,
+      "message": "please add get() method to fetch name",
+      "revId": "97f69b4f59ccae9a6d01931faf3a7b21407cc579",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f1b45bc1_2e071a2e",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/StepTypeCode.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-01T19:39:17Z",
+      "side": 1,
+      "message": "pls add getter to retrieve name",
+      "revId": "97f69b4f59ccae9a6d01931faf3a7b21407cc579",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f0c40f09_9c378f38",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/CommonDataServiceRestClientImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1693,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-01T19:39:17Z",
+      "side": 1,
+      "message": "Please drop this method",
+      "revId": "97f69b4f59ccae9a6d01931faf3a7b21407cc579",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0acb2b2e_6d053aee",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/CommonDataServiceRestClientMockImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1389,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-01T19:39:17Z",
+      "side": 1,
+      "message": "Please implement using enum",
+      "revId": "97f69b4f59ccae9a6d01931faf3a7b21407cc579",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "949716dd_b73af1d0",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/CommonDataServiceRestClientMockImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1395,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-01T19:39:17Z",
+      "side": 1,
+      "message": "Please steal my code",
+      "revId": "97f69b4f59ccae9a6d01931faf3a7b21407cc579",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d8149835_c335a5a7",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/ICommonDataServiceRestClient.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1497,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-01T19:39:17Z",
+      "side": 1,
+      "message": "Please comment all methods",
+      "revId": "97f69b4f59ccae9a6d01931faf3a7b21407cc579",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b4e3c09b_f12d5c2d",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPStepResult.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-01T19:39:17Z",
+      "side": 1,
+      "message": "Nope this is not a solution download please fix",
+      "revId": "97f69b4f59ccae9a6d01931faf3a7b21407cc579",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "46aad3b1_63e9fee8",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPStepResult.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-01T19:39:17Z",
+      "side": 1,
+      "message": "pls use eclipse code formatter",
+      "revId": "97f69b4f59ccae9a6d01931faf3a7b21407cc579",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "99318210_c5b91fe4",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPStepResult.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-01T19:39:17Z",
+      "side": 1,
+      "message": "I really don\u0027t think we want a generated tracking id",
+      "revId": "97f69b4f59ccae9a6d01931faf3a7b21407cc579",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8d309b0d_2b2c4b23",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPStepResult.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-01T19:39:17Z",
+      "side": 1,
+      "message": "maybe set start date in the no-arg constructor?",
+      "range": {
+        "startLine": 94,
+        "startChar": 1,
+        "endLine": 94,
+        "endChar": 2
+      },
+      "revId": "97f69b4f59ccae9a6d01931faf3a7b21407cc579",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "73593188_84cd325e",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPStepResult.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-01T19:39:17Z",
+      "side": 1,
+      "message": "Must accept start date",
+      "revId": "97f69b4f59ccae9a6d01931faf3a7b21407cc579",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "66f5f6c5_2f615277",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPStepStatus.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-01T19:39:17Z",
+      "side": 1,
+      "message": "please refactor using superclass for enums MLPTypeCodeEntity",
+      "revId": "97f69b4f59ccae9a6d01931faf3a7b21407cc579",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4b16a193_b090d0ad",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPStepType.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-01T19:39:17Z",
+      "side": 1,
+      "message": "Can this use MLPTypeCodeEntity?",
+      "revId": "97f69b4f59ccae9a6d01931faf3a7b21407cc579",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0b48c827_c18dfc53",
+        "filename": "cmn-data-svc-server/db-scripts/cmn-data-svc-ddl-dml-mysql-1-13.sql",
+        "patchSetId": 1
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-01T19:39:17Z",
+      "side": 1,
+      "message": "Please drop collate",
+      "revId": "97f69b4f59ccae9a6d01931faf3a7b21407cc579",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4fc24ae5_f7b104d2",
+        "filename": "cmn-data-svc-server/db-scripts/cmn-data-svc-ddl-dml-mysql-1-13.sql",
+        "patchSetId": 1
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-01T19:39:17Z",
+      "side": 1,
+      "message": "drop quotes",
+      "revId": "97f69b4f59ccae9a6d01931faf3a7b21407cc579",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ee768d8_6dbc554a",
+        "filename": "cmn-data-svc-server/db-scripts/cmn-data-svc-ddl-dml-mysql-1-13.sql",
+        "patchSetId": 1
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-01T19:39:17Z",
+      "side": 1,
+      "message": "please drop collate",
+      "revId": "97f69b4f59ccae9a6d01931faf3a7b21407cc579",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7e625590_5a887cee",
+        "filename": "cmn-data-svc-server/db-scripts/cmn-data-svc-ddl-dml-mysql-1-13.sql",
+        "patchSetId": 1
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-01T19:39:17Z",
+      "side": 1,
+      "message": "8K right?",
+      "range": {
+        "startLine": 401,
+        "startChar": 17,
+        "endLine": 401,
+        "endChar": 20
+      },
+      "revId": "97f69b4f59ccae9a6d01931faf3a7b21407cc579",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b815daef_73268a83",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/SolutionController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-01T19:39:17Z",
+      "side": 1,
+      "message": "MUST NOT GO IN",
+      "revId": "97f69b4f59ccae9a6d01931faf3a7b21407cc579",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f9c2e5d6_6454e23a",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/StepResultController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-01T19:39:17Z",
+      "side": 1,
+      "message": "pls drop method",
+      "revId": "97f69b4f59ccae9a6d01931faf3a7b21407cc579",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ac663967_f320c16e",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/StepResultController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-01T19:39:17Z",
+      "side": 1,
+      "message": "Please add method get-by-id",
+      "revId": "97f69b4f59ccae9a6d01931faf3a7b21407cc579",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf46dbf0_20e0152d",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/StepResultController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-01T19:39:17Z",
+      "side": 1,
+      "message": "fix javadoc",
+      "revId": "97f69b4f59ccae9a6d01931faf3a7b21407cc579",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a42bf87d_d9b06b1d",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/StepResultController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-01T19:39:17Z",
+      "side": 1,
+      "message": "Solution revision?",
+      "revId": "97f69b4f59ccae9a6d01931faf3a7b21407cc579",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "672bf61b_a329cab1",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/repository/StepResultRepository.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-01T19:39:17Z",
+      "side": 1,
+      "message": "Solution revision??  Can you drop this method?",
+      "revId": "97f69b4f59ccae9a6d01931faf3a7b21407cc579",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "785b7399_e3a48def",
+        "filename": "cmn-data-svc-server/src/test/java/org/acumos/cds/test/CdsRepositoryServiceTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1062,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-01T19:39:17Z",
+      "side": 1,
+      "message": "please use enum, not hardcoded string",
+      "revId": "97f69b4f59ccae9a6d01931faf3a7b21407cc579",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "958e40d8_df80d535",
+        "filename": "cmn-data-svc-server/src/test/java/org/acumos/cds/test/CdsRepositoryServiceTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1080,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-01T19:39:17Z",
+      "side": 1,
+      "message": "Why not?  Should delete",
+      "revId": "97f69b4f59ccae9a6d01931faf3a7b21407cc579",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
