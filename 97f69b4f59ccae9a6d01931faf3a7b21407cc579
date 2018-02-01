@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "83fb0f15_41215907",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-01T21:26:09Z",
+      "side": 1,
+      "message": "Please add this line:\n\nIssue: ACUMOS-56",
+      "revId": "97f69b4f59ccae9a6d01931faf3a7b21407cc579",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5674a7d4_f361b825",
         "filename": "cmn-data-svc-client/pom.xml",
         "patchSetId": 1
