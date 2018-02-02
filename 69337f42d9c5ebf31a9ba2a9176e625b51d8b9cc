@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "480a3037_19f62bfc",
+        "filename": "cmn-data-svc-server/db-scripts/cmn-data-svc-ddl-dml-mysql-1-13.sql",
+        "patchSetId": 1
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-02-02T16:19:58Z",
+      "side": 1,
+      "message": "Won\u0027t source and origin be non null? If the current Acumos instance is the source and origin itself, then fields can be populated accordingly, but leaving them as null may be undesirable.",
+      "revId": "69337f42d9c5ebf31a9ba2a9176e625b51d8b9cc",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
