@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b51ae853_5c0c1504",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPPeerStatus.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-02-02T22:08:21Z",
+      "side": 1,
+      "message": "Missing comment",
+      "revId": "cfbfb9bcf066a0280426392ab0a52514796b2cd9",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bd2278d2_393fa2c6",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPPeerStatus.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-02-02T22:08:21Z",
+      "side": 1,
+      "message": "Why do you need a separate MLPStatusCodeEntity in addition to type code entity one?",
+      "revId": "cfbfb9bcf066a0280426392ab0a52514796b2cd9",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "358b196e_fd6bcedb",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPSubscriptionScopeType.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-02-02T22:08:21Z",
+      "side": 1,
+      "message": "Correct the comment",
+      "revId": "cfbfb9bcf066a0280426392ab0a52514796b2cd9",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
