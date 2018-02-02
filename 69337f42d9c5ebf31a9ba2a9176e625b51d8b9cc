@@ -16,6 +16,24 @@
       "revId": "69337f42d9c5ebf31a9ba2a9176e625b51d8b9cc",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ec60088_4951987c",
+        "filename": "cmn-data-svc-server/db-scripts/cmn-data-svc-ddl-dml-mysql-1-13.sql",
+        "patchSetId": 1
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-02T16:55:58Z",
+      "side": 1,
+      "message": "Null means the current site IS the source.  Better to adopt that convention than to duplicate information unnecessarily.",
+      "parentUuid": "480a3037_19f62bfc",
+      "revId": "69337f42d9c5ebf31a9ba2a9176e625b51d8b9cc",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
