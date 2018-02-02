@@ -73,6 +73,13 @@ public class MLPSolutionRevision extends MLPTimestampedEntity implements Seriali
 	private String metadata;
 
 	/**
+	 * URI of the peer that provided this object. Supports federation.
+	 */
+	@Column(name = "ORIGIN", columnDefinition = "VARCHAR(512)")
+	@Size(max = 512)
+	private String origin;
+
+	/**
 	 * No-arg constructor
 	 */
 	public MLPSolutionRevision() {
@@ -144,6 +151,14 @@ public class MLPSolutionRevision extends MLPTimestampedEntity implements Seriali
 
 	public void setVersion(String version) {
 		this.version = version;
+	}
+
+	public String getOrigin() {
+		return origin;
+	}
+
+	public void setOrigin(String origin) {
+		this.origin = origin;
 	}
 
 	@Override
