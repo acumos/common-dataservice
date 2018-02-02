@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "895e7c8b_ed7b48ec",
+        "filename": "cmn-data-svc-client/src/test/java/org/acumos/cds/client/test/DomainTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 889,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-02-02T22:19:08Z",
+      "side": 1,
+      "message": "Isn\u0027t this a trivial assertion?",
+      "revId": "ea71653539f3309ac079574655a2d06ae0b4622b",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
