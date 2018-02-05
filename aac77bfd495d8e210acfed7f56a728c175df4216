@@ -1,0 +1,234 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cfbdd966_bf792ba9",
+        "filename": "docs/client.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 94
+      },
+      "writtenOn": "2018-02-05T18:15:19Z",
+      "side": 1,
+      "message": "Do you want to remove this line?",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 54
+      },
+      "revId": "aac77bfd495d8e210acfed7f56a728c175df4216",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3acd0a60_e69aec62",
+        "filename": "docs/client.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 94
+      },
+      "writtenOn": "2018-02-05T18:15:19Z",
+      "side": 1,
+      "message": "Are you sure you want to include the code here instead of just pointing to the location of file in the repo? Trying to minimize updating code in two places.",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 65
+      },
+      "revId": "aac77bfd495d8e210acfed7f56a728c175df4216",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d4122d09_0dc5ef5c",
+        "filename": "docs/requirements.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 94
+      },
+      "writtenOn": "2018-02-05T18:15:19Z",
+      "side": 1,
+      "message": "does MLP stand for Machine Learning Platform? if so, is this how Acumos is commonly referred to?",
+      "range": {
+        "startLine": 6,
+        "startChar": 56,
+        "endLine": 6,
+        "endChar": 59
+      },
+      "revId": "aac77bfd495d8e210acfed7f56a728c175df4216",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "145edc08_69ccdb1b",
+        "filename": "docs/requirements.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 94
+      },
+      "writtenOn": "2018-02-05T18:15:19Z",
+      "side": 1,
+      "message": "missing a space between the \u0027.\u0027 and \u0027T\u0027 -- also where is the picture?",
+      "range": {
+        "startLine": 262,
+        "startChar": 93,
+        "endLine": 262,
+        "endChar": 95
+      },
+      "revId": "aac77bfd495d8e210acfed7f56a728c175df4216",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4de75bf8_e054f568",
+        "filename": "docs/requirements.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 94
+      },
+      "writtenOn": "2018-02-05T18:15:19Z",
+      "side": 1,
+      "message": "is this supposed to be here?",
+      "range": {
+        "startLine": 323,
+        "startChar": 81,
+        "endLine": 323,
+        "endChar": 117
+      },
+      "revId": "aac77bfd495d8e210acfed7f56a728c175df4216",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3af61991_cc9feb70",
+        "filename": "docs/requirements.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 94
+      },
+      "writtenOn": "2018-02-05T18:15:19Z",
+      "side": 1,
+      "message": "is this supposed to be here?",
+      "range": {
+        "startLine": 327,
+        "startChar": 82,
+        "endLine": 327,
+        "endChar": 122
+      },
+      "revId": "aac77bfd495d8e210acfed7f56a728c175df4216",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "60bc334c_1a17c159",
+        "filename": "docs/requirements.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 94
+      },
+      "writtenOn": "2018-02-05T18:15:19Z",
+      "side": 1,
+      "message": "are the Redundant sections supposed to be included? Same comment for the \"Question\" line",
+      "range": {
+        "startLine": 329,
+        "startChar": 0,
+        "endLine": 336,
+        "endChar": 123
+      },
+      "revId": "aac77bfd495d8e210acfed7f56a728c175df4216",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "72be4676_5443406f",
+        "filename": "docs/requirements.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 94
+      },
+      "writtenOn": "2018-02-05T18:15:19Z",
+      "side": 1,
+      "message": "please remove the \u0027?\u0027",
+      "range": {
+        "startLine": 512,
+        "startChar": 29,
+        "endLine": 512,
+        "endChar": 30
+      },
+      "revId": "aac77bfd495d8e210acfed7f56a728c175df4216",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "94903a13_53c1b291",
+        "filename": "docs/server.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 94
+      },
+      "writtenOn": "2018-02-05T18:15:19Z",
+      "side": 1,
+      "message": "This is a single word; please change to match other uses of microservice",
+      "range": {
+        "startLine": 5,
+        "startChar": 5,
+        "endLine": 5,
+        "endChar": 18
+      },
+      "revId": "aac77bfd495d8e210acfed7f56a728c175df4216",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0cc51de2_46d87546",
+        "filename": "docs/server.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 94
+      },
+      "writtenOn": "2018-02-05T18:15:19Z",
+      "side": 1,
+      "message": "This is a single word; please change to match other uses of microservice",
+      "range": {
+        "startLine": 10,
+        "startChar": 4,
+        "endLine": 10,
+        "endChar": 17
+      },
+      "revId": "aac77bfd495d8e210acfed7f56a728c175df4216",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
