@@ -28,8 +28,10 @@ import org.acumos.cds.domain.MLPArtifactType;
 import org.acumos.cds.domain.MLPDeploymentStatus;
 import org.acumos.cds.domain.MLPLoginProvider;
 import org.acumos.cds.domain.MLPModelType;
+import org.acumos.cds.domain.MLPPeerStatus;
 import org.acumos.cds.domain.MLPStepStatus;
 import org.acumos.cds.domain.MLPStepType;
+import org.acumos.cds.domain.MLPSubscriptionScopeType;
 import org.acumos.cds.domain.MLPToolkitType;
 import org.acumos.cds.domain.MLPValidationSequence;
 import org.acumos.cds.domain.MLPValidationSequence.ValidationSequencePK;
@@ -40,8 +42,10 @@ import org.acumos.cds.repository.ArtifactTypeRepository;
 import org.acumos.cds.repository.DeploymentStatusRepository;
 import org.acumos.cds.repository.LoginProviderRepository;
 import org.acumos.cds.repository.ModelTypeRepository;
+import org.acumos.cds.repository.PeerStatusRepository;
 import org.acumos.cds.repository.StepStatusRepository;
 import org.acumos.cds.repository.StepTypeRepository;
+import org.acumos.cds.repository.SubscriptionScopeRepository;
 import org.acumos.cds.repository.ToolkitTypeRepository;
 import org.acumos.cds.repository.ValidationSequenceRepository;
 import org.acumos.cds.repository.ValidationStatusRepository;
@@ -74,9 +78,17 @@ public class CodeTableController extends AbstractController {
 	@Autowired
 	private ArtifactTypeRepository artifactTypeRepository;
 	@Autowired
+	private DeploymentStatusRepository deploymentStatusRepository;
+	@Autowired
 	private LoginProviderRepository loginProviderRepository;
 	@Autowired
 	private ModelTypeRepository modelTypeRepository;
+	@Autowired
+	private PeerStatusRepository peerStatusRepository;
+	@Autowired
+	private StepStatusRepository stepStatusRepository;
+	@Autowired
+	private SubscriptionScopeRepository subscriptionScopeRepository;
 	@Autowired
 	private ToolkitTypeRepository toolkitTypeRepository;
 	@Autowired
@@ -85,10 +97,6 @@ public class CodeTableController extends AbstractController {
 	private ValidationTypeRepository validationTypeRepository;
 	@Autowired
 	private ValidationSequenceRepository validationSequenceRepository;
-	@Autowired
-	private DeploymentStatusRepository deploymentStatusRepository;
-	@Autowired
-	private StepStatusRepository stepStatusRepository;
 	@Autowired
 	private StepTypeRepository stepTypeRepository;
 
@@ -114,6 +122,16 @@ public class CodeTableController extends AbstractController {
 	}
 
 	/**
+	 * @return List of MLPDeploymentStatus objects
+	 */
+	@ApiOperation(value = "Gets the list of deployment status codes.", response = MLPDeploymentStatus.class, responseContainer = "Iterable")
+	@RequestMapping(value = "/" + CCDSConstants.DEP_STAT_PATH, method = RequestMethod.GET)
+	@ResponseBody
+	public Iterable<MLPDeploymentStatus> getDeploymentStatusList() {
+		return deploymentStatusRepository.findAll();
+	}
+
+	/**
 	 * @return List of MLPLoginProvider objects
 	 */
 	@ApiOperation(value = "Gets the list of login providers.", response = MLPLoginProvider.class, responseContainer = "List")
@@ -124,13 +142,53 @@ public class CodeTableController extends AbstractController {
 	}
 
 	/**
-	 * @return List of MLPToolkitType objects
+	 * @return List of MLPModelType objects
 	 */
-	@ApiOperation(value = "Gets the list of model types.", response = MLPToolkitType.class, responseContainer = "List")
+	@ApiOperation(value = "Gets the list of model types.", response = MLPModelType.class, responseContainer = "List")
 	@RequestMapping(value = "/" + CCDSConstants.MODEL_PATH + "/" + CCDSConstants.TYPE_PATH, method = RequestMethod.GET)
 	@ResponseBody
 	public Iterable<MLPModelType> getModelTypeList() {
 		return modelTypeRepository.findAll();
+	}
+
+	/**
+	 * @return List of MLPPeerStatus objects
+	 */
+	@ApiOperation(value = "Gets the list of peer statuses.", response = MLPPeerStatus.class, responseContainer = "List")
+	@RequestMapping(value = "/" + CCDSConstants.PEER_PATH + "/" + CCDSConstants.PEER_STAT_PATH, method = RequestMethod.GET)
+	@ResponseBody
+	public Iterable<MLPPeerStatus> getPeerStatusList() {
+		return peerStatusRepository.findAll();
+	}
+
+	/**
+	 * @return List of MLPStepStatus objects
+	 */
+	@ApiOperation(value = "Gets the list of step statuses.", response = MLPStepStatus.class, responseContainer = "Iterable")
+	@RequestMapping(value = "/" + CCDSConstants.STEP_STAT_PATH, method = RequestMethod.GET)
+	@ResponseBody
+	public Iterable<MLPStepStatus> getStepStatusList() {
+		return stepStatusRepository.findAll();
+	}
+
+	/**
+	 * @return List of MLPStepType objects
+	 */
+	@ApiOperation(value = "Gets the list of step types.", response = MLPStepType.class, responseContainer = "List")
+	@RequestMapping(value = "/" + CCDSConstants.STEP_TYPE_PATH, method = RequestMethod.GET)
+	@ResponseBody
+	public Iterable<MLPStepType> getStepTypeList() {
+		return stepTypeRepository.findAll();
+	}
+
+	/**
+	 * @return List of MLPSubscriptionScopeType objects
+	 */
+	@ApiOperation(value = "Gets the list of subscription scopes.", response = MLPSubscriptionScopeType.class, responseContainer = "List")
+	@RequestMapping(value = "/" + CCDSConstants.SUB_SCOPE_TYPE_PATH, method = RequestMethod.GET)
+	@ResponseBody
+	public Iterable<MLPSubscriptionScopeType> getSubscriptionScopes() {
+		return subscriptionScopeRepository.findAll();
 	}
 
 	/**
@@ -164,44 +222,18 @@ public class CodeTableController extends AbstractController {
 		return validationTypeRepository.findAll();
 	}
 
+	////////////////////////////////////////////////////////////////////////
+	// Validation sequence is configurable at runtime, not a fixed value set
+	////////////////////////////////////////////////////////////////////////
+	
 	/**
-	 * @return List of MLPDeploymentStatus objects
-	 */
-	@ApiOperation(value = "Gets the list of deployment status codes.", response = MLPDeploymentStatus.class, responseContainer = "Iterable")
-	@RequestMapping(value = "/" + CCDSConstants.DEP_STAT_PATH, method = RequestMethod.GET)
-	@ResponseBody
-	public Iterable<MLPDeploymentStatus> getDeploymentStatusList() {
-		return deploymentStatusRepository.findAll();
-	}
-
-	/**
-	 * @return List of MLPSolValSeq objects
+	 * @return List of MLPValidationSequence objects
 	 */
 	@ApiOperation(value = "Gets the list of validation sequence records.", response = MLPValidationSequence.class, responseContainer = "Iterable")
 	@RequestMapping(value = "/" + CCDSConstants.VAL_SEQ_PATH, method = RequestMethod.GET)
 	@ResponseBody
 	public Iterable<MLPValidationSequence> getValidationSequenceList() {
 		return validationSequenceRepository.findAll();
-	}
-
-	/**
-	 * @return List of MLPStepStatus objects
-	 */
-	@ApiOperation(value = "Gets the list of step statuses.", response = MLPStepStatus.class, responseContainer = "Iterable")
-	@RequestMapping(value = "/" + CCDSConstants.STEP_STAT_PATH, method = RequestMethod.GET)
-	@ResponseBody
-	public Iterable<MLPStepStatus> getStepStatusList() {
-		return stepStatusRepository.findAll();
-	}
-
-	/**
-	 * @return List of MLPStepType objects
-	 */
-	@ApiOperation(value = "Gets the list of step types.", response = MLPStepType.class, responseContainer = "List")
-	@RequestMapping(value = "/" + CCDSConstants.STEP_TYPE_PATH, method = RequestMethod.GET)
-	@ResponseBody
-	public Iterable<MLPStepType> getStepTypeList() {
-		return stepTypeRepository.findAll();
 	}
 
 	/**
