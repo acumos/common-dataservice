@@ -50,6 +50,23 @@
       "revId": "a2db723c0c875ddf7453a3fc569ca7352fec20d8",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a7a443f2_b69d5ad2",
+        "filename": "docs/requirements.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 723,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-02-05T21:21:59Z",
+      "side": 1,
+      "message": "Peer group and solution Group entity names are repeating. Sorry, it should have been corrected in the previous wiki itself!",
+      "revId": "a2db723c0c875ddf7453a3fc569ca7352fec20d8",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
