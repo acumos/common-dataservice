@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bd93392a_79deb7e2",
+        "filename": "docs/conf.py.sphinx",
+        "patchSetId": 5
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-02-05T20:57:10Z",
+      "side": 1,
+      "message": "What are these u\u0027 prefixes about?",
+      "revId": "a2db723c0c875ddf7453a3fc569ca7352fec20d8",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
