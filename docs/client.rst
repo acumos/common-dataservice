@@ -7,15 +7,15 @@ This library provides a client for using the Common Data Service in the Acumos m
 Maven Dependency
 ----------------
 
-The client jar is deployed to these Nexus repositories:: 
+The client jar is deployed to these Nexus repositories::
 
 	<repository>
 		<id>snapshots</id>
-		<url>https://nexus.acumos.org/content/repositories/snapshots</url> 
+		<url>https://nexus.acumos.org/content/repositories/snapshots</url>
 	</repository>
 	<repository>
 		<id>releases</id>
-		<url>https://nexus.acumos.org/content/repositories/releases</url> 
+		<url>https://nexus.acumos.org/content/repositories/releases</url>
 	</repository>
 
 TODO: Replace with Linux Foundation Nexus coordinates.
@@ -49,7 +49,7 @@ Run Prerequisites
 
 1. Java version 1.8
 2. A running Common Data Service server.
-3. A username/password combination to access the service. 
+3. A username/password combination to access the service.
 
 Usage Example
 -------------
