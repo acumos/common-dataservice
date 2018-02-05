@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ae736436_c0fee8a0",
+        "filename": "docs/conf.py.sphinx",
+        "patchSetId": 5
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-05T21:58:54Z",
+      "side": 1,
+      "message": "It means \"Unicode\" for the values between quotes",
+      "parentUuid": "bd93392a_79deb7e2",
+      "revId": "a2db723c0c875ddf7453a3fc569ca7352fec20d8",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bfd017e9_9403efa2",
         "filename": "docs/requirements.rst",
         "patchSetId": 5
@@ -30,6 +48,24 @@
       "writtenOn": "2018-02-05T21:05:18Z",
       "side": 1,
       "message": "Don\u0027t we have to mention the mandatory and optional fields for the different entities?",
+      "revId": "a2db723c0c875ddf7453a3fc569ca7352fec20d8",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "371480c8_a0396dd7",
+        "filename": "docs/requirements.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-05T21:58:54Z",
+      "side": 1,
+      "message": "I would prefer to keep this abstract",
+      "parentUuid": "bfd017e9_9403efa2",
       "revId": "a2db723c0c875ddf7453a3fc569ca7352fec20d8",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "723c408f_c65e3dcb",
+        "filename": "docs/requirements.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-05T21:58:54Z",
+      "side": 1,
+      "message": "I added them",
+      "parentUuid": "6a5e3fa1_3bb772aa",
+      "revId": "a2db723c0c875ddf7453a3fc569ca7352fec20d8",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a7a443f2_b69d5ad2",
         "filename": "docs/requirements.rst",
         "patchSetId": 5
@@ -64,6 +118,24 @@
       "writtenOn": "2018-02-05T21:21:59Z",
       "side": 1,
       "message": "Peer group and solution Group entity names are repeating. Sorry, it should have been corrected in the previous wiki itself!",
+      "revId": "a2db723c0c875ddf7453a3fc569ca7352fec20d8",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "db76809a_b62e654c",
+        "filename": "docs/requirements.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 723,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-05T21:58:54Z",
+      "side": 1,
+      "message": "I fixed",
+      "parentUuid": "a7a443f2_b69d5ad2",
       "revId": "a2db723c0c875ddf7453a3fc569ca7352fec20d8",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
