@@ -16,6 +16,23 @@
       "revId": "3618ceccec40b92ba245b1457750609e226170c3",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "54779c96_699b44ac",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/repository/SubscriptionScopeRepository.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-02-05T22:19:22Z",
+      "side": 1,
+      "message": "insert LICENSE statement here",
+      "revId": "3618ceccec40b92ba245b1457750609e226170c3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
