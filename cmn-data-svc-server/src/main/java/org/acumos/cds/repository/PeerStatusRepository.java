@@ -18,32 +18,21 @@
  * ===============LICENSE_END=========================================================
  */
 
-package org.acumos.cds;
+package org.acumos.cds.repository;
+
+import org.acumos.cds.domain.MLPPeerStatus;
+import org.springframework.data.repository.Repository;
 
 /**
- * This enum provides MLP toolkit type codes for developer convenience. The
- * valid values are maintained in a database table modeled by the class
- * {@link org.acumos.cds.domain.MLPToolkitType}.
+ * Only exposes the single get-all method.
  */
-public enum ToolkitTypeCode {
-	CP("Composite Solution"), //
-	DS("Design Studio"), //
-	H2("H2O"), //
-	PB("Probe"), //
-	RC("R"), //
-	SK("Scikit-Learn"), //
-	TF("TensorFlow"), //
-	TC("Training Client"), //
-	BR("Data Broker"); //
-
-	private String typeName;
-
-	private ToolkitTypeCode(final String typeName) {
-		this.typeName = typeName;
-	}
-
-	public String getTypeName() {
-		return typeName;
-	}
+public interface PeerStatusRepository extends Repository<MLPPeerStatus, String> {
+	
+	/**
+	 * Returns all instances of the type.
+	 * 
+	 * @return all entities
+	 */
+	Iterable<MLPPeerStatus> findAll();
 
 }
