@@ -16,6 +16,23 @@
       "revId": "a2db723c0c875ddf7453a3fc569ca7352fec20d8",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6a5e3fa1_3bb772aa",
+        "filename": "docs/requirements.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-02-05T21:01:38Z",
+      "side": 1,
+      "message": "Where are the entities for step type and step status?",
+      "revId": "a2db723c0c875ddf7453a3fc569ca7352fec20d8",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
