@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5e213ded_932fbb1c",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/CodeTableController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-02-05T22:15:15Z",
+      "side": 1,
+      "message": "Why is the responseContainer not List here?",
+      "revId": "3618ceccec40b92ba245b1457750609e226170c3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
