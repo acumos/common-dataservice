@@ -86,6 +86,24 @@
       "revId": "3a54d166e87ada36d4774e12d8572b337ba214f7",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "be57f616_11244137",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/StepResultController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-07T19:46:14Z",
+      "side": 1,
+      "message": "Yes, all the search methods default to AND.  Thanks for catching typo.",
+      "parentUuid": "64c59f14_7b72c9c8",
+      "revId": "3a54d166e87ada36d4774e12d8572b337ba214f7",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
