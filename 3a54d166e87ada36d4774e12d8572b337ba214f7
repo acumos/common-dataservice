@@ -34,6 +34,23 @@
       "revId": "3a54d166e87ada36d4774e12d8572b337ba214f7",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "262b27b3_1ede7845",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/PeerController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-02-07T19:36:02Z",
+      "side": 1,
+      "message": "Why is Spring adding to the multi value map supplied to the controller? Can this hack be avoided?",
+      "revId": "3a54d166e87ada36d4774e12d8572b337ba214f7",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
