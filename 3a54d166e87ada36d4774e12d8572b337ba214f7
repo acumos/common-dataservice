@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8842bdb6_ec29558a",
+        "filename": "cmn-data-svc-client/src/test/java/org/acumos/cds/client/test/ClientMethodTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 843,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-02-07T19:27:43Z",
+      "side": 1,
+      "message": "Why do you pass the isOr argument as false unlike other search methods?",
+      "revId": "3a54d166e87ada36d4774e12d8572b337ba214f7",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
