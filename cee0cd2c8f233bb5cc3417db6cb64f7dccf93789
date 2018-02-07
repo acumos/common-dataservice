@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "44a2a3eb_19604742",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPPeer.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-02-07T21:13:47Z",
+      "side": 1,
+      "message": "Add a check for null for isLocal also maybe?",
+      "revId": "cee0cd2c8f233bb5cc3417db6cb64f7dccf93789",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
