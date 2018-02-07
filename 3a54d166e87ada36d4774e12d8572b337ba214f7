@@ -51,6 +51,24 @@
       "revId": "3a54d166e87ada36d4774e12d8572b337ba214f7",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "57b69ef9_c0e1ffac",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/PeerController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-07T19:37:25Z",
+      "side": 1,
+      "message": "I have not yet found a way to avoid it.",
+      "parentUuid": "262b27b3_1ede7845",
+      "revId": "3a54d166e87ada36d4774e12d8572b337ba214f7",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
