@@ -225,7 +225,7 @@ public class CdsRepositoryServiceTest {
 	public void testEnums() throws Exception {
 
 		int count;
-		
+
 		Iterable<MLPAccessType> accessTypeList = accessTypeRepository.findAll();
 		logger.info("Access types {}", accessTypeList);
 		Assert.assertTrue(accessTypeList.iterator().hasNext());
@@ -261,7 +261,7 @@ public class CdsRepositoryServiceTest {
 			DeploymentStatusCode.valueOf(ds.getStatusCode());
 		}
 		Assert.assertEquals(count, DeploymentStatusCode.values().length);
-		
+
 		Iterable<MLPLoginProvider> loginProviderList = loginProviderRepository.findAll();
 		Assert.assertTrue(loginProviderList.iterator().hasNext());
 		logger.info("Login providers {}", loginProviderList);
@@ -464,7 +464,7 @@ public class CdsRepositoryServiceTest {
 			Assert.assertTrue(searchPeers.size() == 1);
 
 			MLPPeerSubscription ps = new MLPPeerSubscription(pr.getPeerId(), cu.getUserId(),
-					SubscriptionScopeTypeCode.FL.name());
+					SubscriptionScopeTypeCode.FL.name(), AccessTypeCode.PB.name());
 			ps = peerSubscriptionRepository.save(ps);
 			logger.info("Peer subscription {}", ps);
 
@@ -723,11 +723,14 @@ public class CdsRepositoryServiceTest {
 			logger.info("Created site config {}", cc);
 
 			MLPThread thread = threadRepository.save(new MLPThread(cs.getSolutionId(), cr.getRevisionId()));
+			Assert.assertTrue(thread.getThreadId() != null);
+			logger.info("Created thread {}", thread);
+
 			Page<MLPThread> threads = threadRepository.findBySolutionIdAndRevisionId(cs.getSolutionId(),
 					cr.getRevisionId(), new PageRequest(0, 5, null));
-			Assert.assertTrue(threads != null && threads.hasContent());
+			Assert.assertTrue(threads != null && threads.getNumberOfElements() > 0);
 
-			MLPComment mc = commentRepository.save(new MLPComment(thread.getThreadId(), "b", "c"));
+			MLPComment mc = commentRepository.save(new MLPComment(thread.getThreadId(), cu.getUserId(), "c"));
 			long crc = commentRepository.count();
 			Assert.assertTrue(crc > 0);
 			long tcc = commentRepository.countThreadComments(thread.getThreadId());
@@ -858,14 +861,14 @@ public class CdsRepositoryServiceTest {
 
 			// Create Peer
 			final String peerName = "Peer-" + Long.toString(new Date().getTime());
-			MLPPeer pr = new MLPPeer(peerName, "x.509", "http://peer-api", true, "", PeerStatusCode.AC.name(),
+			MLPPeer pr = new MLPPeer(peerName, "x.509", "http://peer-api", true, true, "", PeerStatusCode.AC.name(),
 					ValidationStatusCode.IP.name());
 			pr = peerRepository.save(pr);
 			Assert.assertNotNull(pr.getPeerId());
 			Assert.assertNotNull(pr.getCreated());
 
 			MLPPeerSubscription ps = new MLPPeerSubscription(pr.getPeerId(), cu.getUserId(),
-					SubscriptionScopeTypeCode.FL.name());
+					SubscriptionScopeTypeCode.FL.toString(), AccessTypeCode.PB.toString());
 			ps = peerSubscriptionRepository.save(ps);
 			Assert.assertNotNull(ps.getSubId());
 
