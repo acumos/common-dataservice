@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b325bc64_710b8ae7",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/AbstractController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-02-07T19:53:14Z",
+      "side": 1,
+      "message": "Maybe add a null check on queryParameters here?",
+      "revId": "74f90c5e4a93de48452b6e6baa3ecd9de75648c3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
