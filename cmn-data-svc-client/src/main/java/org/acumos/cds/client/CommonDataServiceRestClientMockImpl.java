@@ -65,6 +65,7 @@ import org.acumos.cds.domain.MLPToolkitType;
 import org.acumos.cds.domain.MLPUser;
 import org.acumos.cds.domain.MLPUserLoginProvider;
 import org.acumos.cds.domain.MLPUserNotification;
+import org.acumos.cds.domain.MLPUserNotifPref;
 import org.acumos.cds.domain.MLPValidationSequence;
 import org.acumos.cds.domain.MLPValidationStatus;
 import org.acumos.cds.domain.MLPValidationType;
@@ -149,6 +150,8 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 	private RestPageResponse<MLPNotification> notifications;
 	private MLPNotification notification;
 	private RestPageResponse<MLPUserNotification> userNotifications;
+	private MLPUserNotifPref usrNotifPref;
+	private List<MLPUserNotifPref> userNotifPreferences;
 	private MLPStepResult stepResult;
 	private MLPSolutionWeb solutionWeb = new MLPSolutionWeb();
 	private List<MLPUser> solutionAccessUsers;
@@ -178,6 +181,8 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 	private RestPageResponse<MLPComment> solutionRevisionComments;
 	private RestPageResponse<MLPStepResult> stepResults;
 	private RestPageResponse<MLPStepResult> searchStepResults;
+	private RestPageResponse<MLPUserNotifPref> alluserNotifPreferences;
+	private MLPUserNotifPref usrNotifPrefById = new MLPUserNotifPref();
 
 	/**
 	 * No-argument constructor.
@@ -582,7 +587,8 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 	}
 
 	@Override
-	public RestPageResponse<MLPArtifact> searchArtifacts(Map<String, Object> queryParameters, boolean isOr, RestPageRequest pageRequest) {
+	public RestPageResponse<MLPArtifact> searchArtifacts(Map<String, Object> queryParameters, boolean isOr,
+			RestPageRequest pageRequest) {
 		return searchArtifacts;
 	}
 
@@ -646,7 +652,8 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 	}
 
 	@Override
-	public RestPageResponse<MLPUser> searchUsers(Map<String, Object> queryParameters, boolean isOr, RestPageRequest pageRequest) {
+	public RestPageResponse<MLPUser> searchUsers(Map<String, Object> queryParameters, boolean isOr,
+			RestPageRequest pageRequest) {
 		return searchUsers;
 	}
 
@@ -781,7 +788,8 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 	}
 
 	@Override
-	public RestPageResponse<MLPRole> searchRoles(Map<String, Object> queryParameters, boolean isOr, RestPageRequest pageRequest) {
+	public RestPageResponse<MLPRole> searchRoles(Map<String, Object> queryParameters, boolean isOr,
+			RestPageRequest pageRequest) {
 		return searchRoles;
 	}
 
@@ -873,7 +881,8 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 	}
 
 	@Override
-	public RestPageResponse<MLPPeer> searchPeers(Map<String, Object> queryParameters, boolean isOr, RestPageRequest pageRequest) {
+	public RestPageResponse<MLPPeer> searchPeers(Map<String, Object> queryParameters, boolean isOr,
+			RestPageRequest pageRequest) {
 		return searchPeers;
 	}
 
@@ -1083,6 +1092,44 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 
 	@Override
 	public void setUserViewedNotification(String notificationId, String userId) {
+		// How to mock?
+	}
+
+	public MLPUserNotifPref createUserNotificationPreference(MLPUserNotifPref usrNotifPref) {
+		this.usrNotifPref = usrNotifPref;
+		return usrNotifPref;
+	}
+
+	public void setUserNotificationPreferences(List<MLPUserNotifPref> usrNotifPref) {
+		this.userNotifPreferences = usrNotifPref;
+	}
+
+	@Override
+	public List<MLPUserNotifPref> getUserNotificationPreferences(String userId,
+			RestPageRequest pageRequest) {
+		return this.userNotifPreferences;
+	}
+
+	@Override
+	public MLPUserNotifPref getUserNotificationPreference(Long userNotifPrefID) {
+		return this.usrNotifPrefById;
+	}
+
+	public void setUserNotificationPreference(MLPUserNotifPref usrNotifPref) {
+		this.usrNotifPrefById = usrNotifPref;
+	}
+
+	public void setAllUserNotificationPreferences(RestPageResponse<MLPUserNotifPref> allusrNotifPref) {
+		this.alluserNotifPreferences = allusrNotifPref;
+	}
+
+	@Override
+	public void deleteUserNotificationPreference(Long usrNotifprefId) {
+		// How to mock?
+	}
+
+	@Override
+	public void updateUserNotificationPreference(MLPUserNotifPref usrNotifpref) {
 		// How to mock?
 	}
 
@@ -1363,7 +1410,8 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 	}
 
 	@Override
-	public RestPageResponse<MLPSolution> searchSolutions(Map<String, Object> queryParameters, boolean isOr, RestPageRequest pageRequest) {
+	public RestPageResponse<MLPSolution> searchSolutions(Map<String, Object> queryParameters, boolean isOr,
+			RestPageRequest pageRequest) {
 		return this.searchSolutions;
 	}
 
@@ -1401,7 +1449,8 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 	}
 
 	@Override
-	public RestPageResponse<MLPStepResult> searchStepResults(Map<String, Object> queryParameters, boolean isOr, RestPageRequest pageRequest) {
+	public RestPageResponse<MLPStepResult> searchStepResults(Map<String, Object> queryParameters, boolean isOr,
+			RestPageRequest pageRequest) {
 		return this.searchStepResults;
 	}
 

@@ -32,7 +32,9 @@ import org.acumos.cds.AccessTypeCode;
 import org.acumos.cds.ArtifactTypeCode;
 import org.acumos.cds.DeploymentStatusCode;
 import org.acumos.cds.LoginProviderCode;
+import org.acumos.cds.MessageSeverityTypeCode;
 import org.acumos.cds.ModelTypeCode;
+import org.acumos.cds.NotificationDeliveryMechanismTypeCode;
 import org.acumos.cds.PeerStatusCode;
 import org.acumos.cds.StepStatusCode;
 import org.acumos.cds.StepTypeCode;
@@ -73,6 +75,7 @@ import org.acumos.cds.domain.MLPToolkitType;
 import org.acumos.cds.domain.MLPUser;
 import org.acumos.cds.domain.MLPUserLoginProvider;
 import org.acumos.cds.domain.MLPUserNotification;
+import org.acumos.cds.domain.MLPUserNotifPref;
 import org.acumos.cds.domain.MLPValidationSequence;
 import org.acumos.cds.domain.MLPValidationStatus;
 import org.acumos.cds.domain.MLPValidationType;
@@ -960,6 +963,7 @@ public class CdsControllerTest {
 			Date now = new Date();
 			no.setStart(new Date(now.getTime() - 60 * 1000));
 			no.setEnd(new Date(now.getTime() + 60 * 1000));
+			no.setMsgSeverityCode(String.valueOf(MessageSeverityTypeCode.LO));
 			no = client.createNotification(no);
 			Assert.assertNotNull(no.getNotificationId());
 
@@ -972,6 +976,7 @@ public class CdsControllerTest {
 			no2.setUrl("http://notify2.me");
 			no2.setStart(new Date(now.getTime() - 60 * 1000));
 			no2.setEnd(new Date(now.getTime() + 60 * 1000));
+			no2.setMsgSeverityCode(String.valueOf(MessageSeverityTypeCode.HI));
 			no2 = client.createNotification(no2);
 
 			long notCountTrans = client.getNotificationCount();
@@ -994,6 +999,44 @@ public class CdsControllerTest {
 
 			client.dropUserFromNotification(no.getNotificationId(), cu.getUserId());
 			client.deleteNotification(no.getNotificationId());
+			client.deleteUser(cu.getUserId());
+		} catch (HttpStatusCodeException ex) {
+			logger.error("testNotifications got response {}", ex.getResponseBodyAsString());
+			logger.error("testNotifications failed", ex);
+			throw ex;
+		}
+
+	}
+
+	@Test
+	public void testUserNotificationPreferences() throws Exception {
+		try {
+			MLPUser cu = new MLPUser();
+			final String loginName = "notif_" + Long.toString(new Date().getTime());
+			cu.setLoginName(loginName);
+			cu = client.createUser(cu);
+			Assert.assertNotNull(cu.getUserId());
+
+			MLPUserNotifPref usrNotifPref = new MLPUserNotifPref();
+
+			usrNotifPref.setUserId(cu.getUserId());
+			usrNotifPref.setNotfDelvMechCode(String.valueOf(NotificationDeliveryMechanismTypeCode.TX));
+			usrNotifPref.setMsgSeverityCode(String.valueOf(MessageSeverityTypeCode.HI));
+
+			usrNotifPref = client.createUserNotificationPreference(usrNotifPref);
+			Assert.assertNotNull(usrNotifPref.getUserNotifPrefId());
+
+			usrNotifPref.setNotfDelvMechCode(String.valueOf(NotificationDeliveryMechanismTypeCode.EM));
+			client.updateUserNotificationPreference(usrNotifPref);
+
+			// Assert.assertTrue(client.getUserNotificationPreference(usrNotifPref.getUserNotifPrefId()).getNotfDelvMechCode().equals(NotificationDeliveryMechanismTypeCode.EM));
+
+			List<MLPUserNotifPref> usrNotifPrefs = client
+					.getUserNotificationPreferences(cu.getUserId(), null);
+			Assert.assertTrue(usrNotifPrefs.iterator().hasNext());
+			logger.info("First user notification preference{}", usrNotifPrefs.iterator().next());
+
+			client.deleteUserNotificationPreference(usrNotifPref.getUserNotifPrefId());
 			client.deleteUser(cu.getUserId());
 		} catch (HttpStatusCodeException ex) {
 			logger.error("testNotifications got response {}", ex.getResponseBodyAsString());
@@ -2155,6 +2198,7 @@ public class CdsControllerTest {
 		}
 		// This one should work
 		cn.setTitle("notif title");
+		cn.setMsgSeverityCode(String.valueOf(MessageSeverityTypeCode.HI));
 		cn = client.createNotification(cn);
 		try {
 			client.createNotification(cn);
