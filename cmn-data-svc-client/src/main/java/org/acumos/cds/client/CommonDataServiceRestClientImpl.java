@@ -62,6 +62,7 @@ import org.acumos.cds.domain.MLPToolkitType;
 import org.acumos.cds.domain.MLPUser;
 import org.acumos.cds.domain.MLPUserLoginProvider;
 import org.acumos.cds.domain.MLPUserNotification;
+import org.acumos.cds.domain.MLPUserNotificationPrefernce;
 import org.acumos.cds.domain.MLPUserRoleMap;
 import org.acumos.cds.domain.MLPValidationSequence;
 import org.acumos.cds.domain.MLPValidationStatus;
@@ -1738,5 +1739,62 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 		logger.debug("deleteStepResult: url {}", uri);
 		restTemplate.delete(uri);
 	}
+
+	@Override
+	public RestPageResponse<MLPUserNotificationPrefernce> getAllUserNotificationPreferences(RestPageRequest pageRequest) {
+		URI uri = buildUri(new String[] { CCDSConstants.USER_PATH, CCDSConstants.NOTIFICATION_PREF_PATH }, null, pageRequest);
+		logger.debug("getAllUserNotificationPreferences: uri {}", uri);
+		ResponseEntity<RestPageResponse<MLPUserNotificationPrefernce>> response = restTemplate.exchange(uri, HttpMethod.GET, null,
+				new ParameterizedTypeReference<RestPageResponse<MLPUserNotificationPrefernce>>() {
+				});
+		return response.getBody();
+	}
+
+	@Override
+	public RestPageResponse<MLPUserNotificationPrefernce> getUserNotificationPreferences(String userId, RestPageRequest pageRequest) {
+		URI uri = buildUri(new String[] { CCDSConstants.USER_PATH, userId, CCDSConstants.NOTIFICATION_PREF_PATH }, null,
+				pageRequest);
+		logger.debug("getUserNotificationPreferences: url {}", uri);
+		ResponseEntity<RestPageResponse<MLPUserNotificationPrefernce>> response = restTemplate.exchange(uri, HttpMethod.GET,
+				null, new ParameterizedTypeReference<RestPageResponse<MLPUserNotificationPrefernce>>() {
+				});
+		return response.getBody();
+	}
+	
+	@Override
+	public MLPUserNotificationPrefernce getUserNotificationPreference(Long usrNotifPrefId) {
+		URI uri = buildUri(new String[] { CCDSConstants.USER_PATH, CCDSConstants.NOTIFICATION_PREF_PATH, String.valueOf(usrNotifPrefId) }, null,
+				null);
+		logger.debug("getUserNotificationPreferenceByID: url {}", uri);
+		ResponseEntity<MLPUserNotificationPrefernce> response = restTemplate.exchange(uri, HttpMethod.GET,
+				null, new ParameterizedTypeReference<MLPUserNotificationPrefernce>() {
+				});
+		return response.getBody();
+	}
+	
+	
+	@Override
+	public MLPUserNotificationPrefernce createUserNotificationPreference(MLPUserNotificationPrefernce usrNotifPref) {
+		URI uri = buildUri(new String[] { CCDSConstants.USER_PATH, CCDSConstants.NOTIFICATION_PREF_PATH }, null, null);
+		logger.debug("createUserNotificationPreference: uri {}", uri);
+		return restTemplate.postForObject(uri, usrNotifPref, MLPUserNotificationPrefernce.class);
+	}
+
+	@Override
+	public void updateUserNotificationPreference(MLPUserNotificationPrefernce usrNotifPref) {
+		URI uri = buildUri(new String[] { CCDSConstants.USER_PATH, CCDSConstants.NOTIFICATION_PREF_PATH, Long.toString(usrNotifPref.getUserNotifPrefId())}, null,
+				null);
+		logger.debug("updateUserNotificationPreference: url {}", uri);
+		restTemplate.put(uri, usrNotifPref);
+	}
+
+	@Override
+	public void deleteUserNotificationPreference(Long userNotifPrefId) {
+		URI uri = buildUri(new String[] { CCDSConstants.USER_PATH, CCDSConstants.NOTIFICATION_PREF_PATH, Long.toString(userNotifPrefId) }, null, null);
+		logger.debug("deleteUserNotificationPreference: url {}", uri);
+		restTemplate.delete(uri);
+	}
+
+
 
 }
