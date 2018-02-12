@@ -16,6 +16,24 @@
       "revId": "4667ee224ab64a76892ce3cccd65b41de6cf624a",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5acd3b70_82393388",
+        "filename": "cmn-data-svc-client/src/test/java/org/acumos/cds/client/test/BasicSequenceDemo.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-12T22:10:51Z",
+      "side": 1,
+      "message": "Restoring them.",
+      "parentUuid": "17c91886_fd073be1",
+      "revId": "4667ee224ab64a76892ce3cccd65b41de6cf624a",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
