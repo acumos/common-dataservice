@@ -90,6 +90,8 @@ Entity Overview
 
   - Details for administration of the system, initially for the Portal/Marketplace web site
 
+* User Notification Preference
+  - What delivery preference and message priority a user will choose for receiving a notification  
 
 Entity Relationship Overview
 ----------------------------
@@ -636,6 +638,19 @@ Attributes:
 *    Created date
 *    Modified date
 
+
+User Notification Preference
+^^^^^^^^^^^^^^^^^^
+
+This stores the delivery mechanism and message priority preferences by the user for receiving notifications
+
+Attributes: 
+
+*    User ID (notification recipient) 
+
+*    Notification type (email/text/web)
+
+*    Message Priority (low/medium/high)  
 
 Comment
 ^^^^^^^
