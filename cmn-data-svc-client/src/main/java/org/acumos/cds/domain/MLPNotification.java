@@ -61,6 +61,12 @@ public class MLPNotification extends MLPTimestampedEntity implements Serializabl
 	@Size(max = 2048)
 	private String message;
 
+	@Column(name = "MSG_SEVERITY_CD", nullable = false, columnDefinition = "CHAR(2)")
+	@NotNull(message = "Message Severity Code cannot be null")
+	@Size(max = 2)
+	private String msgSeverityCode;
+	
+	
 	@Column(name = "URL", columnDefinition = "VARCHAR(512)")
 	@Size(max = 512)
 	private String url;

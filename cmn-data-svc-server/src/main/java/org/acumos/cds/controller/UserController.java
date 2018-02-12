@@ -40,6 +40,7 @@ import org.acumos.cds.domain.MLPUser;
 import org.acumos.cds.domain.MLPUserLoginProvider;
 import org.acumos.cds.domain.MLPUserLoginProvider.UserLoginProviderPK;
 import org.acumos.cds.domain.MLPUserNotification;
+import org.acumos.cds.domain.MLPUserNotificationPrefernce;
 import org.acumos.cds.domain.MLPUserRoleMap;
 import org.acumos.cds.repository.NotifUserMapRepository;
 import org.acumos.cds.repository.NotificationRepository;
@@ -48,6 +49,7 @@ import org.acumos.cds.repository.SolutionDeploymentRepository;
 import org.acumos.cds.repository.SolutionFavoriteRepository;
 import org.acumos.cds.repository.SolutionRepository;
 import org.acumos.cds.repository.UserLoginProviderRepository;
+import org.acumos.cds.repository.UserNotificationPreferenceRepository;
 import org.acumos.cds.repository.UserRepository;
 import org.acumos.cds.repository.UserRoleMapRepository;
 import org.acumos.cds.service.UserSearchService;
@@ -104,6 +106,8 @@ public class UserController extends AbstractController {
 	private NotificationRepository notificationRepository;
 	@Autowired
 	private NotifUserMapRepository notifUserMapRepository;
+	@Autowired
+	private UserNotificationPreferenceRepository notificationpreferenceRepository;
 	@Autowired
 	private SolutionFavoriteRepository solutionFavoriteRepository;
 	@Autowired
@@ -1009,6 +1013,151 @@ public class UserController extends AbstractController {
 		}
 	}
 
+	/**
+	 * 
+	 * @param pageable
+	 *            Sort and page criteria
+	 * @return Page of user notification preferences
+	 */
+	@ApiOperation(value = "Gets a page of all user notification preferences, optionally sorted.", response = MLPUserNotificationPrefernce.class, responseContainer = "Page")
+	@RequestMapping(value = CCDSConstants.NOTIFICATION_PREF_PATH,  method = RequestMethod.GET)
+	@ResponseBody
+	public Page<MLPUserNotificationPrefernce> getAllUserNotificationPreferences(Pageable pageable) {
+		return notificationpreferenceRepository.findAll(pageable);
+	}
+
+	/**
+	 * @param userNotifPrefId
+	 *            Path parameter with row ID
+	 * @param response
+	 *            HttpServletResponse
+	 * @return a user notification preference if found, an error otherwise.
+	 */
+	@ApiOperation(value = "Gets the user notification preference for the specified ID.", response = MLPUserNotificationPrefernce.class)
+	@RequestMapping(value = CCDSConstants.NOTIFICATION_PREF_PATH + "/{userNotifPrefId}/", method = RequestMethod.GET)
+	@ResponseBody
+	public Object getUserNotificationPreference(@PathVariable("userNotifPrefId") Long userNotifPrefId, HttpServletResponse response) {
+		MLPUserNotificationPrefernce usrnp = notificationpreferenceRepository.findOne(userNotifPrefId);
+		if (usrnp == null) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "No entry for ID " + userNotifPrefId, null);
+		}
+		return usrnp;
+	}
+
+	
+	/**
+	 * @param userId
+	 *            User ID
+	 * @return List of notification preferences for the specified user
+	 */
+	@ApiOperation(value = "Gets notification preferences for the specified user ID.", response = MLPUserNotificationPrefernce.class, responseContainer = "List")
+	@RequestMapping(value = "/{userId}/" + CCDSConstants.NOTIFICATION_PREF_PATH, method = RequestMethod.GET)
+	@ResponseBody
+	public Iterable<MLPUserNotificationPrefernce> getNotificationPreferencesForUser(@PathVariable("userId") String userId) {
+		return notificationpreferenceRepository.findByUser(userId);
+	}
+	
+	/**
+	 * @param usrNotifPref
+	 *            user notification preference to save. A new one will be generated;
+	 * @param response
+	 *            HttpServletResponse
+	 * @return Entity on success; error on failure.
+	 */
+	@ApiOperation(value = "Creates a new user notification preference", response = MLPUserNotificationPrefernce.class)
+	@RequestMapping(value = CCDSConstants.NOTIFICATION_PREF_PATH, method = RequestMethod.POST)
+	@ResponseBody
+	public Object createStepResult(@RequestBody MLPUserNotificationPrefernce usrNotifPref, HttpServletResponse response) {
+		logger.debug(EELFLoggerDelegate.debugLogger, "createUserNotificationPreference: received {} ", usrNotifPref);
+		Object result;
+		try {
+			// Create a new row
+			result = notificationpreferenceRepository.save(usrNotifPref);
+			response.setStatus(HttpServletResponse.SC_CREATED);
+			// This is a hack to create the location path.
+			response.setHeader(HttpHeaders.LOCATION,
+					CCDSConstants.NOTIFICATION_PREF_PATH + "/" + usrNotifPref.getUserNotifPrefId());
+		} catch (Exception ex) {
+			Exception cve = findConstraintViolationException(ex);
+			logger.warn(EELFLoggerDelegate.errorLogger, "createUserNotificationPreference", cve.toString());
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			result = new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "createUserNotificationPreference failed", cve);
+		}
+		return result;
+	}
+	
+	/**
+	 * @param userNotifPrefId
+	 *            Path parameter with the row ID
+	 * @param usrNotifPref
+	 *            stepResult data to be updated
+	 * @param response
+	 *            HttpServletResponse
+	 * @return user notification preference that maps String to Object, for serialization as JSON
+	 */
+	@ApiOperation(value = "Updates a user notification preference.", response = SuccessTransport.class)
+	@RequestMapping(value = CCDSConstants.NOTIFICATION_PREF_PATH + "/{userNotifPrefId}", method = RequestMethod.PUT)
+	@ResponseBody
+	public Object updateUserNotificationPreference(@PathVariable("userNotifPrefId") Long userNotifPrefId,
+			@RequestBody MLPUserNotificationPrefernce usrNotifPref, HttpServletResponse response) {
+		logger.debug(EELFLoggerDelegate.debugLogger, "update: received {} ", usrNotifPref);
+		// Get the existing one
+		MLPUserNotificationPrefernce existing = notificationpreferenceRepository.findOne(userNotifPrefId);
+		if (existing == null) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST,
+					"Failed to find object with id " + userNotifPrefId, null);
+		}
+		MLPTransportModel result = null;
+		try {
+			// Use the path-parameter id; don't trust the one in the object
+			usrNotifPref.setUserNotifPrefId(userNotifPrefId);
+			// Update the existing row
+			notificationpreferenceRepository.save(usrNotifPref);
+			result = new SuccessTransport(HttpServletResponse.SC_OK, null);
+		} catch (Exception ex) {
+			Exception cve = findConstraintViolationException(ex);
+			logger.warn(EELFLoggerDelegate.errorLogger, "updateUserNotificationPreference", cve.toString());
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			result = new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "updateUserNotificationPreference failed", cve);
+		}
+		return result;
+	}
+	
+	/**
+	 * 
+	 * @param userNotifPrefId
+	 *            Path parameter that identifies the instance
+	 * @param response
+	 *            HttpServletResponse
+	 * @return Transport model with success or failure
+	 */
+	@ApiOperation(value = "Deletes the user notification preference with the specified ID.", response = SuccessTransport.class)
+	@RequestMapping(value = CCDSConstants.NOTIFICATION_PREF_PATH + "/{userNotifPrefId}", method = RequestMethod.DELETE)
+	@ResponseBody
+	public MLPTransportModel deleteUserNotificationPreference(@PathVariable("userNotifPrefId") Long userNotifPrefId,
+			HttpServletResponse response) {
+		logger.debug(EELFLoggerDelegate.debugLogger, "delete: received {} ", userNotifPrefId);
+		// Get the existing one
+		MLPUserNotificationPrefernce existing = notificationpreferenceRepository.findOne(userNotifPrefId);
+		if (existing == null) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST,
+					"Failed to find object with id " + userNotifPrefId, null);
+		}
+		try {
+			notificationpreferenceRepository.delete(userNotifPrefId);
+			return new SuccessTransport(HttpServletResponse.SC_OK, null);
+		} catch (Exception ex) {
+			// e.g., EmptyResultDataAccessException is NOT an internal server
+			// error
+			logger.warn(EELFLoggerDelegate.errorLogger, "deleteUserNotificationPreference", ex.toString());
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "deleteUserNotificationPreference failed", ex);
+		}
+	}
+	
 	/**
 	 * @param userId
 	 *            Path parameter with user ID
