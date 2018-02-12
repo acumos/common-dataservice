@@ -32,7 +32,9 @@ import org.acumos.cds.AccessTypeCode;
 import org.acumos.cds.ArtifactTypeCode;
 import org.acumos.cds.DeploymentStatusCode;
 import org.acumos.cds.LoginProviderCode;
+import org.acumos.cds.MessageSeverityTypeCode;
 import org.acumos.cds.ModelTypeCode;
+import org.acumos.cds.NotificationDeliveryMechanismTypeCode;
 import org.acumos.cds.PeerStatusCode;
 import org.acumos.cds.StepStatusCode;
 import org.acumos.cds.StepTypeCode;
@@ -46,9 +48,11 @@ import org.acumos.cds.domain.MLPArtifactType;
 import org.acumos.cds.domain.MLPComment;
 import org.acumos.cds.domain.MLPDeploymentStatus;
 import org.acumos.cds.domain.MLPLoginProvider;
+import org.acumos.cds.domain.MLPMessageSeverityType;
 import org.acumos.cds.domain.MLPModelType;
 import org.acumos.cds.domain.MLPNotifUserMap;
 import org.acumos.cds.domain.MLPNotification;
+import org.acumos.cds.domain.MLPNotificationDeliveryMechanismType;
 import org.acumos.cds.domain.MLPPeer;
 import org.acumos.cds.domain.MLPPeerStatus;
 import org.acumos.cds.domain.MLPPeerSubscription;
@@ -83,8 +87,10 @@ import org.acumos.cds.repository.ArtifactTypeRepository;
 import org.acumos.cds.repository.CommentRepository;
 import org.acumos.cds.repository.DeploymentStatusRepository;
 import org.acumos.cds.repository.LoginProviderRepository;
+import org.acumos.cds.repository.MessageSeverityTypeRepository;
 import org.acumos.cds.repository.ModelTypeRepository;
 import org.acumos.cds.repository.NotifUserMapRepository;
+import org.acumos.cds.repository.NotificationDeliveryMechanismTypeRepository;
 import org.acumos.cds.repository.NotificationRepository;
 import org.acumos.cds.repository.PeerRepository;
 import org.acumos.cds.repository.PeerStatusRepository;
@@ -108,6 +114,7 @@ import org.acumos.cds.repository.TagRepository;
 import org.acumos.cds.repository.ThreadRepository;
 import org.acumos.cds.repository.ToolkitTypeRepository;
 import org.acumos.cds.repository.UserLoginProviderRepository;
+import org.acumos.cds.repository.UserNotificationPreferenceRepository;
 import org.acumos.cds.repository.UserRepository;
 import org.acumos.cds.repository.UserRoleMapRepository;
 import org.acumos.cds.repository.ValidationStatusRepository;
@@ -222,6 +229,11 @@ public class CdsRepositoryServiceTest {
 	private ValidationStatusRepository validationStatusRepository;
 	@Autowired
 	private ValidationTypeRepository validationTypeRepository;
+	@Autowired
+	private MessageSeverityTypeRepository msgSeverityTypeRepository;
+	@Autowired
+	private NotificationDeliveryMechanismTypeRepository notifDelvMechTypeRepository;
+
 
 	@Test
 	public void testEnums() throws Exception {
@@ -371,6 +383,30 @@ public class CdsRepositoryServiceTest {
 			ValidationTypeCode.valueOf(vt.getTypeCode());
 		}
 		Assert.assertEquals(count, ValidationTypeCode.values().length);
+
+		Iterable<MLPMessageSeverityType> msgSevTypeList = msgSeverityTypeRepository.findAll();
+		Assert.assertTrue(msgSevTypeList.iterator().hasNext());
+		logger.info("Message Severity types {}", msgSevTypeList);
+		Iterator<MLPMessageSeverityType> msgsevIter = msgSevTypeList.iterator();
+		count = 0;
+		while (msgsevIter.hasNext()) {
+			++count;
+			MLPMessageSeverityType msgsev = msgsevIter.next();
+			MessageSeverityTypeCode.valueOf(msgsev.getTypeCode());
+		}
+		Assert.assertEquals(count, MessageSeverityTypeCode.values().length);
+
+		Iterable<MLPNotificationDeliveryMechanismType> notifDelvMechTypeList = notifDelvMechTypeRepository.findAll();
+		Assert.assertTrue(notifDelvMechTypeList.iterator().hasNext());
+		logger.info("Notification Delivery Mechanism types {}", notifDelvMechTypeList);
+		Iterator<MLPNotificationDeliveryMechanismType> notDelvMechIter =notifDelvMechTypeList.iterator();
+		count = 0;
+		while (notDelvMechIter.hasNext()) {
+			++count;
+			MLPNotificationDeliveryMechanismType notdelv = notDelvMechIter.next();
+			NotificationDeliveryMechanismTypeCode.valueOf(notdelv.getTypeCode());
+		}
+		Assert.assertEquals(count, NotificationDeliveryMechanismTypeCode.values().length);
 
 	}
 

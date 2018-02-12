@@ -54,6 +54,7 @@ import org.acumos.cds.domain.MLPToolkitType;
 import org.acumos.cds.domain.MLPUser;
 import org.acumos.cds.domain.MLPUserLoginProvider;
 import org.acumos.cds.domain.MLPUserNotification;
+import org.acumos.cds.domain.MLPUserNotificationPrefernce;
 import org.acumos.cds.domain.MLPValidationSequence;
 import org.acumos.cds.domain.MLPValidationStatus;
 import org.acumos.cds.domain.MLPValidationType;
@@ -1568,5 +1569,18 @@ public interface ICommonDataServiceRestClient {
 	 * @return List of step type objects.
 	 */
 	List<MLPStepType> getStepTypes();
+
+	
+
+	MLPUserNotificationPrefernce createUserNotificationPreference(MLPUserNotificationPrefernce usrNotifPref);
+
+	void updateUserNotificationPreference(MLPUserNotificationPrefernce usrNotifPref);
+
+	void deleteUserNotificationPreference(Long userNotifPrefId);
+
+	RestPageResponse<MLPUserNotificationPrefernce> getAllUserNotificationPreferences(RestPageRequest pageRequest);
+
+	RestPageResponse<MLPUserNotificationPrefernce> getUserNotificationPreferences(String userId,
+			RestPageRequest pageRequest);
 
 }
