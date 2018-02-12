@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Random;
 
 import javax.validation.ConstraintViolationException;
 
@@ -32,7 +33,9 @@ import org.acumos.cds.AccessTypeCode;
 import org.acumos.cds.ArtifactTypeCode;
 import org.acumos.cds.DeploymentStatusCode;
 import org.acumos.cds.LoginProviderCode;
+import org.acumos.cds.MessageSeverityTypeCode;
 import org.acumos.cds.ModelTypeCode;
+import org.acumos.cds.NotificationDeliveryMechanismTypeCode;
 import org.acumos.cds.PeerStatusCode;
 import org.acumos.cds.StepStatusCode;
 import org.acumos.cds.StepTypeCode;
@@ -46,9 +49,11 @@ import org.acumos.cds.domain.MLPArtifactType;
 import org.acumos.cds.domain.MLPComment;
 import org.acumos.cds.domain.MLPDeploymentStatus;
 import org.acumos.cds.domain.MLPLoginProvider;
+import org.acumos.cds.domain.MLPMessageSeverityType;
 import org.acumos.cds.domain.MLPModelType;
 import org.acumos.cds.domain.MLPNotifUserMap;
 import org.acumos.cds.domain.MLPNotification;
+import org.acumos.cds.domain.MLPNotificationDeliveryMechanismType;
 import org.acumos.cds.domain.MLPPeer;
 import org.acumos.cds.domain.MLPPeerStatus;
 import org.acumos.cds.domain.MLPPeerSubscription;
@@ -74,6 +79,7 @@ import org.acumos.cds.domain.MLPToolkitType;
 import org.acumos.cds.domain.MLPUser;
 import org.acumos.cds.domain.MLPUserLoginProvider;
 import org.acumos.cds.domain.MLPUserNotification;
+import org.acumos.cds.domain.MLPUserNotificationPrefernce;
 import org.acumos.cds.domain.MLPUserRoleMap;
 import org.acumos.cds.domain.MLPValidationStatus;
 import org.acumos.cds.domain.MLPValidationType;
@@ -83,8 +89,10 @@ import org.acumos.cds.repository.ArtifactTypeRepository;
 import org.acumos.cds.repository.CommentRepository;
 import org.acumos.cds.repository.DeploymentStatusRepository;
 import org.acumos.cds.repository.LoginProviderRepository;
+import org.acumos.cds.repository.MessageSeverityTypeRepository;
 import org.acumos.cds.repository.ModelTypeRepository;
 import org.acumos.cds.repository.NotifUserMapRepository;
+import org.acumos.cds.repository.NotificationDeliveryMechanismTypeRepository;
 import org.acumos.cds.repository.NotificationRepository;
 import org.acumos.cds.repository.PeerRepository;
 import org.acumos.cds.repository.PeerStatusRepository;
@@ -108,6 +116,7 @@ import org.acumos.cds.repository.TagRepository;
 import org.acumos.cds.repository.ThreadRepository;
 import org.acumos.cds.repository.ToolkitTypeRepository;
 import org.acumos.cds.repository.UserLoginProviderRepository;
+import org.acumos.cds.repository.UserNotificationPreferenceRepository;
 import org.acumos.cds.repository.UserRepository;
 import org.acumos.cds.repository.UserRoleMapRepository;
 import org.acumos.cds.repository.ValidationStatusRepository;
@@ -222,6 +231,13 @@ public class CdsRepositoryServiceTest {
 	private ValidationStatusRepository validationStatusRepository;
 	@Autowired
 	private ValidationTypeRepository validationTypeRepository;
+	@Autowired
+	private MessageSeverityTypeRepository msgSeverityTypeRepository;
+	@Autowired
+	private NotificationDeliveryMechanismTypeRepository notifDelvMechTypeRepository;
+	@Autowired
+	private UserNotificationPreferenceRepository usrNotifPrefRepository;
+
 
 	@Test
 	public void testEnums() throws Exception {
@@ -372,6 +388,30 @@ public class CdsRepositoryServiceTest {
 		}
 		Assert.assertEquals(count, ValidationTypeCode.values().length);
 
+		Iterable<MLPMessageSeverityType> msgSevTypeList = msgSeverityTypeRepository.findAll();
+		Assert.assertTrue(msgSevTypeList.iterator().hasNext());
+		logger.info("Message Severity types {}", msgSevTypeList);
+		Iterator<MLPMessageSeverityType> msgsevIter = msgSevTypeList.iterator();
+		count = 0;
+		while (msgsevIter.hasNext()) {
+			++count;
+			MLPMessageSeverityType msgsev = msgsevIter.next();
+			MessageSeverityTypeCode.valueOf(msgsev.getTypeCode());
+		}
+		Assert.assertEquals(count, MessageSeverityTypeCode.values().length); 
+
+		Iterable<MLPNotificationDeliveryMechanismType> notifDelvMechTypeList = notifDelvMechTypeRepository.findAll();
+		Assert.assertTrue(notifDelvMechTypeList.iterator().hasNext());
+		logger.info("Notification Delivery Mechanism types {}", notifDelvMechTypeList);
+		Iterator<MLPNotificationDeliveryMechanismType> notDelvMechIter =notifDelvMechTypeList.iterator();
+		count = 0;
+		while (notDelvMechIter.hasNext()) {
+			++count;
+			MLPNotificationDeliveryMechanismType notdelv = notDelvMechIter.next();
+			NotificationDeliveryMechanismTypeCode.valueOf(notdelv.getTypeCode());
+		}
+		Assert.assertEquals(count, NotificationDeliveryMechanismTypeCode.values().length);
+
 	}
 
 	@Test
@@ -382,9 +422,10 @@ public class CdsRepositoryServiceTest {
 			MLPUser cu = null;
 			cu = new MLPUser();
 			cu.setActive(true);
-			final String firstName = "First_" + Long.toString(new Date().getTime());
+			Random rand = new Random();
+			final String firstName = "First_" + String.valueOf(rand.nextInt());
 			final String lastName = "TestLast";
-			final String loginName = "test_user3";
+			final String loginName = "test_user"+ Long.toString(new Date().getTime());
 			final String loginPass = "test_pass3";
 			cu.setFirstName(firstName);
 			cu.setLastName(lastName);
@@ -413,6 +454,7 @@ public class CdsRepositoryServiceTest {
 			notif.setMessage("Notification message");
 			notif.setUrl("http://www.yahoo.com");
 			notif.setStart(new Date());
+			notif.setMsgSeverityCode(String.valueOf(MessageSeverityTypeCode.LO));
 			Calendar c = Calendar.getInstance();
 			c.setTime(new Date()); // Now use today date.
 			c.add(Calendar.DATE, 5); // Adding 5 days
@@ -765,6 +807,7 @@ public class CdsRepositoryServiceTest {
 				peerRepository.delete(pr);
 				notifUserMapRepository.delete(notifMap);
 				notificationRepository.delete(notif);
+				siteConfigRepository.delete(cc);
 				userLoginProviderRepository.delete(ulp);
 				userRepository.delete(cu.getUserId());
 
@@ -1186,6 +1229,7 @@ public class CdsRepositoryServiceTest {
 			no.setTitle("notif title");
 			no.setMessage("notif msg");
 			no.setUrl("http://notify.me");
+			no.setMsgSeverityCode(String.valueOf(MessageSeverityTypeCode.HI));
 			Date now = new Date();
 			no.setStart(new Date(now.getTime() - 1000));
 			no.setEnd(new Date(now.getTime() + 60 * 60 * 1000));
@@ -1210,6 +1254,42 @@ public class CdsRepositoryServiceTest {
 
 			notifUserMapRepository.delete(nm);
 			notificationRepository.delete(no);
+			userRepository.delete(cu);
+		} catch (Exception ex) {
+			logger.error("Failed", ex);
+			throw ex;
+		}
+
+	}
+
+	@Test
+	public void testUserNotificationPreferences() throws Exception {
+		try {
+			MLPUser cu = new MLPUser();
+			final String loginName = "notif_" + Long.toString(new Date().getTime());
+			cu.setLoginName(loginName);
+			cu = userRepository.save(cu);
+			Assert.assertNotNull(cu.getUserId());
+
+			MLPUserNotificationPrefernce usrNotifPref = new MLPUserNotificationPrefernce();
+			usrNotifPref.setUserId(cu.getUserId());
+			usrNotifPref.setNotfDelvMechCode(String.valueOf(NotificationDeliveryMechanismTypeCode.TX));
+			usrNotifPref.setMsgSeverityCode(String.valueOf(MessageSeverityTypeCode.HI));
+			
+			usrNotifPref = usrNotifPrefRepository.save(usrNotifPref);
+			Assert.assertNotNull(usrNotifPref.getUserNotifPrefId());
+
+			Iterable<MLPUserNotificationPrefernce> usrNotifPrefs = usrNotifPrefRepository.findByUser(cu.getUserId(), null);
+			Assert.assertTrue(usrNotifPrefs.iterator().hasNext());
+
+			Iterable<MLPUserNotificationPrefernce> allusrNotifPrefs = usrNotifPrefRepository.findAll();
+			Assert.assertTrue(allusrNotifPrefs.iterator().hasNext());
+
+			usrNotifPref.setNotfDelvMechCode(String.valueOf(NotificationDeliveryMechanismTypeCode.EM));
+			usrNotifPref = usrNotifPrefRepository.save(usrNotifPref);
+			Assert.assertTrue(usrNotifPrefRepository.findOne(usrNotifPref.getUserNotifPrefId()).getNotfDelvMechCode().equals("EM"));
+			
+			usrNotifPrefRepository.delete(usrNotifPref);
 			userRepository.delete(cu);
 		} catch (Exception ex) {
 			logger.error("Failed", ex);

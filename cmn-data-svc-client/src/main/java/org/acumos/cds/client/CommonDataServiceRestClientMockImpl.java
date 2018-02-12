@@ -65,6 +65,7 @@ import org.acumos.cds.domain.MLPToolkitType;
 import org.acumos.cds.domain.MLPUser;
 import org.acumos.cds.domain.MLPUserLoginProvider;
 import org.acumos.cds.domain.MLPUserNotification;
+import org.acumos.cds.domain.MLPUserNotificationPrefernce;
 import org.acumos.cds.domain.MLPValidationSequence;
 import org.acumos.cds.domain.MLPValidationStatus;
 import org.acumos.cds.domain.MLPValidationType;
@@ -149,6 +150,8 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 	private RestPageResponse<MLPNotification> notifications;
 	private MLPNotification notification;
 	private RestPageResponse<MLPUserNotification> userNotifications;
+	private MLPUserNotificationPrefernce usrNotifPref; 
+	private RestPageResponse<MLPUserNotificationPrefernce> userNotifPreferences;
 	private MLPStepResult stepResult;
 	private MLPSolutionWeb solutionWeb = new MLPSolutionWeb();
 	private List<MLPUser> solutionAccessUsers;
@@ -178,6 +181,8 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 	private RestPageResponse<MLPComment> solutionRevisionComments;
 	private RestPageResponse<MLPStepResult> stepResults;
 	private RestPageResponse<MLPStepResult> searchStepResults;
+	private RestPageResponse<MLPUserNotificationPrefernce> alluserNotifPreferences;
+	private MLPUserNotificationPrefernce usrNotifPrefById = new MLPUserNotificationPrefernce();
 
 	/**
 	 * No-argument constructor.
@@ -1086,6 +1091,49 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 		// How to mock?
 	}
 
+
+	public MLPUserNotificationPrefernce createUserNotificationPreference(MLPUserNotificationPrefernce usrNotifPref) {
+		this.usrNotifPref = usrNotifPref;
+		return usrNotifPref;
+	}
+
+	public void setUserNotificationPreferences(RestPageResponse<MLPUserNotificationPrefernce> usrNotifPref) {
+		this.userNotifPreferences = usrNotifPref;
+	}
+	
+	@Override
+	public RestPageResponse<MLPUserNotificationPrefernce> getUserNotificationPreferences(String userId, RestPageRequest pageRequest) {
+		return this.userNotifPreferences;
+	}
+
+	@Override
+	public MLPUserNotificationPrefernce getUserNotificationPreference(Long userNotifPrefID) {
+		 return this.usrNotifPrefById;
+	}
+	
+	public void setAllUserNotificationPreferences(RestPageResponse<MLPUserNotificationPrefernce> allusrNotifPref) {
+		this.alluserNotifPreferences = allusrNotifPref;
+	}
+	
+	@Override
+	public RestPageResponse<MLPUserNotificationPrefernce> getAllUserNotificationPreferences(RestPageRequest pageRequest) {
+		return this.alluserNotifPreferences;
+	}
+	
+	@Override
+	public void deleteUserNotificationPreference(Long usrNotifprefId) {
+		// How to mock?
+	}
+
+	@Override
+	public void updateUserNotificationPreference(MLPUserNotificationPrefernce usrNotifpref) {
+		// How to mock?
+	}
+
+	
+	
+	
+	
 	public void setSolutionWebMetadata(MLPSolutionWeb web) {
 		this.solutionWeb = web;
 	}
