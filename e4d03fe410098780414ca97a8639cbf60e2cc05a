@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e2fd2060_fb753665",
+        "filename": "docs/requirements.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 621,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-12T17:22:57Z",
+      "side": 1,
+      "message": "Maybe we should call this severity or importance?",
+      "revId": "e4d03fe410098780414ca97a8639cbf60e2cc05a",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
