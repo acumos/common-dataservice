@@ -33,7 +33,7 @@ import org.acumos.cds.domain.MLPAccessType;
 import org.acumos.cds.domain.MLPArtifact;
 import org.acumos.cds.domain.MLPArtifactType;
 import org.acumos.cds.domain.MLPComment;
-import org.acumos.cds.domain.MLPDeploymentStatus;
+import org.acumos.cds.domain.MLPDeploymentStatus; 
 import org.acumos.cds.domain.MLPLoginProvider;
 import org.acumos.cds.domain.MLPModelType;
 import org.acumos.cds.domain.MLPNotifUserMap;
@@ -62,6 +62,7 @@ import org.acumos.cds.domain.MLPToolkitType;
 import org.acumos.cds.domain.MLPUser;
 import org.acumos.cds.domain.MLPUserLoginProvider;
 import org.acumos.cds.domain.MLPUserNotification;
+import org.acumos.cds.domain.MLPUserNotifPref;
 import org.acumos.cds.domain.MLPUserRoleMap;
 import org.acumos.cds.domain.MLPValidationSequence;
 import org.acumos.cds.domain.MLPValidationStatus;
@@ -114,8 +115,8 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 	 * Creates an instance to access the remote endpoint using the specified
 	 * credentials.
 	 * 
-	 * If user and pass are both supplied, uses basic HTTP authentication; if either
-	 * one is missing, no authentication is used.
+	 * If user and pass are both supplied, uses basic HTTP authentication; if
+	 * either one is missing, no authentication is used.
 	 * 
 	 * Clients should use the static method
 	 * {@link #getInstance(String, String, String)} instead of this constructor.
@@ -185,8 +186,8 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 	}
 
 	/**
-	 * Gets an instance to access a remote endpoint using the specified template.
-	 * This factory method is the preferred usage.
+	 * Gets an instance to access a remote endpoint using the specified
+	 * template. This factory method is the preferred usage.
 	 * 
 	 * @param webapiUrl
 	 *            URL of the web endpoint
@@ -201,7 +202,8 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 	}
 
 	/**
-	 * Gets an instance to access a remote endpoint using the specified template.
+	 * Gets an instance to access a remote endpoint using the specified
+	 * template.
 	 * 
 	 * @param webapiUrl
 	 *            URL of the web endpoint
@@ -223,16 +225,17 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 	}
 
 	/**
-	 * Builds URI by adding specified path segments and query parameters to the base
-	 * URL. Converts an array of values to a series of parameters with the same
-	 * name; e.g., "find foo in list [a,b]" becomes request parameters
+	 * Builds URI by adding specified path segments and query parameters to the
+	 * base URL. Converts an array of values to a series of parameters with the
+	 * same name; e.g., "find foo in list [a,b]" becomes request parameters
 	 * "foo=a&foo=b".
 	 * 
 	 * @param path
 	 *            Array of path segments
 	 * @param queryParams
-	 *            key-value pairs; ignored if null or empty. Gives special treatment
-	 *            to Date-type values, Array values, and null values inside arrays.
+	 *            key-value pairs; ignored if null or empty. Gives special
+	 *            treatment to Date-type values, Array values, and null values
+	 *            inside arrays.
 	 * @param restPageRequest
 	 *            page, size and sort specification; ignored if null.
 	 * @return
@@ -1736,6 +1739,51 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 	public void deleteStepResult(Long stepResultId) {
 		URI uri = buildUri(new String[] { CCDSConstants.STEP_RESULT_PATH, Long.toString(stepResultId) }, null, null);
 		logger.debug("deleteStepResult: url {}", uri);
+		restTemplate.delete(uri);
+	}
+
+	@Override
+	public List<MLPUserNotifPref> getUserNotificationPreferences(String userId) {
+		URI uri = buildUri(new String[] { CCDSConstants.USER_PATH, userId, CCDSConstants.NOTIFICATION_PREF_PATH }, null,
+				null);
+		logger.debug("getUserNotificationPreferences: url {}", uri);
+		ResponseEntity<List<MLPUserNotifPref>> response = restTemplate.exchange(uri,
+				HttpMethod.GET, null, new ParameterizedTypeReference<List<MLPUserNotifPref>>() {
+				});
+		return response.getBody();
+	}
+
+	@Override
+	public MLPUserNotifPref getUserNotificationPreference(Long usrNotifPrefId) {
+		URI uri = buildUri(new String[] { CCDSConstants.USER_PATH, CCDSConstants.NOTIFICATION_PREF_PATH,
+				String.valueOf(usrNotifPrefId) }, null, null);
+		logger.debug("getUserNotificationPreference: url {}", uri);
+		ResponseEntity<MLPUserNotifPref> response = restTemplate.exchange(uri, HttpMethod.GET, null,
+				new ParameterizedTypeReference<MLPUserNotifPref>() {
+				});
+		return response.getBody();
+	}
+
+	@Override
+	public MLPUserNotifPref createUserNotificationPreference(MLPUserNotifPref usrNotifPref) {
+		URI uri = buildUri(new String[] { CCDSConstants.USER_PATH, CCDSConstants.NOTIFICATION_PREF_PATH }, null, null);
+		logger.debug("createUserNotificationPreference: uri {}", uri);
+		return restTemplate.postForObject(uri, usrNotifPref, MLPUserNotifPref.class);
+	}
+
+	@Override
+	public void updateUserNotificationPreference(MLPUserNotifPref usrNotifPref) {
+		URI uri = buildUri(new String[] { CCDSConstants.USER_PATH, CCDSConstants.NOTIFICATION_PREF_PATH,
+				Long.toString(usrNotifPref.getUserNotifPrefId()) }, null, null);
+		logger.debug("updateUserNotificationPreference: url {}", uri);
+		restTemplate.put(uri, usrNotifPref);
+	}
+
+	@Override
+	public void deleteUserNotificationPreference(Long userNotifPrefId) {
+		URI uri = buildUri(new String[] { CCDSConstants.USER_PATH, CCDSConstants.NOTIFICATION_PREF_PATH,
+				Long.toString(userNotifPrefId) }, null, null);
+		logger.debug("deleteUserNotificationPreference: url {}", uri);
 		restTemplate.delete(uri);
 	}
 
