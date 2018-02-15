@@ -227,6 +227,24 @@
     },
     {
       "key": {
+        "uuid": "f44287ee_3f694c89",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPNotificationDeliveryMechanismType.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-02-15T16:32:47Z",
+      "side": 1,
+      "message": "Please elucidate",
+      "parentUuid": "6cd76c22_4d7d0b4e",
+      "revId": "9fb5549a3b97779c5c3e5f3b2fadbd60080280c9",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "90d2470c_57c42ad0",
         "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPUserNotificationPrefernce.java",
         "patchSetId": 8
