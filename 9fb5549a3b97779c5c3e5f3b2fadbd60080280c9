@@ -245,6 +245,24 @@
     },
     {
       "key": {
+        "uuid": "0e6aa7dc_f45a4b7c",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPNotificationDeliveryMechanismType.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-15T16:54:39Z",
+      "side": 1,
+      "message": "The data type will still exist to transport code-name pairs.  But the data type will not have @Entity nor @Table mappings.  The data will be supplied by an enum, not a database table.",
+      "parentUuid": "6cd76c22_4d7d0b4e",
+      "revId": "9fb5549a3b97779c5c3e5f3b2fadbd60080280c9",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "90d2470c_57c42ad0",
         "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPUserNotificationPrefernce.java",
         "patchSetId": 8
