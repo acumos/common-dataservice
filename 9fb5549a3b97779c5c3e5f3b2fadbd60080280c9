@@ -418,6 +418,24 @@
     },
     {
       "key": {
+        "uuid": "e15dfa04_1ecbfc90",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/UserController.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1154,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-15T18:18:18Z",
+      "side": 1,
+      "message": "Have to check other delete methods.  This one checks for existence of the row first, so if it fails, there\u0027s something seriously wrong.",
+      "parentUuid": "265d76b4_b0b67dc7",
+      "revId": "9fb5549a3b97779c5c3e5f3b2fadbd60080280c9",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cc683987_17179d61",
         "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/repository/MessageSeverityTypeRepository.java",
         "patchSetId": 8
