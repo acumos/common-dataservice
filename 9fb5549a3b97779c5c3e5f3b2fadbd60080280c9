@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "77b0f968_ab81334a",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/NotificationDeliveryMechanismTypeCode.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-15T15:01:54Z",
+      "side": 1,
+      "message": "Sorry, posted this on the wrong class.  Enum classes remain.  Didn\u0027t mean to cause confusion.",
+      "parentUuid": "c64e1965_e5ad5ce1",
+      "revId": "9fb5549a3b97779c5c3e5f3b2fadbd60080280c9",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "06adba88_19d41bba",
         "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/CommonDataServiceRestClientImpl.java",
         "patchSetId": 8
