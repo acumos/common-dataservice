@@ -1,0 +1,373 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a5a780b7_0b635256",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/NotificationDeliveryMechanismTypeCode.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-15T13:55:59Z",
+      "side": 1,
+      "message": "These are going away in 1.14",
+      "revId": "9fb5549a3b97779c5c3e5f3b2fadbd60080280c9",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "06adba88_19d41bba",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/CommonDataServiceRestClientImpl.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1768,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-15T13:55:59Z",
+      "side": 1,
+      "message": "Please make logger message match the method name",
+      "revId": "9fb5549a3b97779c5c3e5f3b2fadbd60080280c9",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c3739cbe_8fe10f6e",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/CommonDataServiceRestClientMockImpl.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1111,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-15T13:55:59Z",
+      "side": 1,
+      "message": "How can this value be set?  I think the setter method is missing",
+      "revId": "9fb5549a3b97779c5c3e5f3b2fadbd60080280c9",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7d75de55_4ab485ce",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/ICommonDataServiceRestClient.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1575,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-15T13:55:59Z",
+      "side": 1,
+      "message": "Please provide javadoc for all new methods.",
+      "revId": "9fb5549a3b97779c5c3e5f3b2fadbd60080280c9",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e9635003_cfef0da5",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/ICommonDataServiceRestClient.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1581,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-15T13:55:59Z",
+      "side": 1,
+      "message": "Drop this method",
+      "revId": "9fb5549a3b97779c5c3e5f3b2fadbd60080280c9",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "22eb5d13_bcc4fc09",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/ICommonDataServiceRestClient.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1583,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-15T13:55:59Z",
+      "side": 1,
+      "message": "Return a list, not a page.  A user can have at most 2.",
+      "revId": "9fb5549a3b97779c5c3e5f3b2fadbd60080280c9",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c4157cfb_8b9a68c1",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPMessageSeverityType.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-15T13:55:59Z",
+      "side": 1,
+      "message": "These are going away in 1.14",
+      "revId": "9fb5549a3b97779c5c3e5f3b2fadbd60080280c9",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "205708e7_a1585e80",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPNotification.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-15T13:55:59Z",
+      "side": 1,
+      "message": "If you are making this mandatory, you must add it to the required-argument constructor",
+      "revId": "9fb5549a3b97779c5c3e5f3b2fadbd60080280c9",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6cd76c22_4d7d0b4e",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPNotificationDeliveryMechanismType.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-15T13:55:59Z",
+      "side": 1,
+      "message": "These will not be entities in 1.14",
+      "revId": "9fb5549a3b97779c5c3e5f3b2fadbd60080280c9",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "90d2470c_57c42ad0",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPUserNotificationPrefernce.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-15T13:55:59Z",
+      "side": 1,
+      "message": "Please rename to UserNotifPref",
+      "revId": "9fb5549a3b97779c5c3e5f3b2fadbd60080280c9",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c5b61024_14e209e6",
+        "filename": "cmn-data-svc-server/db-scripts/cmn-data-svc-ddl-dml-mysql-1-14.sql",
+        "patchSetId": 8
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-15T13:55:59Z",
+      "side": 1,
+      "message": "1.13 or 1.14?",
+      "revId": "9fb5549a3b97779c5c3e5f3b2fadbd60080280c9",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "aba4f422_ab309258",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/UserController.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1025,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-15T13:55:59Z",
+      "side": 1,
+      "message": "This method should be dropped",
+      "revId": "9fb5549a3b97779c5c3e5f3b2fadbd60080280c9",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7492a7f3_a939a3da",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/UserController.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1076,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-15T13:55:59Z",
+      "side": 1,
+      "message": "Must validate the enum-limited codes here",
+      "revId": "9fb5549a3b97779c5c3e5f3b2fadbd60080280c9",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2da61874_2da2155d",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/UserController.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1080,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-15T13:55:59Z",
+      "side": 1,
+      "message": "This path looks wrong - what about prefix USER ?",
+      "revId": "9fb5549a3b97779c5c3e5f3b2fadbd60080280c9",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "56174ad6_b8624843",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/UserController.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1115,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-15T13:55:59Z",
+      "side": 1,
+      "message": "Must validate enum-limited codes here",
+      "revId": "9fb5549a3b97779c5c3e5f3b2fadbd60080280c9",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fe967b7e_36073adc",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/UserController.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1154,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-15T13:55:59Z",
+      "side": 1,
+      "message": "Is this exception handler needed?",
+      "revId": "9fb5549a3b97779c5c3e5f3b2fadbd60080280c9",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cc683987_17179d61",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/repository/MessageSeverityTypeRepository.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-15T13:55:59Z",
+      "side": 1,
+      "message": "These are going away in 1.14",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 34
+      },
+      "revId": "9fb5549a3b97779c5c3e5f3b2fadbd60080280c9",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4e8db5ef_7d6b03d1",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/repository/NotificationDeliveryMechanismTypeRepository.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-15T13:55:59Z",
+      "side": 1,
+      "message": "These are going away in 1.14",
+      "revId": "9fb5549a3b97779c5c3e5f3b2fadbd60080280c9",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0f70d121_f2d81817",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/repository/UserNotificationPreferenceRepository.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-15T13:55:59Z",
+      "side": 1,
+      "message": "CrudRepository is sufficient here; don\u0027t need paging nor sorting",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 70
+      },
+      "revId": "9fb5549a3b97779c5c3e5f3b2fadbd60080280c9",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "90bde560_3bce6fb8",
+        "filename": "cmn-data-svc-server/src/test/java/org/acumos/cds/test/CdsRepositoryServiceTest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-15T13:55:59Z",
+      "side": 1,
+      "message": "All these tests are going away in 1.14",
+      "revId": "9fb5549a3b97779c5c3e5f3b2fadbd60080280c9",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c63c2fbc_ae189fe3",
+        "filename": "cmn-data-svc-server/src/test/resources/data-derby.sql",
+        "patchSetId": 8
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-15T13:55:59Z",
+      "side": 1,
+      "message": "This file goes away in 1.14",
+      "revId": "9fb5549a3b97779c5c3e5f3b2fadbd60080280c9",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
