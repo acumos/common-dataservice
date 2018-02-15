@@ -331,6 +331,24 @@
     },
     {
       "key": {
+        "uuid": "7a9a74fe_413e5e0d",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/UserController.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1076,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-02-15T16:59:48Z",
+      "side": 1,
+      "message": "Please elucidate.",
+      "parentUuid": "7492a7f3_a939a3da",
+      "revId": "9fb5549a3b97779c5c3e5f3b2fadbd60080280c9",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2da61874_2da2155d",
         "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/UserController.java",
         "patchSetId": 8
@@ -376,6 +394,24 @@
       "writtenOn": "2018-02-15T13:55:59Z",
       "side": 1,
       "message": "Is this exception handler needed?",
+      "revId": "9fb5549a3b97779c5c3e5f3b2fadbd60080280c9",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "265d76b4_b0b67dc7",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/UserController.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1154,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-02-15T16:59:48Z",
+      "side": 1,
+      "message": "If the delete fails, this will be needed, right?",
+      "parentUuid": "fe967b7e_36073adc",
       "revId": "9fb5549a3b97779c5c3e5f3b2fadbd60080280c9",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
