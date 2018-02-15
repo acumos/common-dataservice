@@ -175,6 +175,24 @@
     },
     {
       "key": {
+        "uuid": "c20a3abd_3922f34a",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPMessageSeverityType.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-15T16:20:06Z",
+      "side": 1,
+      "message": "The @Entity and @Table annotations go away.  The data will be backed by the Enum, not rows in a database table.",
+      "parentUuid": "8d47f96d_de99e7ae",
+      "revId": "9fb5549a3b97779c5c3e5f3b2fadbd60080280c9",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "205708e7_a1585e80",
         "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPNotification.java",
         "patchSetId": 8
