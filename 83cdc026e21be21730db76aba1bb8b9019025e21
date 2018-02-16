@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "23defed0_c3690449",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPPeerPeerAccMap.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-16T22:09:11Z",
+      "side": 1,
+      "message": "Java has no \"package\" qualifier.  The default is package.  I sometimes put that in to remind myself what\u0027s going on.",
+      "parentUuid": "7b3b169d_ceeda368",
+      "revId": "83cdc026e21be21730db76aba1bb8b9019025e21",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5560392a_553e3451",
         "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPPeerPeerAccMap.java",
         "patchSetId": 12
@@ -30,6 +48,24 @@
       "writtenOn": "2018-02-16T22:02:47Z",
       "side": 1,
       "message": "Why are the COL_NAME suffixes there, please?",
+      "revId": "83cdc026e21be21730db76aba1bb8b9019025e21",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a9fa8624_dc9018a4",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPPeerPeerAccMap.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-16T22:09:11Z",
+      "side": 1,
+      "message": "Just to be clear what the constant contains",
+      "parentUuid": "5560392a_553e3451",
       "revId": "83cdc026e21be21730db76aba1bb8b9019025e21",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
