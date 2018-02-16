@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "114a5f6d_86d8de0d",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/MessageSeverityTypeCode.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-16T17:12:38Z",
+      "side": 1,
+      "message": "Please add license header",
+      "revId": "dffa6a105714896edbe0c068882834e09b2b5102",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c6672844_c2ebfd52",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/NotificationDeliveryMechanismTypeCode.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-16T17:12:38Z",
+      "side": 1,
+      "message": "Please add license header",
+      "revId": "dffa6a105714896edbe0c068882834e09b2b5102",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e7098d04_7e15c191",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/CommonDataServiceRestClientMockImpl.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-16T17:12:38Z",
+      "side": 1,
+      "message": "no need to create a new object here. Just leave it null.",
+      "revId": "dffa6a105714896edbe0c068882834e09b2b5102",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "41186d9a_f2066d1f",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPNotification.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-16T17:12:38Z",
+      "side": 1,
+      "message": "parameters missing in javadoc, pls add",
+      "revId": "dffa6a105714896edbe0c068882834e09b2b5102",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c92fa1ff_1b252631",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPUserNotifPref.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-16T17:12:38Z",
+      "side": 1,
+      "message": "Please add license header",
+      "revId": "dffa6a105714896edbe0c068882834e09b2b5102",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6e259ba0_064c010c",
+        "filename": "cmn-data-svc-server/db-scripts/cds-mysql-downgrade-1-14-to-1-13.sql",
+        "patchSetId": 12
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-16T17:12:38Z",
+      "side": 1,
+      "message": "please keep the two related changes together. Reuse the numbers 29 and 30 from the upgrade script.",
+      "revId": "dffa6a105714896edbe0c068882834e09b2b5102",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "21d5b8da_6c9bcb65",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/repository/UserNotificationPreferenceRepository.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-16T17:12:38Z",
+      "side": 1,
+      "message": "Please add license header",
+      "revId": "dffa6a105714896edbe0c068882834e09b2b5102",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a060b47b_ffc6968a",
+        "filename": "cmn-data-svc-server/src/test/java/org/acumos/cds/test/CdsControllerTest.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 1029,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-16T17:12:38Z",
+      "side": 1,
+      "message": "pls remove code, don\u0027t comment out",
+      "revId": "dffa6a105714896edbe0c068882834e09b2b5102",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8b325eb7_aa78677b",
+        "filename": "cmn-data-svc-server/src/test/java/org/acumos/cds/test/CdsControllerTest.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 1041,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-16T17:12:38Z",
+      "side": 1,
+      "message": "Please add a few invalid tests.  Create with empty, update with bad id, delete with bad id.  Just copy the other examples.",
+      "revId": "dffa6a105714896edbe0c068882834e09b2b5102",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
