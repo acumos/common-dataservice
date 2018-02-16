@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7b3b169d_ceeda368",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPPeerPeerAccMap.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-02-16T21:52:32Z",
+      "side": 1,
+      "message": "What are these package comments about?",
+      "revId": "83cdc026e21be21730db76aba1bb8b9019025e21",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
