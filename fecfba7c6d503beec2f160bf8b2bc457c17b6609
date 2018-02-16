@@ -1,0 +1,378 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eee6197b_15a8b20a",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/MessageSeverityTypeCode.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-16T11:25:56Z",
+      "side": 1,
+      "message": "It\u0027s a minor thing, but make this comment match the other enums.",
+      "revId": "fecfba7c6d503beec2f160bf8b2bc457c17b6609",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "172774da_b4f03d7c",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/NotificationDeliveryMechanismTypeCode.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-16T11:25:56Z",
+      "side": 1,
+      "message": "Another slightly misleading comment, please correct",
+      "revId": "fecfba7c6d503beec2f160bf8b2bc457c17b6609",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d11b2425_276b8438",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/CommonDataServiceRestClientImpl.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 1747,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-16T11:25:56Z",
+      "side": 1,
+      "message": "No page request needed, drop this param",
+      "revId": "fecfba7c6d503beec2f160bf8b2bc457c17b6609",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4b86ee33_76431f8c",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/CommonDataServiceRestClientMockImpl.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 1057,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-16T11:25:56Z",
+      "side": 1,
+      "message": "Add @Override",
+      "revId": "fecfba7c6d503beec2f160bf8b2bc457c17b6609",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ad00f0c3_5530eb93",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/CommonDataServiceRestClientMockImpl.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 1081,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-16T11:25:56Z",
+      "side": 1,
+      "message": "This method is not needed?",
+      "revId": "fecfba7c6d503beec2f160bf8b2bc457c17b6609",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3d26fd3f_c247a5bd",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/ICommonDataServiceRestClient.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-16T11:25:56Z",
+      "side": 1,
+      "message": "What version of Eclipse are you using?  I\u0027m baffled that it changed so, so many comment and whitespace lines.",
+      "revId": "fecfba7c6d503beec2f160bf8b2bc457c17b6609",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e11c3fa7_959a8bdf",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/ICommonDataServiceRestClient.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 1614,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-16T11:25:56Z",
+      "side": 1,
+      "message": "Gets a list, not a page.",
+      "revId": "fecfba7c6d503beec2f160bf8b2bc457c17b6609",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "75e0f7e1_2b25446a",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/ICommonDataServiceRestClient.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 1618,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-16T11:25:56Z",
+      "side": 1,
+      "message": "Remove",
+      "revId": "fecfba7c6d503beec2f160bf8b2bc457c17b6609",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8c843c48_55877803",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPNotification.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-16T11:25:56Z",
+      "side": 1,
+      "message": "Is this usable as the message subject?",
+      "revId": "fecfba7c6d503beec2f160bf8b2bc457c17b6609",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ca47a9f1_ad286327",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPNotification.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-16T11:25:56Z",
+      "side": 1,
+      "message": "Why the extra blank lines?",
+      "revId": "fecfba7c6d503beec2f160bf8b2bc457c17b6609",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8dab02c4_6c33a66c",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPUserNotifPref.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-16T11:25:56Z",
+      "side": 1,
+      "message": "Please remove empty lines and empty comments",
+      "revId": "fecfba7c6d503beec2f160bf8b2bc457c17b6609",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "26cb2fc3_b44ae8fb",
+        "filename": "cmn-data-svc-client/src/test/java/org/acumos/cds/client/test/DomainTest.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-16T11:25:56Z",
+      "side": 1,
+      "message": "extra blank lines are not helpful",
+      "revId": "fecfba7c6d503beec2f160bf8b2bc457c17b6609",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f9de44e_5ea3ed10",
+        "filename": "cmn-data-svc-server/db-scripts/cmn-data-svc-ddl-dml-mysql-1-14.sql",
+        "patchSetId": 11
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-16T11:25:56Z",
+      "side": 1,
+      "message": "Extra blank lines are not required",
+      "revId": "fecfba7c6d503beec2f160bf8b2bc457c17b6609",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4d96565e_74acb701",
+        "filename": "cmn-data-svc-server/db-scripts/cmn-data-svc-ddl-dml-mysql-1-14.sql",
+        "patchSetId": 11
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-16T11:25:56Z",
+      "side": 1,
+      "message": "Where are the upgrade and downgrade scripts?",
+      "revId": "fecfba7c6d503beec2f160bf8b2bc457c17b6609",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2a9109c6_d22eba06",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/UserController.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-16T11:25:56Z",
+      "side": 1,
+      "message": "please use camel case here: notificationPreferenceRepository",
+      "revId": "fecfba7c6d503beec2f160bf8b2bc457c17b6609",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "608a5e6a_0c27c721",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/UserController.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 1075,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-16T11:25:56Z",
+      "side": 1,
+      "message": "please fix method name",
+      "revId": "fecfba7c6d503beec2f160bf8b2bc457c17b6609",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "754393f1_ef991817",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/UserController.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 1153,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-16T11:25:56Z",
+      "side": 1,
+      "message": "please fix method name in logger",
+      "revId": "fecfba7c6d503beec2f160bf8b2bc457c17b6609",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5aa05f2f_bfa6d05a",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/UserController.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 1163,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-16T11:25:56Z",
+      "side": 1,
+      "message": "Simplify - please emulate other delete methods.  Don\u0027t need to do findOne first.  Just try to delete, and catch any exception.",
+      "revId": "fecfba7c6d503beec2f160bf8b2bc457c17b6609",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8b529a9a_f4e0302d",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/repository/UserNotificationPreferenceRepository.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-16T11:25:56Z",
+      "side": 1,
+      "message": "Please drop - you don\u0027t need to write this method. Just call the magic Spring-generated method.  Look at other examples.  it will be something like findByUserId.",
+      "revId": "fecfba7c6d503beec2f160bf8b2bc457c17b6609",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9b991a12_2953e537",
+        "filename": "cmn-data-svc-server/src/test/java/org/acumos/cds/test/CdsControllerTest.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 1039,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-16T11:25:56Z",
+      "side": 1,
+      "message": "pls fix method name here",
+      "revId": "fecfba7c6d503beec2f160bf8b2bc457c17b6609",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1209e0ed_23560674",
+        "filename": "cmn-data-svc-server/src/test/java/org/acumos/cds/test/CdsControllerTest.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 2207,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-16T11:25:56Z",
+      "side": 1,
+      "message": "where are the invalid tests, to force a failure?",
+      "revId": "fecfba7c6d503beec2f160bf8b2bc457c17b6609",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c1af4717_ea62c2af",
+        "filename": "cmn-data-svc-server/src/test/java/org/acumos/cds/test/CdsRepositoryServiceTest.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 1071,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-16T11:25:56Z",
+      "side": 1,
+      "message": "WHere are the invalid tests, to force a failure?",
+      "revId": "fecfba7c6d503beec2f160bf8b2bc457c17b6609",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
