@@ -2475,6 +2475,42 @@ public class CdsControllerTest {
 		}
 
 		try {
+			HashMap<String, Object> restr = new HashMap<>();
+			client.searchStepResults(restr, true, new RestPageRequest(0,1));
+			throw new Exception("Unexpected success");
+		} catch (HttpStatusCodeException ex) {
+			logger.info("search step result empty failed as expected: {}", ex.getResponseBodyAsString());
+		}
+		try {
+			HashMap<String, Object> restr = new HashMap<>();
+			restr.put("bogus", "value");
+			client.searchStepResults(restr, true, new RestPageRequest(0,1));
+			throw new Exception("Unexpected success");
+		} catch (HttpStatusCodeException ex) {
+			logger.info("search step result bad field failed as expected: {}", ex.getResponseBodyAsString());
+		}
+		try {
+			client.createStepResult(new MLPStepResult());
+			throw new Exception("Unexpected success");
+		} catch (HttpStatusCodeException ex) {
+			logger.info("create step result failed as expected: {}", ex.getResponseBodyAsString());
+		}
+		try {
+			MLPStepResult stepResult = new MLPStepResult();
+			stepResult.setStepResultId(999L);
+			client.updateStepResult(stepResult);
+			throw new Exception("Unexpected success");
+		} catch (HttpStatusCodeException ex) {
+			logger.info("update step result failed as expected: {}", ex.getResponseBodyAsString());
+		}
+		try {
+			client.deleteStepResult(999L);
+			throw new Exception("Unexpected success");
+		} catch (HttpStatusCodeException ex) {
+			logger.info("delete step result failed as expected: {}", ex.getResponseBodyAsString());
+		}
+
+		try {
 			client.deleteSolutionValidation(sv);
 			client.deleteSolutionDeployment(solDep);
 			client.dropSolutionRevisionArtifact(cs.getSolutionId(), csr.getRevisionId(), ca.getArtifactId());
