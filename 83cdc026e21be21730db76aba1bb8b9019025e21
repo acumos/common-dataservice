@@ -16,6 +16,23 @@
       "revId": "83cdc026e21be21730db76aba1bb8b9019025e21",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5560392a_553e3451",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPPeerPeerAccMap.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-02-16T22:02:47Z",
+      "side": 1,
+      "message": "Why are the COL_NAME suffixes there, please?",
+      "revId": "83cdc026e21be21730db76aba1bb8b9019025e21",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
