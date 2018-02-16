@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3e974687_79b24913",
+        "filename": "cmn-data-svc-server/db-scripts/cds-mysql-upgrade-1-13-to-1-14.sql",
+        "patchSetId": 14
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-16T18:10:31Z",
+      "side": 1,
+      "message": "remove 31",
+      "revId": "f58f717294dc39cb91a43b2042f6c92af9d32550",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa66eb72_abb5150f",
+        "filename": "cmn-data-svc-server/src/test/java/org/acumos/cds/test/CdsRepositoryServiceTest.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 1064,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-16T18:10:31Z",
+      "side": 1,
+      "message": "make the catch more specific, that\u0027s the safest",
+      "range": {
+        "startLine": 1064,
+        "startChar": 13,
+        "endLine": 1064,
+        "endChar": 22
+      },
+      "revId": "f58f717294dc39cb91a43b2042f6c92af9d32550",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
