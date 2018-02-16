@@ -120,6 +120,23 @@
       "revId": "83cdc026e21be21730db76aba1bb8b9019025e21",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "93db5b6b_7c4653fc",
+        "filename": "docs/release-notes.rst",
+        "patchSetId": 12
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-02-16T23:14:04Z",
+      "side": 1,
+      "message": "Add release date please",
+      "revId": "83cdc026e21be21730db76aba1bb8b9019025e21",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
