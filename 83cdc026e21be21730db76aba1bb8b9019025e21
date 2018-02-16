@@ -69,6 +69,23 @@
       "revId": "83cdc026e21be21730db76aba1bb8b9019025e21",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "50d98f0a_2fcd519c",
+        "filename": "cmn-data-svc-server/db-scripts/cmn-data-svc-ddl-dml-mysql-1-14.sql",
+        "patchSetId": 12
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-02-16T22:21:54Z",
+      "side": 1,
+      "message": "Won\u0027t this constraint C_SOL_GRP_MEM_MAP_C_GROUP be a reference to C_SOLUTION_GROUP?",
+      "revId": "83cdc026e21be21730db76aba1bb8b9019025e21",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
