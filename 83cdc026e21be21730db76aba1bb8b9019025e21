@@ -103,6 +103,23 @@
       "revId": "83cdc026e21be21730db76aba1bb8b9019025e21",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9e5010cb_08ceaef3",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/GroupPeerSolutionController.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-02-16T22:39:36Z",
+      "side": 1,
+      "message": "Add try catch blocks for the rest of the following methods.",
+      "revId": "83cdc026e21be21730db76aba1bb8b9019025e21",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
