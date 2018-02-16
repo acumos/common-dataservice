@@ -104,6 +104,24 @@
     },
     {
       "key": {
+        "uuid": "881115c5_7f3aa81e",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/ICommonDataServiceRestClient.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-02-16T12:59:10Z",
+      "side": 1,
+      "message": "Using Eclipse Mars",
+      "parentUuid": "3d26fd3f_c247a5bd",
+      "revId": "fecfba7c6d503beec2f160bf8b2bc457c17b6609",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e11c3fa7_959a8bdf",
         "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/ICommonDataServiceRestClient.java",
         "patchSetId": 11
@@ -149,6 +167,24 @@
       "writtenOn": "2018-02-16T11:25:56Z",
       "side": 1,
       "message": "Is this usable as the message subject?",
+      "revId": "fecfba7c6d503beec2f160bf8b2bc457c17b6609",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e5dc4ffb_cc1b0f6b",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPNotification.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-02-16T12:59:10Z",
+      "side": 1,
+      "message": "Yes lets use this as message subject, instead of adding a new field",
+      "parentUuid": "8c843c48_55877803",
       "revId": "fecfba7c6d503beec2f160bf8b2bc457c17b6609",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
