@@ -325,6 +325,24 @@
     },
     {
       "key": {
+        "uuid": "162f40f6_88eca1c7",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/repository/UserNotificationPreferenceRepository.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-16T12:50:22Z",
+      "side": 1,
+      "message": "Let me try again.  Please drop the query annotation and change the method name to \"findByUserId\".  Then test.  Spring should generate the method magically.  Look at ThreadRepository for an example.",
+      "parentUuid": "8b529a9a_f4e0302d",
+      "revId": "fecfba7c6d503beec2f160bf8b2bc457c17b6609",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9b991a12_2953e537",
         "filename": "cmn-data-svc-server/src/test/java/org/acumos/cds/test/CdsControllerTest.java",
         "patchSetId": 11
