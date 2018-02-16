@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "03e087c8_74c29b62",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/CommonDataServiceRestClientImpl.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 1968,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-02-16T21:23:07Z",
+      "side": 1,
+      "message": "May be change this method name to peerSolutionAccessCount?",
+      "revId": "819da6f2ea682c8b2981dfaf68fca5e327a06b16",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
