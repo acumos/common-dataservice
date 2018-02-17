@@ -89,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "a3098536_4198528e",
+        "filename": "cmn-data-svc-server/db-scripts/cds-mysql-upgrade-1-13-to-1-14.sql",
+        "patchSetId": 12
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-17T02:34:42Z",
+      "side": 1,
+      "message": "correct, good catch",
+      "parentUuid": "f7e91f2c_a506fcc2",
+      "revId": "83cdc026e21be21730db76aba1bb8b9019025e21",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "50d98f0a_2fcd519c",
         "filename": "cmn-data-svc-server/db-scripts/cmn-data-svc-ddl-dml-mysql-1-14.sql",
         "patchSetId": 12
@@ -100,6 +118,24 @@
       "writtenOn": "2018-02-16T22:21:54Z",
       "side": 1,
       "message": "Won\u0027t this constraint C_SOL_GRP_MEM_MAP_C_GROUP be a reference to C_SOLUTION_GROUP?",
+      "revId": "83cdc026e21be21730db76aba1bb8b9019025e21",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7b2d303b_1a31feba",
+        "filename": "cmn-data-svc-server/db-scripts/cmn-data-svc-ddl-dml-mysql-1-14.sql",
+        "patchSetId": 12
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-17T02:34:42Z",
+      "side": 1,
+      "message": "excellent catch, thank you",
+      "parentUuid": "50d98f0a_2fcd519c",
       "revId": "83cdc026e21be21730db76aba1bb8b9019025e21",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
@@ -123,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "0b214880_196f0bb9",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/GroupPeerSolutionController.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-17T02:34:42Z",
+      "side": 1,
+      "message": "coming right up",
+      "parentUuid": "9e5010cb_08ceaef3",
+      "revId": "83cdc026e21be21730db76aba1bb8b9019025e21",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "93db5b6b_7c4653fc",
         "filename": "docs/release-notes.rst",
         "patchSetId": 12
@@ -134,6 +188,24 @@
       "writtenOn": "2018-02-16T23:14:04Z",
       "side": 1,
       "message": "Add release date please",
+      "revId": "83cdc026e21be21730db76aba1bb8b9019025e21",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2cdf5a1e_b60a4211",
+        "filename": "docs/release-notes.rst",
+        "patchSetId": 12
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-17T02:34:42Z",
+      "side": 1,
+      "message": "19 Feb",
+      "parentUuid": "93db5b6b_7c4653fc",
       "revId": "83cdc026e21be21730db76aba1bb8b9019025e21",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
