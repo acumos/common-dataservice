@@ -325,7 +325,7 @@ public class CdsControllerTest {
 			cu.setLoginHash(loginPass);
 			final String firstName = "test_" + unique;
 			cu.setFirstName(firstName);
-			final String lastName = "test-last-name";
+			final String lastName = "name create-sol-arts";
 			cu.setLastName(lastName);
 			cu.setActive(true);
 			cu.setLoginPassExpire(new Date());
@@ -835,7 +835,7 @@ public class CdsControllerTest {
 			cu.setLoginHash(loginPass);
 			final String firstName = "test_" + unique;
 			cu.setFirstName(firstName);
-			final String lastName = "test-last-name";
+			final String lastName = "test-role-fn";
 			cu.setLastName(lastName);
 			cu.setActive(true);
 			cu.setLoginPassExpire(new Date());
@@ -946,6 +946,7 @@ public class CdsControllerTest {
 			client.deleteRole(cr.getRoleId());
 			logger.info("Deleting role 2");
 			client.deleteRole(cr2.getRoleId());
+			client.deleteUser(cu.getUserId());
 		} catch (HttpClientErrorException ex) {
 			logger.error("Client reported error; body is {}", ex.getResponseBodyAsString());
 			throw ex;
