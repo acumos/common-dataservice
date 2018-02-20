@@ -50,11 +50,17 @@ public class MLPUserNotifPref implements MLPEntity, Serializable {
 	@Size(max = 36)
 	private String userId;
 
+	/**
+	 * This code is defined by {@link org.acumos.cds.NotificationDeliveryMechanismTypeCode}
+	 */
 	@Column(name = "NOTIF_DELV_MECH_CD", nullable = false, columnDefinition = "CHAR(2)")
 	@NotNull(message = "Notificxation Delivery Mechanism Code cannot be null")
 	@Size(max = 2)
 	private String notfDelvMechCode;
 
+	/**
+	 * This code is defined by {@link org.acumos.cds.MessageSeverityTypeCode}
+	 */
 	@Column(name = "MSG_SEVERITY_CD", nullable = false, columnDefinition = "CHAR(2)")
 	@NotNull(message = "Message Severity Code cannot be null")
 	@Size(max = 2)
