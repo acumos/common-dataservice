@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fe64c598_19be50dc",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPUserNotifPref.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-02-20T18:16:32Z",
+      "side": 1,
+      "message": "Change this enum name dropping the \"Type\" part.\nAlso rename this class in whole project dropping the \"Type\" part.",
+      "revId": "a72e4196e95c497c1c58ce0c457ee91050779fba",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a1649a7c_833df866",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPUserNotifPref.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-02-20T18:16:32Z",
+      "side": 1,
+      "message": "Change this enum name dropping the \"Type\" part.\nAlso rename this class in whole project dropping the \"Type\" part.",
+      "revId": "a72e4196e95c497c1c58ce0c457ee91050779fba",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
