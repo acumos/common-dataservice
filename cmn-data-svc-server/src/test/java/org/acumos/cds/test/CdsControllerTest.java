@@ -26,6 +26,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 
 import org.acumos.cds.AccessTypeCode;
@@ -1464,7 +1465,7 @@ public class CdsControllerTest {
 			logger.info("Created solution " + cs.getSolutionId());
 
 			final String peerName = "Peer-" + Long.toString(new Date().getTime());
-			MLPPeer pr = new MLPPeer(peerName, "x.509", "http://peer-api", true, true, "contact",
+			MLPPeer pr = new MLPPeer(peerName, "x." + String.valueOf(new Random().nextInt()), "http://peer-api", true, true, "contact",
 					PeerStatusCode.AC.name(), ValidationStatusCode.FA.name());
 			pr = client.createPeer(pr);
 			logger.info("Created peer " + pr.getPeerId());
