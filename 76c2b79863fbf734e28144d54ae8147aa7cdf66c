@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7782622c_cef4fb7d",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/PeerStatusCode.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-20T19:00:07Z",
+      "side": 1,
+      "message": "Please rename PA to something else.  RQ, perhaps.",
+      "revId": "76c2b79863fbf734e28144d54ae8147aa7cdf66c",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b3a66fec_387db292",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/PeerStatusCode.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-20T19:00:07Z",
+      "side": 1,
+      "message": "Please rename PR to something else.  Perhaps \"RN\".",
+      "revId": "76c2b79863fbf734e28144d54ae8147aa7cdf66c",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "31f5fb10_dbdec877",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/PeerStatusCode.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-20T19:00:07Z",
+      "side": 1,
+      "message": "Please rename RM to something else.  Perhaps DE or DC",
+      "revId": "76c2b79863fbf734e28144d54ae8147aa7cdf66c",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "189ae49f_eb52be35",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPPeer.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-20T19:00:07Z",
+      "side": 1,
+      "message": "can \"UNIQUE\" be added to the columnDefinition attribute at the end - will Derby honor it?",
+      "revId": "76c2b79863fbf734e28144d54ae8147aa7cdf66c",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c96c0235_5113354c",
+        "filename": "cmn-data-svc-server/db-scripts/cds-mysql-downgrade-1-14-to-1-13.sql",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-20T19:00:07Z",
+      "side": 1,
+      "message": "I expected a redefinition of the column - maybe that doesn\u0027t work?",
+      "revId": "76c2b79863fbf734e28144d54ae8147aa7cdf66c",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b33b71b0_7db295c1",
+        "filename": "cmn-data-svc-server/db-scripts/cds-mysql-upgrade-1-13-to-1-14.sql",
+        "patchSetId": 3
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-20T19:00:07Z",
+      "side": 1,
+      "message": "I expected an ALTER column to add the UNIQUE constraint, no?",
+      "revId": "76c2b79863fbf734e28144d54ae8147aa7cdf66c",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d4d1e818_fa0bccaf",
+        "filename": "cmn-data-svc-server/db-scripts/cmn-data-svc-ddl-dml-mysql-1-14.sql",
+        "patchSetId": 3
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-20T19:00:07Z",
+      "side": 1,
+      "message": "I guess this way you get a usable constraint name?",
+      "revId": "76c2b79863fbf734e28144d54ae8147aa7cdf66c",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "41c869c6_985bffd3",
+        "filename": "cmn-data-svc-server/src/test/java/org/acumos/cds/test/CdsRepositoryServiceTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-20T19:00:07Z",
+      "side": 1,
+      "message": "If you can add the UNIQUE constraint in the annotation, will Derby honor it and block an attempt to insert the same subjectName twice?  Adding that test here would be useful.",
+      "revId": "76c2b79863fbf734e28144d54ae8147aa7cdf66c",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
