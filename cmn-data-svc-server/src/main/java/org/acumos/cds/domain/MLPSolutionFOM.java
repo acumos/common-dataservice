@@ -24,31 +24,35 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+
+import org.hibernate.annotations.Immutable;
 
 /**
- * Solution entity with complex mappings for tags and web stats. Inherits all
- * simple field mappings from the abstract superclass.
+ * Solution entity with full object mappings (FOM, a lousy name I know) for all
+ * complex fields including tags, web stats and revisions. Inherits all simple
+ * field mappings from the abstract superclass. Only used for query, never used
+ * for update.
+ * 
+ * Defined in the server package to support queries; not exposed to clients.
  */
 @Entity
 @Table(name = "C_SOLUTION")
-public class MLPSolution extends MLPAbstractSolution implements Serializable {
+@Immutable
+public class MLPSolutionFOM extends MLPAbstractSolution implements Serializable {
 
-	private static final long serialVersionUID = 745945642089325612L;
+	private static final long serialVersionUID = -6075523082529564585L;
 
-	@Column(name = OWNER_ID_COL_NAME, nullable = false, columnDefinition = "CHAR(36)")
-	@NotNull(message = "OwnerId cannot be null")
-	@Size(max = 36)
-	private String ownerId;
+	@OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="OWNER_ID", nullable = false, columnDefinition = "CHAR(36)")
+	private MLPUser owner;
 
 	/**
 	 * Tags assigned to the solution via a join table. Tags can be reused by many
@@ -87,34 +91,26 @@ public class MLPSolution extends MLPAbstractSolution implements Serializable {
 	private MLPSolutionWeb webStats;
 
 	/**
+	 * A solution may have many solution revisions. The solution revision entity has
+	 * the solutionId field.
+	 */
+	@OneToMany(fetch = FetchType.EAGER)
+	@JoinColumn(name = MLPSolutionRevision.SOL_ID_COL_NAME) // in MLPSolutionRevision
+	private Set<MLPSolutionRevision> revisions = new HashSet<>(0);
+
+	/**
 	 * No-arg constructor
 	 */
-	public MLPSolution() {
+	public MLPSolutionFOM() {
 		// no-arg constructor
 	}
 
-	/**
-	 * This constructor accepts the required fields; i.e., the minimum that the user
-	 * must supply to create a valid instance.
-	 * 
-	 * @param name
-	 *            Solution Name
-	 * @param ownerId
-	 *            User ID of owner
-	 * @param active
-	 *            Boolean flag
-	 */
-	public MLPSolution(String name, String ownerId, boolean active) {
-		super(name, active);
-		this.ownerId = ownerId;
+	public MLPUser getOwner() {
+		return owner;
 	}
 
-	public String getOwnerId() {
-		return ownerId;
-	}
-
-	public void setOwnerId(String ownerId) {
-		this.ownerId = ownerId;
+	public void setOwner(MLPUser owner) {
+		this.owner = owner;
 	}
 
 	/**
@@ -162,10 +158,32 @@ public class MLPSolution extends MLPAbstractSolution implements Serializable {
 	@Override
 	public String toString() {
 		return this.getClass().getName() + "[solutionId=" + getSolutionId() + ", name=" + getName() + ", owner="
-				+ ownerId + ", desc=" + getDescription() + ", active=" + isActive() + ", accessTypeCode="
+				+ owner + ", desc=" + getDescription() + ", active=" + isActive() + ", accessTypeCode="
 				+ getAccessTypeCode() + ", modelTypeCode=" + getModelTypeCode() + ", validationStatusCode="
-				+ getValidationStatusCode() + ", provider=" + getProvider() + ", created=" + getCreated()
-				+ ", modified=" + getModified() + "]";
+				+ getValidationStatusCode() + ", provider=" + getProvider() + ", revision count=" + revisions.size()
+				+ ", created=" + getCreated() + ", modified=" + getModified() + "]";
 	}
 
+	/**
+	 * @return MLPSolution with the information from this entity
+	 */
+	public MLPSolution toMLPSolution() {
+		MLPSolution sol = new MLPSolution(getName(), owner.getUserId(), isActive());
+		sol.setAccessTypeCode(getAccessTypeCode());
+		sol.setCreated(getCreated());
+		sol.setDescription(getDescription());
+		sol.setMetadata(getMetadata());
+		sol.setModelTypeCode(getModelTypeCode());
+		sol.setModified(getModified());
+		sol.setName(getName());
+		sol.setOrigin(getOrigin());
+		sol.setProvider(getProvider());
+		sol.setSolutionId(getSolutionId());
+		sol.setSourceId(getSourceId());
+		sol.setTags(getTags());
+		sol.setToolkitTypeCode(getToolkitTypeCode());
+		sol.setValidationStatusCode(getValidationStatusCode());
+		sol.setWebStats(getWebStats());
+		return sol;
+	}
 }
