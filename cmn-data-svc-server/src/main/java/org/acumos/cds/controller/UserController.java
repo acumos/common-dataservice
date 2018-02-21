@@ -288,8 +288,7 @@ public class UserController extends AbstractController {
 					return result;
 				}
 			}
-			// Password arrives in the clear in the hash field, so hash if
-			// present
+			// Create a hash if a clear-text password arrives
 			if (user.getLoginHash() != null) {
 				String pwHash = BCrypt.hashpw(user.getLoginHash(), BCrypt.gensalt());
 				user.setLoginHash(pwHash);
@@ -342,7 +341,8 @@ public class UserController extends AbstractController {
 			if (user.getLoginHash() != null) {
 				String pwHash = BCrypt.hashpw(user.getLoginHash(), BCrypt.gensalt());
 				user.setLoginHash(pwHash);
-			} else {
+			} else {	
+				// Preserve old password if not updated
 				user.setLoginHash(existingUser.getLoginHash());
 			}
 			userRepository.save(user);
