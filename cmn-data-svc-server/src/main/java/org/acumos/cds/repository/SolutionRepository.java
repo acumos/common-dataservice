@@ -59,7 +59,7 @@ public interface SolutionRepository extends JpaRepository<MLPSolution, String>, 
 			+ " WHERE s.solutionId =  m.solutionId " //
 			+ "   AND m.tag = :tag")
 	Page<MLPSolution> findByTag(@Param("tag") String tag, Pageable pageRequest);
-
+	
 	/**
 	 * Gets all solutions with any modifications after the specified date, including
 	 * the solution, revision and artifact entities. Returns no results for a
@@ -80,11 +80,11 @@ public interface SolutionRepository extends JpaRepository<MLPSolution, String>, 
 	 */
 	@Query(value = "SELECT DISTINCT s FROM MLPSolution s, MLPSolutionRevision r, MLPSolRevArtMap m, MLPArtifact a "
 			+ " WHERE s.active = :active " //
-			+ "   AND s.accessTypeCode in :accessTypeCodes " //
-			+ "   AND s.validationStatusCode in :valStatusCodes " //
 			+ "   AND s.solutionId = r.solutionId " //
 			+ "   AND r.revisionId = m.revisionId " //
 			+ "   AND m.artifactId = a.artifactId " //
+			+ "   AND r.accessTypeCode in :accessTypeCodes " //
+			+ "   AND r.validationStatusCode in :valStatusCodes " //
 			+ "   AND " //
 			+ "   ( s.modified >= :theDate " //
 			+ "  OR r.modified >= :theDate " //
