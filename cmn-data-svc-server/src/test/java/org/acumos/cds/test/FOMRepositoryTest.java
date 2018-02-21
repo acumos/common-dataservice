@@ -60,6 +60,7 @@ public class FOMRepositoryTest {
 
 	private final static EELFLoggerDelegate logger = EELFLoggerDelegate.getLogger(FOMRepositoryTest.class);
 
+	// Used to create entities
 	@Autowired
 	private ArtifactRepository artifactRepository;
 	@Autowired
@@ -97,12 +98,11 @@ public class FOMRepositoryTest {
 			logger.info("Created user {}", cu);
 
 			cs = new MLPSolution("sol name", cu.getUserId(), true);
-			cs.setAccessTypeCode(AccessTypeCode.PR.name());
-			cs.setValidationStatusCode(ValidationStatusCode.NV.name());
 			cs = solutionRepository.save(cs);
 			Assert.assertNotNull("Solution ID", cs.getSolutionId());
 
-			cr = new MLPSolutionRevision(cs.getSolutionId(), "version", cu.getUserId());
+			cr = new MLPSolutionRevision(cs.getSolutionId(), "version", cu.getUserId(), AccessTypeCode.PB.name(),
+					ValidationStatusCode.NV.name());
 			cr = revisionRepository.save(cr);
 			Assert.assertNotNull("Revision ID", cr.getRevisionId());
 			logger.info("Created solution revision {}", cr.getRevisionId());
@@ -129,19 +129,11 @@ public class FOMRepositoryTest {
 		Date modifiedDate = new Date();
 		modifiedDate.setTime(modifiedDate.getTime() - 60 * 1000);
 
-		// Via hand-written SQL
-		logger.info("Querying for FOM via repo find-by-date method");
-		Page<MLPSolution> solsBySql = solutionRepository.findByModifiedDate(true, accTypes, valCodes, modifiedDate,
-				new PageRequest(0, 4, null));
-		// Assert.assertTrue(solsBySql != null && solsBySql.getNumberOfElements() > 0);
-		logger.info("Found sols by date via sql: size {}", solsBySql.getContent().size());
-
 		// Via Hibernate constraint
 		logger.info("Querying for FOM via search service");
 		Page<MLPSolution> solsByDate = solutionSearchService.findSolutionsByModifiedDate(true, accTypes, valCodes,
 				modifiedDate, new PageRequest(0, 6, null));
-		// TODO Assert.assertTrue(solsByDate != null && solsByDate.getNumberOfElements()
-		// > 0);
+		Assert.assertTrue(solsByDate != null && solsByDate.getNumberOfElements() > 0);
 		logger.info("Found sols by date via criteria: size {}", solsByDate.getContent().size());
 
 		if (setupTeardown) {

@@ -152,9 +152,8 @@ public class MLPSolutionFOM extends MLPAbstractSolution implements Serializable 
 	public String toString() {
 		return this.getClass().getName() + "[solutionId=" + getSolutionId() + ", name=" + getName() + ", owner=" + owner
 				+ ", desc=" + getDescription() + ", active=" + isActive() + ", modelTypeCode=" + getModelTypeCode()
-				+ ", validationStatusCode=" + getValidationStatusCode() + ", provider=" + getProvider() + ", source="
-				+ source + ", revisions=" + revisions + ", created=" + getCreated() + ", modified=" + getModified()
-				+ "]";
+				+ ", provider=" + getProvider() + ", source=" + source + ", revisions=" + revisions + ", created="
+				+ getCreated() + ", modified=" + getModified() + "]";
 	}
 
 	/**
@@ -175,7 +174,6 @@ public class MLPSolutionFOM extends MLPAbstractSolution implements Serializable 
 			sol.setSourceId(source.getPeerId());
 		sol.setTags(getTags());
 		sol.setToolkitTypeCode(getToolkitTypeCode());
-		sol.setValidationStatusCode(getValidationStatusCode());
 		sol.setWebStats(getWebStats());
 		return sol;
 	}

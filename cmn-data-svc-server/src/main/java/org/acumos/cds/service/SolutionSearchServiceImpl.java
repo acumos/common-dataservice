@@ -54,6 +54,11 @@ public class SolutionSearchServiceImpl extends AbstractSearchServiceImpl impleme
 	@Autowired
 	private SessionFactory sessionFactory;
 
+	private final String revAlias = "revs";
+	private final String artAlias = "arts";
+	private final String ownerAlias = "ownr";
+	private final String tagAlias = "tag";
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public Page<MLPSolution> findSolutions(Map<String, ? extends Object> queryParameters, boolean isOr,
@@ -89,32 +94,34 @@ public class SolutionSearchServiceImpl extends AbstractSearchServiceImpl impleme
 	@SuppressWarnings("unchecked")
 	@Override
 	public Page<MLPSolution> findPortalSolutions(String[] nameKeywords, String[] descKeywords, boolean active,
-			String[] ownerIds, String[] accessTypeCode, String[] modelTypeCode, String[] validationStatusCode,
+			String[] ownerIds, String[] modelTypeCode, String[] accessTypeCode, String[] validationStatusCode,
 			String[] tags, Pageable pageable) {
 
-		Criteria solCriteria = sessionFactory.getCurrentSession().createCriteria(MLPSolution.class);
+		Criteria solCriteria = sessionFactory.getCurrentSession().createCriteria(MLPSolutionFOM.class);
 
-		// Always check active status
+		// Aliases for subclasses
+		solCriteria.createAlias("revisions", revAlias);
+		solCriteria.createAlias(revAlias + ".artifacts", artAlias);
+		solCriteria.createAlias("owner", ownerAlias);
+		solCriteria.createAlias("tags", tagAlias);
+
+		// Attributes on the solution
 		solCriteria.add(Restrictions.eq("active", active));
-
 		if (nameKeywords != null && nameKeywords.length > 0)
 			solCriteria.add(buildLikeListCriterion("name", nameKeywords));
 		if (descKeywords != null && descKeywords.length > 0)
 			solCriteria.add(buildLikeListCriterion("description", descKeywords));
-		if (ownerIds != null && ownerIds.length > 0)
-			solCriteria.add(Restrictions.in("ownerId", ownerIds));
-		if (accessTypeCode != null && accessTypeCode.length > 0)
-			solCriteria.add(buildEqualsListCriterion("accessTypeCode", accessTypeCode));
 		if (modelTypeCode != null && modelTypeCode.length > 0)
-			solCriteria.add(buildEqualsListCriterion("modelTypeCode", modelTypeCode));
+			solCriteria.add(Restrictions.in("modelTypeCode", modelTypeCode));
+		// Attributes on related types
+		if (ownerIds != null && ownerIds.length > 0)
+			solCriteria.add(Restrictions.in(ownerAlias + ".userId", ownerIds));
+		if (accessTypeCode != null && accessTypeCode.length > 0)
+			solCriteria.add(Restrictions.in(revAlias + ".accessTypeCode", accessTypeCode));
 		if (validationStatusCode != null && validationStatusCode.length > 0)
-			solCriteria.add(buildEqualsListCriterion("validationStatusCode", validationStatusCode));
-		if (tags != null && tags.length > 0) {
-			// "tags" is the field name in MLPSolution
-			Criteria tagCriteria = solCriteria.createCriteria("tags");
-			// "tag" is the field name in MLPTag
-			tagCriteria.add(Restrictions.in("tag", tags));
-		}
+			solCriteria.add(Restrictions.in(revAlias + ".validationStatusCode", validationStatusCode));
+		if (tags != null && tags.length > 0)
+			solCriteria.add(Restrictions.in(tagAlias + ".tag", tags));
 
 		// Count the total rows
 		solCriteria.setProjection(Projections.rowCount());
@@ -128,9 +135,19 @@ public class SolutionSearchServiceImpl extends AbstractSearchServiceImpl impleme
 		super.applyPageableCriteria(solCriteria, pageable);
 
 		// Get a page of results
-		List<MLPSolution> items = solCriteria.list();
-		logger.debug(EELFLoggerDelegate.debugLogger, "findPortalSolutions: result size={}", items.size());
-		return new PageImpl<>(items, pageable, count);
+		List<MLPSolutionFOM> items = solCriteria.list();
+		if (items.isEmpty())
+			throw new RuntimeException("findPortalSolutions: unexpected empty result");
+
+		List<MLPSolution> solutions = new ArrayList<>();
+		for (Object item : items) {
+			if (item instanceof MLPSolutionFOM)
+				solutions.add(((MLPSolutionFOM) item).toMLPSolution());
+			else
+				logger.error(EELFLoggerDelegate.errorLogger, "Unexpected type: {} ", item.getClass().getName());
+		}
+		logger.debug(EELFLoggerDelegate.debugLogger, "findPortalSolutions: result size={}", solutions.size());
+		return new PageImpl<>(solutions, pageable, count);
 	}
 
 	@Override
@@ -139,16 +156,14 @@ public class SolutionSearchServiceImpl extends AbstractSearchServiceImpl impleme
 			String[] validationStatusCode, Date date, Pageable pageable) {
 
 		Criteria solCriteria = sessionFactory.getCurrentSession().createCriteria(MLPSolutionFOM.class);
-		final String revAlias = "revs";
-		final String artAlias = "arts";
 		solCriteria.createAlias("revisions", revAlias);
 		solCriteria.createAlias(revAlias + ".artifacts", artAlias);
 
 		solCriteria.add(Restrictions.eq("active", active));
 		if (accessTypeCode != null && accessTypeCode.length > 0)
-			solCriteria.add(buildEqualsListCriterion("accessTypeCode", accessTypeCode));
+			solCriteria.add(Restrictions.in(revAlias + ".accessTypeCode", accessTypeCode));
 		if (validationStatusCode != null && validationStatusCode.length > 0)
-			solCriteria.add(buildEqualsListCriterion("validationStatusCode", validationStatusCode));
+			solCriteria.add(Restrictions.in(revAlias + ".validationStatusCode", validationStatusCode));
 
 		// Construct a disjunction to find any updated item;
 		// unfortunately this requires hardcoded field names
@@ -178,15 +193,15 @@ public class SolutionSearchServiceImpl extends AbstractSearchServiceImpl impleme
 		List items = solCriteria.list();
 		if (items.isEmpty())
 			throw new RuntimeException("findSolutionsByModifiedDate: unexpected empty result");
-		logger.debug(EELFLoggerDelegate.debugLogger, "findSolutionsByModifiedDate: result size={}", items.size());
 
 		List<MLPSolution> solutions = new ArrayList<>();
 		for (Object item : items) {
 			if (item instanceof MLPSolutionFOM)
 				solutions.add(((MLPSolutionFOM) item).toMLPSolution());
 			else
-				logger.error("Unexpected type: " + item.getClass().getName());
+				logger.error(EELFLoggerDelegate.errorLogger, "Unexpected type: {} ", item.getClass().getName());
 		}
+		logger.debug(EELFLoggerDelegate.debugLogger, "findSolutionsByModifiedDate: result size={}", solutions.size());
 		return new PageImpl<>(solutions, pageable, count);
 	}
 
