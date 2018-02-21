@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "270a4ec5_f8e2a3e9",
+        "filename": "cmn-data-svc-server/db-scripts/cds-mysql-upgrade-1-13-to-1-14.sql",
+        "patchSetId": 6
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-21T16:57:10Z",
+      "side": 1,
+      "message": "This is very painful - please add something like this:\n\nselect subject_name, count(*) from c_peer group by subject_name;\n\nBecause if there\u0027s a duplicate, the update fails.",
+      "revId": "3b24cdf10f2f57d900351d20a468ec835cb0030d",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
