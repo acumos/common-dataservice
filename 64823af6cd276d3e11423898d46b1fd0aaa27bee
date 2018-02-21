@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d8568663_32e71ad2",
+        "filename": "docs/server.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-02-21T20:04:07Z",
+      "side": 1,
+      "message": "small typo, you missed \"using\" scripts",
+      "revId": "64823af6cd276d3e11423898d46b1fd0aaa27bee",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
