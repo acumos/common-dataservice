@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1ffe0376_f50e3b7f",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/CommonDataServiceRestClientImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-21T13:29:32Z",
+      "side": 1,
+      "message": "I don\u0027t understand what you\u0027re suggesting, this is a tag for a request parameter passed in the GET.",
+      "parentUuid": "e30be053_45cb187e",
+      "revId": "c0780fc5d2ec77bf051c48a4bbd1b642e2c74abd",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d6593296_da32ea2f",
         "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/ICommonDataServiceRestClient.java",
         "patchSetId": 2
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "0fb51708_139f8ee6",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/ICommonDataServiceRestClient.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-21T13:29:32Z",
+      "side": 1,
+      "message": "Yes.",
+      "parentUuid": "d6593296_da32ea2f",
+      "revId": "c0780fc5d2ec77bf051c48a4bbd1b642e2c74abd",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6959d8b2_f7aabe2e",
         "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/repository/SolutionRepository.java",
         "patchSetId": 2
@@ -47,6 +83,24 @@
       "writtenOn": "2018-02-21T13:21:32Z",
       "side": 1,
       "message": "comment here on what is this flag about please",
+      "revId": "c0780fc5d2ec77bf051c48a4bbd1b642e2c74abd",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "03b8674a_aaf94a1e",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/repository/SolutionRepository.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-21T13:29:32Z",
+      "side": 1,
+      "message": "Yes.",
+      "parentUuid": "6959d8b2_f7aabe2e",
       "revId": "c0780fc5d2ec77bf051c48a4bbd1b642e2c74abd",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
