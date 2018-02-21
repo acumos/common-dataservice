@@ -439,11 +439,11 @@ public interface ICommonDataServiceRestClient {
 	 * Adds an artifact to a solution revision
 	 * 
 	 * @param solutionId
-	 *            solution ID
+	 *            Solution ID
 	 * @param revisionId
-	 *            revision ID
+	 *            Revision ID
 	 * @param artifactId
-	 *            artifact Id
+	 *            Artifact Id
 	 */
 	void addSolutionRevisionArtifact(String solutionId, String revisionId, String artifactId);
 
@@ -451,11 +451,11 @@ public interface ICommonDataServiceRestClient {
 	 * Removes an artifact from a solution revision
 	 * 
 	 * @param solutionId
-	 *            solution ID
+	 *            Solution ID
 	 * @param revisionId
-	 *            revision ID
+	 *            Revision ID
 	 * @param artifactId
-	 *            artifact Id
+	 *            Artifact Id
 	 */
 	void dropSolutionRevisionArtifact(String solutionId, String revisionId, String artifactId);
 

@@ -73,14 +73,6 @@ public abstract class MLPAbstractSolution extends MLPTimestampedEntity {
 	private boolean active;
 
 	/**
-	 * This code is defined by {@link org.acumos.cds.AccessTypeCode} Nullable, which
-	 * was a mistake.
-	 */
-	@Column(name = "ACCESS_TYPE_CD", columnDefinition = "CHAR(2)")
-	@Size(max = 2)
-	private String accessTypeCode;
-
-	/**
 	 * This code is defined by {@link org.acumos.cds.ModelTypeCode}
 	 */
 	@Column(name = "MODEL_TYPE_CD", columnDefinition = "CHAR(2)")
@@ -93,13 +85,6 @@ public abstract class MLPAbstractSolution extends MLPTimestampedEntity {
 	@Column(name = "TOOLKIT_TYPE_CD", columnDefinition = "CHAR(2)")
 	@Size(max = 2)
 	private String toolkitTypeCode;
-
-	/**
-	 * This code is defined by {@link org.acumos.cds.ValidationStatusCode}
-	 */
-	@Column(name = "VALIDATION_STATUS_CD", columnDefinition = "CHAR(2)")
-	@Size(max = 2)
-	private String validationStatusCode;
 
 	/**
 	 * URI of the peer that provided this object. Supports federation.
@@ -179,19 +164,6 @@ public abstract class MLPAbstractSolution extends MLPTimestampedEntity {
 		this.active = active;
 	}
 
-	public String getAccessTypeCode() {
-		return accessTypeCode;
-	}
-
-	/**
-	 * @param accessTypeCode
-	 *            A value obtained by calling
-	 *            {@link org.acumos.cds.AccessTypeCode#toString()}.
-	 */
-	public void setAccessTypeCode(String accessTypeCode) {
-		this.accessTypeCode = accessTypeCode;
-	}
-
 	public String getModelTypeCode() {
 		return modelTypeCode;
 	}
@@ -216,19 +188,6 @@ public abstract class MLPAbstractSolution extends MLPTimestampedEntity {
 	 */
 	public void setToolkitTypeCode(String toolkitTypeCode) {
 		this.toolkitTypeCode = toolkitTypeCode;
-	}
-
-	public String getValidationStatusCode() {
-		return validationStatusCode;
-	}
-
-	/**
-	 * @param validationStatusCode
-	 *            A value obtained by calling
-	 *            {@link org.acumos.cds.ValidationStatusCode#toString()}.
-	 */
-	public void setValidationStatusCode(String validationStatusCode) {
-		this.validationStatusCode = validationStatusCode;
 	}
 
 	public String getOrigin() {
