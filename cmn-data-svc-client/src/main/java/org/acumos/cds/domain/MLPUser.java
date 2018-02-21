@@ -301,7 +301,10 @@ public class MLPUser extends MLPTimestampedEntity implements Serializable {
 
 	@Override
 	public String toString() {
-		return this.getClass().getName() + "[userId=" + userId + ", loginName=" + loginName + ", lastName=" + lastName
-				+ ", email=" + email + ", ...]";
+		return this.getClass().getName() + "[userId=" + userId + ", loginName=" + loginName + ", email=" + email
+				+ ", lastName=" + lastName + ", middleName=" + middleName + ", firstName=" + firstName + "orgName="
+				+ orgName + ", lastLogin = " + lastLogin + "loginPassExpires=" + loginPassExpire + ", created="
+				+ getCreated() + ", modified=" + getModified() + "]";
 	}
+
 }
