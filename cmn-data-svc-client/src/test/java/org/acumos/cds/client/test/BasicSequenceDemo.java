@@ -72,13 +72,12 @@ public class BasicSequenceDemo {
 			MLPSolution cs = new MLPSolution("solution name", cu.getUserId(), true);
 			cs.setValidationStatusCode(ValidationStatusCode.IP.name());
 			cs.setProvider("Big Data Org");
-			cs.setAccessTypeCode(AccessTypeCode.PB.name());
 			cs.setModelTypeCode(ModelTypeCode.CL.name());
 			cs.setToolkitTypeCode(ToolkitTypeCode.CP.name());
 			cs = client.createSolution(cs);
 			logger.info("Created solution {}", cs);
 
-			MLPSolutionRevision cr = new MLPSolutionRevision(cs.getSolutionId(), "1.0R", cu.getUserId());
+			MLPSolutionRevision cr = new MLPSolutionRevision(cs.getSolutionId(), "1.0R", cu.getUserId(), AccessTypeCode.PB.name());
 			cr.setDescription("Some description");
 			cr = client.createSolutionRevision(cr);
 			logger.info("Created solution revision {}", cr);
