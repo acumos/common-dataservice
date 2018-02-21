@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e30be053_45cb187e",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/CommonDataServiceRestClientImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-02-21T13:21:32Z",
+      "side": 1,
+      "message": "may be separate out the SEARCH_VAL and STATUS constants?",
+      "revId": "c0780fc5d2ec77bf051c48a4bbd1b642e2c74abd",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d6593296_da32ea2f",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/ICommonDataServiceRestClient.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-02-21T13:21:32Z",
+      "side": 1,
+      "message": "Add array of validation status codes (required)",
+      "revId": "c0780fc5d2ec77bf051c48a4bbd1b642e2c74abd",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6959d8b2_f7aabe2e",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/repository/SolutionRepository.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-02-21T13:21:32Z",
+      "side": 1,
+      "message": "comment here on what is this flag about please",
+      "revId": "c0780fc5d2ec77bf051c48a4bbd1b642e2c74abd",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
