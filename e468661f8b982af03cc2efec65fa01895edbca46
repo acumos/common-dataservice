@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7eb95a59_f535f3d9",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/CCDSConstants.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-02-21T12:46:19Z",
+      "side": 1,
+      "message": "May be separate out the SEARCH_VAL and STATUSES path as you did for others?",
+      "revId": "e468661f8b982af03cc2efec65fa01895edbca46",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
