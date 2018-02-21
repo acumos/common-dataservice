@@ -91,7 +91,7 @@ ALTER TABLE C_USER
   ALTER COLUMN CREATED_DATE DROP DEFAULT;
 -- 38
 ALTER TABLE C_PEER
-DROP INDEX C_PEER_C_SUBJECT_NAME;
+  DROP INDEX C_PEER_C_SUBJECT_NAME;
 -- 37
 -- Corresponding upgrade script has a SELECT statement for line 37, so no SQL statement needed here for downgrade.
 -- 36
