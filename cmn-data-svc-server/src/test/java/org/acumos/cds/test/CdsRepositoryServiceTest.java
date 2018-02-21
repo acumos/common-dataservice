@@ -389,10 +389,8 @@ public class CdsRepositoryServiceTest {
 			cs.setActive(true);
 			cs.setOwnerId(cu.getUserId());
 			cs.setProvider("Big Data Org");
-			cs.setAccessTypeCode(AccessTypeCode.PB.name());
 			cs.setModelTypeCode(ModelTypeCode.CL.name());
 			cs.setToolkitTypeCode(ToolkitTypeCode.SK.name());
-			cs.setValidationStatusCode(ValidationStatusCode.PS.name());
 			// tags must exist; they are not created here
 			cs.getTags().add(solTag1);
 			cs.getTags().add(solTag2);
@@ -417,34 +415,30 @@ public class CdsRepositoryServiceTest {
 					new PageRequest(0, 5, null));
 			Assert.assertFalse(searchPageSols.getContent().isEmpty());
 
-			logger.info("Finding portal solutions");
-			String[] solKw = { solName };
-			String[] descKw = { solDesc };
-			boolean active = true;
-			String[] ownerIds = { cu.getUserId() };
-			String[] accessTypeCodes = { null, AccessTypeCode.PB.name() };
-			String[] modelTypeCodes = { ModelTypeCode.CL.name() };
-			String[] valStatusCodes = { ValidationStatusCode.PS.name() };
-			String[] searchTags = { solTag1.getTag() };
-			Page<MLPSolution> portalSearchResult = solutionSearchService.findPortalSolutions(solKw, descKw, active,
-					ownerIds, accessTypeCodes, modelTypeCodes, valStatusCodes, searchTags,
-					new PageRequest(0, 2, Direction.ASC, "name"));
-			Assert.assertTrue(portalSearchResult != null && portalSearchResult.getNumberOfElements() > 0);
-			logger.info("Found portal solution total " + portalSearchResult.getTotalElements());
-
-			MLPSolutionRevision cr = new MLPSolutionRevision();
-			cr.setSolutionId(cs.getSolutionId());
-			cr.setVersion("1.0R");
+			MLPSolutionRevision cr = new MLPSolutionRevision(cs.getSolutionId(), "1.0X", cu.getUserId(),
+					AccessTypeCode.PR.name(), ValidationStatusCode.NV.name());
 			cr.setDescription("Some description 2");
-			cr.setOwnerId(cu.getUserId());
 			cr = revisionRepository.save(cr);
 			Assert.assertNotNull("Revision ID", cr.getRevisionId());
 			logger.info("Created solution revision " + cr.getRevisionId());
 
 			logger.info("Adding artifact to revision");
 			solRevArtMapRepository.save(new MLPSolRevArtMap(cr.getRevisionId(), ca.getArtifactId()));
-
 			logger.info("Added" + cr.getRevisionId() + " and " + ca.getArtifactId());
+
+			logger.info("Finding portal solutions");
+			String[] solKw = { solName };
+			String[] descKw = { solDesc };
+			boolean active = true;
+			String[] ownerIds = { cu.getUserId() };
+			String[] modelTypeCodes = { ModelTypeCode.CL.name() };
+			String[] accTypeCodes = { AccessTypeCode.PR.name() };
+			String[] valStatusCodes = { ValidationStatusCode.NV.name() };
+			String[] searchTags = { solTag1.getTag() };
+			Page<MLPSolution> portalSearchResult = solutionSearchService.findPortalSolutions(solKw, descKw, active,
+					ownerIds, modelTypeCodes, accTypeCodes, valStatusCodes, searchTags, new PageRequest(0, 2, Direction.ASC, "name"));
+			Assert.assertTrue(portalSearchResult != null && portalSearchResult.getNumberOfElements() > 0);
+			logger.info("Found portal solution total " + portalSearchResult.getTotalElements());
 
 			logger.info("Querying for artifact by partial match");
 			Iterable<MLPArtifact> al = artifactRepository.findBySearchTerm("name", new PageRequest(0, 5, null));
@@ -471,6 +465,16 @@ public class CdsRepositoryServiceTest {
 				for (MLPArtifact a : arts)
 					logger.info("\t\tArtifact: " + a.toString());
 			}
+
+			// Find by modified date
+			String[] accTypes = new String[] { AccessTypeCode.PR.name() };
+			String[] valCodes = new String[0];
+			Date modifiedDate = new Date();
+			modifiedDate.setTime(modifiedDate.getTime() - 60 * 1000);
+			Page<MLPSolution> solsByDate = solutionSearchService.findSolutionsByModifiedDate(true, accTypes, valCodes,
+					modifiedDate, new PageRequest(0, 5, null));
+			Assert.assertTrue(solsByDate != null && solsByDate.getNumberOfElements() > 0);
+			logger.info("Found sols by date {}", solsByDate);
 
 			// Create Solution download
 			MLPSolutionDownload sd = new MLPSolutionDownload(cs.getSolutionId(), ca.getArtifactId(), cu.getUserId());
@@ -543,15 +547,11 @@ public class CdsRepositoryServiceTest {
 			logger.info("Solutions by tag: {}", solByTag);
 			Assert.assertFalse(solByTag.getContent().isEmpty());
 
-			String[] accessTypes = new String[] { AccessTypeCode.PB.name() };
-			String[] valStatuses = new String[] { ValidationStatusCode.PS.name() };
+			String[] accessTypes = new String[] { AccessTypeCode.PR.name() };
+			String[] valStatuses = new String[] { ValidationStatusCode.NV.name() };
 			Date anHourAgo = new java.util.Date();
 			anHourAgo.setTime(new Date().getTime() - (1000L * 60 * 60));
 			
-			Page<MLPSolution> solByJoin = solutionRepository.findByModifiedDate(true, accessTypes,
-					valStatuses, anHourAgo, new PageRequest(0, 5));
-			logger.info("Solutions by date via join: {}", solByJoin);
-
 			Page<MLPSolution> solByCriteria = solutionSearchService.findSolutionsByModifiedDate(true, accessTypes,
 					valStatuses, anHourAgo, new PageRequest(0, 5));
 			logger.info("Solutions by date via criteria: {}", solByCriteria);
@@ -755,10 +755,8 @@ public class CdsRepositoryServiceTest {
 			cs.setActive(true);
 			cs.setOwnerId(cu.getUserId());
 			cs.setProvider("Big Data Org");
-			cs.setAccessTypeCode(AccessTypeCode.PB.name());
 			cs.setModelTypeCode(ModelTypeCode.CL.name());
 			cs.setToolkitTypeCode(ToolkitTypeCode.SK.name());
-			cs.setValidationStatusCode(ValidationStatusCode.SB.name());
 			cs = solutionRepository.save(cs);
 			Assert.assertNotNull("Solution ID", cs.getSolutionId());
 			Assert.assertNotNull("Solution create time", cs.getCreated());
@@ -804,19 +802,15 @@ public class CdsRepositoryServiceTest {
 			cs2.setActive(true);
 			cs2.setOwnerId(cu.getUserId());
 			cs2.setProvider("Big Data Org");
-			cs2.setAccessTypeCode(AccessTypeCode.PB.toString());
 			cs2.setModelTypeCode(ModelTypeCode.CL.toString());
 			cs2.setToolkitTypeCode(ToolkitTypeCode.SK.toString());
-			cs2.setValidationStatusCode(ValidationStatusCode.SB.name());
 			cs2 = solutionRepository.save(cs2);
 			Assert.assertNotNull("Solution 2 ID", cs2.getSolutionId());
 			logger.info("Created solution 2 " + cs2.getSolutionId());
 
-			MLPSolutionRevision cr = new MLPSolutionRevision();
-			cr.setSolutionId(cs.getSolutionId());
-			cr.setVersion("1.0R");
+			MLPSolutionRevision cr = new MLPSolutionRevision(cs.getSolutionId(), "1.0R", cu.getUserId(),
+					AccessTypeCode.PB.name(), ValidationStatusCode.SB.name());
 			cr.setDescription("Some description");
-			cr.setOwnerId(cu.getUserId());
 			cr = revisionRepository.save(cr);
 			Assert.assertNotNull("Revision ID", cr.getRevisionId());
 			logger.info("Adding artifact to revision");
