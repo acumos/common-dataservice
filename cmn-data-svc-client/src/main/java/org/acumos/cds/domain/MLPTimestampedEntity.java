@@ -38,11 +38,11 @@ import org.hibernate.annotations.UpdateTimestamp;
 public abstract class MLPTimestampedEntity implements MLPEntity {
 
 	@CreationTimestamp
-	@Column(name = "CREATED_DATE", nullable = false, updatable = false)
+	@Column(name = "CREATED_DATE", nullable = false, updatable = false, columnDefinition = "TIMESTAMP")
 	private Date created;
 
 	@UpdateTimestamp
-	@Column(name = "MODIFIED_DATE", nullable = false)
+	@Column(name = "MODIFIED_DATE", nullable = false, columnDefinition = "TIMESTAMP")
 	private Date modified;
 
 	public MLPTimestampedEntity() {
