@@ -24,31 +24,46 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+
+import org.hibernate.annotations.Immutable;
 
 /**
- * Solution entity with complex mappings for tags and web stats. Inherits all
+ * Solution entity with full object mappings (FOM, a lousy name I know) for all
+ * complex fields including revisions, user, tags and web stats. Inherits all
  * simple field mappings from the abstract superclass.
+ * 
+ * Defined in the server project because it's not exposed to clients.
+ * 
+ * Provides a method to convert self to the client-friendly class.
  */
 @Entity
 @Table(name = "C_SOLUTION")
-public class MLPSolution extends MLPAbstractSolution implements Serializable {
+@Immutable // never used for update
+public class MLPSolutionFOM extends MLPAbstractSolution implements Serializable {
 
-	private static final long serialVersionUID = 745945642089325612L;
+	private static final long serialVersionUID = -6075523082529564585L;
 
-	@Column(name = OWNER_ID_COL_NAME, nullable = false, columnDefinition = "CHAR(36)")
-	@NotNull(message = "OwnerId cannot be null")
-	@Size(max = 36)
-	private String ownerId;
+	/**
+	 * This is fundamentally a many-to-many mapping, but no join table is used.
+	 */
+	@OneToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "OWNER_ID", nullable = false, columnDefinition = "CHAR(36)")
+	private MLPUser owner;
+
+	/**
+	 * A solution may have many solution revisions. The solution revision entity has
+	 * the solutionId field.  Bidirectional mapping.
+	 */
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "solution") // field in MLPSolutionRevision
+	private Set<MLPSolutionRevisionFOM> revisions = new HashSet<>(0);
 
 	/**
 	 * Tags assigned to the solution via a join table. Tags can be reused by many
@@ -86,86 +101,68 @@ public class MLPSolution extends MLPAbstractSolution implements Serializable {
 	@JoinColumn(name = MLPSolutionWeb.SOL_ID_COL_NAME)
 	private MLPSolutionWeb webStats;
 
-	/**
-	 * No-arg constructor
-	 */
-	public MLPSolution() {
-		// no-arg constructor
+	public MLPUser getOwner() {
+		return owner;
 	}
 
-	/**
-	 * This constructor accepts the required fields; i.e., the minimum that the user
-	 * must supply to create a valid instance.
-	 * 
-	 * @param name
-	 *            Solution Name
-	 * @param ownerId
-	 *            User ID of owner
-	 * @param active
-	 *            Boolean flag
-	 */
-	public MLPSolution(String name, String ownerId, boolean active) {
-		super(name, active);
-		this.ownerId = ownerId;
+	public void setOwner(MLPUser owner) {
+		this.owner = owner;
 	}
 
-	public String getOwnerId() {
-		return ownerId;
+	public Set<MLPSolutionRevisionFOM> getRevisions() {
+		return revisions;
 	}
 
-	public void setOwnerId(String ownerId) {
-		this.ownerId = ownerId;
+	public void setRevisions(Set<MLPSolutionRevisionFOM> revisions) {
+		this.revisions = revisions;
 	}
 
-	/**
-	 * Solution tags may be updated by modifying this set, but all tag objects must
-	 * exist; i.e., have been created previously.
-	 * 
-	 * @return Set of MLPTag, which may be empty.
-	 */
 	public Set<MLPTag> getTags() {
 		return tags;
 	}
 
-	/**
-	 * Solution tags may be updated via this method, but all tag objects must exist;
-	 * i.e., have been created previously.
-	 * 
-	 * @param tags
-	 *            Set of MLPTag
-	 */
 	public void setTags(Set<MLPTag> tags) {
 		this.tags = tags;
 	}
 
-	/**
-	 * Provides counts of user activity such as downloads. These counts CANNOT be
-	 * updated via this object; all changes made here are discarded.
-	 * 
-	 * @return MLPSolutionWeb object
-	 */
 	public MLPSolutionWeb getWebStats() {
 		return webStats;
 	}
 
-	/**
-	 * User activity counts CANNOT be updated via this object; all changes made here
-	 * are discarded.
-	 * 
-	 * @param webStats
-	 *            MLPSolutionWeb object
-	 */
 	public void setWebStats(MLPSolutionWeb webStats) {
 		this.webStats = webStats;
 	}
 
 	@Override
 	public String toString() {
-		return this.getClass().getName() + "[solutionId=" + getSolutionId() + ", name=" + getName() + ", owner="
-				+ ownerId + ", desc=" + getDescription() + ", active=" + isActive() + ", accessTypeCode="
-				+ getAccessTypeCode() + ", modelTypeCode=" + getModelTypeCode() + ", validationStatusCode="
-				+ getValidationStatusCode() + ", provider=" + getProvider() + ", created=" + getCreated()
+		return this.getClass().getName() + "[solutionId=" + getSolutionId() + ", name=" + getName() + ", owner=" + owner
+				+ ", desc=" + getDescription() + ", active=" + isActive() + ", accessTypeCode=" + getAccessTypeCode()
+				+ ", modelTypeCode=" + getModelTypeCode() + ", validationStatusCode=" + getValidationStatusCode()
+				+ ", provider=" + getProvider() + ", revisions=" + revisions + ", created=" + getCreated()
 				+ ", modified=" + getModified() + "]";
+	}
+
+	/**
+	 * @return MLPSolution with the information from this entity
+	 */
+	public MLPSolution toMLPSolution() {
+		MLPSolution sol = new MLPSolution(getName(), owner.getUserId(), isActive());
+		sol.setAccessTypeCode(getAccessTypeCode());
+		sol.setCreated(getCreated());
+		sol.setDescription(getDescription());
+		sol.setMetadata(getMetadata());
+		sol.setModelTypeCode(getModelTypeCode());
+		sol.setModified(getModified());
+		sol.setName(getName());
+		sol.setOrigin(getOrigin());
+		sol.setProvider(getProvider());
+		sol.setSolutionId(getSolutionId());
+		sol.setSourceId(getSourceId());
+		sol.setTags(getTags());
+		sol.setToolkitTypeCode(getToolkitTypeCode());
+		sol.setValidationStatusCode(getValidationStatusCode());
+		sol.setWebStats(getWebStats());
+		return sol;
 	}
 
 }
