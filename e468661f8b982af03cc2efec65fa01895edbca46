@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a2f4d93f_3ee6f396",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/CCDSConstants.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-21T13:37:37Z",
+      "side": 1,
+      "message": "This is not a path parameter name, it\u0027s a GET request parameter name",
+      "parentUuid": "7eb95a59_f535f3d9",
+      "revId": "e468661f8b982af03cc2efec65fa01895edbca46",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ae420313_685b92a5",
         "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/CommonDataServiceRestClientImpl.java",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2018-02-21T13:05:31Z",
       "side": 1,
       "message": "May be separate out the DEP_PATH and STATUS_PATH in uri?",
+      "revId": "e468661f8b982af03cc2efec65fa01895edbca46",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c36a7128_718866d7",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/CommonDataServiceRestClientImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-21T13:37:37Z",
+      "side": 1,
+      "message": "OK",
+      "parentUuid": "ae420313_685b92a5",
       "revId": "e468661f8b982af03cc2efec65fa01895edbca46",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
@@ -64,6 +100,24 @@
       "writtenOn": "2018-02-21T13:05:31Z",
       "side": 1,
       "message": "Do you need the valTypeCode in RequestMapping if you don\u0027t use it in the method?",
+      "revId": "e468661f8b982af03cc2efec65fa01895edbca46",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a5e8633c_6717be31",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/ValidationSequenceController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-21T13:37:37Z",
+      "side": 1,
+      "message": "Good point, will fix.",
+      "parentUuid": "7896d563_8ac73cc5",
       "revId": "e468661f8b982af03cc2efec65fa01895edbca46",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
