@@ -36,8 +36,8 @@ import org.hibernate.annotations.GenericGenerator;
 /**
  * Model for an artifact.
  * 
- * Participates in a many-to-many relationship with a solution revision; all the
- * annotations are on that other class.
+ * Participates in a many-to-many relationship with a solution revision but has
+ * no annotations for that.
  */
 @Entity
 @Table(name = "C_ARTIFACT")
