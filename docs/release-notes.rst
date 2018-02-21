@@ -23,8 +23,15 @@ Release Notes
 The client and server are released together.  The client is deployed as a jar file to a
 Maven Nexus repository. The server is deployed as a Docker image to a Docker registry.
 
-Version 1.14.0, 21 February 2018
+Version 1.15.0, ? February 2018
 -------------------------------
+
+* New server-side domain classes with full object mappings to support queries (ACUMOS-61)
+* Move acccess type code attribute from Solution to Solution Revision entity (ACUMOS-196)
+* Requires database schema version 1.15
+
+Version 1.14.0, 21 February 2018
+--------------------------------
 
 * Add search-by-date method for federation subscription update (ACUMOS-61)
 * Add peer group, solution group and mapping features for federation access control (ACUMOS-62)

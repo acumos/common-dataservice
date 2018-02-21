@@ -35,7 +35,7 @@ import org.acumos.cds.NotificationDeliveryMechanismCode;
 import org.acumos.cds.domain.MLPNotifUserMap;
 import org.acumos.cds.domain.MLPPasswordChangeRequest;
 import org.acumos.cds.domain.MLPRole;
-import org.acumos.cds.domain.MLPSolution;
+import org.acumos.cds.domain.MLPSolutionFOM;
 import org.acumos.cds.domain.MLPSolutionDeployment;
 import org.acumos.cds.domain.MLPSolutionFavorite;
 import org.acumos.cds.domain.MLPSolutionFavorite.SolutionFavoritePK;
@@ -817,7 +817,7 @@ public class UserController extends AbstractController {
 	 *            HttpServletResponse
 	 * @return A usage if found, an error otherwise.
 	 */
-	@ApiOperation(value = "Gets a page of solutions which are favorites for the specified user ID.", response = MLPSolution.class, responseContainer = "Page")
+	@ApiOperation(value = "Gets a page of solutions which are favorites for the specified user ID.", response = MLPSolutionFOM.class, responseContainer = "Page")
 	@RequestMapping(value = "/{userId}/" + CCDSConstants.FAVORITE_PATH + "/"
 			+ CCDSConstants.SOLUTION_PATH, method = RequestMethod.GET)
 	@ResponseBody

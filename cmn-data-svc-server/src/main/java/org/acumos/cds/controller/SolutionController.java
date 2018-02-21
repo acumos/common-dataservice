@@ -255,16 +255,18 @@ public class SolutionController extends AbstractController {
 	@ResponseBody
 	public Object findSolutionsByDate(@RequestParam MultiValueMap<String, String> queryParameters, Pageable pageRequest,
 			HttpServletResponse response) {
+		// Required
 		Boolean active = new Boolean(queryParameters.getFirst(CCDSConstants.SEARCH_ACTIVE));
+		String[] dateMillis = getOptStringArray(CCDSConstants.SEARCH_DATE, queryParameters);
+		// Optional
 		String[] accessTypeCodes = getOptStringArray(CCDSConstants.SEARCH_ACCESS_TYPES, queryParameters);
 		String[] valStatusCodes = getOptStringArray(CCDSConstants.SEARCH_VAL_STATUSES, queryParameters);
-		String[] dateMillis = getOptStringArray(CCDSConstants.SEARCH_DATE, queryParameters);
-		if (accessTypeCodes.length < 1 || dateMillis.length != 1) {
+		if (dateMillis.length != 1) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "Missing query", null);
+			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "Missing date", null);
 		}
 		Date date = new Date(Long.parseLong(dateMillis[0]));
-		return solutionRepository.findModifiedAfter(active, accessTypeCodes, valStatusCodes, date, pageRequest);
+		return solutionSearchService.findSolutionsByModifiedDate(active, accessTypeCodes, valStatusCodes, date, pageRequest);
 	}
 
 	/**
@@ -349,11 +351,10 @@ public class SolutionController extends AbstractController {
 			String[] nameKws = getOptStringArray(CCDSConstants.SEARCH_NAME, queryParameters);
 			String[] descKws = getOptStringArray(CCDSConstants.SEARCH_DESC, queryParameters);
 			String[] ownerIds = getOptStringArray(CCDSConstants.SEARCH_OWNERS, queryParameters);
-			String[] accessTypeCodes = getOptStringArray(CCDSConstants.SEARCH_ACCESS_TYPES, queryParameters);
 			String[] modelTypeCodes = getOptStringArray(CCDSConstants.SEARCH_MODEL_TYPES, queryParameters);
 			String[] valStatusCodes = getOptStringArray(CCDSConstants.SEARCH_VAL_STATUSES, queryParameters);
 			String[] tags = getOptStringArray(CCDSConstants.SEARCH_TAGS, queryParameters);
-			return solutionSearchService.findPortalSolutions(nameKws, descKws, active, ownerIds, accessTypeCodes,
+			return solutionSearchService.findPortalSolutions(nameKws, descKws, active, ownerIds,
 					modelTypeCodes, valStatusCodes, tags, pageRequest);
 		} catch (Exception ex) {
 			logger.warn(EELFLoggerDelegate.errorLogger, "findPortalSolutions failed", ex);
@@ -398,8 +399,6 @@ public class SolutionController extends AbstractController {
 		Object result;
 		try {
 			// Validate enum codes
-			if (solution.getAccessTypeCode() != null)
-				AccessTypeCode.valueOf(solution.getAccessTypeCode());
 			if (solution.getModelTypeCode() != null)
 				ModelTypeCode.valueOf(solution.getModelTypeCode());
 			if (solution.getToolkitTypeCode() != null)
@@ -459,8 +458,6 @@ public class SolutionController extends AbstractController {
 		MLPTransportModel result = null;
 		try {
 			// Validate enum codes
-			if (solution.getAccessTypeCode() != null)
-				AccessTypeCode.valueOf(solution.getAccessTypeCode());
 			if (solution.getModelTypeCode() != null)
 				ModelTypeCode.valueOf(solution.getModelTypeCode());
 			if (solution.getToolkitTypeCode() != null)
@@ -627,6 +624,9 @@ public class SolutionController extends AbstractController {
 		}
 		Object result;
 		try {
+			// Validate enum codes
+			if (revision.getAccessTypeCode() != null)
+				AccessTypeCode.valueOf(revision.getAccessTypeCode());
 			String id = revision.getRevisionId();
 			if (id != null) {
 				UUID.fromString(id);
@@ -679,6 +679,9 @@ public class SolutionController extends AbstractController {
 		}
 		Object result;
 		try {
+			// Validate enum codes
+			if (revision.getAccessTypeCode() != null)
+				AccessTypeCode.valueOf(revision.getAccessTypeCode());
 			// Use the validated values
 			revision.setRevisionId(revisionId);
 			revision.setSolutionId(solutionId);
