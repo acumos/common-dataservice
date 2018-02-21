@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1557137d_75abf816",
+        "filename": "cmn-data-svc-server/src/test/java/org/acumos/cds/test/CdsControllerTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 2525,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-21T13:40:03Z",
+      "side": 1,
+      "message": "Thanks for adding but this doesn\u0027t cover the dupe subject name case because it reuses the ID from the previous creation.  Need to create a new MLPPeer with no ID.",
+      "revId": "e6600674664606b481298ae4518dc6955ceaae67",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
