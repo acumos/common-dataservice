@@ -10,7 +10,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.5.7.RELEASE</version>
+		<version>1.5.10.RELEASE</version>
 		<!-- silence warning about parent relative path -->
 		<relativePath />
 	</parent>
@@ -21,7 +21,7 @@
 		<start-class>org.acumos.cds.CdsApplication</start-class>
 		<!-- Client jar is in nexus repo -->
 		<client.version>${project.version}</client.version>
-		<springfox.version>2.7.0</springfox.version>
+		<springfox.version>2.8.0</springfox.version>
 		<!-- Supplied by Jenkins -->
 		<build.number>${env.BUILD_NUMBER}</build.number>
 		<!-- Not supplied to all jobs; e.g., Javadoc -->
