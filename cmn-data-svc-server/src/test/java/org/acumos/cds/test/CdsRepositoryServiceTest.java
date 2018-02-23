@@ -282,7 +282,7 @@ public class CdsRepositoryServiceTest {
 			// Create Peer
 			MLPPeer pr = new MLPPeer();
 			pr.setName("Peer-" + Long.toString(new Date().getTime()));
-			pr.setSubjectName("x."+ String.valueOf(new Random().nextInt()));
+			pr.setSubjectName("x." + String.valueOf(new Random().nextInt()));
 			pr.setApiUrl("http://peer-api");
 			pr.setContact1("Tyrion Lannister");
 			pr.setStatusCode(PeerStatusCode.AC.name());
@@ -544,8 +544,8 @@ public class CdsRepositoryServiceTest {
 			String[] valStatuses = new String[] { ValidationStatusCode.PS.name() };
 			Date anHourAgo = new java.util.Date();
 			anHourAgo.setTime(new Date().getTime() - (1000L * 60 * 60));
-			Iterable<MLPSolution> solByDate = solutionRepository.findModifiedAfter(true, accessTypes, valStatuses,
-					anHourAgo, new PageRequest(0, 5, null));
+			Iterable<MLPSolution> solByDate = solutionSearchService.findSolutionsByModifiedDate(true, accessTypes,
+					valStatuses, anHourAgo, new PageRequest(0, 5, null));
 			logger.info("Solutions by date: {}", solByDate);
 			Assert.assertTrue(solByDate != null && solByDate.iterator().hasNext());
 
@@ -696,8 +696,8 @@ public class CdsRepositoryServiceTest {
 
 			// Create Peer
 			final String peerName = "Peer-" + Long.toString(new Date().getTime());
-			MLPPeer pr = new MLPPeer(peerName, "x."+ String.valueOf(new Random().nextInt()), "http://peer-api", true, true, "", PeerStatusCode.AC.name(),
-					ValidationStatusCode.IP.name());
+			MLPPeer pr = new MLPPeer(peerName, "x." + String.valueOf(new Random().nextInt()), "http://peer-api", true,
+					true, "", PeerStatusCode.AC.name(), ValidationStatusCode.IP.name());
 			pr = peerRepository.save(pr);
 			Assert.assertNotNull(pr.getPeerId());
 			Assert.assertNotNull(pr.getCreated());
@@ -1158,14 +1158,14 @@ public class CdsRepositoryServiceTest {
 		logger.info("Created solution " + cs2);
 
 		final String peerName = "Peer-" + Long.toString(new Date().getTime());
-		MLPPeer pr = new MLPPeer(peerName, "x."+ String.valueOf(new Random().nextInt()), "http://peer-api", true, false, "contact", PeerStatusCode.AC.name(),
-				ValidationStatusCode.FA.name());
+		MLPPeer pr = new MLPPeer(peerName, "x." + String.valueOf(new Random().nextInt()), "http://peer-api", true,
+				false, "contact", PeerStatusCode.AC.name(), ValidationStatusCode.FA.name());
 		pr = peerRepository.save(pr);
 		logger.info("Created peer " + pr);
 
 		final String peerName2 = "Peer-" + Long.toString(new Date().getTime());
-		MLPPeer pr2 = new MLPPeer(peerName2, "x."+ String.valueOf(new Random().nextInt()), "http://peer-api", true, false, "contact",
-				PeerStatusCode.AC.name(), ValidationStatusCode.FA.name());
+		MLPPeer pr2 = new MLPPeer(peerName2, "x." + String.valueOf(new Random().nextInt()), "http://peer-api", true,
+				false, "contact", PeerStatusCode.AC.name(), ValidationStatusCode.FA.name());
 		pr2 = peerRepository.save(pr2);
 		logger.info("Created second peer " + pr2);
 

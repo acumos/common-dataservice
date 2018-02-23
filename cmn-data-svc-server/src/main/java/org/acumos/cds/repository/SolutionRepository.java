@@ -20,8 +20,6 @@
 
 package org.acumos.cds.repository;
 
-import java.util.Date;
-
 import org.acumos.cds.domain.MLPSolution;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -59,38 +57,5 @@ public interface SolutionRepository extends JpaRepository<MLPSolution, String>, 
 			+ " WHERE s.solutionId =  m.solutionId " //
 			+ "   AND m.tag = :tag")
 	Page<MLPSolution> findByTag(@Param("tag") String tag, Pageable pageRequest);
-
-	/**
-	 * Gets all solutions with any modifications after the specified date, including
-	 * the solution, revision and artifact entities. Returns no results for a
-	 * solution with no revision(s) and/or no artifact(s).
-	 * 
-	 * @param active
-	 *            Solution status; use true to find active solutions, false to find
-	 *            inactive solutions.
-	 * @param accessTypeCodes
-	 *            Array of access-type codes
-	 * @param valStatusCodes
-	 *            Array of validation-status codes
-	 * @param theDate
-	 *            Date threshold
-	 * @param pageRequest
-	 *            Page and sort criteria
-	 * @return Page of MLPSolution
-	 */
-	@Query(value = "SELECT s FROM MLPSolution s, MLPSolutionRevision r, MLPSolRevArtMap m, MLPArtifact a "
-			+ " WHERE s.active = :active " //
-			+ "   AND s.accessTypeCode in :accessTypeCodes " //
-			+ "   AND s.validationStatusCode in :valStatusCodes " //
-			+ "   AND s.solutionId = r.solutionId " //
-			+ "   AND r.revisionId = m.revisionId " //
-			+ "   AND m.artifactId = a.artifactId " //
-			+ "   AND " //
-			+ "   ( s.modified >= :theDate " //
-			+ "  OR r.modified >= :theDate " //
-			+ "  OR a.modified >= :theDate ) ")
-	Page<MLPSolution> findModifiedAfter(@Param("active") Boolean active,
-			@Param("accessTypeCodes") String[] accessTypeCodes, @Param("valStatusCodes") String[] valStatusCodes,
-			@Param("theDate") Date theDate, Pageable pageRequest);
 
 }
