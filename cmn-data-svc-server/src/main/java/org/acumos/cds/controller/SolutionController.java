@@ -243,7 +243,8 @@ public class SolutionController extends AbstractController {
 	/**
 	 * @param queryParameters
 	 *            Map of String (field name) to String (value) for restricting the
-	 *            query. Expected parameters are access-type codes and date as milliseconds.
+	 *            query. Expects access type codes (optional), validation status
+	 *            codes (optional), and date (required).
 	 * @param pageRequest
 	 *            Page and sort criteria
 	 * @param response
@@ -259,12 +260,14 @@ public class SolutionController extends AbstractController {
 		String[] accessTypeCodes = getOptStringArray(CCDSConstants.SEARCH_ACCESS_TYPES, queryParameters);
 		String[] valStatusCodes = getOptStringArray(CCDSConstants.SEARCH_VAL_STATUSES, queryParameters);
 		String[] dateMillis = getOptStringArray(CCDSConstants.SEARCH_DATE, queryParameters);
-		if (accessTypeCodes.length < 1 || dateMillis.length != 1) {
+		// Only date is required
+		if (dateMillis.length != 1) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "Missing query", null);
 		}
 		Date date = new Date(Long.parseLong(dateMillis[0]));
-		return solutionRepository.findModifiedAfter(active, accessTypeCodes, valStatusCodes, date, pageRequest);
+		return solutionSearchService.findSolutionsByModifiedDate(active, accessTypeCodes, valStatusCodes, date,
+				pageRequest);
 	}
 
 	/**
@@ -531,11 +534,6 @@ public class SolutionController extends AbstractController {
 	@ResponseBody
 	public MLPTransportModel deleteSolution(@PathVariable("solutionId") String solutionId,
 			HttpServletResponse response) {
-		MLPSolution existing = solutionRepository.findOne(solutionId);
-		if (existing == null) {
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_SOL_WITH_ID + solutionId, null);
-		}
 		try {
 			// Manually cascade the delete
 			// what about composite solutions?
@@ -546,7 +544,6 @@ public class SolutionController extends AbstractController {
 			solutionValidationRepository.deleteBySolutionId(solutionId);
 			solUserAccMapRepository.deleteUsersForSolution(solutionId);
 			solutionFavoriteRepository.deleteBySolutionId(solutionId);
-			existing.setWebStats(null);
 			// The web stats are annotated as optional, so be cautious when deleting
 			MLPSolutionWeb webStats = solutionWebRepository.findOne(solutionId);
 			if (webStats != null)
@@ -1002,14 +999,6 @@ public class SolutionController extends AbstractController {
 	@ResponseBody
 	public Object getSolutionRating(@PathVariable("solutionId") String solutionId,
 			@PathVariable("userId") String userId, HttpServletResponse response) {
-		if (solutionRepository.findOne(solutionId) == null) {
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_SOL_WITH_ID + solutionId, null);
-		}
-		if (userRepository.findOne(userId) == null) {
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_USR_WITH_ID + userId, null);
-		}
 		MLPSolutionRating da = solutionRatingRepository.findOne(new SolutionRatingPK(solutionId, userId));
 		if (da == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
