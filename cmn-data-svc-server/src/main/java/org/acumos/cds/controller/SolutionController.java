@@ -259,12 +259,12 @@ public class SolutionController extends AbstractController {
 		String[] accessTypeCodes = getOptStringArray(CCDSConstants.SEARCH_ACCESS_TYPES, queryParameters);
 		String[] valStatusCodes = getOptStringArray(CCDSConstants.SEARCH_VAL_STATUSES, queryParameters);
 		String[] dateMillis = getOptStringArray(CCDSConstants.SEARCH_DATE, queryParameters);
-		if (accessTypeCodes.length < 1 || dateMillis.length != 1) {
+		if (dateMillis.length != 1) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "Missing query", null);
 		}
 		Date date = new Date(Long.parseLong(dateMillis[0]));
-		return solutionRepository.findModifiedAfter(active, accessTypeCodes, valStatusCodes, date, pageRequest);
+		return solutionSearchService.findSolutionsByModifiedDate(active, accessTypeCodes, valStatusCodes, date, pageRequest);
 	}
 
 	/**

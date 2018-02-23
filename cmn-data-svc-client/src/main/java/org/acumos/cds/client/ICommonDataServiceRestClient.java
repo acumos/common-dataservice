@@ -225,16 +225,19 @@ public interface ICommonDataServiceRestClient {
 
 	/**
 	 * Finds solutions with the specified status, access type and validation status
-	 * code(s) that were modified after the specified date. Checks the last-updated
-	 * date on the solution, the revisions for the solution, and the artifacts in
-	 * the revisions.
+	 * code(s), and that were modified after the specified date. Checks the
+	 * last-updated date on the solution, the revisions for the solution, and the
+	 * artifacts in the revisions. A solution must have revision(s) and artifact(s)
+	 * to match.
 	 * 
 	 * @param active
 	 *            Solution active status; true for active, false for inactive
 	 * @param accessTypeCodes
-	 *            Array of access-type codes (required)
+	 *            Access type codes; use four-letter sequence "null" to match a null
+	 *            value; ignored if null or empty
 	 * @param validationStatusCodes
-	 *            Array of Validation status codes (required)
+	 *            Validation status codes; use four-letter sequence "null" to match
+	 *            a null value; ignored if null or empty
 	 * @param date
 	 *            Date threshold
 	 * @param pageRequest

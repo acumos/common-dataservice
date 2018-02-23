@@ -544,7 +544,7 @@ public class CdsRepositoryServiceTest {
 			String[] valStatuses = new String[] { ValidationStatusCode.PS.name() };
 			Date anHourAgo = new java.util.Date();
 			anHourAgo.setTime(new Date().getTime() - (1000L * 60 * 60));
-			Iterable<MLPSolution> solByDate = solutionRepository.findModifiedAfter(true, accessTypes, valStatuses,
+			Iterable<MLPSolution> solByDate = solutionSearchService.findSolutionsByModifiedDate(true, accessTypes, valStatuses,
 					anHourAgo, new PageRequest(0, 5, null));
 			logger.info("Solutions by date: {}", solByDate);
 			Assert.assertTrue(solByDate != null && solByDate.iterator().hasNext());
