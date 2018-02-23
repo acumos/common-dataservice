@@ -86,29 +86,11 @@ public class MLPCodeNamePair implements MLPEntity {
 	}
 
 	/**
-	 * @deprecated use {@link #setCode(String)}
-	 * @param code
-	 *            the code
-	 */
-	public void setTypeCode(String code) {
-		setCode(code);
-	}
-
-	/**
 	 * @deprecated use {@link #getName()}
 	 * @return the name
 	 */
 	public String getTypeName() {
 		return getName();
-	}
-
-	/**
-	 * @deprecated use {@link #setName(String)}
-	 * @param name
-	 *            the name
-	 */
-	public void setTypeName(String name) {
-		setName(name);
 	}
 
 	/**
@@ -120,29 +102,11 @@ public class MLPCodeNamePair implements MLPEntity {
 	}
 
 	/**
-	 * @deprecated use {@link #setCode(String)}
-	 * @param code
-	 *            the code
-	 */
-	public void setStatusCode(String code) {
-		setCode(code);
-	}
-
-	/**
 	 * @deprecated use {@link #getName()}
 	 * @return the name
 	 */
 	public String getStatusName() {
 		return getName();
-	}
-
-	/**
-	 * @deprecated use {@link #setName(String)}
-	 * @param name
-	 *            the name
-	 */
-	public void setStatusName(String name) {
-		setName(name);
 	}
 
 }

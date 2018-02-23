@@ -243,7 +243,8 @@ public class SolutionController extends AbstractController {
 	/**
 	 * @param queryParameters
 	 *            Map of String (field name) to String (value) for restricting the
-	 *            query. Expected parameters are access-type codes and date as milliseconds.
+	 *            query. Expected parameters are access-type codes and date as
+	 *            milliseconds.
 	 * @param pageRequest
 	 *            Page and sort criteria
 	 * @param response
@@ -259,12 +260,13 @@ public class SolutionController extends AbstractController {
 		String[] accessTypeCodes = getOptStringArray(CCDSConstants.SEARCH_ACCESS_TYPES, queryParameters);
 		String[] valStatusCodes = getOptStringArray(CCDSConstants.SEARCH_VAL_STATUSES, queryParameters);
 		String[] dateMillis = getOptStringArray(CCDSConstants.SEARCH_DATE, queryParameters);
-		if (accessTypeCodes.length < 1 || dateMillis.length != 1) {
+		if (dateMillis.length != 1) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "Missing query", null);
 		}
 		Date date = new Date(Long.parseLong(dateMillis[0]));
-		return solutionRepository.findModifiedAfter(active, accessTypeCodes, valStatusCodes, date, pageRequest);
+		return solutionSearchService.findSolutionsByModifiedDate(active, accessTypeCodes, valStatusCodes, date,
+				pageRequest);
 	}
 
 	/**
