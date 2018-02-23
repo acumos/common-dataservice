@@ -520,7 +520,7 @@ public class DomainTest extends AbstractModelTest {
 		Assert.assertFalse(pk.hashCode() == 0);
 		logger.info(pk.toString());
 	}
-	
+
 	@Test
 	public void testMLPRole() {
 		MLPRole m = new MLPRole(s1, b1);
