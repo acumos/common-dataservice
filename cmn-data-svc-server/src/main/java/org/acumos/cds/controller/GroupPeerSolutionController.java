@@ -20,8 +20,6 @@
 
 package org.acumos.cds.controller;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletResponse;
 
 import org.acumos.cds.CCDSConstants;
@@ -658,8 +656,7 @@ public class GroupPeerSolutionController extends AbstractController {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_PEER_WITH_ID + peerId, null);
 		}
-		List<MLPPeer> peers = peerPeerAccMapRepository.findAccessPeers(peerId);
-		return peers;
+		return peerPeerAccMapRepository.findAccessPeers(peerId);
 	}
 
 }
