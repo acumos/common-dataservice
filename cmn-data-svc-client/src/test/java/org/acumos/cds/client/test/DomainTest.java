@@ -73,7 +73,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Tests getters and setters of domain (model) classes.
+ * Tests getters and setters of client-side domain (model) classes.
  */
 public class DomainTest extends AbstractModelTest {
 
@@ -520,7 +520,7 @@ public class DomainTest extends AbstractModelTest {
 		Assert.assertFalse(pk.hashCode() == 0);
 		logger.info(pk.toString());
 	}
-	
+
 	@Test
 	public void testMLPRole() {
 		MLPRole m = new MLPRole(s1, b1);
