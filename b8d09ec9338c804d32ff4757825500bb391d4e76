@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "83eef8de_c3631a7c",
+        "filename": "README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-02-23T20:40:13Z",
+      "side": 1,
+      "message": "Copyright line missing-please add",
+      "revId": "b8d09ec9338c804d32ff4757825500bb391d4e76",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8f1e5602_657bb37e",
+        "filename": "cmn-data-svc-client/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-02-23T20:40:13Z",
+      "side": 1,
+      "message": "Copyright line missing-please add",
+      "revId": "b8d09ec9338c804d32ff4757825500bb391d4e76",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "54821830_3550cf1d",
+        "filename": "cmn-data-svc-server/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-02-23T20:40:13Z",
+      "side": 1,
+      "message": "Copyright line missing-please add",
+      "revId": "b8d09ec9338c804d32ff4757825500bb391d4e76",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
