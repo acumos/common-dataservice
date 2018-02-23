@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "01d77cb4_b45c1abd",
+        "filename": "cmn-data-svc-server/db-scripts/cds-mysql-downgrade-1-11-to-1-10.sql",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-23T20:45:29Z",
+      "side": 1,
+      "message": "Would you please make these consistent with no leading whitespace on lines 2..17?",
+      "revId": "3732e37f33c90fabc16a0c73d947834a039dab7b",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
