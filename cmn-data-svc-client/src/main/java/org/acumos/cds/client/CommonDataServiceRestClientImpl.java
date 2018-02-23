@@ -479,7 +479,7 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 		parms.put(CCDSConstants.SEARCH_ACTIVE, active);
 		parms.put(CCDSConstants.SEARCH_ACCESS_TYPES, accessTypeCodes);
 		parms.put(CCDSConstants.SEARCH_VAL_STATUSES, validationStatusCodes);
-		parms.put(CCDSConstants.SEARCH_DATE, new Long(date.getTime()));
+		parms.put(CCDSConstants.SEARCH_DATE, date.getTime());
 		URI uri = buildUri(
 				new String[] { CCDSConstants.SOLUTION_PATH, CCDSConstants.SEARCH_PATH, CCDSConstants.DATE_PATH }, parms,
 				pageRequest);
@@ -1737,6 +1737,16 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 				null, null);
 		logger.debug("deleteComment: url {}", uri);
 		restTemplate.delete(uri);
+	}
+
+	@Override
+	public MLPStepResult getStepResult(long stepResultId) {
+		URI uri = buildUri(new String[] { CCDSConstants.STEP_RESULT_PATH, Long.toString(stepResultId) }, null, null);
+		logger.debug("getStepResult: uri {}", uri);
+		ResponseEntity<MLPStepResult> response = restTemplate.exchange(uri, HttpMethod.GET, null,
+				new ParameterizedTypeReference<MLPStepResult>() {
+				});
+		return response.getBody();
 	}
 
 	@Override

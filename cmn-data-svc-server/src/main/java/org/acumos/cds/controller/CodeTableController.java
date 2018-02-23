@@ -28,7 +28,6 @@ import org.acumos.cds.ArtifactTypeCode;
 import org.acumos.cds.CCDSConstants;
 import org.acumos.cds.DeploymentStatusCode;
 import org.acumos.cds.LoginProviderCode;
-import org.acumos.cds.MessageSeverityCode;
 import org.acumos.cds.ModelTypeCode;
 import org.acumos.cds.NotificationDeliveryMechanismCode;
 import org.acumos.cds.PeerStatusCode;
@@ -86,7 +85,8 @@ public class CodeTableController extends AbstractController {
 	 * @return List of MLPCodeNamePair with deployment status code-name pairs
 	 */
 	@ApiOperation(value = "Gets the list of deployment status codes.", response = MLPCodeNamePair.class, responseContainer = "List")
-	@RequestMapping(value = "/" + CCDSConstants.DEPLOY_PATH + "/" + CCDSConstants.STATUS_PATH, method = RequestMethod.GET)
+	@RequestMapping(value = "/" + CCDSConstants.DEPLOY_PATH + "/"
+			+ CCDSConstants.STATUS_PATH, method = RequestMethod.GET)
 	@ResponseBody
 	public List<MLPCodeNamePair> getDeploymentStatusList() {
 		List<MLPCodeNamePair> list = new ArrayList<>();
@@ -105,19 +105,6 @@ public class CodeTableController extends AbstractController {
 		List<MLPCodeNamePair> list = new ArrayList<>();
 		for (LoginProviderCode cn : LoginProviderCode.values())
 			list.add(new MLPCodeNamePair(cn.name(), cn.getProviderName()));
-		return list;
-	}
-
-	/**
-	 * @return List of MLPCodeNamePair with message severity code-name pairs
-	 */
-	@ApiOperation(value = "Gets the list of message severity codes.", response = MLPCodeNamePair.class, responseContainer = "List")
-	@RequestMapping(value = "/" + CCDSConstants.MSG_SEV_PATH, method = RequestMethod.GET)
-	@ResponseBody
-	public Iterable<MLPCodeNamePair> getMessageSeverityList() {
-		List<MLPCodeNamePair> list = new ArrayList<>();
-		for (MessageSeverityCode cn : MessageSeverityCode.values())
-			list.add(new MLPCodeNamePair(cn.name(), cn.getTypeName()));
 		return list;
 	}
 
