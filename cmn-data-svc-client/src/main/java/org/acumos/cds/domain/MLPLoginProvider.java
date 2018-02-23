@@ -41,34 +41,18 @@ public class MLPLoginProvider extends MLPCodeNamePair implements Serializable {
 	 * @deprecated use {@link #getCode()}
 	 * @return the code
 	 */
+	@Deprecated
 	public String getProviderCode() {
 		return getCode();
-	}
-
-	/**
-	 * @deprecated use {@link #setCode(String)}
-	 * @param code
-	 *            the code
-	 */
-	public void setProviderCode(String code) {
-		setCode(code);
 	}
 
 	/**
 	 * @deprecated use {@link #getName()}
 	 * @return the name
 	 */
+	@Deprecated
 	public String getProviderName() {
 		return getName();
-	}
-
-	/**
-	 * @deprecated use {@link #setName(String)}
-	 * @param name
-	 *            the name
-	 */
-	public void setProviderName(String name) {
-		setName(name);
 	}
 
 }

@@ -50,13 +50,13 @@ import org.acumos.cds.domain.MLPArtifact;
 import org.acumos.cds.domain.MLPArtifactType;
 import org.acumos.cds.domain.MLPComment;
 import org.acumos.cds.domain.MLPDeploymentStatus;
-import org.acumos.cds.domain.MLPPeerSolAccMap;
 import org.acumos.cds.domain.MLPLoginProvider;
 import org.acumos.cds.domain.MLPModelType;
 import org.acumos.cds.domain.MLPNotification;
 import org.acumos.cds.domain.MLPPasswordChangeRequest;
 import org.acumos.cds.domain.MLPPeer;
 import org.acumos.cds.domain.MLPPeerGroup;
+import org.acumos.cds.domain.MLPPeerSolAccMap;
 import org.acumos.cds.domain.MLPPeerSubscription;
 import org.acumos.cds.domain.MLPRole;
 import org.acumos.cds.domain.MLPRoleFunction;
@@ -78,8 +78,8 @@ import org.acumos.cds.domain.MLPThread;
 import org.acumos.cds.domain.MLPToolkitType;
 import org.acumos.cds.domain.MLPUser;
 import org.acumos.cds.domain.MLPUserLoginProvider;
-import org.acumos.cds.domain.MLPUserNotification;
 import org.acumos.cds.domain.MLPUserNotifPref;
+import org.acumos.cds.domain.MLPUserNotification;
 import org.acumos.cds.domain.MLPValidationSequence;
 import org.acumos.cds.domain.MLPValidationStatus;
 import org.acumos.cds.domain.MLPValidationType;
@@ -351,8 +351,13 @@ public class CdsControllerTest {
 			logger.info("Logged in successfully, password expires {}", loggedIn.getLoginPassExpire());
 			Assert.assertArrayEquals(fakePicture, loggedIn.getPicture());
 
-			// Fetch it back
+			// First an empty result
 			HashMap<String, Object> userRestr = new HashMap<>();
+			userRestr.put("firstName", "~never~match~hahaha");
+			RestPageResponse<MLPUser> emptyUserPage = client.searchUsers(userRestr, false, new RestPageRequest());
+			Assert.assertTrue(emptyUserPage.getNumberOfElements() == 0);
+			
+			// Now use query parameters that should match
 			userRestr.put("active", "true");
 			userRestr.put("firstName", firstName);
 			userRestr.put("lastName", lastName);
@@ -401,10 +406,19 @@ public class CdsControllerTest {
 			RestPageResponse<MLPPeer> peerPage = client.getPeers(rp);
 			Assert.assertTrue(peerPage.getNumberOfElements() > 0);
 
+			// Cover case of zero results
 			HashMap<String, Object> peerRestr = new HashMap<>();
-			peerRestr.put("name", peerName);
-			RestPageResponse<MLPPeer> peerSearchResult = client.searchPeers(peerRestr, false,
+			peerRestr.put("name", "bogusbogus~~nevermatch");
+			RestPageResponse<MLPPeer> emptyPerSearchResult = client.searchPeers(peerRestr, false,
 					new RestPageRequest(0, 1));
+			Assert.assertTrue(emptyPerSearchResult.getNumberOfElements() == 0);
+			
+			// Conver case of non-zero results
+			peerRestr.put("name", peerName);
+			Map<String, String> peerFieldMap = new HashMap<>();
+			peerFieldMap.put("name", "ASC");
+			RestPageResponse<MLPPeer> peerSearchResult = client.searchPeers(peerRestr, false,
+					new RestPageRequest(0, 1, peerFieldMap));
 			Assert.assertTrue(peerSearchResult.getNumberOfElements() > 0);
 
 			MLPPeer pr2 = client.getPeer(pr.getPeerId());
@@ -869,7 +883,13 @@ public class CdsControllerTest {
 			RestPageResponse<MLPRole> roles = client.getRoles(new RestPageRequest());
 			Assert.assertTrue(roles.getNumberOfElements() > 0);
 
+			// Empty result
 			HashMap<String, Object> roleRestr = new HashMap<>();
+			roleRestr.put("name", "never~ever~match~role");
+			RestPageResponse<MLPRole> emptyRoleResult = client.searchRoles(roleRestr, false, new RestPageRequest());
+			Assert.assertTrue(emptyRoleResult.getNumberOfElements() == 0);
+
+			// Nonempty result
 			roleRestr.put("name", roleName);
 			RestPageResponse<MLPRole> roleResult = client.searchRoles(roleRestr, false, new RestPageRequest());
 			Assert.assertTrue(roleResult.getNumberOfElements() > 0);
@@ -1099,9 +1119,10 @@ public class CdsControllerTest {
 	@Test
 	public void testStepResult() throws Exception {
 		try {
+			final String name = "Solution ID creation"; 
 			MLPStepResult sr = new MLPStepResult();
 			sr.setStepCode(StepTypeCode.OB.name());
-			sr.setName("Solution ID creation");
+			sr.setName(name);
 			sr.setStatusCode(String.valueOf(StepStatusCode.SU));
 			Date now = new Date();
 			sr.setStartDate(new Date(now.getTime() - 60 * 1000));
@@ -1115,6 +1136,15 @@ public class CdsControllerTest {
 			RestPageResponse<MLPStepResult> stepResults = client.getStepResults(new RestPageRequest(0, 10));
 			Assert.assertTrue(stepResults.iterator().hasNext());
 			logger.info("First step result {}", stepResults.iterator().next());
+			
+			HashMap<String,Object> queryParameters = new HashMap<>();
+			queryParameters.put("name", "~bogus~never~match");
+			RestPageResponse<MLPStepResult> emptySearchResults = client.searchStepResults(queryParameters, true, new RestPageRequest(0,10));
+			Assert.assertTrue(emptySearchResults.getNumberOfElements() == 0);
+
+			queryParameters.put("name", name);
+			RestPageResponse<MLPStepResult> searchResults = client.searchStepResults(queryParameters, true, new RestPageRequest(0,10));
+			Assert.assertTrue(searchResults.getNumberOfElements() == 1);
 
 			client.deleteStepResult(sr.getStepResultId());
 		} catch (HttpStatusCodeException ex) {
@@ -1486,10 +1516,16 @@ public class CdsControllerTest {
 			Assert.assertNotNull(pg2.getGroupId());
 			logger.info("Created peer group " + pg2.getGroupId());
 
+			RestPageResponse<MLPPeerGroup> peerGroups = client.getPeerGroups(new RestPageRequest(0,5));
+			Assert.assertTrue(peerGroups != null && peerGroups.getNumberOfElements() > 0);
+			
 			MLPSolutionGroup sg = new MLPSolutionGroup("solution group");
 			sg = client.createSolutionGroup(sg);
 			Assert.assertNotNull(sg.getGroupId());
 			logger.info("Created solution group " + sg.getGroupId());
+
+			RestPageResponse<MLPSolutionGroup> solGroups = client.getSolutionGroups(new RestPageRequest(0,5));
+			Assert.assertTrue(solGroups != null && solGroups.getNumberOfElements() > 0);
 
 			RestPageResponse<MLPPeer> peersInGroup = null;
 			client.addPeerToGroup(pr.getPeerId(), pg1.getGroupId());
