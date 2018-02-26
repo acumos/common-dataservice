@@ -33,6 +33,23 @@
       "revId": "01d2d7574ad30bf4b70b626d0208db9956500cca",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df1c45be_c7135a07",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/domain/MLPSolutionFOM.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-02-26T16:27:24Z",
+      "side": 1,
+      "message": "Can a solution have multiple owners?",
+      "revId": "01d2d7574ad30bf4b70b626d0208db9956500cca",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
