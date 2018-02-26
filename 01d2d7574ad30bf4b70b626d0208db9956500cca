@@ -50,6 +50,23 @@
       "revId": "01d2d7574ad30bf4b70b626d0208db9956500cca",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ec3b5095_bda08990",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/service/SolutionSearchServiceImpl.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-02-26T17:14:53Z",
+      "side": 1,
+      "message": "Should we add not null constraint at the DB level to the accessTypeCode to eliminate need of creating custom method like buildEqualsListCreaterion for creating solution criterion?",
+      "revId": "01d2d7574ad30bf4b70b626d0208db9956500cca",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
