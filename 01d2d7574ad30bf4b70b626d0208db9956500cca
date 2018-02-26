@@ -67,6 +67,24 @@
       "revId": "01d2d7574ad30bf4b70b626d0208db9956500cca",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3445a32c_55eb8617",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/service/SolutionSearchServiceImpl.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-26T17:23:43Z",
+      "side": 1,
+      "message": "I missed this way back when.  In the next version, yes.",
+      "parentUuid": "ec3b5095_bda08990",
+      "revId": "01d2d7574ad30bf4b70b626d0208db9956500cca",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
