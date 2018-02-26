@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5b8ed07a_8e5cc7dd",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPSolRevArtMap.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-02-26T16:07:13Z",
+      "side": 1,
+      "message": "Now that we have the cross entity mappings, do we still need this class?",
+      "revId": "4fc22b73301242810ba38d86a2f093e627cd16e7",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
