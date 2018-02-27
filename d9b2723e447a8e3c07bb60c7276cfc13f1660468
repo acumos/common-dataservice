@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bec3ed8b_d48b4d2b",
+        "filename": "cmn-data-svc-server/src/test/java/org/acumos/cds/test/CdsRepositoryServiceTest.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 551,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-02-27T20:43:39Z",
+      "side": 1,
+      "message": "This is broken?",
+      "revId": "d9b2723e447a8e3c07bb60c7276cfc13f1660468",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
