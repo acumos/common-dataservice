@@ -84,12 +84,6 @@ public class GroupPeerSolutionController extends AbstractController {
 	@Autowired
 	private PeerPeerAccMapRepository peerPeerAccMapRepository;
 
-	// Silence Sonar complaints
-	private static final String NO_GROUP_WITH_ID = "No group with ID ";
-	private static final String NO_PEER_WITH_ID = "No peer with ID ";
-	private static final String NO_SOLUTION_WITH_ID = "No solution with ID ";
-	private static final String NO_MAP_WITH_IDS = "No map with IDs ";
-
 	/**
 	 * @param pageRequest
 	 *            Page and sort criteria. Spring sets to page 0 of size 20 if client
@@ -146,8 +140,7 @@ public class GroupPeerSolutionController extends AbstractController {
 		MLPPeerGroup existing = peerGroupRepository.findOne(groupId);
 		if (existing == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "Failed to find object with id " + groupId,
-					null);
+			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + groupId, null);
 		}
 		MLPTransportModel result = null;
 		try {
@@ -222,11 +215,11 @@ public class GroupPeerSolutionController extends AbstractController {
 		logger.debug(EELFLoggerDelegate.debugLogger, "addPeerToGroup: groupId {} peerId {}", groupId, peerId);
 		if (peerRepository.findOne(peerId) == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_PEER_WITH_ID + peerId, null);
+			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + peerId, null);
 		}
 		if (peerGroupRepository.findOne(groupId) == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_GROUP_WITH_ID + groupId, null);
+			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + groupId, null);
 		}
 		// Use path parameters only
 		map.setGroupId(groupId);
@@ -254,7 +247,7 @@ public class GroupPeerSolutionController extends AbstractController {
 		MLPPeerGrpMemMap.PeerGrpMemMapPK pk = new MLPPeerGrpMemMap.PeerGrpMemMapPK(groupId, peerId);
 		if (peerGroupMemMapRepository.findOne(pk) == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_MAP_WITH_IDS + groupId, null);
+			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + groupId, null);
 		}
 		peerGroupMemMapRepository.delete(pk);
 		return new SuccessTransport(HttpServletResponse.SC_OK, null);
@@ -316,8 +309,7 @@ public class GroupPeerSolutionController extends AbstractController {
 		MLPSolutionGroup existing = solutionGroupRepository.findOne(groupId);
 		if (existing == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "Failed to find object with id " + groupId,
-					null);
+			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "NO_ENTRY_WITH_ID " + groupId, null);
 		}
 		MLPTransportModel result = null;
 		try {
@@ -393,11 +385,11 @@ public class GroupPeerSolutionController extends AbstractController {
 		logger.debug(EELFLoggerDelegate.debugLogger, "addSolutionToGroup: map {}", map);
 		if (solutionRepository.findOne(solutionId) == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_SOLUTION_WITH_ID + solutionId, null);
+			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + solutionId, null);
 		}
 		if (solutionGroupRepository.findOne(groupId) == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_GROUP_WITH_ID + groupId, null);
+			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + groupId, null);
 		}
 		try {
 			// Use path parameters only
@@ -479,11 +471,11 @@ public class GroupPeerSolutionController extends AbstractController {
 				peerGroupId, solutionGroupId);
 		if (peerGroupRepository.findOne(peerGroupId) == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_GROUP_WITH_ID + peerGroupId, null);
+			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + peerGroupId, null);
 		}
 		if (solutionGroupRepository.findOne(solutionGroupId) == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_GROUP_WITH_ID + solutionGroupId, null);
+			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + solutionGroupId, null);
 		}
 		try {
 			// Use path parameters only
@@ -552,11 +544,11 @@ public class GroupPeerSolutionController extends AbstractController {
 				resourceGroupId);
 		if (peerGroupRepository.findOne(principalGroupId) == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_GROUP_WITH_ID + principalGroupId, null);
+			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + principalGroupId, null);
 		}
 		if (peerGroupRepository.findOne(resourceGroupId) == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_GROUP_WITH_ID + resourceGroupId, null);
+			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + resourceGroupId, null);
 		}
 		if (principalGroupId == resourceGroupId) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -628,11 +620,11 @@ public class GroupPeerSolutionController extends AbstractController {
 				solutionId);
 		if (peerRepository.findOne(peerId) == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_PEER_WITH_ID + peerId, null);
+			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + peerId, null);
 		}
 		if (solutionRepository.findOne(solutionId) == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_SOLUTION_WITH_ID + solutionId, null);
+			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + solutionId, null);
 		}
 		long count = peerSolAccMapRepository.checkPeerSolutionAccess(peerId, solutionId);
 		return new CountTransport(count);
@@ -654,7 +646,7 @@ public class GroupPeerSolutionController extends AbstractController {
 		logger.debug(EELFLoggerDelegate.debugLogger, "getPeerAccessList: peerId {}", peerId);
 		if (peerRepository.findOne(peerId) == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_PEER_WITH_ID + peerId, null);
+			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + peerId, null);
 		}
 		return peerPeerAccMapRepository.findAccessPeers(peerId);
 	}
