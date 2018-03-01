@@ -33,6 +33,23 @@
       "revId": "feeeab12e60ead5d53d51919998a8cf25c766fd4",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "69cbffaf_fad7e813",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/NotificationController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-03-01T16:54:33Z",
+      "side": 1,
+      "message": "No descriptive error message on failure to find the notification to be deleted?",
+      "revId": "feeeab12e60ead5d53d51919998a8cf25c766fd4",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
