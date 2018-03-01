@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1327b354_cdc912cb",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/GroupPeerSolutionController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-03-01T16:52:51Z",
+      "side": 1,
+      "message": "So NO_ENTRY_WITH_ID not returned for this method on failure to find the peer group to be deleted?",
+      "revId": "feeeab12e60ead5d53d51919998a8cf25c766fd4",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "57785f21_5aeec96a",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/GroupPeerSolutionController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-03-01T16:52:51Z",
+      "side": 1,
+      "message": "So no descriptive error message on failure to find the peer group?",
+      "revId": "feeeab12e60ead5d53d51919998a8cf25c766fd4",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
