@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "159a3694_3342f9cf",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/repository/StepResultRepository.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-03-06T21:01:18Z",
+      "side": 1,
+      "message": "Why is the query required? Why no spring magic?",
+      "revId": "d90ef1c05543780969afa2c904faa9042da36185",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dd16db78_ac2d8440",
+        "filename": "cmn-data-svc-server/src/test/java/org/acumos/cds/test/CdsControllerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-03-06T21:01:18Z",
+      "side": 1,
+      "message": "Don\u0027t work so hard, use the constructor that accepts args",
+      "revId": "d90ef1c05543780969afa2c904faa9042da36185",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1d531811_c286e59e",
+        "filename": "cmn-data-svc-server/src/test/java/org/acumos/cds/test/CdsControllerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-03-06T21:01:18Z",
+      "side": 1,
+      "message": "Use StepTypeCode.VL.toString()  or .name()",
+      "range": {
+        "startLine": 202,
+        "startChar": 18,
+        "endLine": 202,
+        "endChar": 32
+      },
+      "revId": "d90ef1c05543780969afa2c904faa9042da36185",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
