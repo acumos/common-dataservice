@@ -23,10 +23,11 @@ Release Notes
 The client and server are released together.  The client is deployed as a jar file to a
 Maven Nexus repository. The server is deployed as a Docker image to a Docker registry.
 
-Version 1.14.1, 7 March 2018
+Version 1.14.0, 7 March 2018
 ----------------------------
 
 * Cascade solution delete to associated step results (ACUMOS-328)
+* Add copy constructors to all domain POJO classes
 * Requires database schema version 1.14
 
 Version 1.14.0, 1 March 2018

@@ -76,6 +76,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Tests getters and setters of client-side domain (model) classes.
  */
+@SuppressWarnings("deprecation")
 public class DomainTest extends AbstractModelTest {
 
 	private static Logger logger = LoggerFactory.getLogger(DomainTest.class);
@@ -97,6 +98,7 @@ public class DomainTest extends AbstractModelTest {
 	@Test
 	public void testMLPArtifact() {
 		MLPArtifact m = new MLPArtifact(s1, s1, s1, s1, s1, i1);
+		m = new MLPArtifact(m);
 		m = new MLPArtifact();
 		m.setArtifactId(s1);
 		m.setArtifactTypeCode(s2);
@@ -148,7 +150,6 @@ public class DomainTest extends AbstractModelTest {
 		logger.info(m.toString());
 	}
 
-	@SuppressWarnings("deprecation")
 	@Test
 	public void testMLPCodeNamePair() {
 		MLPCodeNamePair m = new MLPCodeNamePair(s1, s1);
@@ -166,7 +167,8 @@ public class DomainTest extends AbstractModelTest {
 		Assert.assertNotNull(m.getTypeName());
 		logger.info(m.toString());
 		try {
-			new MLPPeerGroup(null);
+			String n = null;
+			new MLPPeerGroup(n);
 			Assert.assertTrue("Unexpected success", false);
 		} catch (IllegalArgumentException iae) {
 			// null arg is rejected
@@ -175,8 +177,9 @@ public class DomainTest extends AbstractModelTest {
 
 	@Test
 	public void testMLPComment() {
-		MLPComment m = new MLPComment();
-		m = new MLPComment(s1, s2, s3);
+		MLPComment m = new MLPComment(s1, s2, s3);
+		m = new MLPComment(m);
+		m = new MLPComment();
 		m.setCommentId(s1);
 		m.setParentId(s2);
 		m.setText(s3);
@@ -245,6 +248,7 @@ public class DomainTest extends AbstractModelTest {
 	@Test
 	public void testMLPNotification() {
 		MLPNotification m = new MLPNotification(s1, s6, d1, d1);
+		m = new MLPNotification(m);
 		m = new MLPNotification();
 		m.setCreated(d1);
 		m.setEnd(d2);
@@ -280,6 +284,7 @@ public class DomainTest extends AbstractModelTest {
 	@Test
 	public void testMLPNotifUserMap() {
 		MLPNotifUserMap m = new MLPNotifUserMap();
+		m = new MLPNotifUserMap(m);
 		m = new MLPNotifUserMap(s1, s2);
 		m.setNotificationId(s1);
 		m.setUserId(s2);
@@ -310,6 +315,7 @@ public class DomainTest extends AbstractModelTest {
 	@Test
 	public void testMLPUserNotifPreference() {
 		MLPUserNotifPref m = new MLPUserNotifPref(s1, s1, s1);
+		m = new MLPUserNotifPref(m);
 		m = new MLPUserNotifPref();
 		m.setUserNotifPrefId(l1);
 		m.setMsgSeverityCode(s1);
@@ -335,6 +341,7 @@ public class DomainTest extends AbstractModelTest {
 	@Test
 	public void testMLPPasswordChangeRequest() {
 		MLPPasswordChangeRequest m = new MLPPasswordChangeRequest(s1, s1);
+		m = new MLPPasswordChangeRequest(m);
 		m = new MLPPasswordChangeRequest();
 		m.setNewLoginPass(s1);
 		m.setOldLoginPass(s2);
@@ -356,6 +363,7 @@ public class DomainTest extends AbstractModelTest {
 	@Test
 	public void testMLPPeer() {
 		MLPPeer m = new MLPPeer(s1, s1, s1, b1, b1, s1, s1, s1);
+		m = new MLPPeer(m);
 		m = new MLPPeer();
 		m.setApiUrl(s1);
 		m.setContact1(s2);
@@ -399,6 +407,7 @@ public class DomainTest extends AbstractModelTest {
 	@Test
 	public void testMLPPeerGroup() {
 		MLPPeerGroup m = new MLPPeerGroup(s1);
+		m = new MLPPeerGroup(m);
 		m = new MLPPeerGroup();
 		m.setCreated(d1);
 		m.setDescription(s1);
@@ -413,7 +422,8 @@ public class DomainTest extends AbstractModelTest {
 		Assert.assertNotNull(m.hashCode());
 		logger.info(m.toString());
 		try {
-			new MLPPeerGroup(null);
+			String n = null;
+			new MLPPeerGroup(n);
 			Assert.assertTrue("Unexpected success", false);
 		} catch (IllegalArgumentException iae) {
 			// null arg is rejected
@@ -437,6 +447,7 @@ public class DomainTest extends AbstractModelTest {
 	@Test
 	public void testMLPPeerSubscription() {
 		MLPPeerSubscription m = new MLPPeerSubscription(s1, s2, s3, s4);
+		m = new MLPPeerSubscription(m);
 		m = new MLPPeerSubscription();
 		m.setAccessType(s1);
 		m.setCreated(d1);
@@ -478,6 +489,7 @@ public class DomainTest extends AbstractModelTest {
 	@Test
 	public void testMLPPeerGrpMemMap() {
 		MLPPeerGrpMemMap m = new MLPPeerGrpMemMap(l1, s1);
+		m = new MLPPeerGrpMemMap(m);
 		m = new MLPPeerGrpMemMap();
 		m.setGroupId(l1);
 		m.setPeerId(s1);
@@ -506,6 +518,7 @@ public class DomainTest extends AbstractModelTest {
 	@Test
 	public void testMLPPeerPeerAccMap() {
 		MLPPeerPeerAccMap m = new MLPPeerPeerAccMap(l1, l2);
+		m = new MLPPeerPeerAccMap(m);
 		m = new MLPPeerPeerAccMap();
 		m.setPrincipalPeerGroupId(l1);
 		m.setResourcePeerGroupId(l2);
@@ -534,6 +547,7 @@ public class DomainTest extends AbstractModelTest {
 	@Test
 	public void testMLPPeerSolAccMap() {
 		MLPPeerSolAccMap m = new MLPPeerSolAccMap(l1, l2, true);
+		m = new MLPPeerSolAccMap(m);
 		m = new MLPPeerSolAccMap();
 		m.setPeerGroupId(l1);
 		m.setSolutionGroupId(l2);
@@ -562,6 +576,7 @@ public class DomainTest extends AbstractModelTest {
 	@Test
 	public void testMLPRole() {
 		MLPRole m = new MLPRole(s1, b1);
+		m = new MLPRole(m);
 		m = new MLPRole();
 		m.setCreated(d1);
 		m.setModified(d2);
@@ -587,6 +602,7 @@ public class DomainTest extends AbstractModelTest {
 	@Test
 	public void testMLPRoleFunction() {
 		MLPRoleFunction m = new MLPRoleFunction(s1, s1);
+		m = new MLPRoleFunction(m);
 		m = new MLPRoleFunction();
 		m.setCreated(d1);
 		m.setModified(d2);
@@ -614,6 +630,7 @@ public class DomainTest extends AbstractModelTest {
 	@Test
 	public void testMLPSiteConfig() {
 		MLPSiteConfig m = new MLPSiteConfig(s1, s1);
+		m = new MLPSiteConfig(m);
 		m = new MLPSiteConfig();
 		m.setConfigKey(s1);
 		m.setConfigValue(s2);
@@ -641,6 +658,7 @@ public class DomainTest extends AbstractModelTest {
 	@Test
 	public void testMLPSolRevArtMap() {
 		MLPSolRevArtMap m = new MLPSolRevArtMap(s1, s1);
+		m = new MLPSolRevArtMap(m);
 		m = new MLPSolRevArtMap();
 		m.setArtifactId(s1);
 		m.setRevisionId(s2);
@@ -669,6 +687,7 @@ public class DomainTest extends AbstractModelTest {
 	@Test
 	public void testMLPSolTagMap() {
 		MLPSolTagMap m = new MLPSolTagMap(s1, s1);
+		m = new MLPSolTagMap(m);
 		m = new MLPSolTagMap();
 		m.setSolutionId(s1);
 		m.setTag(s2);
@@ -697,6 +716,7 @@ public class DomainTest extends AbstractModelTest {
 	@Test
 	public void testMLPSolGrpMemMap() {
 		MLPSolGrpMemMap m = new MLPSolGrpMemMap(l1, s1);
+		m = new MLPSolGrpMemMap(m);
 		m = new MLPSolGrpMemMap();
 		m.setGroupId(l1);
 		m.setSolutionId(s1);
@@ -725,6 +745,7 @@ public class DomainTest extends AbstractModelTest {
 	@Test
 	public void testMLPSolUserAccMap() {
 		MLPSolUserAccMap m = new MLPSolUserAccMap(s1, s1);
+		m = new MLPSolUserAccMap(m);
 		m = new MLPSolUserAccMap();
 		m.setSolutionId(s1);
 		m.setUserId(s2);
@@ -753,7 +774,9 @@ public class DomainTest extends AbstractModelTest {
 	@Test
 	public void testMLPSolution() {
 		MLPSolution m = new MLPSolution(s1, s1, b1);
+		m = new MLPSolution(m);
 		m = new MLPSolution();
+		m.setAccessTypeCode(s1);
 		m.setAccessTypeCode(s1);
 		m.setActive(b1);
 		m.setCreated(d1);
@@ -800,6 +823,7 @@ public class DomainTest extends AbstractModelTest {
 	@Test
 	public void testMLPSolutionDeployment() {
 		MLPSolutionDeployment m = new MLPSolutionDeployment(s1, s1, s1, s1);
+		m = new MLPSolutionDeployment(m);
 		m = new MLPSolutionDeployment();
 		m.setCreated(d1);
 		m.setDeploymentId(s1);
@@ -834,6 +858,7 @@ public class DomainTest extends AbstractModelTest {
 	@Test
 	public void testMLPSolutionDownload() {
 		MLPSolutionDownload m = new MLPSolutionDownload(s1, s2, s3);
+		m = new MLPSolutionDownload(m);
 		m = new MLPSolutionDownload();
 		m.setArtifactId(s1);
 		m.setDownloadId(l1);
@@ -861,6 +886,7 @@ public class DomainTest extends AbstractModelTest {
 	@Test
 	public void testMLPSolutionFavorite() {
 		MLPSolutionFavorite m = new MLPSolutionFavorite(s1, s1);
+		m = new MLPSolutionFavorite(m);
 		m = new MLPSolutionFavorite();
 		m.setSolutionId(s1);
 		m.setUserId(s2);
@@ -889,6 +915,7 @@ public class DomainTest extends AbstractModelTest {
 	@Test
 	public void testMLPSolutionGroup() {
 		MLPSolutionGroup m = new MLPSolutionGroup(s1);
+		m = new MLPSolutionGroup(m);
 		m = new MLPSolutionGroup();
 		m.setCreated(d1);
 		m.setDescription(s1);
@@ -906,7 +933,8 @@ public class DomainTest extends AbstractModelTest {
 		Assert.assertNotNull(m.hashCode());
 		logger.info(m.toString());
 		try {
-			new MLPSolutionGroup(null);
+			String n = null;
+			new MLPSolutionGroup(n);
 			Assert.assertTrue("Unexpected success", false);
 		} catch (IllegalArgumentException iae) {
 			// null arg is rejected
@@ -916,6 +944,7 @@ public class DomainTest extends AbstractModelTest {
 	@Test
 	public void testMLPSolutionRating() {
 		MLPSolutionRating m = new MLPSolutionRating(s1, s1, i1);
+		m = new MLPSolutionRating(m);
 		m = new MLPSolutionRating();
 		m.setCreated(d1);
 		m.setRating(i1);
@@ -950,6 +979,7 @@ public class DomainTest extends AbstractModelTest {
 	@Test
 	public void testMLPSolutionRevision() {
 		MLPSolutionRevision m = new MLPSolutionRevision(s1, s1, s1);
+		m = new MLPSolutionRevision(m);
 		m = new MLPSolutionRevision();
 		m.setCreated(d1);
 		m.setDescription(s1);
@@ -987,6 +1017,7 @@ public class DomainTest extends AbstractModelTest {
 	@Test
 	public void testMLPSolutionValidation() {
 		MLPSolutionValidation m = new MLPSolutionValidation(s1, s1, s1, s1);
+		m = new MLPSolutionValidation(m);
 		m = new MLPSolutionValidation();
 		m.setCreated(d1);
 		m.setDetail(s1);
@@ -1027,6 +1058,7 @@ public class DomainTest extends AbstractModelTest {
 	@Test
 	public void testMLPSolutionWeb() {
 		MLPSolutionWeb m = new MLPSolutionWeb(s1);
+		m = new MLPSolutionWeb(m);
 		m = new MLPSolutionWeb();
 		m.setDownloadCount(l1);
 		m.setFeatured(b1);
@@ -1048,7 +1080,8 @@ public class DomainTest extends AbstractModelTest {
 		Assert.assertNotNull(m.hashCode());
 		logger.info(m.toString());
 		try {
-			new MLPSolutionWeb(null);
+			String n = null;
+			new MLPSolutionWeb(n);
 			Assert.assertTrue("Unexpected success", false);
 		} catch (IllegalArgumentException iae) {
 			// null arg is rejected
@@ -1058,6 +1091,7 @@ public class DomainTest extends AbstractModelTest {
 	@Test
 	public void testMLPStepResult() {
 		MLPStepResult m = new MLPStepResult(s1, s2, s3, d1);
+		m = new MLPStepResult(m);
 		m = new MLPStepResult();
 		m.setArtifactId(s1);
 		m.setEndDate(d1);
@@ -1121,6 +1155,7 @@ public class DomainTest extends AbstractModelTest {
 	@Test
 	public void testMLPTag() {
 		MLPTag m = new MLPTag(s1);
+		m = new MLPTag(m);
 		m = new MLPTag();
 		m.setTag(s1);
 		Assert.assertEquals(s1, m.getTag());
@@ -1130,7 +1165,8 @@ public class DomainTest extends AbstractModelTest {
 		Assert.assertNotNull(m.hashCode());
 		logger.info(m.toString());
 		try {
-			new MLPTag(null);
+			String n = null;
+			new MLPTag(n);
 			Assert.assertTrue("Unexpected success", false);
 		} catch (IllegalArgumentException iae) {
 			// null arg is rejected
@@ -1140,6 +1176,7 @@ public class DomainTest extends AbstractModelTest {
 	@Test
 	public void testMLPThread() {
 		MLPThread m = new MLPThread(s1, s1);
+		m = new MLPThread(m);
 		m = new MLPThread();
 		m.setRevisionId(s1);
 		m.setSolutionId(s2);
@@ -1179,6 +1216,7 @@ public class DomainTest extends AbstractModelTest {
 	@Test
 	public void testMLPUser() {
 		MLPUser m = new MLPUser(s1, b1);
+		m = new MLPUser(m);
 		m = new MLPUser();
 		m.setActive(b1);
 		m.setAuthToken(s1);
@@ -1225,6 +1263,7 @@ public class DomainTest extends AbstractModelTest {
 	@Test
 	public void testMLPUserLoginProvider() {
 		MLPUserLoginProvider m = new MLPUserLoginProvider(s1, s1, s1, s1, i1);
+		m = new MLPUserLoginProvider(m);
 		m = new MLPUserLoginProvider();
 		m.setAccessToken(s1);
 		m.setCreated(d1);
@@ -1273,6 +1312,7 @@ public class DomainTest extends AbstractModelTest {
 	@Test
 	public void testMLPUserNotification() {
 		MLPUserNotification m = new MLPUserNotification(s1, s1, s1, s1, d1, d1, d1);
+		m = new MLPUserNotification(m);
 		m = new MLPUserNotification();
 		m.setCreated(d1);
 		m.setEnd(d2);
@@ -1302,6 +1342,7 @@ public class DomainTest extends AbstractModelTest {
 	@Test
 	public void testMLPUserRoleMap() {
 		MLPUserRoleMap m = new MLPUserRoleMap(s1, s1);
+		m = new MLPUserRoleMap(m);
 		m = new MLPUserRoleMap();
 		m.setRoleId(s1);
 		m.setUserId(s2);
@@ -1330,6 +1371,7 @@ public class DomainTest extends AbstractModelTest {
 	@Test
 	public void testMLPValidationSequence() {
 		MLPValidationSequence m = new MLPValidationSequence(i1, s1);
+		m = new MLPValidationSequence(m);
 		m = new MLPValidationSequence();
 		m.setCreated(d1);
 		m.setSequence(i1);
