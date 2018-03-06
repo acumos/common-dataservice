@@ -197,6 +197,16 @@ public class CdsControllerTest {
 			logger.info("Adding artifact to revision");
 			client.addSolutionRevisionArtifact(cs.getSolutionId(), cr.getRevisionId(), ca.getArtifactId());
 
+			MLPStepResult sr = new MLPStepResult();
+			sr.setSolutionId(cs.getSolutionId());
+			sr.setStepCode(String.valueOf(StepTypeCode.VL));
+			sr.setStatusCode(String.valueOf(StepStatusCode.FA));
+			sr.setName("New Step Result1");
+			sr = client.createStepResult(sr);
+			Assert.assertNotNull(sr.getStepResultId());
+			logger.info("Created basicsequencedemo step result {}", sr);
+			
+			
 			logger.info("Deleting objects");
 			client.dropSolutionRevisionArtifact(cs.getSolutionId(), cr.getRevisionId(), ca.getArtifactId());
 			client.deleteArtifact(ca.getArtifactId());
