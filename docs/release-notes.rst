@@ -23,6 +23,11 @@ Release Notes
 The client and server are released together.  The client is deployed as a jar file to a
 Maven Nexus repository. The server is deployed as a Docker image to a Docker registry.
 
+Version 1.14.1, ? March 2018
+----------------------------
+
+* Fix the bug for failure to delete a solution if an associated step result exists (ACUMOS-328)
+
 Version 1.14.0, 1 March 2018
 ----------------------------
 
