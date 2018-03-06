@@ -133,6 +133,17 @@ public class MLPPeerGrpMemMap implements MLPEntity, Serializable {
 		this.peerId = peerId;
 	}
 
+	/**
+	 * Copy constructor
+	 * 
+	 * @param that
+	 *            Instance to copy
+	 */
+	public MLPPeerGrpMemMap(MLPPeerGrpMemMap that) {
+		this.groupId = that.groupId;
+		this.peerId = that.peerId;
+	}
+
 	public Long getGroupId() {
 		return groupId;
 	}
