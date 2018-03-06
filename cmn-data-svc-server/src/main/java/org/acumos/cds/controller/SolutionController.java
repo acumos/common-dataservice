@@ -61,6 +61,7 @@ import org.acumos.cds.repository.SolutionRepository;
 import org.acumos.cds.repository.SolutionRevisionRepository;
 import org.acumos.cds.repository.SolutionValidationRepository;
 import org.acumos.cds.repository.SolutionWebRepository;
+import org.acumos.cds.repository.StepResultRepository;
 import org.acumos.cds.repository.TagRepository;
 import org.acumos.cds.repository.UserRepository;
 import org.acumos.cds.service.SolutionSearchService;
@@ -125,6 +126,8 @@ public class SolutionController extends AbstractController {
 	private SolutionWebRepository solutionWebRepository;
 	@Autowired
 	private UserRepository userRepository;
+	@Autowired
+	private StepResultRepository stepResultRepository;
 
 	/**
 	 * Updates the cached value(s) for solution downloads.
@@ -537,7 +540,8 @@ public class SolutionController extends AbstractController {
 			solutionValidationRepository.deleteBySolutionId(solutionId);
 			solUserAccMapRepository.deleteUsersForSolution(solutionId);
 			solutionFavoriteRepository.deleteBySolutionId(solutionId);
-			// The web stats are annotated as optional, so be cautious when deleting
+			// The web stats are annotated as optional, so be cautious when
+			// deleting
 			MLPSolutionWeb webStats = solutionWebRepository.findOne(solutionId);
 			if (webStats != null)
 				solutionWebRepository.delete(solutionId);
@@ -548,10 +552,12 @@ public class SolutionController extends AbstractController {
 				// do NOT delete artifacts!
 				solutionRevisionRepository.delete(r);
 			}
+			stepResultRepository.deleteBySolutionId(solutionId);
 			solutionRepository.delete(solutionId);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
-			// e.g., EmptyResultDataAccessException is NOT an internal server error
+			// e.g., EmptyResultDataAccessException is NOT an internal server
+			// error
 			logger.warn(EELFLoggerDelegate.errorLogger, "deleteSolution failed", ex.toString());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "deleteSolution failed", ex);
@@ -703,7 +709,8 @@ public class SolutionController extends AbstractController {
 			solutionRevisionRepository.delete(revisionId);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
-			// e.g., EmptyResultDataAccessException is NOT an internal server error
+			// e.g., EmptyResultDataAccessException is NOT an internal server
+			// error
 			logger.warn(EELFLoggerDelegate.errorLogger, "deleteSolutionRevision failed", ex.getMessage());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "deleteRevision failed", ex);
@@ -889,7 +896,8 @@ public class SolutionController extends AbstractController {
 			@PathVariable("userId") String userId, @PathVariable("artifactId") String artifactId,
 			@RequestBody MLPSolutionDownload sd, HttpServletResponse response) {
 		logger.debug(EELFLoggerDelegate.debugLogger, "createSolutionDownload: received object: {} ", sd);
-		// These validations duplicate the constraints but are much user friendlier.
+		// These validations duplicate the constraints but are much user
+		// friendlier.
 		if (solutionRepository.findOne(solutionId) == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + solutionId, null);
@@ -945,7 +953,8 @@ public class SolutionController extends AbstractController {
 			updateSolutionDownloadStats(solutionId);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
-			// e.g., EmptyResultDataAccessException is NOT an internal server error
+			// e.g., EmptyResultDataAccessException is NOT an internal server
+			// error
 			logger.warn(EELFLoggerDelegate.errorLogger, "deleteSolutionDownload failed", ex.getMessage());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "deleteSolutionDownload failed", ex);
@@ -1111,7 +1120,8 @@ public class SolutionController extends AbstractController {
 			updateSolutionRatingStats(solutionId);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
-			// e.g., EmptyResultDataAccessException is NOT an internal server error
+			// e.g., EmptyResultDataAccessException is NOT an internal server
+			// error
 			logger.warn(EELFLoggerDelegate.errorLogger, "deleteSolutionRating failed", ex.toString());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "deleteSolutionRating failed", ex);
@@ -1377,7 +1387,8 @@ public class SolutionController extends AbstractController {
 			solutionValidationRepository.delete(pk);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
-			// e.g., EmptyResultDataAccessException is NOT an internal server error
+			// e.g., EmptyResultDataAccessException is NOT an internal server
+			// error
 			logger.warn(EELFLoggerDelegate.errorLogger, "deleteSolutionValidation failed", ex.getMessage());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "deleteSolutionValidation failed", ex);
@@ -1571,7 +1582,8 @@ public class SolutionController extends AbstractController {
 			solutionDeploymentRepository.delete(deploymentId);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
-			// e.g., EmptyResultDataAccessException is NOT an internal server error
+			// e.g., EmptyResultDataAccessException is NOT an internal server
+			// error
 			logger.warn(EELFLoggerDelegate.errorLogger, "deleteSolutionDeployment failed", ex.toString());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "deleteSolutionDeployment failed", ex);
