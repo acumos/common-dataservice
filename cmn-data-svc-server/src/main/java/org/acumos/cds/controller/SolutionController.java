@@ -61,6 +61,7 @@ import org.acumos.cds.repository.SolutionRepository;
 import org.acumos.cds.repository.SolutionRevisionRepository;
 import org.acumos.cds.repository.SolutionValidationRepository;
 import org.acumos.cds.repository.SolutionWebRepository;
+import org.acumos.cds.repository.StepResultRepository;
 import org.acumos.cds.repository.TagRepository;
 import org.acumos.cds.repository.UserRepository;
 import org.acumos.cds.service.SolutionSearchService;
@@ -125,6 +126,8 @@ public class SolutionController extends AbstractController {
 	private SolutionWebRepository solutionWebRepository;
 	@Autowired
 	private UserRepository userRepository;
+	@Autowired
+	private StepResultRepository stepResultRepository;
 
 	/**
 	 * Updates the cached value(s) for solution downloads.
@@ -537,7 +540,8 @@ public class SolutionController extends AbstractController {
 			solutionValidationRepository.deleteBySolutionId(solutionId);
 			solUserAccMapRepository.deleteUsersForSolution(solutionId);
 			solutionFavoriteRepository.deleteBySolutionId(solutionId);
-			// The web stats are annotated as optional, so be cautious when deleting
+			// The web stats are annotated as optional, so be cautious when
+			// deleting
 			MLPSolutionWeb webStats = solutionWebRepository.findOne(solutionId);
 			if (webStats != null)
 				solutionWebRepository.delete(solutionId);
@@ -548,6 +552,7 @@ public class SolutionController extends AbstractController {
 				// do NOT delete artifacts!
 				solutionRevisionRepository.delete(r);
 			}
+			stepResultRepository.deleteBySolutionId(solutionId);
 			solutionRepository.delete(solutionId);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
