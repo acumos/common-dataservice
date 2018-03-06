@@ -143,6 +143,25 @@ public class MLPPeer extends MLPTimestampedEntity implements Serializable {
 	}
 
 	/**
+	 * Copy constructor
+	 * 
+	 * @param that
+	 *            Instance to copy
+	 */
+	public MLPPeer(MLPPeer that) {
+		super(that);
+		this.apiUrl = that.apiUrl;
+		this.contact1 = that.contact1;
+		this.description = that.description;
+		this.isLocal = that.isLocal;
+		this.isSelf = that.isSelf;
+		this.name = that.name;
+		this.peerId = that.peerId;
+		this.statusCode = that.statusCode;
+		this.subjectName = that.subjectName;
+	}
+
+	/**
 	 * @return the peerId
 	 */
 	public String getPeerId() {
