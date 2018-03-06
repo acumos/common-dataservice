@@ -66,6 +66,18 @@ public abstract class MLPAbstractGroup extends MLPTimestampedEntity {
 	}
 
 	/**
+	 * Copy constructor
+	 * 
+	 * @param that
+	 *            Instance to copy
+	 */
+	public MLPAbstractGroup(MLPAbstractGroup that) {
+		this.description = that.description;
+		this.groupId = that.groupId;
+		this.name = that.name;
+	}
+
+	/**
 	 * @return the groupId
 	 */
 	public Long getGroupId() {
