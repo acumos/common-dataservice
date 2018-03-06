@@ -61,6 +61,7 @@ import org.acumos.cds.repository.SolutionRepository;
 import org.acumos.cds.repository.SolutionRevisionRepository;
 import org.acumos.cds.repository.SolutionValidationRepository;
 import org.acumos.cds.repository.SolutionWebRepository;
+import org.acumos.cds.repository.StepResultRepository;
 import org.acumos.cds.repository.TagRepository;
 import org.acumos.cds.repository.UserRepository;
 import org.acumos.cds.service.SolutionSearchService;
@@ -125,6 +126,8 @@ public class SolutionController extends AbstractController {
 	private SolutionWebRepository solutionWebRepository;
 	@Autowired
 	private UserRepository userRepository;
+	@Autowired
+	private StepResultRepository stepResultRepository;
 
 	/**
 	 * Updates the cached value(s) for solution downloads.
@@ -196,8 +199,8 @@ public class SolutionController extends AbstractController {
 	 * @param term
 	 *            Search term used for partial match ("like")
 	 * @param pageRequest
-	 *            Page and sort criteria. Spring sets to page 0 of size 20 if client
-	 *            sends nothing.
+	 *            Page and sort criteria. Spring sets to page 0 of size 20 if
+	 *            client sends nothing.
 	 * @param response
 	 *            HttpServletResponse
 	 * @return Page of solutions
@@ -215,8 +218,8 @@ public class SolutionController extends AbstractController {
 	 * @param tag
 	 *            Tag string to find
 	 * @param pageRequest
-	 *            Page and sort criteria. Spring sets to page 0 of size 20 if client
-	 *            sends nothing.
+	 *            Page and sort criteria. Spring sets to page 0 of size 20 if
+	 *            client sends nothing.
 	 * @param response
 	 *            HttpServletResponse
 	 * @return Page of solutions
@@ -235,8 +238,8 @@ public class SolutionController extends AbstractController {
 	}
 
 	/**
-	 * Fetches the value, and converts the four-letter sequence "null" to the null
-	 * value.
+	 * Fetches the value, and converts the four-letter sequence "null" to the
+	 * null value.
 	 * 
 	 * @param parmName
 	 *            Map key
@@ -258,11 +261,11 @@ public class SolutionController extends AbstractController {
 
 	/**
 	 * @param queryParameters
-	 *            Map of String (field name) to String (value) for restricting the
-	 *            query
+	 *            Map of String (field name) to String (value) for restricting
+	 *            the query
 	 * @param pageRequest
-	 *            Page and sort criteria. Spring sets to page 0 of size 20 if client
-	 *            sends nothing.
+	 *            Page and sort criteria. Spring sets to page 0 of size 20 if
+	 *            client sends nothing.
 	 * @param response
 	 *            HttpServletResponse
 	 * @return Page of solutions
@@ -294,11 +297,11 @@ public class SolutionController extends AbstractController {
 	 * Dynamic query.
 	 * 
 	 * @param queryParameters
-	 *            Field names-value pairs, see below for names. Some values can be
-	 *            comma-separated lists.
+	 *            Field names-value pairs, see below for names. Some values can
+	 *            be comma-separated lists.
 	 * @param pageRequest
-	 *            Page and sort criteria. Spring sets to page 0 of size 20 if client
-	 *            sends nothing.
+	 *            Page and sort criteria. Spring sets to page 0 of size 20 if
+	 *            client sends nothing.
 	 * @param response
 	 *            HttpServletResponse
 	 * @return Page of solutions
@@ -332,9 +335,9 @@ public class SolutionController extends AbstractController {
 
 	/**
 	 * @param queryParameters
-	 *            Map of String (field name) to String (value) for restricting the
-	 *            query. Expects access type codes (optional), validation status
-	 *            codes (optional), and date (required).
+	 *            Map of String (field name) to String (value) for restricting
+	 *            the query. Expects access type codes (optional), validation
+	 *            status codes (optional), and date (required).
 	 * @param pageRequest
 	 *            Page and sort criteria
 	 * @param response
@@ -380,8 +383,9 @@ public class SolutionController extends AbstractController {
 
 	/**
 	 * @param solution
-	 *            Solution to save. If no ID is set a new one will be generated; if
-	 *            an ID value is set, it will be used if valid and not in table.
+	 *            Solution to save. If no ID is set a new one will be generated;
+	 *            if an ID value is set, it will be used if valid and not in
+	 *            table.
 	 * @param response
 	 *            HttpServletResponse
 	 * @return solution model for serialization as JSON
@@ -512,9 +516,9 @@ public class SolutionController extends AbstractController {
 	}
 
 	/**
-	 * Originally this was declared void and accordingly returned nothing. But when
-	 * used in SpringBoot, after invoking the method it would look for a ThymeLeaf
-	 * template, fail to find it, then throw internal server error.
+	 * Originally this was declared void and accordingly returned nothing. But
+	 * when used in SpringBoot, after invoking the method it would look for a
+	 * ThymeLeaf template, fail to find it, then throw internal server error.
 	 * 
 	 * @param solutionId
 	 *            Path parameter that identifies the instance
@@ -537,7 +541,8 @@ public class SolutionController extends AbstractController {
 			solutionValidationRepository.deleteBySolutionId(solutionId);
 			solUserAccMapRepository.deleteUsersForSolution(solutionId);
 			solutionFavoriteRepository.deleteBySolutionId(solutionId);
-			// The web stats are annotated as optional, so be cautious when deleting
+			// The web stats are annotated as optional, so be cautious when
+			// deleting
 			MLPSolutionWeb webStats = solutionWebRepository.findOne(solutionId);
 			if (webStats != null)
 				solutionWebRepository.delete(solutionId);
@@ -548,10 +553,12 @@ public class SolutionController extends AbstractController {
 				// do NOT delete artifacts!
 				solutionRevisionRepository.delete(r);
 			}
+			stepResultRepository.deleteBySolutionId(solutionId);
 			solutionRepository.delete(solutionId);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
-			// e.g., EmptyResultDataAccessException is NOT an internal server error
+			// e.g., EmptyResultDataAccessException is NOT an internal server
+			// error
 			logger.warn(EELFLoggerDelegate.errorLogger, "deleteSolution failed", ex.toString());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "deleteSolution failed", ex);
@@ -560,9 +567,10 @@ public class SolutionController extends AbstractController {
 
 	/**
 	 * @param solutionId
-	 *            Array of solution IDs (comma-separated values - the name should be
-	 *            plural but it's declared above). Spring will split the list if the
-	 *            path variable is declared as String array or List of String.
+	 *            Array of solution IDs (comma-separated values - the name
+	 *            should be plural but it's declared above). Spring will split
+	 *            the list if the path variable is declared as String array or
+	 *            List of String.
 	 * @return List of revisions
 	 */
 	@ApiOperation(value = "Gets a list of revisions for the specified solution IDs.", response = MLPSolutionRevision.class, responseContainer = "List")
@@ -599,8 +607,9 @@ public class SolutionController extends AbstractController {
 	 * @param solutionId
 	 *            solution ID
 	 * @param revision
-	 *            Revision to save. If no ID is set a new one will be generated; if
-	 *            an ID value is set, it will be used if valid and not in table.
+	 *            Revision to save. If no ID is set a new one will be generated;
+	 *            if an ID value is set, it will be used if valid and not in
+	 *            table.
 	 * @param response
 	 *            HttpServletResponse
 	 * @return Solution revision model for serialization as JSON
@@ -703,7 +712,8 @@ public class SolutionController extends AbstractController {
 			solutionRevisionRepository.delete(revisionId);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
-			// e.g., EmptyResultDataAccessException is NOT an internal server error
+			// e.g., EmptyResultDataAccessException is NOT an internal server
+			// error
 			logger.warn(EELFLoggerDelegate.errorLogger, "deleteSolutionRevision failed", ex.getMessage());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "deleteRevision failed", ex);
@@ -849,8 +859,8 @@ public class SolutionController extends AbstractController {
 	 * @param solutionId
 	 *            Path parameter with solution ID
 	 * @param pageRequest
-	 *            Page and sort criteria. Spring sets to page 0 of size 20 if client
-	 *            sends nothing.
+	 *            Page and sort criteria. Spring sets to page 0 of size 20 if
+	 *            client sends nothing.
 	 * @param response
 	 *            HttpServletResponse
 	 * @return A page of download records
@@ -889,7 +899,8 @@ public class SolutionController extends AbstractController {
 			@PathVariable("userId") String userId, @PathVariable("artifactId") String artifactId,
 			@RequestBody MLPSolutionDownload sd, HttpServletResponse response) {
 		logger.debug(EELFLoggerDelegate.debugLogger, "createSolutionDownload: received object: {} ", sd);
-		// These validations duplicate the constraints but are much user friendlier.
+		// These validations duplicate the constraints but are much user
+		// friendlier.
 		if (solutionRepository.findOne(solutionId) == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + solutionId, null);
@@ -945,7 +956,8 @@ public class SolutionController extends AbstractController {
 			updateSolutionDownloadStats(solutionId);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
-			// e.g., EmptyResultDataAccessException is NOT an internal server error
+			// e.g., EmptyResultDataAccessException is NOT an internal server
+			// error
 			logger.warn(EELFLoggerDelegate.errorLogger, "deleteSolutionDownload failed", ex.getMessage());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "deleteSolutionDownload failed", ex);
@@ -956,8 +968,8 @@ public class SolutionController extends AbstractController {
 	 * @param solutionId
 	 *            Path parameter with ID
 	 * @param pageRequest
-	 *            Page and sort criteria. Spring sets to page 0 of size 20 if client
-	 *            sends nothing.
+	 *            Page and sort criteria. Spring sets to page 0 of size 20 if
+	 *            client sends nothing.
 	 * @param response
 	 *            HttpServletResponse
 	 * @return A list of solution ratings
@@ -1111,7 +1123,8 @@ public class SolutionController extends AbstractController {
 			updateSolutionRatingStats(solutionId);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
-			// e.g., EmptyResultDataAccessException is NOT an internal server error
+			// e.g., EmptyResultDataAccessException is NOT an internal server
+			// error
 			logger.warn(EELFLoggerDelegate.errorLogger, "deleteSolutionRating failed", ex.toString());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "deleteSolutionRating failed", ex);
@@ -1123,8 +1136,8 @@ public class SolutionController extends AbstractController {
 	 *            Solution ID
 	 * @param response
 	 *            HttpServletResponse
-	 * @return Web site metadata about the specified solution including view count,
-	 *         download count, rating count and such.
+	 * @return Web site metadata about the specified solution including view
+	 *         count, download count, rating count and such.
 	 */
 	@ApiOperation(value = "Gets web metadata for the specified solution including average rating and total download count.", response = MLPSolutionWeb.class)
 	@RequestMapping(value = "/{solutionId}/" + CCDSConstants.WEB_PATH, method = RequestMethod.GET)
@@ -1212,8 +1225,8 @@ public class SolutionController extends AbstractController {
 	 * @param userId
 	 *            Path parameter with user ID
 	 * @param pageable
-	 *            Page and sort criteria. Spring sets to page 0 of size 20 if client
-	 *            sends nothing.
+	 *            Page and sort criteria. Spring sets to page 0 of size 20 if
+	 *            client sends nothing.
 	 * @param response
 	 *            HttpServletResponse
 	 * @return A usage if found, an error otherwise.
@@ -1377,7 +1390,8 @@ public class SolutionController extends AbstractController {
 			solutionValidationRepository.delete(pk);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
-			// e.g., EmptyResultDataAccessException is NOT an internal server error
+			// e.g., EmptyResultDataAccessException is NOT an internal server
+			// error
 			logger.warn(EELFLoggerDelegate.errorLogger, "deleteSolutionValidation failed", ex.getMessage());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "deleteSolutionValidation failed", ex);
@@ -1390,8 +1404,8 @@ public class SolutionController extends AbstractController {
 	 * @param revisionId
 	 *            Path parameter with revision ID
 	 * @param pageRequest
-	 *            Page and sort criteria. Spring sets to page 0 of size 20 if client
-	 *            sends nothing.
+	 *            Page and sort criteria. Spring sets to page 0 of size 20 if
+	 *            client sends nothing.
 	 * @param response
 	 *            HttpServletResponse
 	 * @return Page of deployments
@@ -1420,8 +1434,8 @@ public class SolutionController extends AbstractController {
 	 * @param userId
 	 *            Path parameter with user ID
 	 * @param pageRequest
-	 *            Page and sort criteria. Spring sets to page 0 of size 20 if client
-	 *            sends nothing.
+	 *            Page and sort criteria. Spring sets to page 0 of size 20 if
+	 *            client sends nothing.
 	 * @param response
 	 *            HttpServletResponse
 	 * @return Page of deployments
@@ -1571,7 +1585,8 @@ public class SolutionController extends AbstractController {
 			solutionDeploymentRepository.delete(deploymentId);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
-			// e.g., EmptyResultDataAccessException is NOT an internal server error
+			// e.g., EmptyResultDataAccessException is NOT an internal server
+			// error
 			logger.warn(EELFLoggerDelegate.errorLogger, "deleteSolutionDeployment failed", ex.toString());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "deleteSolutionDeployment failed", ex);
