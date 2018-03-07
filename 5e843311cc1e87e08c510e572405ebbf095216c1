@@ -16,6 +16,23 @@
       "revId": "5e843311cc1e87e08c510e572405ebbf095216c1",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "eced7878_d1878ad1",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPPeerGrpMemMap.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-03-07T16:32:34Z",
+      "side": 1,
+      "message": "So a default empty value for created date field is fine?",
+      "revId": "5e843311cc1e87e08c510e572405ebbf095216c1",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
