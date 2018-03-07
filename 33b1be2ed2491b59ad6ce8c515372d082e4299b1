@@ -16,6 +16,24 @@
       "revId": "33b1be2ed2491b59ad6ce8c515372d082e4299b1",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "68cd4531_dcecc888",
+        "filename": "docs/release-notes.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-03-07T23:09:05Z",
+      "side": 1,
+      "message": "JIRA tasks now there as 344 and 345. Please add them.",
+      "parentUuid": "8f635fad_50ff9d85",
+      "revId": "33b1be2ed2491b59ad6ce8c515372d082e4299b1",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
