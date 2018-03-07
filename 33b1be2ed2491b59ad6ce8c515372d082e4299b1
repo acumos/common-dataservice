@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8f635fad_50ff9d85",
+        "filename": "docs/release-notes.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-03-07T22:44:33Z",
+      "side": 1,
+      "message": "Add the JIRA task ids for these newly added tasks please",
+      "revId": "33b1be2ed2491b59ad6ce8c515372d082e4299b1",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
