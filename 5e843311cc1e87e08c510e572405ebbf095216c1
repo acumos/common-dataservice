@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a114b47c_81a705b0",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPPeer.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-03-07T16:26:36Z",
+      "side": 1,
+      "message": "Did you miss setting the webUrl and validationStatusCode fields in this copy constructor?",
+      "revId": "5e843311cc1e87e08c510e572405ebbf095216c1",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
