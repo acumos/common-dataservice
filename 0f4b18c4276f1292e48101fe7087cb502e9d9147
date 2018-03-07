@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "05fc208a_1134dc3d",
+        "filename": "cmn-data-svc-client/src/test/java/org/acumos/cds/client/test/DomainTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-03-07T17:17:38Z",
+      "side": 1,
+      "message": "Where are the Assert statements on the \u0027copied-to\u0027 entities, please?",
+      "revId": "0f4b18c4276f1292e48101fe7087cb502e9d9147",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
