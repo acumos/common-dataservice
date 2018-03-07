@@ -27,6 +27,7 @@ Version 1.14.1, 7 March 2018
 ----------------------------
 
 * Cascade solution delete to associated step results (ACUMOS-328)
+* Drop unneeded queries in server-side repository methods
 * Requires database schema version 1.14
 
 Version 1.14.0, 1 March 2018
