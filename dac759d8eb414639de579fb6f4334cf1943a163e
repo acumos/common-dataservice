@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b2e045a6_7ec0c035",
+        "filename": "cmn-data-svc-server/db-scripts/cds-mysql-downgrade-1.14-to-1.13.sql",
+        "patchSetId": 3
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-03-09T21:53:41Z",
+      "side": 1,
+      "message": "Please put back \"-- 37\"",
+      "revId": "dac759d8eb414639de579fb6f4334cf1943a163e",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
