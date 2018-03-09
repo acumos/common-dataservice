@@ -16,6 +16,23 @@
       "revId": "dac759d8eb414639de579fb6f4334cf1943a163e",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31e721_eb6dc746",
+        "filename": "docs/release-notes.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-03-09T22:00:31Z",
+      "side": 1,
+      "message": "May I suggest this wording:\n\n* Define created-date columns as \"DEFAULT 0\" to stop Mariadb from setting to now() on update",
+      "revId": "dac759d8eb414639de579fb6f4334cf1943a163e",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
