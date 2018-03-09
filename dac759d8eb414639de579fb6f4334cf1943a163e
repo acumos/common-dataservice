@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9b54dcae_bf74ac77",
+        "filename": "cmn-data-svc-server/db-scripts/cds-mysql-downgrade-1.14-to-1.13.sql",
+        "patchSetId": 3
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-03-09T22:02:32Z",
+      "side": 1,
+      "message": "There was no SQL statement for line 37 originally!",
+      "parentUuid": "b2e045a6_7ec0c035",
+      "revId": "dac759d8eb414639de579fb6f4334cf1943a163e",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa31e721_eb6dc746",
         "filename": "docs/release-notes.rst",
         "patchSetId": 3
