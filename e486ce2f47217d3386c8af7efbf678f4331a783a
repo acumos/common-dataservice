@@ -34,6 +34,23 @@
       "revId": "e486ce2f47217d3386c8af7efbf678f4331a783a",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f5d249d0_d6864cdd",
+        "filename": "cmn-data-svc-server/db-scripts/cds-mysql-downgrade-1.15-to-1.14.sql",
+        "patchSetId": 25
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-03-12T14:29:16Z",
+      "side": 1,
+      "message": "Do you want to try in the same statement like \nALTER TABLE C_SOLUTION ADD COLUMN VALIDATION_STATUS_CD CHAR(2) DEFAULT \u0027NV\u0027. \nThis will be applicable only if we agree that its ok to have a default value of \u0027NV\u0027.",
+      "revId": "e486ce2f47217d3386c8af7efbf678f4331a783a",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
