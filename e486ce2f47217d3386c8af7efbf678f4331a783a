@@ -16,6 +16,24 @@
       "revId": "e486ce2f47217d3386c8af7efbf678f4331a783a",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8c80cf18_38d2f92a",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPTimestampedEntity.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-03-12T14:02:37Z",
+      "side": 1,
+      "message": "I want to specify a definition for every column. Missed this previously.  I don\u0027t know the default.  Actually this probably should read \"TIMESTAMP DEFAULT 0\".",
+      "parentUuid": "49fcb883_3bf45be6",
+      "revId": "e486ce2f47217d3386c8af7efbf678f4331a783a",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
