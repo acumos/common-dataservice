@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "49fcb883_3bf45be6",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPTimestampedEntity.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-03-12T13:59:11Z",
+      "side": 1,
+      "message": "Isn\u0027t \"TIMESTAMP\" the default property type for CreationTimestamp, or is an explicit definition via columnDefinition needed?",
+      "revId": "e486ce2f47217d3386c8af7efbf678f4331a783a",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
