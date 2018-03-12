@@ -51,6 +51,24 @@
       "revId": "e486ce2f47217d3386c8af7efbf678f4331a783a",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1935245b_b078806e",
+        "filename": "cmn-data-svc-server/db-scripts/cds-mysql-downgrade-1.15-to-1.14.sql",
+        "patchSetId": 25
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-03-12T15:06:45Z",
+      "side": 1,
+      "message": "I don\u0027t think this will have the same effect, because it will not set the value on the existing rows.",
+      "parentUuid": "f5d249d0_d6864cdd",
+      "revId": "e486ce2f47217d3386c8af7efbf678f4331a783a",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
