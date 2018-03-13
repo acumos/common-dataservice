@@ -23,9 +23,12 @@ package org.acumos.cds.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.acumos.cds.AccessTypeCode;
 import org.acumos.cds.ArtifactTypeCode;
 import org.acumos.cds.CCDSConstants;
+import org.acumos.cds.CodeNameType;
 import org.acumos.cds.DeploymentStatusCode;
 import org.acumos.cds.LoginProviderCode;
 import org.acumos.cds.MessageSeverityCode;
@@ -39,7 +42,12 @@ import org.acumos.cds.ToolkitTypeCode;
 import org.acumos.cds.ValidationStatusCode;
 import org.acumos.cds.ValidationTypeCode;
 import org.acumos.cds.domain.MLPCodeNamePair;
+import org.acumos.cds.service.CodeNameService;
+import org.acumos.cds.transport.ErrorTransport;
+import org.acumos.cds.util.EELFLoggerDelegate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -51,9 +59,38 @@ import io.swagger.annotations.ApiOperation;
  * implemented as Java enums, so these controllers are only of interest to
  * systems that don't use this project's Java client.
  */
+@SuppressWarnings("deprecation")
 @Controller
 @RequestMapping("/" + CCDSConstants.CODE_PATH)
 public class CodeTableController extends AbstractController {
+
+	private static final EELFLoggerDelegate logger = EELFLoggerDelegate.getLogger(CodeTableController.class);
+
+	@Autowired
+	private CodeNameService codeNameService;
+
+	/**
+	 * @param typeName
+	 *            Name of an field in {@link org.acumos.cds.CodeNameType}
+	 * @param response
+	 *            HttpServletResponse
+	 * @return List of MLPCodeNamePair objects for the specified value set.
+	 */
+	@ApiOperation(value = "Gets the list of code-name pairs for the specified value set name.", response = MLPCodeNamePair.class, responseContainer = "List")
+	@RequestMapping(value = "/" + CCDSConstants.PAIR_PATH + "/{type}", method = RequestMethod.GET)
+	@ResponseBody
+	public Object getCodeNamePairs(@PathVariable(CCDSConstants.TYPE_PATH) String typeName,
+			HttpServletResponse response) {
+		CodeNameType type;
+		try {
+			type = CodeNameType.valueOf(typeName);
+			return codeNameService.getCodeNamePairs(type);
+		} catch (Exception ex) {
+			logger.warn(EELFLoggerDelegate.errorLogger, "getCodeNamePairs", ex.toString());
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "Unexpected value set name " + typeName);
+		}
+	}
 
 	/**
 	 * @return List of MLPCodeNamePair objects with access type code-name pairs
