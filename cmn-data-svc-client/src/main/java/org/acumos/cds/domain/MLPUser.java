@@ -95,6 +95,7 @@ public class MLPUser extends MLPTimestampedEntity implements Serializable {
 	 */
 	@Column(name = "LOGIN_HASH", columnDefinition = "VARCHAR(64)")
 	@Size(max = 64)
+	@ApiModelProperty(value = "Transports password in clear text", example = "LongKeysAreHardToCrack12345")
 	private String loginHash;
 
 	@Column(name = "LOGIN_PASS_EXPIRE_DATE")
