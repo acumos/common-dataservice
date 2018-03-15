@@ -364,6 +364,57 @@
       "revId": "effa0ce2c14550a8114265542414d38281ec30ca",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a92206df_b96a2a06",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPSolutionRevision.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-03-15T21:34:48Z",
+      "side": 1,
+      "message": "value \u003d \"User Id\" not needed here?",
+      "revId": "effa0ce2c14550a8114265542414d38281ec30ca",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "77661896_435640e0",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPSolutionWeb.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-03-15T21:34:48Z",
+      "side": 1,
+      "message": "Is a readOnly annotation required here?",
+      "revId": "effa0ce2c14550a8114265542414d38281ec30ca",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a973b35_4dbd0b64",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPStepResult.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-03-15T21:34:48Z",
+      "side": 1,
+      "message": "May be provide example annotation on this?",
+      "revId": "effa0ce2c14550a8114265542414d38281ec30ca",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
