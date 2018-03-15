@@ -32,13 +32,18 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Type;
 
+import io.swagger.annotations.ApiModelProperty;
+
 /**
- * Model for solution website metadata. In a one:one relationship with solution.
- * The relationship is mapped via annotations on MLPSolution (unidirectional).
+ * Model for solution website metadata, which transports descriptive statistics
+ * recorded on the server to the client; never used for update from the client.
  * 
- * The separation was made to distinguish updates ON a solution made by the
- * owner (e.g., description) from updates ABOUT a solution made by the system
- * (e.g., downloads or views).
+ * In a one:one relationship with solution. The relationship is mapped via
+ * annotations on MLPSolution (unidirectional).
+ * 
+ * These stats were separated out of the solution entity to distinguish updates
+ * ON a solution made by the owner (e.g., description) from updates ABOUT a
+ * solution made by the system (e.g., downloads or views).
  */
 @Entity
 @Table(name = "C_SOLUTION_WEB")
@@ -51,6 +56,7 @@ public class MLPSolutionWeb implements MLPEntity, Serializable {
 	@Id
 	@Column(name = SOL_ID_COL_NAME, nullable = false, columnDefinition = "CHAR(36)")
 	@Size(max = 36)
+	@ApiModelProperty(required = true, value = "UUID", example = "12345678-abcd-90ab-cdef-1234567890ab")
 	private String solutionId;
 
 	@Column(name = "VIEW_COUNT", columnDefinition = "INT")
