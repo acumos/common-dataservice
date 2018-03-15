@@ -28,6 +28,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * Model for site configuration details, basically a key-value store.
  */
@@ -39,14 +41,17 @@ public class MLPSiteConfig extends MLPTimestampedEntity implements Serializable 
 
 	// Alas the column name "KEY" isn't usable in most databases
 	@Id
-	@Column(name = "CONFIG_KEY", updatable = false, nullable = false, columnDefinition = "VARCHAR(50)")
+	@Column(name = "CONFIG_KEY", nullable = false, updatable = false, columnDefinition = "VARCHAR(50)")
+	@ApiModelProperty(required = true, value = "Unique key", example = "site_config_key_1")
 	private String configKey;
 
 	@Column(name = "CONFIG_VAL", nullable = false, columnDefinition = "VARCHAR(8192)")
+	@ApiModelProperty(required = true, value = "Site configuration value")
 	private String configValue;
 
 	// Optional
 	@Column(name = "USER_ID", columnDefinition = "CHAR(36)")
+	@ApiModelProperty(value = "UUID", example = "12345678-abcd-90ab-cdef-1234567890ab")
 	private String userId;
 
 	/**
