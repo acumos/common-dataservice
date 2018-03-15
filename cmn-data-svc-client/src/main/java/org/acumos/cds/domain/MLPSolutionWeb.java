@@ -32,6 +32,8 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Type;
 
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * Model for solution website metadata. In a one:one relationship with solution.
  * The relationship is mapped via annotations on MLPSolution (unidirectional).
@@ -51,6 +53,7 @@ public class MLPSolutionWeb implements MLPEntity, Serializable {
 	@Id
 	@Column(name = SOL_ID_COL_NAME, nullable = false, columnDefinition = "CHAR(36)")
 	@Size(max = 36)
+	@ApiModelProperty(required = true, example = "12345678-abcd-90ab-cdef-1234567890ab")
 	private String solutionId;
 
 	@Column(name = "VIEW_COUNT", columnDefinition = "INT")
