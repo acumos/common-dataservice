@@ -16,7 +16,7 @@
 -- limitations under the License.
 -- ===============LICENSE_END=========================================================
 
--- DDL and DML for tables managed by the Common Data Service version 1.14.x
+-- DDL and DML for tables managed by the Common Data Service version 1.15.x
 -- No database is created or specified to allow flexible deployment;
 -- also see script cmn-data-svc-base-mysql.sql.
 
@@ -454,3 +454,11 @@ INSERT INTO C_SITE_CONFIG (CONFIG_KEY, CONFIG_VAL) VALUES (
     {"type":"select","name":"enableOnBoarding","label":"EnableOnboarding","options":[{"name":"Enabled"},{"name":"Disabled"}],"required":true,"data":{"name":"Enabled"}}
   ]}');
   
+#Initial user, role setups for admin
+INSERT INTO C_USER (USER_ID, LOGIN_NAME, LOGIN_HASH) VALUES ('12345678-abcd-90ab-cdef-1234567890ab', 'admin', '$2a$10$nogCM69/Vc0rEsZbHXlEm.nxSdGuD88Kd6NlW6fnKJz3AIz0PdOwa');
+
+INSERT INTO C_ROLE (ROLE_ID, NAME, ACTIVE_YN) VALUES ('8c850f07-4352-4afd-98b1-00cbceca569f', 'admin', 'N');
+
+INSERT INTO C_USER_ROLE_MAP (USER_ID, ROLE_ID) VALUES ('12345678-abcd-90ab-cdef-1234567890ab', '8c850f07-4352-4afd-98b1-00cbceca569f'); 
+
+DELETE FROM C_ROLE WHERE NAME='MLP System User'; 

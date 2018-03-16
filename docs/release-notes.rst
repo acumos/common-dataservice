@@ -23,6 +23,11 @@ Release Notes
 The client and server are released together.  The client is deployed as a jar file to a
 Maven Nexus repository. The server is deployed as a Docker image to a Docker registry.
 
+Version 1.15.0, ? March 2018
+----------------------------
+
+* Admin user role setup (ACUMOS-388)
+
 Version 1.14.2, 15 March 2018
 ----------------------------
 
