@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4711c6e0_16019941",
+        "filename": "cmn-data-svc-server/db-scripts/cmn-data-svc-ddl-dml-mysql-1.14.sql",
+        "patchSetId": 1
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-03-16T23:01:23Z",
+      "side": 1,
+      "message": "Can the c_role entry \"MLP System User\" be deleted now?",
+      "revId": "c2b78ce4b74dfc345da5822b117125f8187a961c",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf9ac065_cfb25090",
+        "filename": "cmn-data-svc-server/db-scripts/cmn-data-svc-ddl-dml-mysql-1.14.sql",
+        "patchSetId": 1
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-03-16T23:01:23Z",
+      "side": 1,
+      "message": "Please set the active status to FALSE, as it says in the Jira ticket.  And don\u0027t use back ticks (`), be consistent with others insert statements.",
+      "revId": "c2b78ce4b74dfc345da5822b117125f8187a961c",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
