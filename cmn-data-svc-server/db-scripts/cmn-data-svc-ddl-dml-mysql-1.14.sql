@@ -453,3 +453,10 @@ INSERT INTO C_SITE_CONFIG (CONFIG_KEY, CONFIG_VAL) VALUES (
     ]},
     {"type":"select","name":"enableOnBoarding","label":"EnableOnboarding","options":[{"name":"Enabled"},{"name":"Disabled"}],"required":true,"data":{"name":"Enabled"}}
   ]}');
+  
+#Initial user, role setups for admin
+INSERT INTO `c_user` (`USER_ID`, `LOGIN_NAME`, `LOGIN_HASH`) VALUES ('12345678-abcd-90ab-cdef-1234567890ab', 'admin', '$2a$10$nogCM69/Vc0rEsZbHXlEm.nxSdGuD88Kd6NlW6fnKJz3AIz0PdOwa');
+
+INSERT INTO `c_role` (`ROLE_ID`, `NAME`) VALUES ('8c850f07-4352-4afd-98b1-00cbceca569f', 'admin');
+
+INSERT INTO `c_user_role_map` (`USER_ID`, `ROLE_ID`) VALUES ('12345678-abcd-90ab-cdef-1234567890ab', '8c850f07-4352-4afd-98b1-00cbceca569f');  
