@@ -386,6 +386,24 @@
     },
     {
       "key": {
+        "uuid": "9a5f4148_ce8e4589",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPSolution.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-03-16T15:09:38Z",
+      "side": 1,
+      "message": "Patch set 8 has value\u003d\"User ID\"",
+      "parentUuid": "26ccba36_54bb9c9e",
+      "revId": "effa0ce2c14550a8114265542414d38281ec30ca",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6745090e_06b8d4b8",
         "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPSolution.java",
         "patchSetId": 2
@@ -578,6 +596,24 @@
     },
     {
       "key": {
+        "uuid": "4b5cec33_d9e46eab",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPStepResult.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-03-16T15:09:38Z",
+      "side": 1,
+      "message": "I don\u0027t think extending MLPTimestampedEntity is wise.  First, it would require renaming the columns in the database.  Second, the client is supposed to submit the start/end values, not the database.",
+      "parentUuid": "10aaf7ea_88952190",
+      "revId": "effa0ce2c14550a8114265542414d38281ec30ca",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fac8a5fe_6a13c934",
         "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPTag.java",
         "patchSetId": 2
@@ -595,6 +631,41 @@
     },
     {
       "key": {
+        "uuid": "ff6028be_152c8766",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPTag.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-03-16T15:09:38Z",
+      "side": 1,
+      "message": "Coming up in patch set 9",
+      "parentUuid": "fac8a5fe_6a13c934",
+      "revId": "effa0ce2c14550a8114265542414d38281ec30ca",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "850178fe_0d7fe3a2",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPUser.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-03-16T15:09:38Z",
+      "side": 1,
+      "message": "This field must accept updates, definitely read-write.",
+      "revId": "effa0ce2c14550a8114265542414d38281ec30ca",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf690043_71d45006",
         "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPUser.java",
         "patchSetId": 2
@@ -606,6 +677,24 @@
       "writtenOn": "2018-03-16T14:55:04Z",
       "side": 1,
       "message": "No readOnly annotations on the date fields required here?",
+      "revId": "effa0ce2c14550a8114265542414d38281ec30ca",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f155088b_4fa67152",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPUser.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-03-16T15:09:38Z",
+      "side": 1,
+      "message": "Hmm, good question about last login date.",
+      "parentUuid": "bf690043_71d45006",
       "revId": "effa0ce2c14550a8114265542414d38281ec30ca",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
