@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d3987f5d_cb75f12c",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPSolutionWeb.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-03-16T14:55:04Z",
+      "side": 1,
+      "message": "Is a readOnly annotation required here?",
+      "revId": "8e87f575d3cfa561200607aae8ace3e6551d8bd0",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
