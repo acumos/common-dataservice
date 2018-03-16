@@ -16,6 +16,24 @@
       "revId": "8e87f575d3cfa561200607aae8ace3e6551d8bd0",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "21ce4b83_ada7a741",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPSolutionWeb.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-03-16T15:09:38Z",
+      "side": 1,
+      "message": "This model is never used to generate User input in the Swagger API. I will remove the one annotation and explain.",
+      "parentUuid": "d3987f5d_cb75f12c",
+      "revId": "8e87f575d3cfa561200607aae8ace3e6551d8bd0",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
