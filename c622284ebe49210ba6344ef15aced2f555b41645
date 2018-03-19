@@ -16,6 +16,23 @@
       "revId": "c622284ebe49210ba6344ef15aced2f555b41645",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d19e5c11_e3b8461c",
+        "filename": "cmn-data-svc-server/db-scripts/cmn-data-svc-ddl-dml-mysql-1.15.sql",
+        "patchSetId": 2
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-03-19T14:09:59Z",
+      "side": 1,
+      "message": "Please start instead with the version of this file from the open review, which will not have access_type_cd nor validation_status_cd on C_SOLUTION",
+      "revId": "c622284ebe49210ba6344ef15aced2f555b41645",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
