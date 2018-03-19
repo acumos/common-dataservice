@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5950f7d1_5a425a4c",
+        "filename": "cmn-data-svc-server/db-scripts/cmn-data-svc-ddl-dml-mysql-1.14.sql",
+        "patchSetId": 2
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-03-19T14:02:10Z",
+      "side": 1,
+      "message": "Please clean this up so there\u0027s no commit at all on this (otherwise unchanged) file",
+      "revId": "c622284ebe49210ba6344ef15aced2f555b41645",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
