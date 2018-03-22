@@ -149,7 +149,7 @@ public class ClientMethodTest {
 	public void coverClientMethods() {
 
 		// Exercise getRestTemplate, also no-credentials path
-		new TrivialRestClientImplSubclass("http://localhost:12345", null, null);
+		new TrivialRestClientImplSubclass("http://invalidhost:12345", null, null);
 
 		try {
 			CommonDataServiceRestClientImpl.getInstance(null, null, null);
