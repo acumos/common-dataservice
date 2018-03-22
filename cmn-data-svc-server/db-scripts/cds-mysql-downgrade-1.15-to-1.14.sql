@@ -20,6 +20,9 @@
 -- FROM version 1.15.x TO version 1.14.x.
 -- No database is specified to allow flexible deployment!
 
+-- 7
+ALTER TABLE C_SITE_CONFIG
+  DROP COLUMN VALIDATION_TEXT;
 -- 6
 ALTER TABLE C_SOLUTION
   ADD COLUMN VALIDATION_STATUS_CD CHAR(2);

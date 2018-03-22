@@ -58,6 +58,12 @@ public class MLPSiteConfig extends MLPTimestampedEntity implements Serializable 
 	@ApiModelProperty(value = "UUID", example = "12345678-abcd-90ab-cdef-1234567890ab")
 	private String userId;
 
+	// Optional
+	@Column(name = "VALIDATION_TEXT", columnDefinition = "VARCHAR(8192)")
+	@Size(max = 8192)
+	@ApiModelProperty(value = "Validation Text")
+	private String valText;
+
 	/**
 	 * No-arg constructor.
 	 */
@@ -66,8 +72,8 @@ public class MLPSiteConfig extends MLPTimestampedEntity implements Serializable 
 	}
 
 	/**
-	 * This constructor accepts the required fields; i.e., the minimum that the user
-	 * must supply to create a valid instance.
+	 * This constructor accepts the required fields; i.e., the minimum that the
+	 * user must supply to create a valid instance.
 	 * 
 	 * @param configKey
 	 *            Row ID
@@ -93,6 +99,7 @@ public class MLPSiteConfig extends MLPTimestampedEntity implements Serializable 
 		this.configKey = that.configKey;
 		this.configValue = that.configValue;
 		this.userId = that.userId;
+		this.valText = that.valText;
 	}
 
 	public String getConfigKey() {
@@ -117,6 +124,14 @@ public class MLPSiteConfig extends MLPTimestampedEntity implements Serializable 
 
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+
+	public String getValText() {
+		return valText;
+	}
+
+	public void setValText(String valText) {
+		this.valText = valText;
 	}
 
 	@Override
