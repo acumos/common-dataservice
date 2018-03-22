@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "45abf609_70a24311",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPSiteConfig.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-03-22T10:01:16Z",
+      "side": 1,
+      "message": "Remove, revert",
+      "revId": "c26e4ff1c5804425327c8f956e4c0469f3509578",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "08f26d85_5dd4fe13",
+        "filename": "cmn-data-svc-client/src/test/java/org/acumos/cds/client/test/DomainTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 564,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-03-22T10:01:16Z",
+      "side": 1,
+      "message": "Remove, revert",
+      "revId": "c26e4ff1c5804425327c8f956e4c0469f3509578",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7435d5b6_302030cf",
+        "filename": "cmn-data-svc-server/db-scripts/cds-mysql-downgrade-1.15-to-1.14.sql",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-03-22T10:01:16Z",
+      "side": 1,
+      "message": "Remove, revert",
+      "revId": "c26e4ff1c5804425327c8f956e4c0469f3509578",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "95a4ecbb_4670a456",
+        "filename": "cmn-data-svc-server/db-scripts/cds-mysql-upgrade-1.14-to-1.15.sql",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-03-22T10:01:16Z",
+      "side": 1,
+      "message": "remove, revert",
+      "revId": "c26e4ff1c5804425327c8f956e4c0469f3509578",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "51291f6a_f1459f62",
+        "filename": "cmn-data-svc-server/db-scripts/cmn-data-svc-ddl-dml-mysql-1.15.sql",
+        "patchSetId": 1
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-03-22T10:01:16Z",
+      "side": 1,
+      "message": "Remove, revert",
+      "revId": "c26e4ff1c5804425327c8f956e4c0469f3509578",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d0a7519c_83e8d866",
+        "filename": "docs/release-notes.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-03-22T10:01:16Z",
+      "side": 1,
+      "message": "add VALUE, not field",
+      "revId": "c26e4ff1c5804425327c8f956e4c0469f3509578",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
