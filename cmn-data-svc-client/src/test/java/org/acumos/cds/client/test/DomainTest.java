@@ -560,7 +560,7 @@ public class DomainTest extends AbstractModelTest {
 		Assert.assertEquals(s2, m.getConfigValue());
 		Assert.assertEquals(d1, m.getCreated());
 		Assert.assertEquals(d2, m.getModified());
-		Assert.assertEquals(s3, m.getUserId());
+		Assert.assertEquals(s3, m.getUserId());		
 	}
 
 	@Test
