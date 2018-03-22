@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "48a73315_eb3a9c9e",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPSiteConfig.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-03-22T16:37:30Z",
+      "side": 1,
+      "message": "Please revert this change so we can keep the history clean",
+      "revId": "282e38cd8e265d91c862f8ea619a8c80ed73754c",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "02507d4b_2b411b0b",
+        "filename": "cmn-data-svc-client/src/test/java/org/acumos/cds/client/test/DomainTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 563,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-03-22T16:37:30Z",
+      "side": 1,
+      "message": "Please revert, avoid whitespace-only changes",
+      "revId": "282e38cd8e265d91c862f8ea619a8c80ed73754c",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f6ae3a7f_a741d7f3",
+        "filename": "cmn-data-svc-client/src/test/java/org/acumos/cds/client/test/DomainTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 575,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-03-22T16:37:30Z",
+      "side": 1,
+      "message": "Ditto",
+      "revId": "282e38cd8e265d91c862f8ea619a8c80ed73754c",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d575cb7c_05447382",
+        "filename": "cmn-data-svc-server/db-scripts/cds-mysql-downgrade-1.15-to-1.14.sql",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-03-22T16:37:30Z",
+      "side": 1,
+      "message": "I know this is really picky, but would you please remove the trailing whitespace?",
+      "revId": "282e38cd8e265d91c862f8ea619a8c80ed73754c",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ac448a38_e07b2ddc",
+        "filename": "cmn-data-svc-server/db-scripts/cds-mysql-upgrade-1.14-to-1.15.sql",
+        "patchSetId": 2
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-03-22T16:37:30Z",
+      "side": 1,
+      "message": "Please use space (not tab) so this looks identical to other lines",
+      "revId": "282e38cd8e265d91c862f8ea619a8c80ed73754c",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3cb11b89_90b0a595",
+        "filename": "cmn-data-svc-server/db-scripts/cmn-data-svc-ddl-dml-mysql-1.15.sql",
+        "patchSetId": 2
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-03-22T16:37:30Z",
+      "side": 1,
+      "message": "Please use space (not tab) so this matches other lines",
+      "revId": "282e38cd8e265d91c862f8ea619a8c80ed73754c",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
