@@ -66,8 +66,8 @@ public class MLPSiteConfig extends MLPTimestampedEntity implements Serializable 
 	}
 
 	/**
-	 * This constructor accepts the required fields; i.e., the minimum that the user
-	 * must supply to create a valid instance.
+	 * This constructor accepts the required fields; i.e., the minimum that the
+	 * user must supply to create a valid instance.
 	 * 
 	 * @param configKey
 	 *            Row ID

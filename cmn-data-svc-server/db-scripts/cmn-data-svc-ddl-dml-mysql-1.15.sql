@@ -451,7 +451,8 @@ INSERT INTO C_SITE_CONFIG (CONFIG_KEY, CONFIG_VAL) VALUES (
       {"type":"text","name":"socketTimeout","label":"socketTimeout","required":"true","data":"300"},
       {"type":"text","name":"connectionTimeout","label":"connectionTimeout","required":"true","data":"10"}
     ]},
-    {"type":"select","name":"enableOnBoarding","label":"EnableOnboarding","options":[{"name":"Enabled"},{"name":"Disabled"}],"required":true,"data":{"name":"Enabled"}}
+    {"type":"select","name":"enableOnBoarding","label":"EnableOnboarding","options":[{"name":"Enabled"},{"name":"Disabled"}],"required":true,"data":{"name":"Enabled"}},
+	{"type":"textarea","name":"validationText","label":"validationText","required":"false","data":"test"}
   ]}');
 
 # Initial user, role setups for admin
