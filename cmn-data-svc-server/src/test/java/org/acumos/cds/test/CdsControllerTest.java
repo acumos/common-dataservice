@@ -1530,7 +1530,8 @@ public class CdsControllerTest {
 		pg1.setDescription("some description");
 		client.updatePeerGroup(pg1);
 
-		MLPPeerGroup pg2 = new MLPPeerGroup("peer group 2");
+		String peerGrpName = "peer group 2";
+		MLPPeerGroup pg2 = new MLPPeerGroup(peerGrpName);
 		pg2 = client.createPeerGroup(pg2);
 		Assert.assertNotNull(pg2.getGroupId());
 		logger.info("Created peer group " + pg2.getGroupId());
@@ -1588,7 +1589,9 @@ public class CdsControllerTest {
 
 		access = client.checkPeerSolutionAccess(pr.getPeerId(), cs.getSolutionId());
 		Assert.assertTrue(access <= 0);
-
+		
+		String solGrpName = "solution group";
+		
 		// Invalid cases
 		try {
 			client.getPeersInGroup(99999999999L, new RestPageRequest());
@@ -1603,7 +1606,7 @@ public class CdsControllerTest {
 			logger.info("getSolutionsInGroup failed as expected: {}", ex.getResponseBodyAsString());
 		}
 		try {
-			MLPSolutionGroup sgx = new MLPSolutionGroup("solution group");
+			MLPSolutionGroup sgx = new MLPSolutionGroup(solGrpName);
 			sgx.setGroupId(999L);
 			client.updateSolutionGroup(sgx);
 			throw new Exception("Unexpected success");
@@ -1618,6 +1621,15 @@ public class CdsControllerTest {
 		} catch (HttpStatusCodeException ex) {
 			logger.info("updatePeerGroup failed as expected: {}", ex.getResponseBodyAsString());
 		}
+		
+		try {
+			MLPPeerGroup pgAnother = new MLPPeerGroup(peerGrpName);
+			client.createPeerGroup(pgAnother);
+			throw new Exception("Unexpected success");
+		} catch (HttpStatusCodeException ex) {
+			logger.info("Create peer group failed due to duplicate group name as expected: {}", ex.getResponseBodyAsString());
+		}
+		
 		try {
 			client.createPeerGroup(new MLPPeerGroup());
 			throw new Exception("Unexpected success");
@@ -1644,6 +1656,14 @@ public class CdsControllerTest {
 		} catch (HttpStatusCodeException ex) {
 			logger.info("Create solution group failed as expected: {}", ex.getResponseBodyAsString());
 		}
+		
+		try {
+			client.createSolutionGroup(new MLPSolutionGroup(solGrpName));
+			throw new Exception("Unexpected success");
+		} catch (HttpStatusCodeException ex) {
+			logger.info("Create solution group failed due to duplicate group name as expected: {}", ex.getResponseBodyAsString());
+		}
+		
 		try {
 			MLPSolutionGroup sg2 = new MLPSolutionGroup();
 			sg2.setGroupId(1L);
