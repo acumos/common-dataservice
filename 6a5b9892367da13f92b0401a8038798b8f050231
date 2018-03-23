@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "f0ee562d_984ed703",
+        "filename": "cmn-data-svc-server/db-scripts/cds-mysql-upgrade-1.14-to-1.15.sql",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-03-23T19:53:21Z",
+      "side": 1,
+      "message": "As step 0 please run \"select name, count(name) group by name\" on all three tables to be modified.  Add some suitable warnings up front.  If any emits non-empty the script will fail.",
+      "revId": "6a5b9892367da13f92b0401a8038798b8f050231",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ea30269d_97a67a3c",
         "filename": "cmn-data-svc-server/db-scripts/cmn-data-svc-ddl-dml-mysql-1.15.sql",
         "patchSetId": 1
