@@ -235,18 +235,18 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 	 * Builds URI by adding specified path segments and query parameters to the base
 	 * URL. Converts an array of values to a series of parameters with the same
 	 * name; e.g., "find foo in list [a,b]" becomes request parameters
-	 * "foo=a&foo=b".
+	 * "foo=a&amp;foo=b".
 	 * 
 	 * @param path
 	 *            Array of path segments
 	 * @param queryParams
 	 *            key-value pairs; ignored if null or empty. Gives special treatment
 	 *            to Date-type values, Array values, and null values inside arrays.
-	 * @param restPageRequest
+	 * @param pageRequest
 	 *            page, size and sort specification; ignored if null.
-	 * @return
+	 * @return URI with the specified path segments and query parameters
 	 */
-	private URI buildUri(final String[] path, final Map<String, Object> queryParams, RestPageRequest pageRequest) {
+	protected URI buildUri(final String[] path, final Map<String, Object> queryParams, RestPageRequest pageRequest) {
 		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(this.baseUrl);
 		for (int p = 0; p < path.length; ++p)
 			builder.pathSegment(path[p]);

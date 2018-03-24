@@ -20,6 +20,7 @@
 
 package org.acumos.cds.test;
 
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,6 +32,7 @@ import java.util.UUID;
 
 import org.acumos.cds.AccessTypeCode;
 import org.acumos.cds.ArtifactTypeCode;
+import org.acumos.cds.CCDSConstants;
 import org.acumos.cds.CodeNameType;
 import org.acumos.cds.DeploymentStatusCode;
 import org.acumos.cds.LoginProviderCode;
@@ -98,9 +100,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * Tests server controller classes by sending in requests with the client. The
@@ -110,6 +116,23 @@ import org.springframework.web.client.HttpStatusCodeException;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @SuppressWarnings("deprecation")
 public class CdsControllerTest {
+
+	/**
+	 * Provides access to several protected methods.
+	 */
+	static class TrivialRestClientImplSubclass extends CommonDataServiceRestClientImpl {
+		public TrivialRestClientImplSubclass(String webapiUrl, String user, String pass) {
+			super(webapiUrl, user, pass);
+		}
+
+		public RestTemplate getRestTemplate() {
+			return super.getRestTemplate();
+		}
+
+		public URI buildUri(final String[] path, final Map<String, Object> queryParams, RestPageRequest pageRequest) {
+			return super.buildUri(path, queryParams, pageRequest);
+		}
+	}
 
 	private static Logger logger = LoggerFactory.getLogger(CdsControllerTest.class);
 
@@ -139,7 +162,7 @@ public class CdsControllerTest {
 		logger.info("createClient: port is {}", port);
 		URL url = new URL("http", hostname, port, contextPath);
 		logger.info("createClient: URL is {}", url);
-		client = CommonDataServiceRestClientImpl.getInstance(url.toString(), userName, password);
+		client = new TrivialRestClientImplSubclass(url.toString(), userName, password);
 	}
 
 	@Test
@@ -230,61 +253,60 @@ public class CdsControllerTest {
 	@Test
 	public void getCodeValueConstants() throws Exception {
 
-		for (CodeNameType type : CodeNameType.values()) {
-			List<MLPCodeNamePair> list = client.getCodeNamePairs(type);
-			logger.info("testCodeNameService: type {} -> values {}", type, list);
+		// No client method provided for this server endpoint
+		if (client instanceof TrivialRestClientImplSubclass) {
+			TrivialRestClientImplSubclass privClient = (TrivialRestClientImplSubclass) client;
+			RestTemplate restTemplate = privClient.getRestTemplate();
+			URI uri = privClient.buildUri(
+					new String[] { CCDSConstants.CODE_PATH, CCDSConstants.PAIR_PATH }, null,
+					null);
+			ResponseEntity<List<String>> response = restTemplate.exchange(uri, HttpMethod.GET, null,
+					new ParameterizedTypeReference<List<String>>() {
+					});
+			List<String> names = response.getBody();
+			logger.info("getCodeValueConstants: names {}", names);
+			Assert.assertFalse(names.isEmpty());
+			// Validate against the enum
+			for (String name : names)
+				CodeNameType.valueOf(name);
+		}
+
+		for (CodeNameType name : CodeNameType.values()) {
+			List<MLPCodeNamePair> list = client.getCodeNamePairs(name);
+			logger.info("getCodeValueConstants: name {} -> values {}", name, list);
 			Assert.assertFalse(list.isEmpty());
+			// Cannot validate here - list of values is defined by server config
 		}
 
 		List<MLPAccessType> act = client.getAccessTypes();
-		Assert.assertTrue(act.size() > 0);
-		for (MLPAccessType c : act)
-			logger.info("Access type {}", c);
+		Assert.assertFalse(act.isEmpty());
 
 		List<MLPArtifactType> art = client.getArtifactTypes();
-		Assert.assertTrue(art.size() > 0);
-		for (MLPArtifactType r : art)
-			logger.info("Artifact type {}", r);
+		Assert.assertFalse(art.isEmpty());
 
 		List<MLPDeploymentStatus> ds = client.getDeploymentStatuses();
-		Assert.assertTrue(ds.size() > 0);
-		for (MLPDeploymentStatus d : ds)
-			logger.info("Deployment status {}", d);
+		Assert.assertFalse(ds.isEmpty());
 
 		List<MLPLoginProvider> lp = client.getLoginProviders();
-		Assert.assertTrue(lp.size() > 0);
-		for (MLPLoginProvider l : lp)
-			logger.info("Login provider {}", l);
+		Assert.assertFalse(lp.isEmpty());
 
 		List<MLPModelType> mt = client.getModelTypes();
-		Assert.assertTrue(mt.size() > 0);
-		for (MLPModelType m : mt)
-			logger.info("Model type {}", m);
+		Assert.assertFalse(mt.isEmpty());
 
 		List<MLPToolkitType> tt = client.getToolkitTypes();
-		Assert.assertTrue(tt.size() > 0);
-		for (MLPToolkitType m : tt)
-			logger.info("Toolkit type {}", m);
+		Assert.assertFalse(tt.isEmpty());
 
 		List<MLPValidationStatus> vs = client.getValidationStatuses();
-		Assert.assertTrue(vs.size() > 0);
-		for (MLPValidationStatus v : vs)
-			logger.info("Validation status {}", v);
+		Assert.assertFalse(vs.isEmpty());
 
 		List<MLPValidationType> vt = client.getValidationTypes();
-		Assert.assertTrue(tt.size() > 0);
-		for (MLPValidationType m : vt)
-			logger.info("Validation type {}", m);
+		Assert.assertFalse(vt.isEmpty());
 
 		List<MLPStepStatus> ss = client.getStepStatuses();
-		Assert.assertTrue(ss.size() > 0);
-		for (MLPStepStatus s : ss)
-			logger.info("Step Status {}", s);
+		Assert.assertFalse(ss.isEmpty());
 
 		List<MLPStepType> st = client.getStepTypes();
-		Assert.assertTrue(st.size() > 0);
-		for (MLPStepType s : st)
-			logger.info("Step Type {}", s);
+		Assert.assertFalse(st.isEmpty());
 	}
 
 	@Test
@@ -1939,16 +1961,15 @@ public class CdsControllerTest {
 		} catch (HttpStatusCodeException ex) {
 			logger.info("addUsersInRole failed on empty list as expected {}", ex.getResponseBodyAsString());
 		}
-		
+
 		try {
 			MLPRole roleAnother = new MLPRole(roleNm, true);
 			client.createRole(roleAnother);
 			throw new Exception("Unexpected success");
 		} catch (HttpStatusCodeException ex) {
-			logger.info("Create role failed due to duplicate role name as expected: {}",
-					ex.getResponseBodyAsString());
+			logger.info("Create role failed due to duplicate role name as expected: {}", ex.getResponseBodyAsString());
 		}
-		
+
 		users.add("bogusUser");
 		try {
 			client.addUsersInRole(users, cr.getRoleId());
