@@ -246,7 +246,7 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 	 *            page, size and sort specification; ignored if null.
 	 * @return
 	 */
-	private URI buildUri(final String[] path, final Map<String, Object> queryParams, RestPageRequest pageRequest) {
+	protected URI buildUri(final String[] path, final Map<String, Object> queryParams, RestPageRequest pageRequest) {
 		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(this.baseUrl);
 		for (int p = 0; p < path.length; ++p)
 			builder.pathSegment(path[p]);

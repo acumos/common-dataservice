@@ -20,6 +20,7 @@
 
 package org.acumos.cds.test;
 
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,6 +32,7 @@ import java.util.UUID;
 
 import org.acumos.cds.AccessTypeCode;
 import org.acumos.cds.ArtifactTypeCode;
+import org.acumos.cds.CCDSConstants;
 import org.acumos.cds.CodeNameType;
 import org.acumos.cds.DeploymentStatusCode;
 import org.acumos.cds.LoginProviderCode;
@@ -98,9 +100,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * Tests server controller classes by sending in requests with the client. The
@@ -110,6 +116,21 @@ import org.springframework.web.client.HttpStatusCodeException;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @SuppressWarnings("deprecation")
 public class CdsControllerTest {
+
+	/**
+	 * Provides access to several protected methods.
+	 */
+	static class TrivialRestClientImplSubclass extends CommonDataServiceRestClientImpl {
+		public TrivialRestClientImplSubclass(String webapiUrl, String user, String pass) {
+			super(webapiUrl, user, pass);
+		}
+		public RestTemplate getRestTemplate() {
+			return super.getRestTemplate();
+		}
+		public URI buildUri(final String[] path, final Map<String, Object> queryParams, RestPageRequest pageRequest) {
+			return super.buildUri(path, queryParams, pageRequest);
+		}
+	}
 
 	private static Logger logger = LoggerFactory.getLogger(CdsControllerTest.class);
 
@@ -139,7 +160,7 @@ public class CdsControllerTest {
 		logger.info("createClient: port is {}", port);
 		URL url = new URL("http", hostname, port, contextPath);
 		logger.info("createClient: URL is {}", url);
-		client = CommonDataServiceRestClientImpl.getInstance(url.toString(), userName, password);
+		client = new TrivialRestClientImplSubclass(url.toString(), userName, password);
 	}
 
 	@Test
@@ -230,9 +251,22 @@ public class CdsControllerTest {
 	@Test
 	public void getCodeValueConstants() throws Exception {
 
-		for (CodeNameType type : CodeNameType.values()) {
-			List<MLPCodeNamePair> list = client.getCodeNamePairs(type);
-			logger.info("testCodeNameService: type {} -> values {}", type, list);
+		// No client method provided for this server endpoint
+		if (client instanceof TrivialRestClientImplSubclass) {
+			TrivialRestClientImplSubclass subclass = (TrivialRestClientImplSubclass) client;
+			RestTemplate restTemplate = subclass.getRestTemplate();
+			URI uri = subclass.buildUri(new String[] { CCDSConstants.CODE_PATH, CCDSConstants.PAIR_PATH, CCDSConstants.NAME_PATH }, null, null);
+			ResponseEntity<List<String>> response = restTemplate.exchange(uri, HttpMethod.GET, null,
+				new ParameterizedTypeReference<List<String>>() {
+				});
+			List<String> names = response.getBody();
+			logger.info("getCodeValueConstants: names {}", names);
+			Assert.assertFalse(names.isEmpty());
+		}
+	
+		for (CodeNameType name : CodeNameType.values()) {
+			List<MLPCodeNamePair> list = client.getCodeNamePairs(name);
+			logger.info("getCodeValueConstants: name {} -> values {}", name, list);
 			Assert.assertFalse(list.isEmpty());
 		}
 
