@@ -63,7 +63,6 @@ public class StepResultSearchServiceImpl extends AbstractSearchServiceImpl imple
 
 		// Reset the count criteria; add pagination and sort
 		criteria.setProjection(null);
-		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		super.applyPageableCriteria(criteria, pageable);
 
 		// Get a page of results and send it back with the total available

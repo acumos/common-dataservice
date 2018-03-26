@@ -69,14 +69,17 @@ public class SolutionSearchServiceImpl extends AbstractSearchServiceImpl impleme
 
 		// Count the total rows
 		criteria.setProjection(Projections.rowCount());
+		// Request distinct; cross product yields multiple rows with same solution
+		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		Long count = (Long) criteria.uniqueResult();
 		if (count == 0)
 			return new PageImpl<>(new ArrayList<>(), pageable, count);
 
-		// Reset the count criteria; add pagination and sort
+		// Reset the count criteria
 		criteria.setProjection(null);
-		// Want unique set; cross product yields multiple rows with same solution
+		// Still need distinct
 		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		// Add pagination and sort
 		super.applyPageableCriteria(criteria, pageable);
 
 		// Get a page of results and send it back with the total available
@@ -85,9 +88,10 @@ public class SolutionSearchServiceImpl extends AbstractSearchServiceImpl impleme
 		return new PageImpl<>(items, pageable, count);
 	}
 
-	/**
-	 * This implementation is awkward primarily becos of the need the need to use
-	 * LIKE queries on certain fields
+	/*
+	 * Searches using the full object model, then converts result to plain.
+	 *
+	 * This implementation is awkward due to LIKE queries on certain fields
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -121,16 +125,22 @@ public class SolutionSearchServiceImpl extends AbstractSearchServiceImpl impleme
 		if (tags != null && tags.length > 0)
 			criteria.add(Restrictions.in(tagAlias + ".tag", tags));
 
-		// Count the total rows
+		// Want unique set; cross product yields multiple rows with same solution
+		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+
+		// Request count of rows
 		criteria.setProjection(Projections.rowCount());
+		// Request distinct set, cross product yields repeats
+		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		Long count = (Long) criteria.uniqueResult();
 		if (count == 0)
 			return new PageImpl<>(new ArrayList<>(), pageable, count);
 
-		// Reset the count criteria; add pagination and sort
+		// Remove the count projection
 		criteria.setProjection(null);
-		// Want unique set; cross product yields multiple rows with same solution
+		// Still need distinct
 		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		// Add pagination and sort
 		super.applyPageableCriteria(criteria, pageable);
 
 		// Get a page of results
@@ -145,12 +155,15 @@ public class SolutionSearchServiceImpl extends AbstractSearchServiceImpl impleme
 			if (item instanceof MLPSolutionFOM)
 				solutions.add(((MLPSolutionFOM) item).toMLPSolution());
 			else
-				logger.error(EELFLoggerDelegate.errorLogger, "Unexpected type: {} ", item.getClass().getName());
+				throw new AssertionFailure("findPortalSolutions: unexpected type: {} " + item.getClass().getName());
 
 		logger.debug(EELFLoggerDelegate.debugLogger, "findPortalSolutions: result size={}", solutions.size());
 		return new PageImpl<>(solutions, pageable, count);
 	}
 
+	/*
+	 * Searches using the full object model, then converts result to plain.
+	 */
 	@Override
 	@SuppressWarnings("rawtypes")
 	public Page<MLPSolution> findSolutionsByModifiedDate(boolean active, String[] accessTypeCode,
@@ -177,15 +190,17 @@ public class SolutionSearchServiceImpl extends AbstractSearchServiceImpl impleme
 		itemModifiedAfter.add(artModified);
 		criteria.add(itemModifiedAfter);
 
-		// Count the total rows
+		// Request count of rows
 		criteria.setProjection(Projections.rowCount());
+		// Request distinct set, cross product yields repeats
+		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		Long count = (Long) criteria.uniqueResult();
 		if (count == 0)
 			return new PageImpl<>(new ArrayList<>(), pageable, count);
 
-		// Remove the count projections
+		// Remove the count projection
 		criteria.setProjection(null);
-		// Want unique set; cross product yields multiple rows with same solution
+		// Still need distinct
 		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		// Add pagination and sort
 		super.applyPageableCriteria(criteria, pageable);
