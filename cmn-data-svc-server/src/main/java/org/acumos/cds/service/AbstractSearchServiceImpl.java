@@ -114,8 +114,32 @@ public abstract class AbstractSearchServiceImpl {
 	 *            Pageable
 	 */
 	protected void applyPageableCriteria(Criteria criteria, Pageable pageable) {
+		applyFirstMaxCriteria(criteria, pageable);
+		applySortCriteria(criteria, pageable);
+	}
+
+	/**
+	 * Adds first row and page size criteria to the criteria.
+	 * 
+	 * @param criteria
+	 *            Criteria
+	 * @param pageable
+	 *            Pageable
+	 */
+	protected void applyFirstMaxCriteria(Criteria criteria, Pageable pageable) {
 		criteria.setFirstResult(pageable.getOffset());
 		criteria.setMaxResults(pageable.getPageSize());
+	}
+
+	/**
+	 * Adds sort criteria to the criteria.
+	 * 
+	 * @param criteria
+	 *            Criteria
+	 * @param pageable
+	 *            Pageable
+	 */
+	protected void applySortCriteria(Criteria criteria, Pageable pageable) {
 		if (pageable.getSort() != null) {
 			Iterator<Sort.Order> orderIter = pageable.getSort().iterator();
 			while (orderIter.hasNext()) {
