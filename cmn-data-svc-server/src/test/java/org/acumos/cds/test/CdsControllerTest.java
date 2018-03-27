@@ -279,6 +279,7 @@ public class CdsControllerTest {
 			MLPUser cu = new MLPUser();
 			cu.setLoginName("user_login");
 			cu.setLoginHash("user_pass");
+			cu.setEmail(cu.getLoginName() + "@nowhere.com");
 			cu.setFirstName("First Name");
 			cu.setLastName("Last Name");
 			cu = client.createUser(cu);
@@ -322,6 +323,7 @@ public class CdsControllerTest {
 			final String loginPass = "test_client_pass";
 			cu.setLoginName(loginName);
 			cu.setLoginHash(loginPass);
+			cu.setEmail(cu.getLoginName() + "@nowhere.com");
 			final String firstName = "test_" + unique;
 			cu.setFirstName(firstName);
 			final String lastName = "name create-sol-arts";
@@ -839,6 +841,7 @@ public class CdsControllerTest {
 			final String loginPass = "test_client_pass";
 			cu.setLoginName(loginName);
 			cu.setLoginHash(loginPass);
+			cu.setEmail(cu.getLoginName() + "@nowhere.com");
 			final String firstName = "test_" + unique;
 			cu.setFirstName(firstName);
 			final String lastName = "test-role-fn";
@@ -972,6 +975,7 @@ public class CdsControllerTest {
 			MLPUser cu = new MLPUser();
 			final String loginName = "notif_" + Long.toString(new Date().getTime());
 			cu.setLoginName(loginName);
+			cu.setEmail(cu.getLoginName() + "@nowhere.com");
 			cu = client.createUser(cu);
 			Assert.assertNotNull(cu.getUserId());
 
@@ -1036,6 +1040,7 @@ public class CdsControllerTest {
 		try {
 			final String loginName = "notif_" + Long.toString(new Date().getTime());
 			cu.setLoginName(loginName);
+			cu.setEmail(cu.getLoginName() + "@nowhere.com");
 			cu = client.createUser(cu);
 			Assert.assertNotNull(cu.getUserId());
 
@@ -1274,6 +1279,7 @@ public class CdsControllerTest {
 	@Test
 	public void testThreadsComments() throws Exception {
 		MLPUser cu = new MLPUser("commentUser", true);
+		cu.setEmail(cu.getLoginName() + "@nowhere.com");
 		cu = client.createUser(cu);
 		Assert.assertNotNull(cu.getUserId());
 
@@ -1495,6 +1501,7 @@ public class CdsControllerTest {
 		cu.setActive(true);
 		final String loginName = "test_user_" + Long.toString(new Date().getTime());
 		cu.setLoginName(loginName);
+		cu.setEmail(cu.getLoginName() + "@nowhere.com");
 		cu = client.createUser(cu);
 		Assert.assertNotNull("User ID", cu.getUserId());
 		logger.info("Created user " + cu.getUserId());

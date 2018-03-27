@@ -220,7 +220,7 @@ public class CdsRepositoryServiceTest {
 			cu.setActive(true);
 			final String firstName = "First_" + Long.toString(new Date().getTime());
 			final String lastName = "TestLast";
-			final String loginName = "test_user" + Long.toString(new Date().getTime());
+			final String loginName = "testrepo_" + Long.toString(new Date().getTime());
 			final String loginPass = "test_pass3";
 			cu.setFirstName(firstName);
 			cu.setLastName(lastName);
@@ -696,7 +696,7 @@ public class CdsRepositoryServiceTest {
 			// Want a unique first name for query below
 			final String firstName = "First" + Long.toString(new Date().getTime());
 			final String lastName = "TestLast";
-			final String loginName = "test_user" + Long.toString(new Date().getTime());
+			final String loginName = "cresol_" + Long.toString(new Date().getTime());
 			final String loginPass = "test_pass";
 			cu.setFirstName(firstName);
 			cu.setLastName(lastName);
@@ -987,7 +987,7 @@ public class CdsRepositoryServiceTest {
 			MLPUser cu = null;
 			cu = new MLPUser();
 			cu.setActive(true);
-			final String loginName = "test_user_" + Long.toString(new Date().getTime());
+			final String loginName = "rolefnuser_" + Long.toString(new Date().getTime());
 			cu.setLoginName(loginName);
 			cu = userRepository.save(cu);
 			Assert.assertNotNull(cu.getUserId());
@@ -1090,7 +1090,7 @@ public class CdsRepositoryServiceTest {
 	public void testUserNotificationPreferences() throws Exception {
 		try {
 			MLPUser cu = new MLPUser();
-			final String loginName = "notif_" + Long.toString(new Date().getTime());
+			final String loginName = "testnotif_" + Long.toString(new Date().getTime());
 			cu.setLoginName(loginName);
 			cu = userRepository.save(cu);
 			Assert.assertNotNull(cu.getUserId());
@@ -1114,7 +1114,7 @@ public class CdsRepositoryServiceTest {
 			usrNotifPrefRepository.delete(usrNotifPref);
 			userRepository.delete(cu);
 		} catch (Exception ex) {
-			logger.error("Failed", ex);
+			logger.error("testUserNotificationPreferences failed", ex);
 			throw ex;
 		}
 
@@ -1311,4 +1311,5 @@ public class CdsRepositoryServiceTest {
 			Assert.assertFalse(list.isEmpty());
 		}
 	}
+
 }
