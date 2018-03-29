@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "30f8b1da_d33d5f75",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/SolutionController.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-03-29T14:32:15Z",
+      "side": 1,
+      "message": "Why are the rest of the conditions on accessTypeCodes and valStatusCodes removed, please?",
+      "revId": "2d525515ccf4fd8db5cdf0e57bd9f236b20cc970",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
