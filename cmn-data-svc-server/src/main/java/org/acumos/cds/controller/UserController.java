@@ -149,9 +149,11 @@ public class UserController extends AbstractController {
 		boolean passwordMatches = user != null //
 				&& BCrypt.checkpw(login.getPass(), user.getLoginHash());
 		if (user == null || !passwordMatches) {
+			logger.info(EELFLoggerDelegate.auditLogger, "No match for credentials ", login.getName());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			result = new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "No match for credentials", null);
 		} else {
+			logger.info(EELFLoggerDelegate.auditLogger, "Successful login of  ", user.getLoginName());
 			// detach from Hibernate and wipe hash
 			entityManager.detach(user);
 			user.setLoginHash(null);
@@ -381,6 +383,7 @@ public class UserController extends AbstractController {
 		// Reject empty passwords
 		if (changeRequest.getNewLoginPass() == null || changeRequest.getNewLoginPass().length() == 0) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			logger.info(EELFLoggerDelegate.auditLogger, "Cannot set the password to empty ", "");
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "Cannot set the password to empty", null);
 		}
 		MLPTransportModel result = null;
@@ -392,8 +395,10 @@ public class UserController extends AbstractController {
 			if (bothNull || notNullAndMatch) {
 				String pwHash = BCrypt.hashpw(changeRequest.getNewLoginPass(), BCrypt.gensalt());
 				existingUser.setLoginHash(pwHash);
+				logger.info(EELFLoggerDelegate.auditLogger, "Successful change of password for user ", userId);
 			} else {
 				// no match
+				logger.info(EELFLoggerDelegate.auditLogger, "The old password did not match for user ", userId);
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "The old password did not match", null);
 			}
