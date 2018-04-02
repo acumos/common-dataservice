@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8ce08dc9_619236b2",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/UserController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-04-02T21:18:10Z",
+      "side": 1,
+      "message": "Use {} here.  That\u0027s why the name doesn\u0027t print.",
+      "revId": "8dc1357715db87941a13141087bcd6f051dc076b",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8593a3b2_8090c027",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/UserController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-04-02T21:18:10Z",
+      "side": 1,
+      "message": "Add method name and {}",
+      "revId": "8dc1357715db87941a13141087bcd6f051dc076b",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "87997fdf_9937015a",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/UserController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-04-02T21:18:10Z",
+      "side": 1,
+      "message": "This is not relevant to auditing",
+      "revId": "8dc1357715db87941a13141087bcd6f051dc076b",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fb97b11_3fd83fe5",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/UserController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-04-02T21:18:10Z",
+      "side": 1,
+      "message": "add method name and {}",
+      "revId": "8dc1357715db87941a13141087bcd6f051dc076b",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0cc243a2_d205f5ee",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/UserController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-04-02T21:18:10Z",
+      "side": 1,
+      "message": "Factor out the message to avoid repeating it?",
+      "revId": "8dc1357715db87941a13141087bcd6f051dc076b",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4830b341_aab592b3",
+        "filename": "cmn-data-svc-server/src/main/resources/logback.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-04-02T21:18:10Z",
+      "side": 1,
+      "message": "Far too many unnecessary format/whitespace changes.  What happened here?",
+      "revId": "8dc1357715db87941a13141087bcd6f051dc076b",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
