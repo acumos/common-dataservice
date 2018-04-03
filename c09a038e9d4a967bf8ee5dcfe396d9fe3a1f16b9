@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8e2c166f_82d6c2f7",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/UserController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-04-03T13:41:24Z",
+      "side": 1,
+      "message": "Instead of doing string catenation, write it this way:\n\n\"updatePasswd: {} for user {}\", passwordNoMatch, user.getLoginName());",
+      "revId": "c09a038e9d4a967bf8ee5dcfe396d9fe3a1f16b9",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "005ef8fe_7830cb17",
+        "filename": "cmn-data-svc-server/src/main/resources/logback.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-04-03T13:41:24Z",
+      "side": 1,
+      "message": "You removed the license?  The whitespace is still a problem. Please revert all changes, then add in ONLY the lines you need to add for the audit loggers.",
+      "revId": "c09a038e9d4a967bf8ee5dcfe396d9fe3a1f16b9",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
