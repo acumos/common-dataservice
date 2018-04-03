@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "00bbb89a_b82a4f05",
+        "filename": "docs/release-notes.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 94
+      },
+      "writtenOn": "2018-04-03T15:39:03Z",
+      "side": 1,
+      "message": "dashed line isn\u0027t long enough",
+      "range": {
+        "startLine": 38,
+        "startChar": 27,
+        "endLine": 38,
+        "endChar": 28
+      },
+      "revId": "acc74db0249d0fbe60c3c3332b53cc029e8379ab",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "aeea9352_3079a441",
+        "filename": "docs/release-notes.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 94
+      },
+      "writtenOn": "2018-04-03T15:39:03Z",
+      "side": 1,
+      "message": "dashed line isn\u0027t long enough",
+      "range": {
+        "startLine": 44,
+        "startChar": 27,
+        "endLine": 44,
+        "endChar": 28
+      },
+      "revId": "acc74db0249d0fbe60c3c3332b53cc029e8379ab",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
