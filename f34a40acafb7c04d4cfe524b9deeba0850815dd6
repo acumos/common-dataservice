@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "580f76ee_92dd03d0",
+        "filename": "docs/server.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 94
+      },
+      "writtenOn": "2018-04-04T17:23:42Z",
+      "side": 1,
+      "message": "is this still ccds? or did it change to cds?",
+      "range": {
+        "startLine": 30,
+        "startChar": 100,
+        "endLine": 32,
+        "endChar": 46
+      },
+      "revId": "f34a40acafb7c04d4cfe524b9deeba0850815dd6",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
