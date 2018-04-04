@@ -89,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "f74a346d_1c9b4783",
+        "filename": "docs/requirements.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 785,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-04-04T16:15:52Z",
+      "side": 1,
+      "message": "No external mapping, thanks good catch.",
+      "parentUuid": "c6c630a2_06ed6910",
+      "revId": "f6ff6bafb73c24c4c6317c5688f871a0d9205c57",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fe1c61c4_6acb5629",
         "filename": "docs/server.rst",
         "patchSetId": 2
@@ -100,6 +118,24 @@
       "writtenOn": "2018-04-04T16:02:59Z",
       "side": 1,
       "message": "Say M.N to M\u003eN\u0027 please where N!\u003dN\u0027",
+      "revId": "f6ff6bafb73c24c4c6317c5688f871a0d9205c57",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f837b616_c28e17c2",
+        "filename": "docs/server.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-04-04T16:15:52Z",
+      "side": 1,
+      "message": "OK",
+      "parentUuid": "fe1c61c4_6acb5629",
       "revId": "f6ff6bafb73c24c4c6317c5688f871a0d9205c57",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
