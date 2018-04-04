@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "d113994c_45c09712",
+        "filename": "docs/requirements.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-04-04T16:02:13Z",
+      "side": 1,
+      "message": "Well, what\u0027s a \"client\"?  The person who controls the server config can add values.",
+      "parentUuid": "eb5721ca_2f4eff84",
+      "revId": "f6ff6bafb73c24c4c6317c5688f871a0d9205c57",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b8a5f278_b7443fe5",
         "filename": "docs/requirements.rst",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2018-04-04T15:49:11Z",
       "side": 1,
       "message": "If you want to specify which attributes have unique constraints, then that ideally should be specified for all other entities as well.",
+      "revId": "f6ff6bafb73c24c4c6317c5688f871a0d9205c57",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "21112aeb_a009cfaa",
+        "filename": "docs/requirements.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 730,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-04-04T16:02:13Z",
+      "side": 1,
+      "message": "Good point, I will add.",
+      "parentUuid": "b8a5f278_b7443fe5",
       "revId": "f6ff6bafb73c24c4c6317c5688f871a0d9205c57",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
