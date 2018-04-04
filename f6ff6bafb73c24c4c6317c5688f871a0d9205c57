@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eb5721ca_2f4eff84",
+        "filename": "docs/requirements.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-04-04T15:29:55Z",
+      "side": 1,
+      "message": "But in their specific installations clients can add values to their value sets through configuration changes, isn\u0027t it?",
+      "revId": "f6ff6bafb73c24c4c6317c5688f871a0d9205c57",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
