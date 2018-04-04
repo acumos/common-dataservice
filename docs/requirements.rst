@@ -22,13 +22,14 @@ Common Data Service Requirements
 
 This document presents the abstract data model implemented by the Acumos Common Data Service.
 The data model is explained in terms of entities in the system, attributes of the entities,
-and relationships among the entities.  The details here are abstract in that they don't specify
-data type, data length, table name, column name, etc.
+and relationships among the entities.  These requirements are implemented in a relational
+database, but this page does not define table names, column names, data types, lengths, etc.
 
 Support for Federation
 ----------------------
 
-The Acumos system is intended to be federated. This has implications for identifiers used in the system, because they will have to be usable globally:
+The Acumos system is intended to be federated. This has implications for identifiers used 
+in the system, because they will have to be usable globally:
 
 * Multiple systems will be running in different organizations
 * Information will be shared selectively across the systems
@@ -198,7 +199,8 @@ All entities and attributes are listed below, grouped into three sections:
 Enumerated Code-Name Sets
 -------------------------
 
-The code-name value sets listed below are the minimum that shall be provided. These may be configured in each installation.
+The code-name value sets listed below are the minimum that shall be provided as configuration.
+These may be configured differently in a specific installation. The value sets cannot be changed by clients.
 
 Access Type
 ^^^^^^^^^^^
@@ -303,12 +305,12 @@ Message Severity
 Entities
 --------
 
-The system entities are shown in alphabetical order.
+The system entities are presented below in alphabetical order.
 
 Comment
 ^^^^^^^
 
-This stores a user comment within a comment thread.
+This stores a user comment within a thread of comments.
 
 Attributes:
 
@@ -339,7 +341,9 @@ Notifications are mapped to users in a many:many relationship.  That relationshi
 Peer
 ^^^^
 
-Registered and authorized external instances of the platform that communicate with this instance.  The registration is intended to be controlled by any user with admin roles.  This model is used to support the federated architecture.
+Registered and authorized external instances of the platform that communicate with this instance.  
+The registration is intended to be controlled by any user with admin roles.  
+This model is used to support the federated architecture.
 
 Attributes:
 
@@ -379,7 +383,8 @@ Attributes:
 Role for Users
 ^^^^^^^^^^^^^^
 
-Roles are named like "designer" or "administrator" and are used to assign privilege levels to users, in terms of the functions those users may perform; i.e., the system features they are authorized to use.
+Roles are named like "designer" or "administrator" and are used to assign privilege levels to users, 
+in terms of the functions those users may perform; i.e., the system features they are authorized to use.
 
 Attributes:
 
@@ -459,10 +464,6 @@ Attributes:
 * Model type code
 
   - Underlying ML category; valid values include CLASSIFICATION and PREDICTION
-
-* Access type code
-
-  - This refers to the visibility of the solution. It can be 'Private', 'Organization Shared' or 'Public'.
 
 * Proposed attribute: System ID where created
 
@@ -569,7 +570,7 @@ Attributes:
 *    Revision ID - required
 *    User ID - required
 *    Target deployment environment
-*    Deployment status (in progress, deployed, failed, etc.)
+*    Deployment status. This uses the Deployment Status Code defined above.
 
 
 
@@ -606,6 +607,14 @@ Attributes:
 
      -   Represents the solution, allows multiple revisions per solution
 
+*    Access type code
+
+     - This refers to the visibility of the revision. It uses values defined by Access Type Code (above).
+
+*    Validation status code
+
+     - This refers to the validation result for the revision. It uses values defined by Validation Status Code (above).
+
 *    Version
 
      -   Chosen by the user. This serves as the solution's child revision entry identifier. This needs to be unique for any solution revision within the same solution.
@@ -613,10 +622,6 @@ Attributes:
 *    Create time
 
      -   The time when this revision of the solution is created
-
-*    Status
-
-     -   Denotes if the solution is active or not
 
 *    Creator
 
@@ -684,7 +689,7 @@ Attributes:
 
 *    User ID (notification recipient) 
 *    Notification type (email/text/web)
-*    Message Severity (low/medium/high)  
+*    Message Severity code. This uses the Message Severity Code value set defined above.
 
 
 Tag for Solution
@@ -721,10 +726,16 @@ Attributes:
 *    Unique ID for system use
 *    User's organization name
 *    Login name
+
+     - Must be unique among all users
+     
 *    Login password
 *    Password expiration date/time
 *    First, middle, last names
 *    Email address(es)
+
+     - Must be unique among all users
+
 *    Phone number(s)
 *    Profile picture (subject to some size limit)
 *    Authentication mechanism
@@ -774,21 +785,16 @@ Please note this section does not document simple relationships managed within e
 Relationship Solution - Revision
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This captures the relationship of a revision within a solution.
-
-Attributes:
-
-*    Revision ID
-*    Solution ID
-*    Version name (user-assigned string)
-*    Description
-*    Owner (User ID)
+This captures the relationship of a revision within a solution.  
+Every revision has a Solution ID attribute that defines this 1:1 relationship.
+No additional mapping is required.
 
 
 Relationship Revision - Artifact
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This captures the relationship of an artifact within a revision.
+This captures the many:many relationship of an artifact to a revision.
+A separate mapping entity is required here.
 
 Attributes:
 
@@ -909,8 +915,8 @@ Attributes:
 *    Role ID
 
 
-Relationship Peer Subscription
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Relationship Peer - Subscription
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Describes which solution(s) available on a remote peer should be tracked and/or replicated.
 
@@ -1142,16 +1148,6 @@ Standard CRUD operations plus the following:
 * Get all notifications for a user
 
 Operations on workflow step result
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Standard CRUD operations apply.
-
-Operations on workflow step type
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Standard CRUD operations apply.
-
-Operations on workflow step status
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Standard CRUD operations apply.
