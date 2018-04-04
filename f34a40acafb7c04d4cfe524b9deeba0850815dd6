@@ -22,6 +22,30 @@
       "revId": "f34a40acafb7c04d4cfe524b9deeba0850815dd6",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a05d8f64_b1f97bba",
+        "filename": "docs/server.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-04-04T17:25:39Z",
+      "side": 1,
+      "message": "The web context is whatever you set it to be.  At present we\u0027re still using ccds, a remnant of the Cognita days.",
+      "parentUuid": "580f76ee_92dd03d0",
+      "range": {
+        "startLine": 30,
+        "startChar": 100,
+        "endLine": 32,
+        "endChar": 46
+      },
+      "revId": "f34a40acafb7c04d4cfe524b9deeba0850815dd6",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
