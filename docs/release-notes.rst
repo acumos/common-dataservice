@@ -23,7 +23,7 @@ Common Data Service Release Notes
 The client and server are released together.  The client is deployed as a jar file to a
 Maven Nexus repository. The server is deployed as a Docker image to a Docker registry.
 
-Version 1.15.0, 3 April 2018
+Version 1.15.0, 6 April 2018
 ----------------------------
 
 * Move acccess type code attribute from Solution to Solution Revision entity (ACUMOS-196)
@@ -32,6 +32,7 @@ Version 1.15.0, 3 April 2018
 * Search solutions returns unexpectedly few results (ACUMOS-529)
 * User email attribute should not accept null (ACUMOS-603)
 * Write details about security-related events to the audit log (ACUMOS-618)
+* Check user (in)active status in login and change password methods (ACUMOS-639)
 * Requires database schema version 1.15
 
 Version 1.14.3, 26 March 2018
