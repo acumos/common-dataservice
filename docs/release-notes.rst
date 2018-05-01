@@ -23,6 +23,12 @@ Common Data Service Release Notes
 The client and server are released together.  The client is deployed as a jar file to a
 Maven Nexus repository. The server is deployed as a Docker image to a Docker registry.
 
+Version 1.15.1, ? May 2018
+--------------------------
+
+* Add artifact type code LG - Log File (ACUMOS-765)
+* Requires database schema version 1.15
+
 Version 1.15.0, 6 April 2018
 ----------------------------
 
