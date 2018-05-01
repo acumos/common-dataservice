@@ -43,7 +43,8 @@ public enum ArtifactTypeCode {
 	TG("TOSCA Generator Input File"), //
 	TS("TOSCA SCHEMA"), //
 	TT("TOSCA TRANSLATE"), //
-	PJ("PROTOBUF FILE");
+	PJ("PROTOBUF FILE"), //
+	LG("LOG FILE");
 
 	private String typeName;
 
