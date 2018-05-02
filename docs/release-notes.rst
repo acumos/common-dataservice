@@ -23,6 +23,11 @@ Release Notes
 The client and server are released together.  The client is deployed as a jar file to a
 Maven Nexus repository. The server is deployed as a Docker image to a Docker registry.
 
+Version 1.14.4, 3 May 2018
+----------------------------
+
+* Add default artifact code for onboarding's log files (ACUMOS-765)
+
 Version 1.14.3, 29 March 2018
 ----------------------------
 
