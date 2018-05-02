@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8a918876_7bcfa4ac",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/ArtifactTypeCode.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-02T12:10:15Z",
+      "side": 1,
+      "message": "Remove. This is only of historical interest.",
+      "revId": "4bf959cb77fbeb16163cb16a29037f6e777016fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
