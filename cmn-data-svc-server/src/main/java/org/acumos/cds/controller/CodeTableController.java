@@ -21,6 +21,7 @@
 package org.acumos.cds.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -61,9 +62,12 @@ public class CodeTableController extends AbstractController {
 	@RequestMapping(value = "/" + CCDSConstants.PAIR_PATH, method = RequestMethod.GET)
 	@ResponseBody
 	public List<String> getValueSetNames() {
+		Date beginDate = new Date();
 		List<String> list = new ArrayList<>();
-		for (CodeNameType cn : CodeNameType.values())
+		for (CodeNameType cn : CodeNameType.values()) {
 			list.add(cn.name());
+		}
+		logger.audit(beginDate, "getValueSetNames");
 		return list;
 	}
 
@@ -79,10 +83,13 @@ public class CodeTableController extends AbstractController {
 	@ResponseBody
 	public Object getCodeNamePairs(@PathVariable(CCDSConstants.NAME_PATH) String valueSetName,
 			HttpServletResponse response) {
+		Date beginDate = new Date();
 		CodeNameType type;
 		try {
 			type = CodeNameType.valueOf(valueSetName);
-			return codeNameService.getCodeNamePairs(type);
+			Object result = codeNameService.getCodeNamePairs(type);
+			logger.audit(beginDate, "getCodeNamePairs {}", valueSetName);
+			return result;
 		} catch (Exception ex) {
 			logger.warn(EELFLoggerDelegate.errorLogger, "getCodeNamePairs", ex.toString());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);

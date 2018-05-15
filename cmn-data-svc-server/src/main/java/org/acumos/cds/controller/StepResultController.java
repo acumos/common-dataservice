@@ -19,6 +19,7 @@
  */
 package org.acumos.cds.controller;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -69,7 +70,10 @@ public class StepResultController extends AbstractController {
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
 	public Page<MLPStepResult> getStepResults(Pageable pageRequest) {
-		return stepResultRepository.findAll(pageRequest);
+		Date beginDate = new Date();
+		Page<MLPStepResult> result = stepResultRepository.findAll(pageRequest);
+		logger.audit(beginDate, "getStepResults {}", pageRequest);
+		return result;
 	}
 
 	/**
@@ -87,6 +91,7 @@ public class StepResultController extends AbstractController {
 	@ResponseBody
 	public Object searchStepResults(@RequestParam MultiValueMap<String, String> queryParameters,
 			HttpServletResponse response, Pageable pageRequest) {
+		Date beginDate = new Date();
 		cleanPageableParameters(queryParameters);
 		List<String> junction = queryParameters.remove(CCDSConstants.JUNCTION_QUERY_PARAM);
 		boolean isOr = junction != null && junction.size() == 1 && "o".equals(junction.get(0));
@@ -96,7 +101,9 @@ public class StepResultController extends AbstractController {
 		}
 		try {
 			Map<String, Object> convertedQryParm = convertQueryParameters(MLPStepResult.class, queryParameters);
-			return stepResultSearchService.findStepResults(convertedQryParm, isOr, pageRequest);
+			Object result = stepResultSearchService.findStepResults(convertedQryParm, isOr, pageRequest);
+			logger.audit(beginDate, "searchStepResults {}", queryParameters);
+			return result;
 		} catch (Exception ex) {
 			logger.warn(EELFLoggerDelegate.errorLogger, "searchStepResults failed", ex);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -116,11 +123,13 @@ public class StepResultController extends AbstractController {
 	@RequestMapping(value = "/{stepResultId}", method = RequestMethod.GET)
 	@ResponseBody
 	public Object getStepResult(@PathVariable("stepResultId") Long stepResultId, HttpServletResponse response) {
+		Date beginDate = new Date();
 		MLPStepResult sr = stepResultRepository.findOne(stepResultId);
 		if (sr == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + stepResultId, null);
 		}
+		logger.audit(beginDate, "getStepResult: stepResultId {}", stepResultId);
 		return sr;
 	}
 
@@ -135,25 +144,24 @@ public class StepResultController extends AbstractController {
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
 	public Object createStepResult(@RequestBody MLPStepResult stepResult, HttpServletResponse response) {
-		logger.debug(EELFLoggerDelegate.debugLogger, "createStepResult: received {} ", stepResult);
-		Object result;
+		Date beginDate = new Date();
 		try {
 			// Validate enum codes
 			super.validateCode(stepResult.getStepCode(), CodeNameType.STEP_TYPE);
 			super.validateCode(stepResult.getStatusCode(), CodeNameType.STEP_STATUS);
 			// Create a new row
-			result = stepResultRepository.save(stepResult);
+			MLPStepResult result = stepResultRepository.save(stepResult);
 			response.setStatus(HttpServletResponse.SC_CREATED);
 			// This is a hack to create the location path.
-			response.setHeader(HttpHeaders.LOCATION,
-					CCDSConstants.STEP_RESULT_PATH + "/" + stepResult.getStepResultId());
+			response.setHeader(HttpHeaders.LOCATION, CCDSConstants.STEP_RESULT_PATH + "/" + result.getStepResultId());
+			logger.audit(beginDate, "createStepResult: stepResultId {}", result.getStepResultId());
+			return result;
 		} catch (Exception ex) {
 			Exception cve = findConstraintViolationException(ex);
 			logger.warn(EELFLoggerDelegate.errorLogger, "createStepResult", cve.toString());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			result = new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "createStepResult failed", cve);
+			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "createStepResult failed", cve);
 		}
-		return result;
 	}
 
 	/**
@@ -170,14 +178,13 @@ public class StepResultController extends AbstractController {
 	@ResponseBody
 	public Object updateStepResult(@PathVariable("stepResultId") Long stepResultId,
 			@RequestBody MLPStepResult stepResult, HttpServletResponse response) {
-		logger.debug(EELFLoggerDelegate.debugLogger, "update: received {} ", stepResult);
+		Date beginDate = new Date();
 		// Get the existing one
 		MLPStepResult existing = stepResultRepository.findOne(stepResultId);
 		if (existing == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + stepResultId, null);
 		}
-		MLPTransportModel result = null;
 		try {
 			// Validate enum codes
 			super.validateCode(stepResult.getStepCode(), CodeNameType.STEP_TYPE);
@@ -186,14 +193,14 @@ public class StepResultController extends AbstractController {
 			stepResult.setStepResultId(stepResultId);
 			// Update the existing row
 			stepResultRepository.save(stepResult);
-			result = new SuccessTransport(HttpServletResponse.SC_OK, null);
+			logger.audit(beginDate, "updateStepResult: stepResultId {}", stepResultId);
+			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
 			Exception cve = findConstraintViolationException(ex);
 			logger.warn(EELFLoggerDelegate.errorLogger, "updateStepResult", cve.toString());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			result = new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "updateStepResult failed", cve);
+			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "updateStepResult failed", cve);
 		}
-		return result;
 	}
 
 	/**
@@ -209,8 +216,10 @@ public class StepResultController extends AbstractController {
 	@ResponseBody
 	public MLPTransportModel deleteStepResult(@PathVariable("stepResultId") Long stepResultId,
 			HttpServletResponse response) {
+		Date beginDate = new Date();
 		try {
 			stepResultRepository.delete(stepResultId);
+			logger.audit(beginDate, "deleteStepResult: stepResultId {}", stepResultId);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
 			// e.g., EmptyResultDataAccessException is NOT an internal server

@@ -20,6 +20,8 @@
 
 package org.acumos.cds.controller;
 
+import java.util.Date;
+
 import javax.servlet.http.HttpServletResponse;
 
 import org.acumos.cds.CCDSConstants;
@@ -66,11 +68,13 @@ public class SiteConfigController extends AbstractController {
 	@RequestMapping(value = "/{configKey}", method = RequestMethod.GET)
 	@ResponseBody
 	public Object getSiteConfig(@PathVariable("configKey") String configKey, HttpServletResponse response) {
+		Date beginDate = new Date();
 		MLPSiteConfig da = siteConfigRepository.findOne(configKey);
 		if (da == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + configKey, null);
 		}
+		logger.audit(beginDate, "getSiteConfig key {}", configKey);
 		return da;
 	}
 
@@ -85,6 +89,7 @@ public class SiteConfigController extends AbstractController {
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
 	public Object createSiteConfig(@RequestBody MLPSiteConfig siteConfig, HttpServletResponse response) {
+		Date beginDate = new Date();
 		logger.debug(EELFLoggerDelegate.debugLogger, "createSiteConfig: received object: {} ", siteConfig);
 		if (siteConfigRepository.findOne(siteConfig.getConfigKey()) != null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -97,19 +102,19 @@ public class SiteConfigController extends AbstractController {
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + siteConfig.getUserId(),
 					null);
 		}
-		Object result;
 		try {
-			result = siteConfigRepository.save(siteConfig);
+			Object result = siteConfigRepository.save(siteConfig);
 			response.setStatus(HttpServletResponse.SC_CREATED);
 			// This is a hack to create the location path.
 			response.setHeader(HttpHeaders.LOCATION, CCDSConstants.CONFIG_PATH + "/" + siteConfig.getConfigKey());
+			logger.audit(beginDate, "createSiteConfig key {}", siteConfig.getConfigKey());
+			return result;
 		} catch (Exception ex) {
 			Exception cve = findConstraintViolationException(ex);
 			logger.warn(EELFLoggerDelegate.errorLogger, "createSiteConfig", cve.toString());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			result = new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "createSiteConfig failed", cve);
+			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "createSiteConfig failed", cve);
 		}
-		return result;
 	}
 
 	/**
@@ -126,26 +131,25 @@ public class SiteConfigController extends AbstractController {
 	@ResponseBody
 	public Object updateSiteConfig(@PathVariable("configKey") String configKey, @RequestBody MLPSiteConfig siteConfig,
 			HttpServletResponse response) {
-		logger.debug(EELFLoggerDelegate.debugLogger, "updateSiteConfig: received {} ", siteConfig);
+		Date beginDate = new Date();
 		// Get the existing one
 		MLPSiteConfig existing = siteConfigRepository.findOne(configKey);
 		if (existing == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + configKey, null);
 		}
-		MLPTransportModel result = null;
 		try {
 			// Use the path-parameter id; don't trust the one in the object
 			siteConfig.setConfigKey(configKey);
 			siteConfigRepository.save(siteConfig);
-			result = new SuccessTransport(HttpServletResponse.SC_OK, null);
+			logger.audit(beginDate, "updateSiteConfig key {}", configKey);
+			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
 			Exception cve = findConstraintViolationException(ex);
 			logger.warn(EELFLoggerDelegate.errorLogger, "updateSiteConfig", cve.toString());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			result = new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "updateSiteConfig failed", cve);
+			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "updateSiteConfig failed", cve);
 		}
-		return result;
 	}
 
 	/**
@@ -160,8 +164,10 @@ public class SiteConfigController extends AbstractController {
 	@ResponseBody
 	public MLPTransportModel deleteSiteConfig(@PathVariable("configKey") String configKey,
 			HttpServletResponse response) {
+		Date beginDate = new Date();
 		try {
 			siteConfigRepository.delete(configKey);
+			logger.audit(beginDate, "deleteSiteConfig key {}", configKey);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
 			// e.g., EmptyResultDataAccessException is NOT an internal server error
