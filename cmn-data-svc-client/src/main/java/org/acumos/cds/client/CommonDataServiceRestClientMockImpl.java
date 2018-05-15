@@ -206,6 +206,7 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 	private MLPStepResult stepResultById;
 	private List<MLPCodeNamePair> pairs;
 	private List<String> valueSetNames;
+	private String requestId;
 
 	/**
 	 * No-argument constructor.
@@ -1653,6 +1654,12 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 	@Override
 	public List<MLPPeer> getPeerAccess(String peerId) {
 		return peerAccessList;
+	}
+
+	@Override
+	public void setRequestId(String requestId) {
+		this.requestId = requestId;
+		logger.info("set request id {}", this.requestId);
 	}
 
 }
