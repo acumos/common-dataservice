@@ -233,7 +233,8 @@ public class CdsRepositoryServiceTest {
 			Assert.assertNotNull(cu.getUserId());
 			Assert.assertNotNull(cu.getCreated());
 			Assert.assertNotNull(cu.getModified());
-			Assert.assertEquals(cu.getCreated(), cu.getModified());
+			// Created and modified timestamps may be milliseconds apart
+			Assert.assertTrue(Math.abs(cu.getCreated().getTime() - cu.getModified().getTime()) < 5);
 			logger.info("Created user {}", cu);
 			// Update
 			cu.setAuthToken("JWT is Greek to me");

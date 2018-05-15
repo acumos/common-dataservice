@@ -20,6 +20,8 @@
 
 package org.acumos.cds.controller;
 
+import java.util.Date;
+
 import javax.servlet.http.HttpServletResponse;
 
 import org.acumos.cds.CCDSConstants;
@@ -63,7 +65,10 @@ public class ValidationSequenceController extends AbstractController {
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
 	public Iterable<MLPValidationSequence> getValidationSequenceList() {
-		return validationSequenceRepository.findAll();
+		Date beginDate = new Date();
+		Iterable<MLPValidationSequence> result = validationSequenceRepository.findAll();
+		logger.audit(beginDate, "getValidationSequenceList");
+		return result;
 	}
 
 	/**
@@ -85,8 +90,7 @@ public class ValidationSequenceController extends AbstractController {
 	public Object createValidationSequence(@PathVariable("sequence") Integer sequence,
 			@PathVariable("valTypeCode") String valTypeCode, @RequestBody MLPValidationSequence valSeq,
 			HttpServletResponse response) {
-		logger.debug(EELFLoggerDelegate.debugLogger, "createValidationSequence: received object: {} ", valSeq);
-		Object result;
+		Date beginDate = new Date();
 		try {
 			// Validate enum code
 			super.validateCode(valTypeCode, CodeNameType.VALIDATION_TYPE);
@@ -94,17 +98,18 @@ public class ValidationSequenceController extends AbstractController {
 			valSeq.setSequence(sequence);
 			valSeq.setValTypeCode(valTypeCode);
 			// Create a new row
-			result = validationSequenceRepository.save(valSeq);
+			Object result = validationSequenceRepository.save(valSeq);
 			response.setStatus(HttpServletResponse.SC_CREATED);
 			// This is a hack to create the location path.
 			response.setHeader(HttpHeaders.LOCATION, CCDSConstants.VAL_SEQ_PATH);
+			logger.audit(beginDate, "createValidationSequence: sequence {} valTypeCode {}", sequence, valTypeCode);
+			return result;
 		} catch (Exception ex) {
 			Exception cve = findConstraintViolationException(ex);
 			logger.warn(EELFLoggerDelegate.errorLogger, "createValidationSequence", cve.toString());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			result = new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "createValidationSequence failed", cve);
+			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "createValidationSequence failed", cve);
 		}
-		return result;
 	}
 
 	/**
@@ -122,10 +127,12 @@ public class ValidationSequenceController extends AbstractController {
 	@ResponseBody
 	public MLPTransportModel deleteValidationSequence(@PathVariable("sequence") Integer sequence,
 			@PathVariable("valTypeCode") String valTypeCode, HttpServletResponse response) {
+		Date beginDate = new Date();
 		try {
 			// Build a key for fetch
 			ValidationSequencePK pk = new ValidationSequencePK(sequence, valTypeCode);
 			validationSequenceRepository.delete(pk);
+			logger.audit(beginDate, "deleteValidationSequence: sequence {} valTypeCode {}", sequence, valTypeCode);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
 			// e.g., EmptyResultDataAccessException is NOT an internal server error

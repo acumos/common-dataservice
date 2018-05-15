@@ -20,6 +20,8 @@
 
 package org.acumos.cds.controller;
 
+import java.util.Date;
+
 import javax.servlet.http.HttpServletResponse;
 
 import org.acumos.cds.CCDSConstants;
@@ -62,7 +64,10 @@ public class TagController extends AbstractController {
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
 	public Page<MLPTag> getTags(Pageable pageable) {
-		return tagRepository.findAll(pageable);
+		Date beginDate = new Date();
+		Page<MLPTag> result = tagRepository.findAll(pageable);
+		logger.audit(beginDate, "getTags: {}", pageable);
+		return result;
 	}
 
 	/**
@@ -76,21 +81,21 @@ public class TagController extends AbstractController {
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
 	public Object createTag(@RequestBody MLPTag tag, HttpServletResponse response) {
-		logger.debug(EELFLoggerDelegate.debugLogger, "createTag: tag {}", tag);
+		Date beginDate = new Date();
 		if (tagRepository.findOne(tag.getTag()) != null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "Tag exists: " + tag, null);
 		}
-		Object result;
 		try {
-			result = tagRepository.save(tag);
+			Object result = tagRepository.save(tag);
+			logger.audit(beginDate, "createTag: tag {}", tag);
+			return result;
 		} catch (Exception ex) {
 			Exception cve = findConstraintViolationException(ex);
 			logger.warn(EELFLoggerDelegate.errorLogger, "createTag", cve.toString());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			result = new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "createTag failed", cve);
+			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "createTag failed", cve);
 		}
-		return result;
 	}
 
 	/**
@@ -104,9 +109,10 @@ public class TagController extends AbstractController {
 	@RequestMapping(value = "/{tag}", method = RequestMethod.DELETE)
 	@ResponseBody
 	public MLPTransportModel deleteTag(@PathVariable("tag") String tag, HttpServletResponse response) {
-		logger.debug(EELFLoggerDelegate.debugLogger, "deleteTag: tag {}", tag);
+		Date beginDate = new Date();
 		try {
 			tagRepository.delete(tag);
+			logger.audit(beginDate, "deleteTag: tag {}", tag);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
 			// e.g., EmptyResultDataAccessException is NOT an internal server error
