@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c79280c0_c49633a7",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/ICommonDataServiceRestClient.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1944,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-05-16T14:58:04Z",
+      "side": 1,
+      "message": "Junit on Controller test failing on create role. Please recheck.",
+      "revId": "a3e35db3035472463d29709c5794401ad3d96acf",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
