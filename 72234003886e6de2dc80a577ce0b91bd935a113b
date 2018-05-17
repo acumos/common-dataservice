@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6dd55d6f_4a67c4b4",
+        "filename": "cmn-data-svc-server/db-scripts/cds-mysql-downgrade-1.15-to-1.14.sql",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-05-17T16:24:44Z",
+      "side": 1,
+      "message": "Do you need the keyword \"COLUMN\" here?",
+      "revId": "72234003886e6de2dc80a577ce0b91bd935a113b",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
