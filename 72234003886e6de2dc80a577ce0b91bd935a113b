@@ -16,6 +16,24 @@
       "revId": "72234003886e6de2dc80a577ce0b91bd935a113b",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9e05cd72_189dc302",
+        "filename": "cmn-data-svc-server/db-scripts/cds-mysql-downgrade-1.15-to-1.14.sql",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-17T16:29:48Z",
+      "side": 1,
+      "message": "well, it\u0027s just like item 11, right?",
+      "parentUuid": "6dd55d6f_4a67c4b4",
+      "revId": "72234003886e6de2dc80a577ce0b91bd935a113b",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
