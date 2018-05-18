@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "25be9f59_882376ad",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/GroupPeerSolutionController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-05-18T16:29:08Z",
+      "side": 1,
+      "message": "Don\u0027t you want to pass pageRequest as the third argument in getPeerGroups? - just to keep it consistent with other controller usages",
+      "revId": "186f87d218710400866c05fe2181eb51f2236f0a",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
