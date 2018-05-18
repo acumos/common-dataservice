@@ -16,6 +16,24 @@
       "revId": "c95c84e315081e4250e0293930f3b6b4b2035bec",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "643c1ab2_5ba2ab31",
+        "filename": "cmn-data-svc-server/db-scripts/cds-mysql-downgrade-1.15-to-1.14.sql",
+        "patchSetId": 6
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-05-18T14:43:43Z",
+      "side": 1,
+      "message": "Ok, taking back my comment, since you are dropping history table initially. Going forward, for downgrades of higher versions, this insert would be needed.",
+      "parentUuid": "9d2c3b9e_939c7388",
+      "revId": "c95c84e315081e4250e0293930f3b6b4b2035bec",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
