@@ -34,6 +34,23 @@
       "revId": "229fad448c1e119e8936e5799da90797788c68f5",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ebeb300a_bdb5573b",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/GroupPeerSolutionController.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-05-18T18:39:36Z",
+      "side": 1,
+      "message": "pageRequest argument in getSolutionGroups missing?",
+      "revId": "229fad448c1e119e8936e5799da90797788c68f5",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
