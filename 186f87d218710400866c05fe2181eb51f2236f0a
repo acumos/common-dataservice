@@ -34,6 +34,23 @@
       "revId": "186f87d218710400866c05fe2181eb51f2236f0a",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e703a695_fba5f3ee",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/HealthcheckController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-05-18T18:45:35Z",
+      "side": 1,
+      "message": "But in some cases you are kind of writing the method result in the log, isn\u0027t it?",
+      "revId": "186f87d218710400866c05fe2181eb51f2236f0a",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
