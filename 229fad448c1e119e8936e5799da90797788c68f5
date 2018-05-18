@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "420102ce_69fd9bd5",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/GroupPeerSolutionController.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-05-18T18:24:31Z",
+      "side": 1,
+      "message": "Maybe pass the peers in this group also as an argument to audit method?",
+      "revId": "229fad448c1e119e8936e5799da90797788c68f5",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
