@@ -16,6 +16,24 @@
       "revId": "229fad448c1e119e8936e5799da90797788c68f5",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "eb37781a_2541998d",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/GroupPeerSolutionController.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-18T18:31:34Z",
+      "side": 1,
+      "message": "Which peers? The result? I have not been including results in the audit output.",
+      "parentUuid": "420102ce_69fd9bd5",
+      "revId": "229fad448c1e119e8936e5799da90797788c68f5",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
