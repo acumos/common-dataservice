@@ -16,6 +16,23 @@
       "revId": "6fc37fc3342515977390c17cd0020bedd5864553",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "721f0f1e_9edaef5f",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/RoleController.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-05-21T20:52:11Z",
+      "side": 1,
+      "message": "May be pass the functionId also as arg to audit to keep consistency?",
+      "revId": "6fc37fc3342515977390c17cd0020bedd5864553",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
