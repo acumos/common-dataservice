@@ -33,6 +33,57 @@
       "revId": "6fc37fc3342515977390c17cd0020bedd5864553",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f1bd6102_a01e7db9",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/SolutionController.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-05-21T21:15:04Z",
+      "side": 1,
+      "message": "Why are you using index 0 in 3rd arg? Isn\u0027t this meant for getting all revisions of all the solutionIds in the array?",
+      "revId": "6fc37fc3342515977390c17cd0020bedd5864553",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "22df3b42_8c287bff",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/SolutionController.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1039,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-05-21T21:15:04Z",
+      "side": 1,
+      "message": "May be also pass userId as arg to audit?",
+      "revId": "6fc37fc3342515977390c17cd0020bedd5864553",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "656f9418_7fbf6339",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/SolutionController.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1197,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-05-21T21:15:04Z",
+      "side": 1,
+      "message": "May be say getSolutionUserACL: solutionId {} in 2nd arg?\nAlso update the method name accordingly.",
+      "revId": "6fc37fc3342515977390c17cd0020bedd5864553",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
