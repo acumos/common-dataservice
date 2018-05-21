@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e4a7b906_4d6beac8",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/RoleController.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-05-21T20:47:35Z",
+      "side": 1,
+      "message": "May be write the count also as 3rd arg to audit to keep consistency with other controllers?",
+      "revId": "6fc37fc3342515977390c17cd0020bedd5864553",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
