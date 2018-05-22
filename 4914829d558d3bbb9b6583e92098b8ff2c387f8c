@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6de1f4e2_858279c0",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/ThreadController.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-05-22T16:00:32Z",
+      "side": 1,
+      "message": "Where is the threadID parameter used here?",
+      "revId": "4914829d558d3bbb9b6583e92098b8ff2c387f8c",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ca6f7733_4802335f",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/ThreadController.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-05-22T16:00:32Z",
+      "side": 1,
+      "message": "Where is the threadID parameter\u0027s usage here except in audit logging?",
+      "revId": "4914829d558d3bbb9b6583e92098b8ff2c387f8c",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "70338ddd_ed4d4954",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/ThreadController.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-05-22T16:00:32Z",
+      "side": 1,
+      "message": "Same comment as above",
+      "revId": "4914829d558d3bbb9b6583e92098b8ff2c387f8c",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
