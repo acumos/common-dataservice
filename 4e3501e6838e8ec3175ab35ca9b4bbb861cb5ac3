@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eba9e09f_f2a41b71",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/SolutionController.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-05-22T14:22:13Z",
+      "side": 1,
+      "message": "Remove count as 3rd arg.",
+      "revId": "4e3501e6838e8ec3175ab35ca9b4bbb861cb5ac3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
