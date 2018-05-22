@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cc18d29d_f7874ee4",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/StepResultController.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-05-22T14:58:25Z",
+      "side": 1,
+      "message": "Pass the stepResult instead as the 3rd arg in order to keep consistency with other controllers.",
+      "revId": "b2a9dffde637f56ffac811a7d88ea4554dcac14c",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
