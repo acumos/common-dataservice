@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "4f79e2a5_33408e0f",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/RoleController.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-22T12:32:04Z",
+      "side": 1,
+      "message": "Good catch, instead I have made all the get*Count() methods match this version.",
+      "parentUuid": "e4a7b906_4d6beac8",
+      "revId": "6fc37fc3342515977390c17cd0020bedd5864553",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "721f0f1e_9edaef5f",
         "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/RoleController.java",
         "patchSetId": 8
@@ -30,6 +48,24 @@
       "writtenOn": "2018-05-21T20:52:11Z",
       "side": 1,
       "message": "May be pass the functionId also as arg to audit to keep consistency?",
+      "revId": "6fc37fc3342515977390c17cd0020bedd5864553",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "db6a8dc2_472b5f38",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/RoleController.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-22T12:32:04Z",
+      "side": 1,
+      "message": "Yes will do.",
+      "parentUuid": "721f0f1e_9edaef5f",
       "revId": "6fc37fc3342515977390c17cd0020bedd5864553",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "f57c91c2_ec77b7ee",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/SolutionController.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-22T12:32:04Z",
+      "side": 1,
+      "message": "Will repair.",
+      "parentUuid": "f1bd6102_a01e7db9",
+      "revId": "6fc37fc3342515977390c17cd0020bedd5864553",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "22df3b42_8c287bff",
         "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/SolutionController.java",
         "patchSetId": 8
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "c0a939ec_72d0930a",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/SolutionController.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1039,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-22T12:32:04Z",
+      "side": 1,
+      "message": "Will do.",
+      "parentUuid": "22df3b42_8c287bff",
+      "revId": "6fc37fc3342515977390c17cd0020bedd5864553",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "656f9418_7fbf6339",
         "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/SolutionController.java",
         "patchSetId": 8
@@ -81,6 +153,24 @@
       "writtenOn": "2018-05-21T21:15:04Z",
       "side": 1,
       "message": "May be say getSolutionUserACL: solutionId {} in 2nd arg?\nAlso update the method name accordingly.",
+      "revId": "6fc37fc3342515977390c17cd0020bedd5864553",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "20ad8479_8136978d",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/SolutionController.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1197,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-22T12:32:04Z",
+      "side": 1,
+      "message": "Please explain your comments, I don\u0027t understand.",
+      "parentUuid": "656f9418_7fbf6339",
       "revId": "6fc37fc3342515977390c17cd0020bedd5864553",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
