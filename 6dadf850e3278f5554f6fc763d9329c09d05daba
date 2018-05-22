@@ -16,6 +16,24 @@
       "revId": "6dadf850e3278f5554f6fc763d9329c09d05daba",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "253f95be_dca8a2da",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/UserController.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 1115,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-22T18:27:04Z",
+      "side": 1,
+      "message": "Will do",
+      "parentUuid": "31d87384_2c360a5d",
+      "revId": "6dadf850e3278f5554f6fc763d9329c09d05daba",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
