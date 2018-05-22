@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "129fecc9_70b6f6b8",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/TagController.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-22T15:57:15Z",
+      "side": 1,
+      "message": "The tag string itself is the ID.  So this is already logging the ID :)",
+      "parentUuid": "46921f75_81da29af",
+      "revId": "b2a9dffde637f56ffac811a7d88ea4554dcac14c",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "90e64b23_0cc245c5",
         "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/TagController.java",
         "patchSetId": 10
@@ -65,6 +83,24 @@
       "writtenOn": "2018-05-22T15:44:33Z",
       "side": 1,
       "message": "Same comment as above.",
+      "revId": "b2a9dffde637f56ffac811a7d88ea4554dcac14c",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "18b77ee9_a97089b0",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/TagController.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-22T15:57:15Z",
+      "side": 1,
+      "message": "Same reply as above.",
+      "parentUuid": "90e64b23_0cc245c5",
       "revId": "b2a9dffde637f56ffac811a7d88ea4554dcac14c",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
