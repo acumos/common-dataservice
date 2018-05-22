@@ -104,6 +104,23 @@
       "revId": "4914829d558d3bbb9b6583e92098b8ff2c387f8c",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1df9ca64_5333ebe5",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/UserController.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-05-22T16:13:50Z",
+      "side": 1,
+      "message": "Add the userIds too as an arg to audit",
+      "revId": "4914829d558d3bbb9b6583e92098b8ff2c387f8c",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
