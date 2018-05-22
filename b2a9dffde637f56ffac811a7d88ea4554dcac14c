@@ -16,6 +16,24 @@
       "revId": "b2a9dffde637f56ffac811a7d88ea4554dcac14c",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a9c3c854_0a0c33f9",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/StepResultController.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-22T15:32:40Z",
+      "side": 1,
+      "message": "I think this method is consistent with the other createXY() methods.  They report the ID of the item created.",
+      "parentUuid": "cc18d29d_f7874ee4",
+      "revId": "b2a9dffde637f56ffac811a7d88ea4554dcac14c",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
