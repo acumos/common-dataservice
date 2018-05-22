@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a600f267_dac959c1",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/ThreadController.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-22T16:12:02Z",
+      "side": 1,
+      "message": "Yeah, it\u0027s not used.  Will clarify javadoc.",
+      "parentUuid": "6de1f4e2_858279c0",
+      "revId": "4914829d558d3bbb9b6583e92098b8ff2c387f8c",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ca6f7733_4802335f",
         "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/ThreadController.java",
         "patchSetId": 11
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "6376d5a9_805df486",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/ThreadController.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-22T16:12:02Z",
+      "side": 1,
+      "message": "Yeah, it\u0027s not used.  Will clarify javadoc.",
+      "parentUuid": "ca6f7733_4802335f",
+      "revId": "4914829d558d3bbb9b6583e92098b8ff2c387f8c",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "70338ddd_ed4d4954",
         "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/ThreadController.java",
         "patchSetId": 11
@@ -47,6 +83,24 @@
       "writtenOn": "2018-05-22T16:00:32Z",
       "side": 1,
       "message": "Same comment as above",
+      "revId": "4914829d558d3bbb9b6583e92098b8ff2c387f8c",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "764957cd_3a937e27",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/ThreadController.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-22T16:12:02Z",
+      "side": 1,
+      "message": "Same reply as above",
+      "parentUuid": "70338ddd_ed4d4954",
       "revId": "4914829d558d3bbb9b6583e92098b8ff2c387f8c",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
