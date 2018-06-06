@@ -182,10 +182,14 @@ public class SolutionSearchServiceImpl extends AbstractSearchServiceImpl impleme
 
 		// build the query using FOM to access child attributes
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MLPSolutionFOM.class);
-		criteria.createAlias("revisions", revAlias);
-		criteria.createAlias(revAlias + ".artifacts", artAlias);
+		// Always have an owner
 		criteria.createAlias("owner", ownerAlias);
-		criteria.createAlias("tags", tagAlias);
+		// A solution should ALWAYS have revisions.
+		criteria.createAlias("revisions", revAlias);
+		// A revision should ALWAYS have artifacts.
+		criteria.createAlias(revAlias + ".artifacts", artAlias);
+		// Might have no tags
+		criteria.createAlias("tags", tagAlias, org.hibernate.sql.JoinType.LEFT_OUTER_JOIN);
 		// Attributes on the solution
 		criteria.add(Restrictions.eq("active", active));
 		if (nameKeywords != null && nameKeywords.length > 0)
@@ -224,9 +228,11 @@ public class SolutionSearchServiceImpl extends AbstractSearchServiceImpl impleme
 
 		// build the query using FOM to access child attributes
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MLPSolutionFOM.class);
+		// A solution should ALWAYS have revisions.
 		criteria.createAlias("revisions", revAlias);
+		// A revision should ALWAYS have artifacts
 		criteria.createAlias(revAlias + ".artifacts", artAlias);
-		criteria.createAlias(revAlias + ".solution", "sol");
+		// Attributes on the solution
 		criteria.add(Restrictions.eq("active", active));
 		if (accessTypeCode != null && accessTypeCode.length > 0)
 			criteria.add(Restrictions.in(revAlias + ".accessTypeCode", accessTypeCode));

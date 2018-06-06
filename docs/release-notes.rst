@@ -23,6 +23,12 @@ Common Data Service Release Notes
 The client and server are released together.  The client is deployed as a jar file to a
 Maven Nexus repository. The server is deployed as a Docker image to a Docker registry.
 
+Version 1.15.2, 6 June 2018
+---------------------------
+
+* Repair findPortalSolutions API behavior on untagged solutions (ACUMOS-1045)
+* Requires database schema version 1.15
+
 Version 1.15.1, 18 May 2018
 ---------------------------
 
