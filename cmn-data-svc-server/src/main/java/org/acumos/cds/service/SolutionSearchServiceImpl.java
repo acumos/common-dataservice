@@ -182,10 +182,6 @@ public class SolutionSearchServiceImpl extends AbstractSearchServiceImpl impleme
 
 		// build the query using FOM to access child attributes
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MLPSolutionFOM.class);
-		criteria.createAlias("revisions", revAlias);
-		criteria.createAlias(revAlias + ".artifacts", artAlias);
-		criteria.createAlias("owner", ownerAlias);
-		criteria.createAlias("tags", tagAlias);
 		// Attributes on the solution
 		criteria.add(Restrictions.eq("active", active));
 		if (nameKeywords != null && nameKeywords.length > 0)
@@ -194,16 +190,23 @@ public class SolutionSearchServiceImpl extends AbstractSearchServiceImpl impleme
 			criteria.add(buildLikeListCriterion("description", descKeywords));
 		if (modelTypeCode != null && modelTypeCode.length > 0)
 			criteria.add(buildEqualsListCriterion("modelTypeCode", modelTypeCode));
-		// Attributes on other entities
-		if (accessTypeCode != null && accessTypeCode.length > 0)
-			criteria.add(buildEqualsListCriterion(revAlias + ".accessTypeCode", accessTypeCode));
-		if (validationStatusCode != null && validationStatusCode.length > 0)
-			criteria.add(buildEqualsListCriterion(revAlias + ".validationStatusCode", validationStatusCode));
-		if (ownerIds != null && ownerIds.length > 0)
+		if ((accessTypeCode != null && accessTypeCode.length > 0)
+				|| (validationStatusCode != null && validationStatusCode.length > 0)) {
+			criteria.createAlias("revisions", revAlias);
+			if (accessTypeCode != null && accessTypeCode.length > 0)
+				criteria.add(buildEqualsListCriterion(revAlias + ".accessTypeCode", accessTypeCode));
+			if (validationStatusCode != null && validationStatusCode.length > 0)
+				criteria.add(buildEqualsListCriterion(revAlias + ".validationStatusCode", validationStatusCode));
+		}
+		if (ownerIds != null && ownerIds.length > 0) {
+			criteria.createAlias("owner", ownerAlias);
 			criteria.add(Restrictions.in(ownerAlias + ".userId", ownerIds));
-		if (tags != null && tags.length > 0)
+		}
+		if (tags != null && tags.length > 0) {
+			// Tags are optional, so must use outer join
+			criteria.createAlias("tags", tagAlias, org.hibernate.sql.JoinType.LEFT_OUTER_JOIN);
 			criteria.add(Restrictions.in(tagAlias + ".tag", tags));
-
+		}
 		Page<MLPSolution> result = runSolutionFomQuery(criteria, pageable);
 		logger.debug(EELFLoggerDelegate.debugLogger, "findPortalSolutions: result size={}",
 				result.getNumberOfElements());
@@ -224,9 +227,11 @@ public class SolutionSearchServiceImpl extends AbstractSearchServiceImpl impleme
 
 		// build the query using FOM to access child attributes
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MLPSolutionFOM.class);
+		// A solution should ALWAYS have revisions.
 		criteria.createAlias("revisions", revAlias);
+		// A revision should ALWAYS have artifacts
 		criteria.createAlias(revAlias + ".artifacts", artAlias);
-		criteria.createAlias(revAlias + ".solution", "sol");
+		// Attributes on the solution
 		criteria.add(Restrictions.eq("active", active));
 		if (accessTypeCode != null && accessTypeCode.length > 0)
 			criteria.add(Restrictions.in(revAlias + ".accessTypeCode", accessTypeCode));
