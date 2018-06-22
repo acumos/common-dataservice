@@ -831,6 +831,14 @@ public class CdsControllerTest {
 			Assert.assertTrue(revsByArt != null && revsByArt.size() > 0);
 			for (MLPSolutionRevision r : revs)
 				logger.info("\tRevision: {}", r);
+			
+			// Composite solution support was added very late
+			client.addCompositeSolutionMember(cs.getSolutionId(), csOrg.getSolutionId());
+			List<String> kids = client.getCompositeSolutionMembers(cs.getSolutionId());
+			Assert.assertTrue(kids != null && kids.size() == 1);
+			client.dropCompositeSolutionMember(cs.getSolutionId(), csOrg.getSolutionId());
+			kids = client.getCompositeSolutionMembers(cs.getSolutionId());
+			Assert.assertTrue(kids != null && kids.size() == 0);
 
 			if (cleanup) {
 				logger.info("Deleting newly created instances");
