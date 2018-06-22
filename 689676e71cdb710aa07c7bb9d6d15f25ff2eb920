@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "59f2a97a_f9f8be89",
+        "filename": "INFO.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 94
+      },
+      "writtenOn": "2018-06-22T17:32:54Z",
+      "side": 1,
+      "message": "this repo is part of the Catalog, Data Model, and Data Management project. Chris Lott is the PTL.\nhttps://wiki.acumos.org/display/TSC/PTL+Nominations",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 16
+      },
+      "revId": "689676e71cdb710aa07c7bb9d6d15f25ff2eb920",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "aae9aa53_bbb2b9b6",
+        "filename": "INFO.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 94
+      },
+      "writtenOn": "2018-06-22T17:32:54Z",
+      "side": 1,
+      "message": "perhaps #acumos is a better option",
+      "range": {
+        "startLine": 24,
+        "startChar": 3,
+        "endLine": 24,
+        "endChar": 22
+      },
+      "revId": "689676e71cdb710aa07c7bb9d6d15f25ff2eb920",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
