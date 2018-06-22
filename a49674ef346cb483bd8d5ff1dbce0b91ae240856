@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0cdfd547_bf072066",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/CommonDataServiceRestClientImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2158,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-06-22T18:46:00Z",
+      "side": 1,
+      "message": "Can multiple children solutions be added at the same time to a parentId? In that case the supportive method needs to be added for that",
+      "revId": "a49674ef346cb483bd8d5ff1dbce0b91ae240856",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f1d1b669_afd3e023",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/CommonDataServiceRestClientImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2166,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-06-22T18:46:00Z",
+      "side": 1,
+      "message": "Does the above concept apply to drop as well?",
+      "revId": "a49674ef346cb483bd8d5ff1dbce0b91ae240856",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
