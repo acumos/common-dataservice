@@ -320,7 +320,7 @@ public class SolutionController extends AbstractController {
 	 *            HttpServletResponse
 	 * @return Page of solutions
 	 */
-	@ApiOperation(value = "Gets a page of solutions for populating Portal screens.", response = MLPSolution.class, responseContainer = "Page")
+	@ApiOperation(value = "Gets a page of solutions matching all criteria.", response = MLPSolution.class, responseContainer = "Page")
 	@RequestMapping(value = "/" + CCDSConstants.SEARCH_PATH + "/"
 			+ CCDSConstants.PORTAL_PATH, method = RequestMethod.GET)
 	@ResponseBody
@@ -343,10 +343,54 @@ public class SolutionController extends AbstractController {
 			logger.audit(beginDate, "findPortalSolutions: query {}", queryParameters);
 			return result;
 		} catch (Exception ex) {
-			logger.warn(EELFLoggerDelegate.errorLogger, "findPortalSolutions failed", ex);
+			String msg = "findPortalSolutions failed";
+			logger.warn(EELFLoggerDelegate.errorLogger, msg, ex);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST,
-					ex.getCause() != null ? ex.getCause().getMessage() : "findPortalSolutions failed", ex);
+					ex.getCause() != null ? ex.getCause().getMessage() : msg, ex);
+		}
+	}
+
+	/**
+	 * Supports a dynamic query by user on Portal screen for private user-accessible
+	 * solutions.
+	 * 
+	 * @param queryParameters
+	 *            Field names-value pairs, see below for names. Some values can be
+	 *            comma-separated lists.
+	 * @param pageRequest
+	 *            Page and sort criteria. Spring sets to page 0 of size 20 if client
+	 *            sends nothing.
+	 * @param response
+	 *            HttpServletResponse
+	 * @return Page of solutions
+	 */
+	@ApiOperation(value = "Gets a page of private user-accessible solutions", response = MLPSolution.class, responseContainer = "Page")
+	@RequestMapping(value = "/" + CCDSConstants.SEARCH_PATH + "/" + CCDSConstants.USER_PATH, method = RequestMethod.GET)
+	@ResponseBody
+	public Object findUserPrivateSolutions(@RequestParam MultiValueMap<String, String> queryParameters,
+			Pageable pageRequest, HttpServletResponse response) {
+		Date beginDate = new Date();
+		try {
+			// These parameters are required
+			Boolean active = new Boolean(queryParameters.getFirst(CCDSConstants.SEARCH_ACTIVE));
+			String ownerId = queryParameters.getFirst(CCDSConstants.SEARCH_OWNERS);
+			// All remaining parameters are optional
+			String[] nameKws = getOptStringArray(CCDSConstants.SEARCH_NAME, queryParameters);
+			String[] descKws = getOptStringArray(CCDSConstants.SEARCH_DESC, queryParameters);
+			String[] modelTypeCodes = getOptStringArray(CCDSConstants.SEARCH_MODEL_TYPES, queryParameters);
+			String[] valStatusCodes = getOptStringArray(CCDSConstants.SEARCH_VAL_STATUSES, queryParameters);
+			String[] tags = getOptStringArray(CCDSConstants.SEARCH_TAGS, queryParameters);
+			Object result = solutionSearchService.findUserPrivateSolutions(nameKws, descKws, active, ownerId,
+					modelTypeCodes, valStatusCodes, tags, pageRequest);
+			logger.audit(beginDate, "findUserPrivateSolutions: query {}", queryParameters);
+			return result;
+		} catch (Exception ex) {
+			String msg = "findUserPrivateSolutions failed";
+			logger.warn(EELFLoggerDelegate.errorLogger, msg, ex);
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST,
+					ex.getCause() != null ? ex.getCause().getMessage() : msg, ex);
 		}
 	}
 

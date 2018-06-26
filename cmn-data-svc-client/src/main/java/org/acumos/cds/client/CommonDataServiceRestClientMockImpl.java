@@ -209,6 +209,7 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 	private List<String> valueSetNames;
 	private String requestId;
 	private List<String> solutionMembers;
+	private RestPageResponse<MLPSolution> userPrivateSolutions;
 
 	/**
 	 * No-argument constructor.
@@ -1438,6 +1439,17 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 			boolean active, String[] ownerIds, String[] accessTypeCodes, String[] modelTypeCodes,
 			String[] validationStatusCodes, String[] tags, RestPageRequest pageRequest) {
 		return this.portalSolutions;
+	}
+
+	public void setUserPrivateSolutions(RestPageResponse<MLPSolution> solutions) {
+		this.userPrivateSolutions = solutions;
+	}
+
+	@Override
+	public RestPageResponse<MLPSolution> findUserPrivateSolutions(String[] nameKeywords, String[] descriptionKeywords,
+			boolean active, String ownerId, String[] modelTypeCodes, String[] validationStatusCodes, String[] tags,
+			RestPageRequest pageRequest) {
+		return this.userPrivateSolutions;
 	}
 
 	public void setSearchSolutions(RestPageResponse<MLPSolution> solutions) {

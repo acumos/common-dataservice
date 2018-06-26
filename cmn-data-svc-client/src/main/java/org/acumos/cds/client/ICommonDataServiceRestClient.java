@@ -299,6 +299,39 @@ public interface ICommonDataServiceRestClient {
 			String[] validationStatusCodes, String[] tags, RestPageRequest pageRequest);
 
 	/**
+	 * Finds private solutions that accessible for the specified user. This includes
+	 * the user's own private solutions as well as solutions shared with the user.
+	 * Special-purpose method to support the dynamic search page on the portal
+	 * interface.
+	 * 
+	 * @param nameKeywords
+	 *            Keywords to perform "LIKE" search in Name field; ignored if null
+	 *            or empty
+	 * @param descriptionKeywords
+	 *            Keywords to perform "LIKE" search in Description field; ignored if
+	 *            null or empty
+	 * @param active
+	 *            Solution active status; true for active, false for inactive
+	 * @param userId
+	 *            User ID who created the solution or has access to solution
+	 * @param modelTypeCodes
+	 *            Model type codes; use four-letter sequence "null" to match a null
+	 *            value; ignored if null or empty
+	 * @param validationStatusCodes
+	 *            Validation status codes; use four-letter sequence "null" to match
+	 *            a null value; ignored if null or empty
+	 * @param tags
+	 *            Solution tag names; ignored if null or empty
+	 * @param pageRequest
+	 *            Page index, page size and sort information; defaults to page 0 of
+	 *            size 20 if null.
+	 * @return Page of solution objects.
+	 */
+	RestPageResponse<MLPSolution> findUserPrivateSolutions(String[] nameKeywords, String[] descriptionKeywords,
+			boolean active, String userId, String[] modelTypeCodes, String[] validationStatusCodes, String[] tags,
+			RestPageRequest pageRequest);
+
+	/**
 	 * Searches the solutions.
 	 * 
 	 * @param queryParameters
