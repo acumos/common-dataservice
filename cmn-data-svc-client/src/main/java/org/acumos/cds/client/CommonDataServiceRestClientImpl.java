@@ -610,14 +610,42 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 			parms.put(CCDSConstants.SEARCH_ACCESS_TYPES, accessTypeCodes);
 		if (modelTypeCodes != null && modelTypeCodes.length > 0)
 			parms.put(CCDSConstants.SEARCH_MODEL_TYPES, modelTypeCodes);
-		if (tags != null && tags.length > 0)
-			parms.put(CCDSConstants.SEARCH_TAGS, tags);
 		if (validationStatusCodes != null && validationStatusCodes.length > 0)
 			parms.put(CCDSConstants.SEARCH_VAL_STATUSES, validationStatusCodes);
+		if (tags != null && tags.length > 0)
+			parms.put(CCDSConstants.SEARCH_TAGS, tags);
 		URI uri = buildUri(
 				new String[] { CCDSConstants.SOLUTION_PATH, CCDSConstants.SEARCH_PATH, CCDSConstants.PORTAL_PATH },
 				parms, pageRequest);
 		logger.debug("findPortalSolutions: uri {}", uri);
+		ResponseEntity<RestPageResponse<MLPSolution>> response = restTemplate.exchange(uri, HttpMethod.GET, null,
+				new ParameterizedTypeReference<RestPageResponse<MLPSolution>>() {
+				});
+		return response.getBody();
+	}
+
+	@Override
+	public RestPageResponse<MLPSolution> findUserPrivateSolutions(String[] nameKeywords, String[] descriptionKeywords,
+			boolean active, String ownerId, String[] modelTypeCodes, String[] validationStatusCodes, String[] tags,
+			RestPageRequest pageRequest) {
+		HashMap<String, Object> parms = new HashMap<>();
+		// These are required
+		parms.put(CCDSConstants.SEARCH_ACTIVE, active);
+		parms.put(CCDSConstants.SEARCH_OWNERS, ownerId);
+		if (nameKeywords != null && nameKeywords.length > 0)
+			parms.put(CCDSConstants.SEARCH_NAME, nameKeywords);
+		if (descriptionKeywords != null && descriptionKeywords.length > 0)
+			parms.put(CCDSConstants.SEARCH_DESC, descriptionKeywords);
+		if (modelTypeCodes != null && modelTypeCodes.length > 0)
+			parms.put(CCDSConstants.SEARCH_MODEL_TYPES, modelTypeCodes);
+		if (validationStatusCodes != null && validationStatusCodes.length > 0)
+			parms.put(CCDSConstants.SEARCH_VAL_STATUSES, validationStatusCodes);
+		if (tags != null && tags.length > 0)
+			parms.put(CCDSConstants.SEARCH_TAGS, tags);
+		URI uri = buildUri(
+				new String[] { CCDSConstants.SOLUTION_PATH, CCDSConstants.SEARCH_PATH, CCDSConstants.USER_PATH }, parms,
+				pageRequest);
+		logger.debug("findUserPrivateSolutions: uri {}", uri);
 		ResponseEntity<RestPageResponse<MLPSolution>> response = restTemplate.exchange(uri, HttpMethod.GET, null,
 				new ParameterizedTypeReference<RestPageResponse<MLPSolution>>() {
 				});
