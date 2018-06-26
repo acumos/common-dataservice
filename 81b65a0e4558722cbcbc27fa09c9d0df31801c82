@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2390ce7c_7ca3abc0",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/CommonDataServiceRestClientImpl.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 633,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-06-26T21:01:58Z",
+      "side": 1,
+      "message": "Check for active is still missing",
+      "revId": "81b65a0e4558722cbcbc27fa09c9d0df31801c82",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
