@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cdd02930_f7792e88",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/CommonDataServiceRestClientImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 633,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-06-26T19:09:47Z",
+      "side": 1,
+      "message": "No need to check for the corner cases of ownerId and active?",
+      "revId": "402fa8fd289c6e8fefe3fd4f15912ee9df02987d",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
