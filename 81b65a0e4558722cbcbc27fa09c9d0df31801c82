@@ -16,6 +16,24 @@
       "revId": "81b65a0e4558722cbcbc27fa09c9d0df31801c82",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a98a5ccf_eca873be",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/CommonDataServiceRestClientImpl.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 633,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-06-27T00:08:15Z",
+      "side": 1,
+      "message": "it\u0027s type boolean (not Boolean), can\u0027t ever be null.",
+      "parentUuid": "2390ce7c_7ca3abc0",
+      "revId": "81b65a0e4558722cbcbc27fa09c9d0df31801c82",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
