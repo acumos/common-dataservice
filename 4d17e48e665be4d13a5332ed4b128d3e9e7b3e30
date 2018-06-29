@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8c5cae52_82f40588",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/CommonDataServiceRestClientImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1833,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-06-29T13:42:09Z",
+      "side": 1,
+      "message": "Is solution revision comment specific to a thread? How does the thread concept come into here?",
+      "revId": "4d17e48e665be4d13a5332ed4b128d3e9e7b3e30",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
