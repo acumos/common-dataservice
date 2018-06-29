@@ -16,6 +16,24 @@
       "revId": "4d17e48e665be4d13a5332ed4b128d3e9e7b3e30",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac3459d_d968ea99",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/CommonDataServiceRestClientImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1833,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-06-29T14:12:01Z",
+      "side": 1,
+      "message": "\"THREAD\" is only used in the endpoint path, note there is no threadId parameter",
+      "parentUuid": "8c5cae52_82f40588",
+      "revId": "4d17e48e665be4d13a5332ed4b128d3e9e7b3e30",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
