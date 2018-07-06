@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d2c3cf09_2767ee43",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/NotificationController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 3
+      },
+      "writtenOn": "2018-07-06T13:42:04Z",
+      "side": 1,
+      "message": "createNotificatio -\u003e createNotification",
+      "range": {
+        "startLine": 127,
+        "startChar": 48,
+        "endLine": 127,
+        "endChar": 65
+      },
+      "revId": "405f4ffc5bafc6dc02d887f3e5461ef492b74b32",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
