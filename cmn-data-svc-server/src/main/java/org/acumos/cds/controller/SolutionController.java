@@ -333,12 +333,12 @@ public class SolutionController extends AbstractController {
 			// All remaining parameters are optional
 			String[] nameKws = getOptStringArray(CCDSConstants.SEARCH_NAME, queryParameters);
 			String[] descKws = getOptStringArray(CCDSConstants.SEARCH_DESC, queryParameters);
-			String[] ownerIds = getOptStringArray(CCDSConstants.SEARCH_OWNERS, queryParameters);
+			String[] userIds = getOptStringArray(CCDSConstants.SEARCH_USERS, queryParameters);
 			String[] modelTypeCodes = getOptStringArray(CCDSConstants.SEARCH_MODEL_TYPES, queryParameters);
 			String[] accTypeCodes = getOptStringArray(CCDSConstants.SEARCH_ACCESS_TYPES, queryParameters);
 			String[] valStatusCodes = getOptStringArray(CCDSConstants.SEARCH_VAL_STATUSES, queryParameters);
 			String[] tags = getOptStringArray(CCDSConstants.SEARCH_TAGS, queryParameters);
-			Object result = solutionSearchService.findPortalSolutions(nameKws, descKws, active, ownerIds,
+			Object result = solutionSearchService.findPortalSolutions(nameKws, descKws, active, userIds,
 					modelTypeCodes, accTypeCodes, valStatusCodes, tags, pageRequest);
 			logger.audit(beginDate, "findPortalSolutions: query {}", queryParameters);
 			return result;
@@ -373,7 +373,7 @@ public class SolutionController extends AbstractController {
 		try {
 			// These parameters are required
 			String activeString = queryParameters.getFirst(CCDSConstants.SEARCH_ACTIVE);
-			String userId = queryParameters.getFirst(CCDSConstants.SEARCH_OWNERS);
+			String userId = queryParameters.getFirst(CCDSConstants.SEARCH_USERS);
 			if (activeString == null || activeString.length() == 0 || userId == null || userId.length() == 0)
 				throw new IllegalArgumentException("Missing parameter");
 			Boolean active = new Boolean(activeString);

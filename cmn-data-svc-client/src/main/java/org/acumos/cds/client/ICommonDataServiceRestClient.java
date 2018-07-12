@@ -276,7 +276,7 @@ public interface ICommonDataServiceRestClient {
 	 *            null or empty
 	 * @param active
 	 *            Solution active status; true for active, false for inactive
-	 * @param ownerIds
+	 * @param userIds
 	 *            User IDs who created the solution; ignored if null or empty
 	 * @param accessTypeCodes
 	 *            Access type codes; use four-letter sequence "null" to match a null
@@ -295,7 +295,7 @@ public interface ICommonDataServiceRestClient {
 	 * @return Page of solution objects.
 	 */
 	RestPageResponse<MLPSolution> findPortalSolutions(String[] nameKeywords, String[] descriptionKeywords,
-			boolean active, String[] ownerIds, String[] accessTypeCodes, String[] modelTypeCodes,
+			boolean active, String[] userIds, String[] accessTypeCodes, String[] modelTypeCodes,
 			String[] validationStatusCodes, String[] tags, RestPageRequest pageRequest);
 
 	/**

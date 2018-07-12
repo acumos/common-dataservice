@@ -595,7 +595,7 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 
 	@Override
 	public RestPageResponse<MLPSolution> findPortalSolutions(String[] nameKeywords, String[] descriptionKeywords,
-			boolean active, String[] ownerIds, String[] accessTypeCodes, String[] modelTypeCodes,
+			boolean active, String[] userIds, String[] accessTypeCodes, String[] modelTypeCodes,
 			String[] validationStatusCodes, String[] tags, RestPageRequest pageRequest) {
 		HashMap<String, Object> parms = new HashMap<>();
 		// This is required
@@ -604,8 +604,8 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 			parms.put(CCDSConstants.SEARCH_NAME, nameKeywords);
 		if (descriptionKeywords != null && descriptionKeywords.length > 0)
 			parms.put(CCDSConstants.SEARCH_DESC, descriptionKeywords);
-		if (ownerIds != null && ownerIds.length > 0)
-			parms.put(CCDSConstants.SEARCH_OWNERS, ownerIds);
+		if (userIds != null && userIds.length > 0)
+			parms.put(CCDSConstants.SEARCH_USERS, userIds);
 		if (accessTypeCodes != null && accessTypeCodes.length > 0)
 			parms.put(CCDSConstants.SEARCH_ACCESS_TYPES, accessTypeCodes);
 		if (modelTypeCodes != null && modelTypeCodes.length > 0)
@@ -632,7 +632,7 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 			throw new IllegalArgumentException("userId argument is required");
 		HashMap<String, Object> parms = new HashMap<>();
 		parms.put(CCDSConstants.SEARCH_ACTIVE, active);
-		parms.put(CCDSConstants.SEARCH_OWNERS, userId);
+		parms.put(CCDSConstants.SEARCH_USERS, userId);
 		if (nameKeywords != null && nameKeywords.length > 0)
 			parms.put(CCDSConstants.SEARCH_NAME, nameKeywords);
 		if (descriptionKeywords != null && descriptionKeywords.length > 0)

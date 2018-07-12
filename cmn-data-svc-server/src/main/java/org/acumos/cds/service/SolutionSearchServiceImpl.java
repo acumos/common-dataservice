@@ -181,7 +181,7 @@ public class SolutionSearchServiceImpl extends AbstractSearchServiceImpl impleme
 	 */
 	@Override
 	public Page<MLPSolution> findPortalSolutions(String[] nameKeywords, String[] descKeywords, boolean active,
-			String[] ownerIds, String[] modelTypeCode, String[] accessTypeCode, String[] validationStatusCode,
+			String[] userIds, String[] modelTypeCode, String[] accessTypeCode, String[] validationStatusCode,
 			String[] tags, Pageable pageable) {
 
 		Date beginDate = new Date();
@@ -203,9 +203,9 @@ public class SolutionSearchServiceImpl extends AbstractSearchServiceImpl impleme
 			if (validationStatusCode != null && validationStatusCode.length > 0)
 				criteria.add(buildEqualsListCriterion(revAlias + ".validationStatusCode", validationStatusCode));
 		}
-		if (ownerIds != null && ownerIds.length > 0) {
+		if (userIds != null && userIds.length > 0) {
 			criteria.createAlias("owner", ownerAlias);
-			criteria.add(Restrictions.in(ownerAlias + ".userId", ownerIds));
+			criteria.add(Restrictions.in(ownerAlias + ".userId", userIds));
 		}
 		if (tags != null && tags.length > 0) {
 			// Tags are optional, so must use outer join
