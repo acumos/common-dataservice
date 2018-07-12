@@ -26,6 +26,7 @@ package org.acumos.cds.transport;
 public class LoginTransport implements MLPTransportModel {
 
 	private String name;
+	// Password or API token
 	private String pass;
 
 	/**
@@ -41,7 +42,7 @@ public class LoginTransport implements MLPTransportModel {
 	 * @param name
 	 *            Login name
 	 * @param pass
-	 *            Login password (clear text).
+	 *            Login password or token in clear text.
 	 */
 	public LoginTransport(String name, String pass) {
 		this.name = name;

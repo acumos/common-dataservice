@@ -133,39 +133,99 @@ public class UserController extends AbstractController {
 	}
 
 	/**
+	 * Only for method checkUserCredentials
+	 */
+	private enum CredentialType {
+		PASSWORD, API_TOKEN, VERIFY_TOKEN;
+	};
+
+	/**
+	 * Checks specified user credentials against values in the database, which has
+	 * hashes (not clear text) of sensitive information like password or token.
+	 * 
+	 * @param credentials
+	 *            User name and authentication token
+	 * @param credentialType
+	 *            type of credential to check
+	 * @param response
+	 *            HttpServletResponse
+	 */
+	private Object checkUserCredentials(LoginTransport credentials, CredentialType credentialType,
+			HttpServletResponse response) {
+		Date beginDate = new Date();
+		if (credentials == null || credentials.getName() == null || credentials.getName().trim().isEmpty()
+				|| credentials.getPass() == null || credentials.getPass().trim().isEmpty()) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "Missing or empty credential(s)");
+		}
+		MLPUser user = userRepository.findByLoginOrEmail(credentials.getName());
+		if (user == null || !user.isActive()) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST,
+					"Failed to find active user " + credentials.getName());
+		}
+		String hash = null;
+		if (credentialType == CredentialType.PASSWORD)
+			hash = user.getLoginHash();
+		else if (credentialType == CredentialType.API_TOKEN)
+			hash = user.getApiTokenHash();
+		else if (credentialType == CredentialType.VERIFY_TOKEN)
+			hash = user.getVerifyTokenHash();
+		else
+			// Not reached by any test.
+			throw new IllegalArgumentException("Unexpected credential type: " + credentialType);
+
+		if (!BCrypt.checkpw(credentials.getPass(), hash)) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "Failed to authenticate user", null);
+		}
+		// detach from Hibernate and wipe hashes
+		entityManager.detach(user);
+		user.clearHashes();
+		logger.audit(beginDate, "checkUserCredentials: authenticated user {}", user.getLoginName());
+		return user;
+	}
+
+	/**
 	 * @param login
 	 *            Body with name and clear-text password
 	 * @param response
 	 *            HttpServletResponse
 	 * @return A user if found, an error otherwise.
 	 */
-	@ApiOperation(value = "Checks the specified credentials.  Searches both login name and email fields for the specified name.  Returns the user object if an active user exists with the specified credentials; answers bad request if no match is found.", response = MLPUser.class)
+	@ApiOperation(value = "Checks the specified credentials for full access.  Searches both login name and email fields for the specified name.  Returns the user object if an active user exists with the specified credentials; answers bad request if no match is found.", response = MLPUser.class)
 	@RequestMapping(value = "/" + CCDSConstants.LOGIN_PATH, method = RequestMethod.POST)
 	@ResponseBody
-	public Object login(@RequestBody LoginTransport login, HttpServletResponse response) {
-		Date beginDate = new Date();
-		if (login.getName() == null || login.getName().trim().length() == 0 || login.getPass() == null
-				|| login.getPass().trim().length() == 0) {
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "Missing login name and/or password");
-		}
-		MLPUser user = userRepository.findByLoginOrEmail(login.getName());
-		if (user == null || !user.isActive()) {
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST,
-					"Failed to find active user " + login.getName());
-		}
-		if (!BCrypt.checkpw(login.getPass(), user.getLoginHash())) {
-			final String msg = "Failed to authenticate user";
-			logger.audit(beginDate, "login: {}: {}", msg, login.getName());
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, msg, null);
-		}
-		// detach from Hibernate and wipe hash
-		entityManager.detach(user);
-		user.setLoginHash(null);
-		logger.audit(beginDate, "login: authenticated user {}", user.getLoginName());
-		return user;
+	public Object loginUser(@RequestBody LoginTransport login, HttpServletResponse response) {
+		return checkUserCredentials(login, CredentialType.PASSWORD, response);
+	}
+
+	/**
+	 * @param login
+	 *            Body with name and clear-text token
+	 * @param response
+	 *            HttpServletResponse
+	 * @return A user if found, an error otherwise.
+	 */
+	@ApiOperation(value = "Checks the specified credentials for API access.  Searches both login name and email fields for the specified name.  Returns the user object if an active user exists with the specified credentials; answers bad request if no match is found.", response = MLPUser.class)
+	@RequestMapping(value = "/" + CCDSConstants.LOGIN_API_PATH, method = RequestMethod.POST)
+	@ResponseBody
+	public Object loginApi(@RequestBody LoginTransport login, HttpServletResponse response) {
+		return checkUserCredentials(login, CredentialType.API_TOKEN, response);
+	}
+	
+	/**
+	 * @param login
+	 *            Body with name and clear-text token
+	 * @param response
+	 *            HttpServletResponse
+	 * @return A user if found, an error otherwise.
+	 */
+	@ApiOperation(value = "Checks the specified credentials for verification.  Searches both login name and email fields for the specified name.  Returns the user object if an active user exists with the specified credentials; answers bad request if no match is found.", response = MLPUser.class)
+	@RequestMapping(value = "/" + CCDSConstants.VERIFY_PATH, method = RequestMethod.POST)
+	@ResponseBody
+	public Object verifyUser(@RequestBody LoginTransport login, HttpServletResponse response) {
+		return checkUserCredentials(login, CredentialType.VERIFY_TOKEN, response);
 	}
 
 	/**
@@ -233,10 +293,9 @@ public class UserController extends AbstractController {
 		Date beginDate = new Date();
 		Page<MLPUser> page = userRepository.findAll(pageable);
 		for (MLPUser user : page.getContent()) {
-			// detach from Hibernate
+			// detach from Hibernate and clear sensitive data
 			entityManager.detach(user);
-			// wipe password
-			user.setLoginHash(null);
+			user.clearHashes();
 		}
 		logger.audit(beginDate, "getUsers {}", pageable);
 		return page;
@@ -256,10 +315,9 @@ public class UserController extends AbstractController {
 		Date beginDate = new Date();
 		Page<MLPUser> page = userRepository.findBySearchTerm(term, pageable);
 		for (MLPUser user : page.getContent()) {
-			// detach from Hibernate
+			// detach from Hibernate and clear sensitive data
 			entityManager.detach(user);
-			// wipe password
-			user.setLoginHash(null);
+			user.clearHashes();
 		}
 		logger.audit(beginDate, "likeUsers: term {}", term);
 		return page;
@@ -291,12 +349,12 @@ public class UserController extends AbstractController {
 		try {
 			Map<String, Object> convertedQryParm = convertQueryParameters(MLPUser.class, queryParameters);
 			Page<MLPUser> userPage = userSearchService.findUsers(convertedQryParm, isOr, pageable);
-			// Wipe login hash values
+			// Wipe hash values
 			Iterator<MLPUser> userIter = userPage.iterator();
 			while (userIter.hasNext()) {
 				MLPUser user = userIter.next();
 				entityManager.detach(user);
-				user.setLoginHash(null);
+				user.clearHashes();
 			}
 			logger.audit(beginDate, "searchUsers: query {}", queryParameters);
 			return userPage;
@@ -325,9 +383,9 @@ public class UserController extends AbstractController {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + userId, null);
 		}
-		// detach from Hibernate and wipe password
+		// detach from Hibernate and wipe hashes
 		entityManager.detach(user);
-		user.setLoginHash(null);
+		user.clearHashes();
 		logger.audit(beginDate, "getUser: userId {}", userId);
 		return user;
 	}
@@ -355,20 +413,22 @@ public class UserController extends AbstractController {
 					return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "ID exists: " + id);
 				}
 			}
-			// Create a hash if a clear-text password arrives
-			if (user.getLoginHash() != null) {
-				String pwHash = BCrypt.hashpw(user.getLoginHash(), BCrypt.gensalt());
-				user.setLoginHash(pwHash);
-			}
+			// Hash any clear-text values that arrive
+			if (user.getLoginHash() != null)
+				user.setLoginHash(BCrypt.hashpw(user.getLoginHash(), BCrypt.gensalt()));
+			if (user.getApiTokenHash() != null)
+				user.setApiTokenHash(BCrypt.hashpw(user.getApiTokenHash(), BCrypt.gensalt()));
+			if (user.getVerifyTokenHash() != null)
+				user.setVerifyTokenHash(BCrypt.hashpw(user.getVerifyTokenHash(), BCrypt.gensalt()));
 			// Create a new row
 			MLPUser newUser = userRepository.save(user);
 			response.setStatus(HttpServletResponse.SC_CREATED);
 			// This is a hack to create the location path.
 			response.setHeader(HttpHeaders.LOCATION, CCDSConstants.USER_PATH + "/" + newUser.getUserId());
 			// ALSO send back the model for client convenience,
-			// but first detach from Hibernate and wipe the hash
+			// but first detach from Hibernate and wipe all hashes
 			entityManager.detach(newUser);
-			newUser.setLoginHash(null);
+			newUser.clearHashes();
 			result = newUser;
 			logger.audit(beginDate, "createUser: userId {}", newUser.getUserId());
 			return result;
@@ -404,14 +464,19 @@ public class UserController extends AbstractController {
 		try {
 			// Use the path-parameter id; don't trust the one in the object
 			user.setUserId(userId);
-			// Hash password if present in request
-			if (user.getLoginHash() != null) {
-				String pwHash = BCrypt.hashpw(user.getLoginHash(), BCrypt.gensalt());
-				user.setLoginHash(pwHash);
-			} else {
-				// Preserve old password if not updated
+			// Hash any clear-text values that arrive; otherwise use old value
+			if (user.getLoginHash() != null)
+				user.setLoginHash(BCrypt.hashpw(user.getLoginHash(), BCrypt.gensalt()));
+			else
 				user.setLoginHash(existingUser.getLoginHash());
-			}
+			if (user.getApiTokenHash() != null)
+				user.setApiTokenHash(BCrypt.hashpw(user.getApiTokenHash(), BCrypt.gensalt()));
+			else
+				user.setApiTokenHash(existingUser.getApiTokenHash());
+			if (user.getVerifyTokenHash() != null)
+				user.setVerifyTokenHash(BCrypt.hashpw(user.getVerifyTokenHash(), BCrypt.gensalt()));
+			else
+				user.setVerifyTokenHash(existingUser.getApiTokenHash());
 			userRepository.save(user);
 			logger.audit(beginDate, "updateUser: userId {}", userId);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);

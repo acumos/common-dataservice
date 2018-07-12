@@ -20,7 +20,9 @@
 
 package org.acumos.cds.domain;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -29,6 +31,7 @@ import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.acumos.cds.transport.AuthorTransport;
 import org.hibernate.annotations.GenericGenerator;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -36,8 +39,8 @@ import io.swagger.annotations.ApiModelProperty;
 /**
  * Base model for a solution revision. Maps all simple columns; maps no complex
  * columns that a subclass might want to map in alternate ways. For example the
- * owner column is not mapped here; that is a user ID reference to an MLPUser
- * entity, and could be exposed as a string or as an object via Hibernate magic.
+ * solution ID column is not mapped here; that is an entity ID, and could be
+ * exposed as a string or as an object via Hibernate.
  */
 @MappedSuperclass
 public abstract class MLPAbstractSolutionRevision extends MLPTimestampedEntity {
@@ -76,7 +79,7 @@ public abstract class MLPAbstractSolutionRevision extends MLPTimestampedEntity {
 	private String origin;
 
 	/**
-	 * This code is defined by {@link org.acumos.cds.AccessTypeCode}
+	 * The Access Type Code value set is defined by server-side configuration.
 	 */
 	@Column(name = "ACCESS_TYPE_CD", nullable = false, columnDefinition = "CHAR(2)")
 	@NotNull(message = "Access type code cannot be null")
@@ -84,11 +87,36 @@ public abstract class MLPAbstractSolutionRevision extends MLPTimestampedEntity {
 	private String accessTypeCode;
 
 	/**
-	 * This code is defined by {@link org.acumos.cds.ValidationStatusCode}
+	 * The Verification Status Code value set is defined by server-side
+	 * configuration.
 	 */
-	@Column(name = "VALIDATION_STATUS_CD", nullable = false, columnDefinition = "CHAR(2)")
+	@Column(name = "LICENSE_STATUS_CD", columnDefinition = "CHAR(2)")
 	@Size(max = 2)
-	private String validationStatusCode;
+	@ApiModelProperty(required = false, value = "Security-verification status", example = "IP")
+	private String licenseStatusCode;
+
+	/**
+	 * The Verification Status Code value set is defined by server-side
+	 * configuration.
+	 */
+	@Column(name = "VULNER_STATUS_CD", columnDefinition = "CHAR(2)")
+	@Size(max = 2)
+	@ApiModelProperty(required = false, value = "Security-verification status", example = "IP")
+	private String vulnerabilityStatusCode;
+
+	/**
+	 * Structured text with author (name, contact) pairs
+	 */
+	@Column(name = "AUTHORS", columnDefinition = "VARCHAR(1024)")
+	@Size(max = 1024)
+	private String authors;
+
+	/**
+	 * Free text with a company or organization name.
+	 */
+	@Column(name = "PUBLISHER", columnDefinition = "VARCHAR(64)")
+	@Size(max = 64)
+	private String publisher;
 
 	/**
 	 * No-arg constructor
@@ -105,15 +133,12 @@ public abstract class MLPAbstractSolutionRevision extends MLPTimestampedEntity {
 	 *            User-assigned version string
 	 * @param accessTypeCode
 	 *            Access type code
-	 * @param validationStatusCode
-	 *            Validation status code
 	 */
-	public MLPAbstractSolutionRevision(String version, String accessTypeCode, String validationStatusCode) {
-		if (version == null || accessTypeCode == null || validationStatusCode == null)
+	public MLPAbstractSolutionRevision(String version, String accessTypeCode) {
+		if (version == null || accessTypeCode == null)
 			throw new IllegalArgumentException("Null not permitted");
 		this.version = version;
 		this.accessTypeCode = accessTypeCode;
-		this.validationStatusCode = validationStatusCode;
 	}
 
 	/**
@@ -125,11 +150,14 @@ public abstract class MLPAbstractSolutionRevision extends MLPTimestampedEntity {
 	public MLPAbstractSolutionRevision(MLPAbstractSolutionRevision that) {
 		super(that);
 		this.accessTypeCode = that.accessTypeCode;
+		this.authors = that.authors;
 		this.description = that.description;
 		this.metadata = that.metadata;
 		this.origin = that.origin;
+		this.publisher = that.publisher;
 		this.revisionId = that.revisionId;
-		this.validationStatusCode = that.validationStatusCode;
+		this.licenseStatusCode = that.licenseStatusCode;
+		this.vulnerabilityStatusCode = that.vulnerabilityStatusCode;
 		this.version = that.version;
 	}
 
@@ -177,26 +205,85 @@ public abstract class MLPAbstractSolutionRevision extends MLPTimestampedEntity {
 		return accessTypeCode;
 	}
 
-	/**
-	 * @param accessTypeCode
-	 *            A value obtained by calling
-	 *            {@link org.acumos.cds.AccessTypeCode#toString()}.
-	 */
 	public void setAccessTypeCode(String accessTypeCode) {
 		this.accessTypeCode = accessTypeCode;
 	}
 
-	public String getValidationStatusCode() {
-		return validationStatusCode;
+	public String getLicenseStatusCode() {
+		return licenseStatusCode;
+	}
+
+	public void setLicenseStatusCode(String licenseStatusCode) {
+		this.licenseStatusCode = licenseStatusCode;
+	}
+
+	public String getVulnerabilityStatusCode() {
+		return vulnerabilityStatusCode;
+	}
+
+	public void setVulnerabilityStatusCode(String vulnerabilityStatusCode) {
+		this.vulnerabilityStatusCode = vulnerabilityStatusCode;
+	}
+
+	public String getPublisher() {
+		return publisher;
+	}
+
+	public void setPublisher(String publisher) {
+		this.publisher = publisher;
+	}
+
+	/** author row separator character */
+	private static final String AUTHOR_ROW_SEP = "\n";
+	private static final String AUTHOR_ROW_REGEX = "[" + AUTHOR_ROW_SEP + "]";
+	/** author pair separator character */
+	private static final String AUTHOR_PAIR_SEP = "\t";
+	private static final String AUTHOR_PAIR_REGEX = "[" + AUTHOR_PAIR_SEP + "]";
+
+	/**
+	 * Gets the authors. Converts the internal data storage format to a set of
+	 * objects.
+	 * 
+	 * @return Array of author (name, contact) pairs
+	 */
+	public AuthorTransport[] getAuthors() {
+		Set<AuthorTransport> set = new HashSet<>();
+		if (authors != null && authors.length() > 0) {
+			String[] rows = authors.split(AUTHOR_ROW_REGEX);
+			for (String r : rows) {
+				String[] pair = r.split(AUTHOR_PAIR_REGEX);
+				if (pair[0].isEmpty() && pair[1].isEmpty())
+					continue;
+				AuthorTransport a = new AuthorTransport(pair[0], pair[1]);
+				set.add(a);
+			}
+		}
+		AuthorTransport[] result = new AuthorTransport[set.size()];
+		set.toArray(result);
+		return result;
 	}
 
 	/**
-	 * @param validationStatusCode
-	 *            A value obtained by calling
-	 *            {@link org.acumos.cds.ValidationStatusCode#toString()}.
+	 * Sets the authors. Converts the set of objects to the internal storage format.
+	 * 
+	 * @param authors
+	 *            Set of author (name, contact) pairs. Must not contain the
+	 *            character {@link #AUTHOR_PAIR_SEP} nor {@link #AUTHOR_ROW_SEP}.
 	 */
-	public void setValidationStatusCode(String validationStatusCode) {
-		this.validationStatusCode = validationStatusCode;
+	public void setAuthors(AuthorTransport[] authors) {
+		StringBuilder sb = new StringBuilder();
+		for (AuthorTransport a : authors) {
+			if (a.getName().isEmpty() && a.getContact().isEmpty())
+				continue;
+			if (a.getName().contains(AUTHOR_ROW_SEP) || a.getName().contains(AUTHOR_PAIR_SEP))
+				throw new IllegalArgumentException("Illegal character in name");
+			if (a.getContact().contains(AUTHOR_ROW_SEP) || a.getContact().contains(AUTHOR_PAIR_SEP))
+				throw new IllegalArgumentException("Illegal character in contact");
+			if (sb.length() > 0)
+				sb.append(AUTHOR_ROW_SEP);
+			sb.append(a.getName() + AUTHOR_PAIR_SEP + a.getContact());
+		}
+		this.authors = sb.toString();
 	}
 
 	@Override

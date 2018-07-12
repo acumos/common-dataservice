@@ -200,5 +200,10 @@ codeName.validationType.LC=License Check
 codeName.validationType.OQ=OSS Quantification
 codeName.validationType.TA=Text Analysis
 
+codeName.verificationStatus.SC=Success
+codeName.verificationStatus.FA=Failure
+codeName.verificationStatus.IP=In-progress
+codeName.verificationStatus.UR=Unrequested.
+
 # Specific loggers can be configured here:
 # logging.level.org.springframework.web=INFO
