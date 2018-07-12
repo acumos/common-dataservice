@@ -123,8 +123,7 @@ public class MockClientTest {
 		Assert.assertTrue(solutions3 == client.findSolutionsByTag("string", pageRequest));
 		RestPageResponse<MLPSolution> solutions4 = new RestPageResponse<>();
 		client.setSolutionsByDate(solutions4);
-		Assert.assertTrue(
-				solutions4 == client.findSolutionsByDate(true, new String[0], new String[0], new Date(), pageRequest));
+		Assert.assertTrue(solutions4 == client.findSolutionsByDate(true, new String[0], new String[0], new Date(), pageRequest));
 
 		MLPSolution solution = new MLPSolution();
 		client.setSolutionById(solution);
@@ -209,6 +208,8 @@ public class MockClientTest {
 		MLPUser user = new MLPUser();
 		client.setLoginUser(user);
 		Assert.assertTrue(user == client.loginUser("name", "pass"));
+		Assert.assertTrue(user == client.loginApiUser("name", "pass"));
+		Assert.assertTrue(user == client.verifyUser("name", "pass"));
 
 		client.setUserById(user);
 		Assert.assertTrue(user == client.getUser("id"));
@@ -441,8 +442,8 @@ public class MockClientTest {
 
 		RestPageResponse<MLPSolution> portalSols = new RestPageResponse<>();
 		client.setPortalSolutions(portalSols);
-		Assert.assertTrue(
-				portalSols == client.findPortalSolutions(null, null, true, null, null, null, null, null, pageRequest));
+		Assert.assertTrue(portalSols == client.findPortalSolutions(null, null, true, null, null, null, null, null, null,
+				null, pageRequest));
 
 		RestPageResponse<MLPSolution> userPrivSols = new RestPageResponse<>();
 		client.setUserSolutions(userPrivSols);
