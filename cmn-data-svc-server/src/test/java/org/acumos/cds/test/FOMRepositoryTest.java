@@ -143,7 +143,6 @@ public class FOMRepositoryTest {
 		String[] empty = new String[0];
 		String[] nameKw = new String[] { name }; // substring of solution name
 		String[] accTypes = new String[] { accCode };
-		String[] valCodes = new String[] { valCode };
 		Date modifiedDate = new Date();
 		modifiedDate.setTime(modifiedDate.getTime() - 60 * 1000);
 
@@ -153,19 +152,19 @@ public class FOMRepositoryTest {
 
 		logger.info("Querying for FOM via findPortalSolutions method");
 		Page<MLPSolution> byName = solutionSearchService.findPortalSolutions(nameKw, empty, true, empty, empty,
-				accTypes, valCodes, empty, pageable);
+				accTypes, empty, empty, empty, empty, pageable);
 		Assert.assertTrue(byName != null && byName.getNumberOfElements() > 0);
 		logger.info("Found sols by name via criteria: size {}", byName.getContent().size());
 
-		Page<MLPSolution> solsByDate = solutionSearchService.findSolutionsByModifiedDate(true, accTypes, valCodes,
-				modifiedDate, pageable);
+		Page<MLPSolution> solsByDate = solutionSearchService.findSolutionsByModifiedDate(true, accTypes, modifiedDate,
+				pageable);
 		Assert.assertTrue(solsByDate != null && solsByDate.getNumberOfElements() > 0);
 		logger.info("Found sols by date via criteria: size {}", solsByDate.getContent().size());
 
 		// Find by user and Hibernate constraint - user2 owns no solutions but has
 		// access
 		Page<MLPSolution> byUser = solutionSearchService.findUserSolutions(nameKw, empty, true, cu2.getUserId(), empty,
-				empty, valCodes, empty, pageable);
+				empty, empty, pageable);
 		Assert.assertTrue(byUser != null && byUser.getNumberOfElements() > 0);
 		logger.info("Found sols by user via criteria: size {}", byUser.getContent().size());
 

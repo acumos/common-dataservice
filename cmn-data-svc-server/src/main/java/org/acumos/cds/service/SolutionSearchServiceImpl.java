@@ -169,10 +169,10 @@ public class SolutionSearchServiceImpl extends AbstractSearchServiceImpl impleme
 	}
 
 	/*
-	 * This query checks properties of the solution AND associated entities, like
-	 * the revision's access type, which requires an inner join and yields a large
-	 * cross product that Hibernate will coalesce. Because of the joins it's unsafe
-	 * to apply limit parameters at the database. Therefore this method fetches the
+	 * This query checks properties of the solution AND associated entities
+	 * especially revisions, which requires an inner join and yields a large cross
+	 * product that Hibernate will coalesce. Because of the joins it's unsafe to
+	 * apply limit parameters at the database. Therefore this method fetches the
 	 * full result from the database then reduces the result size here, which is
 	 * inefficient.
 	 *
@@ -181,8 +181,8 @@ public class SolutionSearchServiceImpl extends AbstractSearchServiceImpl impleme
 	 */
 	@Override
 	public Page<MLPSolution> findPortalSolutions(String[] nameKeywords, String[] descKeywords, boolean active,
-			String[] ownerIds, String[] modelTypeCode, String[] accessTypeCode, String[] validationStatusCode,
-			String[] tags, Pageable pageable) {
+			String[] userIds, String[] modelTypeCode, String[] accessTypeCode, String[] validationStatusCodes,
+			String[] tags, String[] authorKeywords, String[] publisherKeywords, Pageable pageable) {
 
 		Date beginDate = new Date();
 		// build the query using FOM to access child attributes
@@ -196,16 +196,19 @@ public class SolutionSearchServiceImpl extends AbstractSearchServiceImpl impleme
 		if (modelTypeCode != null && modelTypeCode.length > 0)
 			criteria.add(buildEqualsListCriterion("modelTypeCode", modelTypeCode));
 		if ((accessTypeCode != null && accessTypeCode.length > 0)
-				|| (validationStatusCode != null && validationStatusCode.length > 0)) {
+				|| (authorKeywords != null && authorKeywords.length > 0)
+				|| (publisherKeywords != null && publisherKeywords.length > 0)) {
 			criteria.createAlias("revisions", revAlias);
 			if (accessTypeCode != null && accessTypeCode.length > 0)
 				criteria.add(buildEqualsListCriterion(revAlias + ".accessTypeCode", accessTypeCode));
-			if (validationStatusCode != null && validationStatusCode.length > 0)
-				criteria.add(buildEqualsListCriterion(revAlias + ".validationStatusCode", validationStatusCode));
+			if (authorKeywords != null && authorKeywords.length > 0)
+				criteria.add(buildLikeListCriterion(revAlias + ".authors", authorKeywords));
+			if (publisherKeywords != null && publisherKeywords.length > 0)
+				criteria.add(buildLikeListCriterion(revAlias + ".publisher", publisherKeywords));
 		}
-		if (ownerIds != null && ownerIds.length > 0) {
+		if (userIds != null && userIds.length > 0) {
 			criteria.createAlias("owner", ownerAlias);
-			criteria.add(Restrictions.in(ownerAlias + ".userId", ownerIds));
+			criteria.add(Restrictions.in(ownerAlias + ".userId", userIds));
 		}
 		if (tags != null && tags.length > 0) {
 			// Tags are optional, so must use outer join
@@ -231,8 +234,7 @@ public class SolutionSearchServiceImpl extends AbstractSearchServiceImpl impleme
 	 */
 	@Override
 	public Page<MLPSolution> findUserSolutions(String[] nameKeywords, String[] descKeywords, boolean active,
-			String userId, String[] modelTypeCode, String[] accessTypeCode, String[] validationStatusCode,
-			String[] tags, Pageable pageable) {
+			String userId, String[] modelTypeCode, String[] accessTypeCode, String[] tags, Pageable pageable) {
 
 		Date beginDate = new Date();
 		// build the query using FOM to access child attributes
@@ -252,13 +254,9 @@ public class SolutionSearchServiceImpl extends AbstractSearchServiceImpl impleme
 			criteria.add(buildLikeListCriterion("description", descKeywords));
 		if (modelTypeCode != null && modelTypeCode.length > 0)
 			criteria.add(buildEqualsListCriterion("modelTypeCode", modelTypeCode));
-		if ((accessTypeCode != null && accessTypeCode.length > 0)
-				|| (validationStatusCode != null && validationStatusCode.length > 0)) {
+		if (accessTypeCode != null && accessTypeCode.length > 0) {
 			criteria.createAlias("revisions", revAlias);
-			if (accessTypeCode != null && accessTypeCode.length > 0)
-				criteria.add(buildEqualsListCriterion(revAlias + ".accessTypeCode", accessTypeCode));
-			if (validationStatusCode != null && validationStatusCode.length > 0)
-				criteria.add(buildEqualsListCriterion(revAlias + ".validationStatusCode", validationStatusCode));
+			criteria.add(buildEqualsListCriterion(revAlias + ".accessTypeCode", accessTypeCode));
 		}
 		if (tags != null && tags.length > 0) {
 			// Tags are optional, so must use outer join
@@ -279,8 +277,8 @@ public class SolutionSearchServiceImpl extends AbstractSearchServiceImpl impleme
 	 * inefficient.
 	 */
 	@Override
-	public Page<MLPSolution> findSolutionsByModifiedDate(boolean active, String[] accessTypeCode,
-			String[] validationStatusCode, Date date, Pageable pageable) {
+	public Page<MLPSolution> findSolutionsByModifiedDate(boolean active, String[] accessTypeCode, Date date,
+			Pageable pageable) {
 
 		Date beginDate = new Date();
 		// build the query using FOM to access child attributes
@@ -293,8 +291,6 @@ public class SolutionSearchServiceImpl extends AbstractSearchServiceImpl impleme
 		criteria.add(Restrictions.eq("active", active));
 		if (accessTypeCode != null && accessTypeCode.length > 0)
 			criteria.add(Restrictions.in(revAlias + ".accessTypeCode", accessTypeCode));
-		if (validationStatusCode != null && validationStatusCode.length > 0)
-			criteria.add(Restrictions.in(revAlias + ".validationStatusCode", validationStatusCode));
 		// Construct a disjunction to find any updated item.
 		// Unfortunately this requires hard-coded field names
 		Criterion solModified = Restrictions.ge("modified", date);

@@ -82,6 +82,7 @@ public class MLPPeer extends MLPTimestampedEntity implements Serializable {
 
 	@Column(name = "WEB_URL", columnDefinition = "VARCHAR(512)")
 	@Size(max = 512)
+	@ApiModelProperty(required = true)
 	private String webUrl;
 
 	@Column(name = "IS_SELF", nullable = false, columnDefinition = "CHAR(1) DEFAULT 'N'")
@@ -99,13 +100,13 @@ public class MLPPeer extends MLPTimestampedEntity implements Serializable {
 	@Column(name = "CONTACT1", nullable = false, columnDefinition = "VARCHAR(100)")
 	@NotNull(message = "contact1 cannot be null")
 	@Size(max = 100)
-	@ApiModelProperty(required = true, example = "Sys Admin 212-555-1212")
+	@ApiModelProperty(required = true, value = "Contact information", example = "Sys Admin 212-555-1212")
 	private String contact1;
 
 	@Column(name = "STATUS_CD", nullable = false, columnDefinition = "CHAR(2)")
 	@NotNull(message = "statusCode cannot be null")
 	@Size(max = 2)
-	@ApiModelProperty(required = true, example = "AC")
+	@ApiModelProperty(required = true, value = "Peer active status", example = "AC")
 	private String statusCode;
 
 	@Column(name = "VALIDATION_STATUS_CD", nullable = false, columnDefinition = "CHAR(2)")
@@ -143,9 +144,8 @@ public class MLPPeer extends MLPTimestampedEntity implements Serializable {
 	 *            Peer validation code
 	 */
 	public MLPPeer(String name, String subjectName, String apiUrl, boolean isSelf, boolean isLocal, String contact1,
-			String statusCode, String validationStatusCode) {
-		if (name == null || subjectName == null || apiUrl == null || contact1 == null || statusCode == null
-				|| validationStatusCode == null)
+			String statusCode, String 	validationStatusCode) {
+		if (name == null || subjectName == null || apiUrl == null || contact1 == null || statusCode == null || validationStatusCode == null)
 			throw new IllegalArgumentException("Null not permitted");
 		this.name = name;
 		this.subjectName = subjectName;
@@ -332,8 +332,7 @@ public class MLPPeer extends MLPTimestampedEntity implements Serializable {
 
 	/**
 	 * @param validationStatusCode
-	 *            A value obtained by calling
-	 *            {@link org.acumos.cds.ValidationStatusCode#toString()}.
+	 *            The validation status code
 	 */
 	public void setValidationStatusCode(String validationStatusCode) {
 		this.validationStatusCode = validationStatusCode;

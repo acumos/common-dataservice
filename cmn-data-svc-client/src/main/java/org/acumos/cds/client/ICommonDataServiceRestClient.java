@@ -266,7 +266,7 @@ public interface ICommonDataServiceRestClient {
 
 	/**
 	 * Finds solutions that match every specified condition. Special-purpose method
-	 * to support the dynamic search page on the portal interface.
+	 * to support the dynamic search page on the portal marketplace.
 	 * 
 	 * @param nameKeywords
 	 *            Keywords to perform "LIKE" search in Name field; ignored if null
@@ -276,7 +276,7 @@ public interface ICommonDataServiceRestClient {
 	 *            null or empty
 	 * @param active
 	 *            Solution active status; true for active, false for inactive
-	 * @param ownerIds
+	 * @param userIds
 	 *            User IDs who created the solution; ignored if null or empty
 	 * @param accessTypeCodes
 	 *            Access type codes; use four-letter sequence "null" to match a null
@@ -289,14 +289,21 @@ public interface ICommonDataServiceRestClient {
 	 *            a null value; ignored if null or empty
 	 * @param tags
 	 *            Solution tag names; ignored if null or empty
+	 * @param authorKeywords
+	 *            Keywords to perform "LIKE" search in the Authors field; ignored if
+	 *            null or empty
+	 * @param publisherKeywords
+	 *            Keywords to perform "LIKE" search in the Publisher field; ignored
+	 *            if null or empty
 	 * @param pageRequest
 	 *            Page index, page size and sort information; defaults to page 0 of
 	 *            size 20 if null.
 	 * @return Page of solution objects.
 	 */
 	RestPageResponse<MLPSolution> findPortalSolutions(String[] nameKeywords, String[] descriptionKeywords,
-			boolean active, String[] ownerIds, String[] accessTypeCodes, String[] modelTypeCodes,
-			String[] validationStatusCodes, String[] tags, RestPageRequest pageRequest);
+			boolean active, String[] userIds, String[] accessTypeCodes, String[] modelTypeCodes,
+			String[] validationStatusCodes, String[] tags, String[] authorKeywords, String[] publisherKeywords,
+			RestPageRequest pageRequest);
 
 	/**
 	 * Finds solutions editable by the specified user ('my models'). This includes
@@ -698,7 +705,9 @@ public interface ICommonDataServiceRestClient {
 
 	/**
 	 * Checks credentials for the specified active user. Throws an exception if the
-	 * user is not found, is not active or the password does not match.
+	 * user is not found, is not active or the password does not match. This does
+	 * NOT check the expiration date of the password, the client must do that as
+	 * needed.
 	 * 
 	 * @param name
 	 *            login name or email address; both attributes are checked
@@ -707,6 +716,32 @@ public interface ICommonDataServiceRestClient {
 	 * @return User object if a match for an active user is found.
 	 */
 	MLPUser loginUser(String name, String pass);
+
+	/**
+	 * Checks API credentials for the specified active user. Throws an exception if
+	 * the user is not found, is not active or the token does not match.
+	 * 
+	 * @param name
+	 *            login name or email address; both attributes are checked
+	 * @param apiToken
+	 *            clear-text API token
+	 * @return User object if a match for an active user is found.
+	 */
+	MLPUser loginApiUser(String name, String apiToken);
+
+	/**
+	 * Checks verification credentials for the specified active user. Throws an
+	 * exception if the user is not found, is not active or the token does not
+	 * match. This does NOT check the expiration date of the token, the client must
+	 * do that as needed.
+	 * 
+	 * @param name
+	 *            login name or email address; both attributes are checked
+	 * @param verifyToken
+	 *            clear-text verification token
+	 * @return User object if a match for an active user is found.
+	 */
+	MLPUser verifyUser(String name, String verifyToken);
 
 	/**
 	 * Gets the user with the specified ID.

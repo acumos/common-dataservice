@@ -84,8 +84,8 @@ import org.acumos.cds.domain.MLPUserLoginProvider;
 import org.acumos.cds.domain.MLPUserNotifPref;
 import org.acumos.cds.domain.MLPUserNotification;
 import org.acumos.cds.domain.MLPValidationSequence;
-import org.acumos.cds.domain.MLPValidationStatus;
 import org.acumos.cds.domain.MLPValidationType;
+import org.acumos.cds.transport.AuthorTransport;
 import org.acumos.cds.transport.RestPageRequest;
 import org.acumos.cds.transport.RestPageResponse;
 import org.acumos.cds.transport.SuccessTransport;
@@ -164,8 +164,7 @@ public class CdsControllerTest {
 
 			MLPSolution cs = new MLPSolution();
 			cs.setName("solution name");
-			cs.setOwnerId(cu.getUserId());
-			cs.setProvider("Big Data Org");
+			cs.setUserId(cu.getUserId());
 			cs.setModelTypeCode("CL");
 			cs.setToolkitTypeCode("CP");
 			cs.setActive(true);
@@ -179,8 +178,9 @@ public class CdsControllerTest {
 			Assert.assertTrue(fetched != null && fetched.getTags() != null && fetched.getWebStats() != null);
 
 			MLPSolutionRevision cr = new MLPSolutionRevision(cs.getSolutionId(), "1.0R", cu.getUserId(),
-					AccessTypeCode.PB.name(), ValidationStatusCode.IP.name());
+					AccessTypeCode.PB.name(), "NV");
 			cr.setDescription("Some description");
+			cr.setPublisher("Big Data Org");
 			cr = client.createSolutionRevision(cr);
 			logger.info("Created solution revision {}", cr);
 
@@ -262,9 +262,6 @@ public class CdsControllerTest {
 		List<MLPToolkitType> tt = client.getToolkitTypes();
 		Assert.assertFalse(tt.isEmpty());
 
-		List<MLPValidationStatus> vs = client.getValidationStatuses();
-		Assert.assertFalse(vs.isEmpty());
-
 		List<MLPValidationType> vt = client.getValidationTypes();
 		Assert.assertFalse(vt.isEmpty());
 
@@ -323,8 +320,12 @@ public class CdsControllerTest {
 			String unique = Long.toString(new Date().getTime());
 			final String loginName = "user-" + unique;
 			final String loginPass = "test_client_pass";
+			final String apiToken = "test_client_api";
+			final String verifyToken = "test_client_verify";
 			cu.setLoginName(loginName);
 			cu.setLoginHash(loginPass);
+			cu.setApiTokenHash(apiToken);
+			cu.setVerifyTokenHash(verifyToken);
 			cu.setEmail("createSolArtuser@abc.com");
 			final String firstName = "test_" + unique;
 			cu.setFirstName(firstName);
@@ -360,6 +361,14 @@ public class CdsControllerTest {
 			Assert.assertNotNull(loggedIn);
 			logger.info("Logged in successfully, password expires {}", loggedIn.getLoginPassExpire());
 			Assert.assertArrayEquals(fakePicture, loggedIn.getPicture());
+
+			MLPUser apiUser = client.loginApiUser(loginName, apiToken);
+			Assert.assertNotNull(apiUser);
+			logger.info("Logged in successfully via API token");
+
+			MLPUser verifyUser = client.verifyUser(loginName, verifyToken);
+			Assert.assertNotNull(verifyUser);
+			logger.info("Verified successfully via verification token");
 
 			// Ensure inactive user cannot login
 			try {
@@ -427,7 +436,7 @@ public class CdsControllerTest {
 			pr.setApiUrl("http://peer-api");
 			pr.setContact1("Katherine Globe");
 			pr.setStatusCode(PeerStatusCode.AC.name());
-			pr.setValidationStatusCode(ValidationStatusCode.FA.name());
+			pr.setValidationStatusCode("IP");
 			pr = client.createPeer(pr);
 			logger.info("Created peer with ID {}", pr.getPeerId());
 
@@ -479,7 +488,7 @@ public class CdsControllerTest {
 			ca.setVersion(version);
 			ca.setName("artifact name");
 			ca.setUri("http://nexus/artifact");
-			ca.setOwnerId(cu.getUserId());
+			ca.setUserId(cu.getUserId());
 			ca.setArtifactTypeCode(ArtifactTypeCode.DI.toString());
 			ca.setSize(1);
 			ca = client.createArtifact(ca);
@@ -503,7 +512,7 @@ public class CdsControllerTest {
 			ca2.setName("replicated artifact ");
 			ca2.setUri("http://other.foo");
 			ca2.setArtifactTypeCode(ArtifactTypeCode.CD.toString());
-			ca2.setOwnerId(cu.getUserId());
+			ca2.setUserId(cu.getUserId());
 			ca2.setSize(456);
 			ca2 = client.createArtifact(ca2);
 			Assert.assertEquals(artId, ca2.getArtifactId());
@@ -542,7 +551,7 @@ public class CdsControllerTest {
 			Assert.assertTrue(tags.getNumberOfElements() > 0);
 
 			MLPSolution cs = new MLPSolution("solution name", cu.getUserId(), true);
-			cs.setProvider("Tagged solution org");
+			cs.setDescription("Tagged solution");
 			cs.setModelTypeCode(ModelTypeCode.CL.name());
 			cs.setToolkitTypeCode(ToolkitTypeCode.CP.name());
 			cs.getTags().add(tag1);
@@ -553,7 +562,7 @@ public class CdsControllerTest {
 
 			// no tags
 			MLPSolution csOrg = new MLPSolution("solution organization", cu.getUserId(), true);
-			csOrg.setProvider("Untagged solution org");
+			csOrg.setDescription("Untagged solution org");
 			csOrg.setModelTypeCode(ModelTypeCode.DS.name());
 			csOrg.setToolkitTypeCode(ToolkitTypeCode.SK.name());
 			csOrg = client.createSolution(csOrg);
@@ -562,8 +571,8 @@ public class CdsControllerTest {
 
 			MLPSolution inactive = new MLPSolution();
 			inactive.setName("inactive solution name");
-			inactive.setOwnerId(cu.getUserId());
-			inactive.setProvider("Inactive Data Org");
+			inactive.setUserId(cu.getUserId());
+			inactive.setDescription("Inactive Data Org");
 			inactive.setModelTypeCode(ModelTypeCode.DS.name());
 			inactive.setToolkitTypeCode(ToolkitTypeCode.SK.name());
 			inactive.setActive(false);
@@ -630,19 +639,22 @@ public class CdsControllerTest {
 			logger.info("Got solutions accessible by user {}", cu.getUserId());
 
 			MLPSolutionRevision cr = new MLPSolutionRevision(cs.getSolutionId(), "1.0R", cu.getUserId(), //
-					AccessTypeCode.PR.name(), ValidationStatusCode.NV.name());
+					AccessTypeCode.PR.name(), "NV");
+			cr.setAuthors(new AuthorTransport[] { new AuthorTransport("my name", "http://github") });
+			cr.setPublisher("publisher 1");
 			cr = client.createSolutionRevision(cr);
 			Assert.assertNotNull(cr.getRevisionId());
 			logger.info("Created solution revision {}", cr.getRevisionId());
+			cr.setDescription("Some description");
+			client.updateSolutionRevision(cr);
 
 			MLPSolutionRevision crOrg = new MLPSolutionRevision(csOrg.getSolutionId(), "1.0R", cu.getUserId(), //
-					AccessTypeCode.PR.name(), ValidationStatusCode.NV.name());
+					AccessTypeCode.PR.name(), "NV");
+			crOrg.setAuthors(new AuthorTransport[] { new AuthorTransport("your name", "email") });
+			crOrg.setPublisher("publisher 2");
 			crOrg = client.createSolutionRevision(crOrg);
 			Assert.assertNotNull(crOrg.getRevisionId());
 			logger.info("Created solution revision {}", cr.getRevisionId());
-
-			cr.setDescription("Some description");
-			client.updateSolutionRevision(cr);
 
 			logger.info("Adding artifact to revision 1");
 			client.addSolutionRevisionArtifact(cs.getSolutionId(), cr.getRevisionId(), ca.getArtifactId());
@@ -679,23 +691,23 @@ public class CdsControllerTest {
 			// Portal dynamic search
 			logger.info("Querying for any solutions via flexible i/f");
 			RestPageResponse<MLPSolution> portalAnyMatches = client.findPortalSolutions(null, null, true, null, null,
-					null, null, null, new RestPageRequest(0, 5));
+					null, null, null, null, null, new RestPageRequest(0, 5));
 			Assert.assertTrue(portalAnyMatches != null && portalAnyMatches.getNumberOfElements() > 1);
 
 			logger.info("Querying for valid tag on solutions via flexible i/f");
 			String[] searchTags = new String[] { tagName1 };
 			RestPageResponse<MLPSolution> portalTagMatches = client.findPortalSolutions(null, null, true, null, null,
-					null, null, searchTags, new RestPageRequest(0, 5));
+					null, null, searchTags, null, null, new RestPageRequest(0, 5));
 			Assert.assertTrue(portalTagMatches != null && portalTagMatches.getNumberOfElements() > 0);
 
 			logger.info("Querying for bogus tag on solutions via flexible i/f");
 			String[] bogusTags = new String[] { "bogus" };
 			RestPageResponse<MLPSolution> portalTagNoMatches = client.findPortalSolutions(null, null, true, null, null,
-					null, null, bogusTags, new RestPageRequest(0, 5));
+					null, null, bogusTags, null, null, new RestPageRequest(0, 5));
 			Assert.assertTrue(portalTagNoMatches != null && portalTagNoMatches.getNumberOfElements() == 0);
 
 			logger.info("Querying for user solutions via flexible i/f");
-			RestPageResponse<MLPSolution> userSols = client.findUserSolutions(null, null, true, 
+			RestPageResponse<MLPSolution> userSols = client.findUserSolutions(null, null, true,
 					inactiveUser.getUserId(), null, null, null, null, new RestPageRequest(0, 5));
 			Assert.assertTrue(userSols != null && userSols.getNumberOfElements() > 0);
 
@@ -704,12 +716,13 @@ public class CdsControllerTest {
 			String[] owners = { cu.getUserId() };
 			String[] accessTypeCodes = { AccessTypeCode.PR.name() };
 			String[] modelTypeCodes = null;
-			String[] valStatusCodes = { ValidationStatusCode.NV.name() };
+			String[] authKw = { "github" };
+			String[] pubKw = { "publisher" };
 			searchTags = null;
 
 			// find active solutions
 			RestPageResponse<MLPSolution> portalActiveMatches = client.findPortalSolutions(nameKw, descKw, true, owners,
-					accessTypeCodes, modelTypeCodes, valStatusCodes, searchTags, new RestPageRequest(0, 5));
+					accessTypeCodes, modelTypeCodes, null, searchTags, authKw, pubKw, new RestPageRequest(0, 5));
 			Assert.assertTrue(portalActiveMatches != null && portalActiveMatches.getNumberOfElements() > 0);
 
 			// Requires revisions and artifacts!
@@ -717,8 +730,8 @@ public class CdsControllerTest {
 			String[] searchValidationStatusCodes = new String[] { ValidationStatusCode.NV.name() };
 			Date anHourAgo = new java.util.Date();
 			anHourAgo.setTime(new Date().getTime() - 1000L * 60 * 60);
-			RestPageResponse<MLPSolution> sld = client.findSolutionsByDate(true, searchAccessTypeCodes,
-					searchValidationStatusCodes, anHourAgo, new RestPageRequest(0, 1));
+			RestPageResponse<MLPSolution> sld = client.findSolutionsByDate(true, searchAccessTypeCodes, searchValidationStatusCodes, anHourAgo,
+					new RestPageRequest(0, 1));
 			Assert.assertTrue(sld != null && sld.getNumberOfElements() > 0);
 			logger.info("Found solutions by date: " + sld.getContent().size());
 
@@ -756,14 +769,12 @@ public class CdsControllerTest {
 			sv.setRevisionId(cr.getRevisionId());
 			sv.setTaskId("fake-task-id");
 			sv.setValidationTypeCode(ValidationTypeCode.LC.name());
-			sv.setValidationStatusCode(ValidationStatusCode.FA.name());
 			sv = client.createSolutionValidation(sv);
 			Assert.assertNotNull(sv);
 			logger.info("Created solution validation {}", sv);
 			List<MLPSolutionValidation> vals = client.getSolutionValidations(cs.getSolutionId(), cr.getRevisionId());
 			Assert.assertTrue(vals != null && vals.size() > 0);
 			logger.info("Fetched solution validation {}", vals.get(0));
-			sv.setValidationStatusCode(ValidationStatusCode.FA.toString());
 			client.updateSolutionValidation(sv);
 
 			MLPValidationSequence seq = new MLPValidationSequence(1, ValidationTypeCode.LC.toString());
@@ -1333,7 +1344,7 @@ public class CdsControllerTest {
 		Assert.assertNotNull(cs.getSolutionId());
 
 		MLPSolutionRevision cr = new MLPSolutionRevision(cs.getSolutionId(), "1.0", cu.getUserId(),
-				AccessTypeCode.PR.name(), ValidationStatusCode.NV.name());
+				AccessTypeCode.PR.name(), "NV");
 		cr = client.createSolutionRevision(cr);
 		Assert.assertNotNull(cr.getRevisionId());
 
@@ -1427,8 +1438,7 @@ public class CdsControllerTest {
 				new RestPageRequest(0, 1));
 		Assert.assertTrue(threadComments != null && threadComments.hasContent());
 
-		long commentCountById = client.getSolutionRevisionCommentCount(cs.getSolutionId(),
-				cr.getRevisionId());
+		long commentCountById = client.getSolutionRevisionCommentCount(cs.getSolutionId(), cr.getRevisionId());
 		Assert.assertTrue(commentCountById > 0);
 
 		RestPageResponse<MLPComment> commentsById = client.getSolutionRevisionComments(cs.getSolutionId(),
@@ -1562,7 +1572,7 @@ public class CdsControllerTest {
 
 		final String peerName = "Peer-" + Long.toString(new Date().getTime());
 		MLPPeer pr = new MLPPeer(peerName, "x." + Long.toString(new Date().getTime()), "http://peer-api", true, true,
-				"contact", PeerStatusCode.AC.name(), ValidationStatusCode.FA.name());
+				"contact", PeerStatusCode.AC.name(), "NV");
 		pr = client.createPeer(pr);
 		logger.info("Created peer " + pr.getPeerId());
 
@@ -2296,14 +2306,14 @@ public class CdsControllerTest {
 			logger.info("Create solution failed on dupe as expected: {}", ex.getResponseBodyAsString());
 		}
 		try {
-			cs.setOwnerId(s64);
+			cs.setUserId(s64);
 			client.updateSolution(cs);
 			throw new Exception("Unexpected success");
 		} catch (HttpStatusCodeException ex) {
 			logger.info("Update solution failed on constraints as expected: {}", ex.getResponseBodyAsString());
 		}
 		// restore valid value
-		cs.setOwnerId(cu.getUserId());
+		cs.setUserId(cu.getUserId());
 
 		try {
 			Map<String, Object> queryParameters = new HashMap<>();
@@ -2362,16 +2372,7 @@ public class CdsControllerTest {
 		} catch (HttpStatusCodeException ex) {
 			logger.info("Create solution rev failed on acc code as expected: {}", ex.getResponseBodyAsString());
 		}
-		try {
-			MLPSolutionRevision r = new MLPSolutionRevision(cs.getSolutionId(), "version", cu.getUserId(),
-					AccessTypeCode.PB.name(), "bogus");
-			client.createSolutionRevision(r);
-			throw new Exception("Unexpected success");
-		} catch (HttpStatusCodeException ex) {
-			logger.info("Create solution failed on val stat code as expected: {}", ex.getResponseBodyAsString());
-		}
-		csr = new MLPSolutionRevision(cs.getSolutionId(), s64, cu.getUserId(), AccessTypeCode.PR.name(),
-				ValidationStatusCode.NV.name());
+		csr = new MLPSolutionRevision(cs.getSolutionId(), s64, cu.getUserId(), AccessTypeCode.PR.name(), "NV");
 		try {
 			client.createSolutionRevision(csr);
 			throw new Exception("Unexpected success");
@@ -2402,8 +2403,8 @@ public class CdsControllerTest {
 			logger.info("Update solution revision failed on empty as expected: {}", ex.getResponseBodyAsString());
 		}
 		try {
-			MLPSolutionRevision r = new MLPSolutionRevision(cs.getSolutionId(), "version", "ownerId",
-					AccessTypeCode.PB.name(), ValidationStatusCode.NV.name());
+			MLPSolutionRevision r = new MLPSolutionRevision(cs.getSolutionId(), "version", "userId",
+					AccessTypeCode.PB.name(), "NV");
 			r.setRevisionId("bogus");
 			client.updateSolutionRevision(r);
 			throw new Exception("Unexpected success");
@@ -2538,14 +2539,14 @@ public class CdsControllerTest {
 
 		client.addSolutionRevisionArtifact(cs.getSolutionId(), csr.getRevisionId(), ca.getArtifactId());
 		try {
-			ca.setOwnerId(s64);
+			ca.setUserId(s64);
 			client.updateArtifact(ca);
 			throw new Exception("Unexpected success");
 		} catch (HttpStatusCodeException ex) {
 			logger.info("Update artifact failed on constraints as expected: {}", ex.getResponseBodyAsString());
 		}
 		// Restore valid value
-		ca.setOwnerId(cu.getUserId());
+		ca.setUserId(cu.getUserId());
 
 		try {
 			client.incrementSolutionViewCount("bogus");
@@ -2632,7 +2633,8 @@ public class CdsControllerTest {
 		}
 		try {
 			String[] searchTags = new String[] { "%" };
-			client.findPortalSolutions(null, null, true, null, null, null, null, searchTags, new RestPageRequest(0, 1));
+			client.findPortalSolutions(null, null, true, null, null, null, null, searchTags, null, null,
+					new RestPageRequest(0, 1));
 			// I have not been able to make findPortalSolutions fail.
 			// all arguments are optional; there is no illegal value; etc.
 			// so can't throw new Exception("Unexpected success") here.
@@ -2915,18 +2917,10 @@ public class CdsControllerTest {
 			logger.info("Create peer failed as expected: {}", ex.getResponseBodyAsString());
 		}
 		try {
-			client.createPeer(new MLPPeer("peer name", "subj name", "api url", false, false, "contact 1", "bogus",
-					ValidationStatusCode.FA.name()));
+			client.createPeer(new MLPPeer("peer name", "subj name", "api url", false, false, "contact 1", "bogus", "bogus"));
 			throw new Exception("Unexpected success");
 		} catch (HttpStatusCodeException ex) {
 			logger.info("Create peer failed on bad peer stat code as expected: {}", ex.getResponseBodyAsString());
-		}
-		try {
-			cp = client.createPeer(new MLPPeer("peer name", "subj name", "api url", false, false, "contact 1",
-					PeerStatusCode.AC.name(), "bogus"));
-			throw new Exception("Unexpected success");
-		} catch (HttpStatusCodeException ex) {
-			logger.info("Create peer failed on bad val stat code as expected: {}", ex.getResponseBodyAsString());
 		}
 		try {
 			client.updatePeer(cp);
@@ -2944,8 +2938,8 @@ public class CdsControllerTest {
 			logger.info("Create peer failed on constraint as expected: {}", ex.getResponseBodyAsString());
 		}
 		// This one is supposed to work
-		cp = client.createPeer(new MLPPeer("peer name", "subj name", "api url", false, false, "contact 1",
-				PeerStatusCode.AC.name(), ValidationStatusCode.FA.name()));
+		cp = client.createPeer(
+				new MLPPeer("peer name", "subj name", "api url", false, false, "contact 1", PeerStatusCode.AC.name(), "NV"));
 
 		try {
 			cp = client.createPeer(cp);
@@ -2956,7 +2950,7 @@ public class CdsControllerTest {
 
 		try {
 			cp = client.createPeer(new MLPPeer("another peer name", "subj name", "api url", false, false, "contact 2",
-					PeerStatusCode.DC.name(), ValidationStatusCode.FA.name()));
+					PeerStatusCode.DC.name(), "NV"));
 			throw new Exception("Unexpected success");
 		} catch (HttpStatusCodeException ex) {
 			logger.info("Create peer failed on duplicate subject name as expected: {}", ex.getResponseBodyAsString());
