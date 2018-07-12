@@ -39,9 +39,11 @@ import org.hibernate.annotations.Type;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * Model for a user profile. Passwords on the disk are encrypted (data at rest).
- * Passwords entered by a user are sent to the server in the clear (data in
- * flight). This model is used for both purposes.
+ * Model for a user profile.
+ * 
+ * Passwords and tokens on the disk are hashed (data at rest). Passwords and
+ * tokens are sent to the server in the clear (data in flight), then hashed for
+ * comparison to a stored value.
  */
 @Entity
 @Table(name = "C_USER")
@@ -86,9 +88,11 @@ public class MLPUser extends MLPTimestampedEntity implements Serializable {
 	private String loginName;
 
 	/**
-	 * This field models the hash stored on disk. This model is ALSO used to
-	 * transport a clear-text password from client to server. The server blocks this
-	 * field in all responses so the client never sees the hash.
+	 * This field models the password hash stored on disk. It is ALSO used to
+	 * transport clear-text from client to server. The server ignores this field on
+	 * requests if its null; it nulls out this field in all responses.
+	 * 
+	 * Optional because some installations use an external single sign-on system.
 	 * 
 	 * Must NOT use this annotation because it breaks serialization in the client:
 	 * (at-sign)JsonIgnore
@@ -98,10 +102,17 @@ public class MLPUser extends MLPTimestampedEntity implements Serializable {
 	@ApiModelProperty(value = "Transports password in clear text", example = "LongKeysAreHardToCrack12345")
 	private String loginHash;
 
+	/**
+	 * Derby lacks DATETIME, so do not specify column definition here.
+	 */
 	@Column(name = "LOGIN_PASS_EXPIRE_DATE")
 	@ApiModelProperty(value = "Millisec since the Epoch", example = "1521202458867")
 	private Date loginPassExpire;
 
+	/**
+	 * Used in early versions both to maintain web session information and as an API
+	 * token.
+	 */
 	@Column(name = "AUTH_TOKEN", columnDefinition = "VARCHAR(4096)")
 	@Size(max = 4096)
 	private String authToken;
@@ -111,8 +122,13 @@ public class MLPUser extends MLPTimestampedEntity implements Serializable {
 	@ApiModelProperty(required = true)
 	private boolean active;
 
+	/**
+	 * Client sends date-time as long integer, milliseconds since the Epoch. Stored
+	 * as DATETIME, but Derby lacks DATETIME, so do not specify column definition
+	 * here.
+	 */
 	@Column(name = "LAST_LOGIN_DATE")
-	@ApiModelProperty(value = "Millisec since the Epoch", example = "1521202458867")
+	@ApiModelProperty(value = "Last login date, sent as millisec since the Epoch", example = "1521202458867")
 	private Date lastLogin;
 
 	/**
@@ -126,6 +142,31 @@ public class MLPUser extends MLPTimestampedEntity implements Serializable {
 	@Column(name = "PICTURE", length = 2000000 /* DO NOT USE: columnDefinition = "BLOB" */)
 	@Lob
 	private Byte[] picture;
+
+	/**
+	 * This field models the API token hash stored on disk. It is ALSO used to
+	 * transport a clear-text token from client to server.
+	 */
+	@Column(name = "API_TOKEN_HASH", columnDefinition = "VARCHAR(64)")
+	@Size(max = 64)
+	private String apiTokenHash;
+
+	/**
+	 * This field models the verify token hash stored on disk. It is ALSO used to
+	 * transport a clear-text token from client to server.
+	 */
+	@Column(name = "VERIFY_TOKEN_HASH", columnDefinition = "VARCHAR(64)")
+	@Size(max = 64)
+	private String verifyTokenHash;
+
+	/**
+	 * Client sends date-time as long integer, milliseconds since the Epoch. Stored
+	 * as DATETIME, but Derby lacks DATETIME, so do not specify column definition
+	 * here.
+	 */
+	@Column(name = "VERIFY_EXPIRE_DATE")
+	@ApiModelProperty(value = "Verification token expiration date, sent as millisec since the Epoch", example = "1521202458867")
+	private Date verifyExpiration;
 
 	/**
 	 * No-arg constructor
@@ -162,6 +203,7 @@ public class MLPUser extends MLPTimestampedEntity implements Serializable {
 	public MLPUser(MLPUser that) {
 		super(that);
 		this.active = that.active;
+		this.apiTokenHash = that.apiTokenHash;
 		this.authToken = that.authToken;
 		this.email = that.email;
 		this.firstName = that.firstName;
@@ -174,6 +216,8 @@ public class MLPUser extends MLPTimestampedEntity implements Serializable {
 		this.orgName = that.orgName;
 		this.picture = that.picture;
 		this.userId = that.userId;
+		this.verifyTokenHash = that.verifyTokenHash;
+		this.verifyExpiration = that.verifyExpiration;
 	}
 
 	public String getUserId() {
@@ -233,7 +277,7 @@ public class MLPUser extends MLPTimestampedEntity implements Serializable {
 	}
 
 	/**
-	 * Gets the hash (or possibly a clear-text password if used for client
+	 * Gets the login hash (or possibly a clear-text password if used for client
 	 * transport).
 	 * 
 	 * Must NOT use this annotation because it breaks the path from client to
@@ -246,7 +290,7 @@ public class MLPUser extends MLPTimestampedEntity implements Serializable {
 	}
 
 	/**
-	 * Sets the hash.
+	 * Sets the login hash.
 	 * 
 	 * @param hash
 	 *            The hash
@@ -293,6 +337,40 @@ public class MLPUser extends MLPTimestampedEntity implements Serializable {
 
 	public void setPicture(Byte[] picture) {
 		this.picture = picture;
+	}
+
+	public String getApiTokenHash() {
+		return apiTokenHash;
+	}
+
+	public void setApiTokenHash(String apiTokenHash) {
+		this.apiTokenHash = apiTokenHash;
+	}
+
+	public String getVerifyTokenHash() {
+		return verifyTokenHash;
+	}
+
+	public void setVerifyTokenHash(String verifyTokenHash) {
+		this.verifyTokenHash = verifyTokenHash;
+	}
+
+	public Date getVerifyExpiration() {
+		return verifyExpiration;
+	}
+
+	public void setVerifyExpiration(Date verifyExpiration) {
+		this.verifyExpiration = verifyExpiration;
+	}
+
+	/**
+	 * Convenience method to set all hashed values to null. Factors out this
+	 * sequence for reuse and especially to avoid missing one!
+	 */
+	public void clearHashes() {
+		setLoginHash(null);
+		setApiTokenHash(null);
+		setVerifyTokenHash(null);
 	}
 
 	@Override
