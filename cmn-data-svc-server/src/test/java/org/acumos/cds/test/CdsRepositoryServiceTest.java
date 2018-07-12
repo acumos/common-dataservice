@@ -392,7 +392,7 @@ public class CdsRepositoryServiceTest {
 			ca.setName("test artifact name");
 			ca.setUri("http://nexus/artifact");
 			ca.setArtifactTypeCode(ArtifactTypeCode.DI.name());
-			ca.setOwnerId(cu.getUserId());
+			ca.setUserId(cu.getUserId());
 			ca.setSize(123);
 			ca = artifactRepository.save(ca);
 			Assert.assertTrue(artifactRepository.count() > 0);
@@ -415,7 +415,7 @@ public class CdsRepositoryServiceTest {
 			cs.setName(solName);
 			cs.setDescription(solDesc);
 			cs.setActive(true);
-			cs.setOwnerId(cu.getUserId());
+			cs.setUserId(cu.getUserId());
 			cs.setProvider("Big Data Org");
 			cs.setModelTypeCode(ModelTypeCode.CL.name());
 			cs.setToolkitTypeCode(ToolkitTypeCode.SK.name());
@@ -462,13 +462,13 @@ public class CdsRepositoryServiceTest {
 			String[] solKw = { solName };
 			String[] descKw = { solDesc };
 			boolean active = true;
-			String[] ownerIds = { cu.getUserId() };
+			String[] userIds = { cu.getUserId() };
 			String[] modelTypeCodes = { ModelTypeCode.CL.name() };
 			String[] accTypeCodes = { AccessTypeCode.PR.name() };
 			String[] valStatusCodes = { ValidationStatusCode.NV.name() };
 			String[] searchTags = { solTag1.getTag() };
 			Page<MLPSolution> portalSearchResult = solutionSearchService.findPortalSolutions(solKw, descKw, active,
-					ownerIds, modelTypeCodes, accTypeCodes, valStatusCodes, searchTags,
+					userIds, modelTypeCodes, accTypeCodes, valStatusCodes, searchTags,
 					new PageRequest(0, 2, Direction.ASC, "name"));
 			Assert.assertTrue(portalSearchResult != null && portalSearchResult.getNumberOfElements() > 0);
 			logger.info("Found portal solution total " + portalSearchResult.getTotalElements());
@@ -772,7 +772,7 @@ public class CdsRepositoryServiceTest {
 			ca.setName("test artifact name");
 			ca.setUri("http://nexus/artifact");
 			ca.setArtifactTypeCode(ArtifactTypeCode.DI.name());
-			ca.setOwnerId(cu.getUserId());
+			ca.setUserId(cu.getUserId());
 			ca.setSize(123);
 			ca = artifactRepository.save(ca);
 			Assert.assertNotNull(ca.getArtifactId());
@@ -786,7 +786,7 @@ public class CdsRepositoryServiceTest {
 			ca2.setName("replicated artifact ");
 			ca2.setUri("http://other.foo");
 			ca2.setArtifactTypeCode(ArtifactTypeCode.CD.toString());
-			ca2.setOwnerId(cu.getUserId());
+			ca2.setUserId(cu.getUserId());
 			ca2.setSize(456);
 			ca2 = artifactRepository.save(ca2);
 			Assert.assertEquals(artId, ca2.getArtifactId());
@@ -804,7 +804,7 @@ public class CdsRepositoryServiceTest {
 			MLPSolution cs = new MLPSolution();
 			cs.setName("solution name");
 			cs.setActive(true);
-			cs.setOwnerId(cu.getUserId());
+			cs.setUserId(cu.getUserId());
 			cs.setProvider("Big Data Org");
 			cs.setModelTypeCode(ModelTypeCode.CL.name());
 			cs.setToolkitTypeCode(ToolkitTypeCode.SK.name());
@@ -851,7 +851,7 @@ public class CdsRepositoryServiceTest {
 			MLPSolution cs2 = new MLPSolution();
 			cs2.setName("solution name");
 			cs2.setActive(true);
-			cs2.setOwnerId(cu.getUserId());
+			cs2.setUserId(cu.getUserId());
 			cs2.setProvider("Big Data Org");
 			cs2.setModelTypeCode(ModelTypeCode.CL.toString());
 			cs2.setToolkitTypeCode(ToolkitTypeCode.SK.toString());

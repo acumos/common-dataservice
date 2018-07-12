@@ -97,7 +97,7 @@ public abstract class CCDSConstants {
 	// Portal search interface
 	public static final String SEARCH_ACCESS_TYPES = "atc";
 	public static final String SEARCH_ACTIVE = "active";
-	public static final String SEARCH_OWNERS = "owner";
+	public static final String SEARCH_USERS = "user";
 	public static final String SEARCH_DESC = "desc";
 	public static final String SEARCH_MODEL_TYPES = "mtc";
 	public static final String SEARCH_NAME = "name";

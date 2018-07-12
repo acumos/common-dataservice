@@ -60,7 +60,7 @@ public interface SolutionSearchService {
 	 *            characters; ignored if null or empty
 	 * @param active
 	 *            Active status: true or false; required.
-	 * @param ownerIds
+	 * @param userIds
 	 *            Limits match to solutions with one of the specified values;
 	 *            ignored if null or empty
 	 * @param modelTypeCodes
@@ -83,7 +83,7 @@ public interface SolutionSearchService {
 	 * @return Page of matches
 	 */
 	Page<MLPSolution> findPortalSolutions(String[] nameKeywords, String[] descriptionKeywords, boolean active,
-			String[] ownerIds, String[] modelTypeCodes, String[] accessTypeCodes, String[] validationStatusCodes,
+			String[] userIds, String[] modelTypeCodes, String[] accessTypeCodes, String[] validationStatusCodes,
 			String[] tags, Pageable pageable);
 
 	/**

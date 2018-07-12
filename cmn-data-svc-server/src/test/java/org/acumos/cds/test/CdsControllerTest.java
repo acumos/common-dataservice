@@ -164,7 +164,7 @@ public class CdsControllerTest {
 
 			MLPSolution cs = new MLPSolution();
 			cs.setName("solution name");
-			cs.setOwnerId(cu.getUserId());
+			cs.setUserId(cu.getUserId());
 			cs.setProvider("Big Data Org");
 			cs.setModelTypeCode("CL");
 			cs.setToolkitTypeCode("CP");
@@ -479,7 +479,7 @@ public class CdsControllerTest {
 			ca.setVersion(version);
 			ca.setName("artifact name");
 			ca.setUri("http://nexus/artifact");
-			ca.setOwnerId(cu.getUserId());
+			ca.setUserId(cu.getUserId());
 			ca.setArtifactTypeCode(ArtifactTypeCode.DI.toString());
 			ca.setSize(1);
 			ca = client.createArtifact(ca);
@@ -503,7 +503,7 @@ public class CdsControllerTest {
 			ca2.setName("replicated artifact ");
 			ca2.setUri("http://other.foo");
 			ca2.setArtifactTypeCode(ArtifactTypeCode.CD.toString());
-			ca2.setOwnerId(cu.getUserId());
+			ca2.setUserId(cu.getUserId());
 			ca2.setSize(456);
 			ca2 = client.createArtifact(ca2);
 			Assert.assertEquals(artId, ca2.getArtifactId());
@@ -562,7 +562,7 @@ public class CdsControllerTest {
 
 			MLPSolution inactive = new MLPSolution();
 			inactive.setName("inactive solution name");
-			inactive.setOwnerId(cu.getUserId());
+			inactive.setUserId(cu.getUserId());
 			inactive.setProvider("Inactive Data Org");
 			inactive.setModelTypeCode(ModelTypeCode.DS.name());
 			inactive.setToolkitTypeCode(ToolkitTypeCode.SK.name());
@@ -2296,14 +2296,14 @@ public class CdsControllerTest {
 			logger.info("Create solution failed on dupe as expected: {}", ex.getResponseBodyAsString());
 		}
 		try {
-			cs.setOwnerId(s64);
+			cs.setUserId(s64);
 			client.updateSolution(cs);
 			throw new Exception("Unexpected success");
 		} catch (HttpStatusCodeException ex) {
 			logger.info("Update solution failed on constraints as expected: {}", ex.getResponseBodyAsString());
 		}
 		// restore valid value
-		cs.setOwnerId(cu.getUserId());
+		cs.setUserId(cu.getUserId());
 
 		try {
 			Map<String, Object> queryParameters = new HashMap<>();
@@ -2402,7 +2402,7 @@ public class CdsControllerTest {
 			logger.info("Update solution revision failed on empty as expected: {}", ex.getResponseBodyAsString());
 		}
 		try {
-			MLPSolutionRevision r = new MLPSolutionRevision(cs.getSolutionId(), "version", "ownerId",
+			MLPSolutionRevision r = new MLPSolutionRevision(cs.getSolutionId(), "version", "userId",
 					AccessTypeCode.PB.name(), ValidationStatusCode.NV.name());
 			r.setRevisionId("bogus");
 			client.updateSolutionRevision(r);
@@ -2538,14 +2538,14 @@ public class CdsControllerTest {
 
 		client.addSolutionRevisionArtifact(cs.getSolutionId(), csr.getRevisionId(), ca.getArtifactId());
 		try {
-			ca.setOwnerId(s64);
+			ca.setUserId(s64);
 			client.updateArtifact(ca);
 			throw new Exception("Unexpected success");
 		} catch (HttpStatusCodeException ex) {
 			logger.info("Update artifact failed on constraints as expected: {}", ex.getResponseBodyAsString());
 		}
 		// Restore valid value
-		ca.setOwnerId(cu.getUserId());
+		ca.setUserId(cu.getUserId());
 
 		try {
 			client.incrementSolutionViewCount("bogus");

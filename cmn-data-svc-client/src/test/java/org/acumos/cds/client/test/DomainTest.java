@@ -91,7 +91,7 @@ public class DomainTest extends AbstractModelTest {
 		Assert.assertEquals(s4, m.getMetadata());
 		Assert.assertEquals(d2, m.getModified());
 		Assert.assertEquals(s5, m.getName());
-		Assert.assertEquals(s6, m.getOwnerId());
+		Assert.assertEquals(s6, m.getUserId());
 		Assert.assertEquals(i1, m.getSize());
 		Assert.assertEquals(s7, m.getUri());
 		Assert.assertEquals(s8, m.getVersion());
@@ -108,7 +108,7 @@ public class DomainTest extends AbstractModelTest {
 		m.setMetadata(s4);
 		m.setModified(d2);
 		m.setName(s5);
-		m.setOwnerId(s6);
+		m.setUserId(s6);
 		m.setSize(i1);
 		m.setUri(s7);
 		m.setVersion(s8);
@@ -385,7 +385,7 @@ public class DomainTest extends AbstractModelTest {
 		Assert.assertEquals(l1, m.getMaxArtifactSize());
 		Assert.assertEquals(d2, m.getModified());
 		Assert.assertEquals(s2, m.getOptions());
-		Assert.assertEquals(s3, m.getOwnerId());
+		Assert.assertEquals(s3, m.getUserId());
 		Assert.assertEquals(s4, m.getPeerId());
 		Assert.assertEquals(d3, m.getProcessed());
 		Assert.assertEquals(l2, m.getRefreshInterval());
@@ -403,7 +403,7 @@ public class DomainTest extends AbstractModelTest {
 		m.setMaxArtifactSize(l1);
 		m.setModified(d2);
 		m.setOptions(s2);
-		m.setOwnerId(s3);
+		m.setUserId(s3);
 		m.setPeerId(s4);
 		m.setProcessed(d3);
 		m.setRefreshInterval(l2);
@@ -771,7 +771,8 @@ public class DomainTest extends AbstractModelTest {
 		Assert.assertEquals(d2, m.getModified());
 		Assert.assertEquals(s4, m.getName());
 		Assert.assertEquals(s5, m.getOrigin());
-		Assert.assertEquals(s6, m.getOwnerId());
+		Assert.assertEquals(s6, m.getUserId());
+		Assert.assertArrayEquals(by1, m.getPicture());
 		Assert.assertEquals(s7, m.getProvider());
 		Assert.assertEquals(s8, m.getSolutionId());
 		Assert.assertEquals(s9, m.getSourceId());
@@ -790,7 +791,8 @@ public class DomainTest extends AbstractModelTest {
 		m.setModified(d2);
 		m.setName(s4);
 		m.setOrigin(s5);
-		m.setOwnerId(s6);
+		m.setUserId(s6);
+		m.setPicture(by1);
 		m.setProvider(s7);
 		m.setSolutionId(s8);
 		m.setSourceId(s9);
@@ -1000,7 +1002,7 @@ public class DomainTest extends AbstractModelTest {
 		Assert.assertEquals(s3, m.getMetadata());
 		Assert.assertEquals(d2, m.getModified());
 		Assert.assertEquals(s4, m.getOrigin());
-		Assert.assertEquals(s5, m.getOwnerId());
+		Assert.assertEquals(s5, m.getUserId());
 		Assert.assertEquals(s6, m.getRevisionId());
 		Assert.assertEquals(s7, m.getSolutionId());
 		Assert.assertEquals(s8, m.getSourceId());
@@ -1018,7 +1020,7 @@ public class DomainTest extends AbstractModelTest {
 		m.setMetadata(s3);
 		m.setModified(d2);
 		m.setOrigin(s4);
-		m.setOwnerId(s5);
+		m.setUserId(s5);
 		m.setRevisionId(s6);
 		m.setSolutionId(s7);
 		m.setSourceId(s8);
