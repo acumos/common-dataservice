@@ -209,6 +209,8 @@ public class MockClientTest {
 		MLPUser user = new MLPUser();
 		client.setLoginUser(user);
 		Assert.assertTrue(user == client.loginUser("name", "pass"));
+		Assert.assertTrue(user == client.loginApiUser("name", "pass"));
+		Assert.assertTrue(user == client.verifyUser("name", "pass"));
 
 		client.setUserById(user);
 		Assert.assertTrue(user == client.getUser("id"));
@@ -441,8 +443,8 @@ public class MockClientTest {
 
 		RestPageResponse<MLPSolution> portalSols = new RestPageResponse<>();
 		client.setPortalSolutions(portalSols);
-		Assert.assertTrue(
-				portalSols == client.findPortalSolutions(null, null, true, null, null, null, null, null, pageRequest));
+		Assert.assertTrue(portalSols == client.findPortalSolutions(null, null, true, null, null, null, null, null, null,
+				null, pageRequest));
 
 		RestPageResponse<MLPSolution> userPrivSols = new RestPageResponse<>();
 		client.setUserSolutions(userPrivSols);
