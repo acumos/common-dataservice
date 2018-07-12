@@ -24,7 +24,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.acumos.cds.AccessTypeCode;
-import org.acumos.cds.ValidationStatusCode;
 import org.acumos.cds.domain.MLPArtifact;
 import org.acumos.cds.domain.MLPSolRevArtMap;
 import org.acumos.cds.domain.MLPSolUserAccMap;
@@ -93,7 +92,6 @@ public class FOMRepositoryTest {
 		MLPSolUserAccMap accMap = null;
 		final String name = "name";
 		final String accCode = AccessTypeCode.PR.name();
-		final String valCode = ValidationStatusCode.NV.name();
 
 		if (setupTeardown) {
 			// Create entities for query
@@ -114,7 +112,7 @@ public class FOMRepositoryTest {
 			cs = solutionRepository.save(cs);
 			Assert.assertNotNull("Solution ID", cs.getSolutionId());
 
-			cr = new MLPSolutionRevision(cs.getSolutionId(), "version", cu.getUserId(), accCode, valCode);
+			cr = new MLPSolutionRevision(cs.getSolutionId(), "version", cu.getUserId(), accCode);
 			cr = revisionRepository.save(cr);
 			Assert.assertNotNull("Revision ID", cr.getRevisionId());
 			logger.info("Created solution revision {}", cr.getRevisionId());
@@ -143,7 +141,6 @@ public class FOMRepositoryTest {
 		String[] empty = new String[0];
 		String[] nameKw = new String[] { name }; // substring of solution name
 		String[] accTypes = new String[] { accCode };
-		String[] valCodes = new String[] { valCode };
 		Date modifiedDate = new Date();
 		modifiedDate.setTime(modifiedDate.getTime() - 60 * 1000);
 
@@ -153,11 +150,11 @@ public class FOMRepositoryTest {
 
 		logger.info("Querying for FOM via findPortalSolutions method");
 		Page<MLPSolution> byName = solutionSearchService.findPortalSolutions(nameKw, empty, true, empty, empty,
-				accTypes, valCodes, empty, pageable);
+				accTypes, empty, empty, empty, pageable);
 		Assert.assertTrue(byName != null && byName.getNumberOfElements() > 0);
 		logger.info("Found sols by name via criteria: size {}", byName.getContent().size());
 
-		Page<MLPSolution> solsByDate = solutionSearchService.findSolutionsByModifiedDate(true, accTypes, valCodes,
+		Page<MLPSolution> solsByDate = solutionSearchService.findSolutionsByModifiedDate(true, accTypes,
 				modifiedDate, pageable);
 		Assert.assertTrue(solsByDate != null && solsByDate.getNumberOfElements() > 0);
 		logger.info("Found sols by date via criteria: size {}", solsByDate.getContent().size());
@@ -165,7 +162,7 @@ public class FOMRepositoryTest {
 		// Find by user and Hibernate constraint - user2 owns no solutions but has
 		// access
 		Page<MLPSolution> byUser = solutionSearchService.findUserSolutions(nameKw, empty, true, cu2.getUserId(), empty,
-				empty, valCodes, empty, pageable);
+				empty,empty, pageable);
 		Assert.assertTrue(byUser != null && byUser.getNumberOfElements() > 0);
 		logger.info("Found sols by user via criteria: size {}", byUser.getContent().size());
 

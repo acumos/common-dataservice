@@ -60,7 +60,7 @@ public class CodeNameProperties {
 	private Map<String, String> stepType;
 	private Map<String, String> subscriptionScope;
 	private Map<String, String> toolkitType;
-	private Map<String, String> validationStatus;
+	private Map<String, String> verificationStatus;
 	private Map<String, String> validationType;
 
 	public Map<String, String> getAccessType() {
@@ -159,12 +159,12 @@ public class CodeNameProperties {
 		this.toolkitType = toolkitType;
 	}
 
-	public Map<String, String> getValidationStatus() {
-		return validationStatus;
+	public Map<String, String> getVerificationStatus() {
+		return verificationStatus;
 	}
 
-	public void setValidationStatus(Map<String, String> validationStatus) {
-		this.validationStatus = validationStatus;
+	public void setVerificationStatus(Map<String, String> verificationStatus) {
+		this.verificationStatus = verificationStatus;
 	}
 
 	public Map<String, String> getValidationType() {

@@ -57,10 +57,10 @@ public class MLPPeerSubscription extends MLPTimestampedEntity implements Seriali
 	@ApiModelProperty(required = true, value = "UUID", example = "12345678-abcd-90ab-cdef-1234567890ab")
 	private String peerId;
 
-	@Column(name = "OWNER_ID", nullable = false, columnDefinition = "CHAR(36)")
+	@Column(name = "USER_ID", nullable = false, columnDefinition = "CHAR(36)")
 	@Size(max = 36)
 	@ApiModelProperty(required = true, value = "User ID", example = "12345678-abcd-90ab-cdef-1234567890ab")
-	private String ownerId;
+	private String userId;
 
 	@Column(name = "SCOPE_TYPE", nullable = false, columnDefinition = "CHAR(2)")
 	@Size(max = 2)
@@ -105,18 +105,18 @@ public class MLPPeerSubscription extends MLPTimestampedEntity implements Seriali
 	 * 
 	 * @param peerId
 	 *            Peer ID
-	 * @param ownerId
+	 * @param userId
 	 *            User ID, the operator
 	 * @param scopeType
 	 *            Peer subscription scope type
 	 * @param accessType
 	 *            Peer subscription access type
 	 */
-	public MLPPeerSubscription(String peerId, String ownerId, String scopeType, String accessType) {
-		if (peerId == null || ownerId == null || scopeType == null || accessType == null)
+	public MLPPeerSubscription(String peerId, String userId, String scopeType, String accessType) {
+		if (peerId == null || userId == null || scopeType == null || accessType == null)
 			throw new IllegalArgumentException("Null not permitted");
 		this.peerId = peerId;
-		this.ownerId = ownerId;
+		this.userId = userId;
 		this.scopeType = scopeType;
 		this.accessType = accessType;
 	}
@@ -132,7 +132,7 @@ public class MLPPeerSubscription extends MLPTimestampedEntity implements Seriali
 		this.accessType = that.accessType;
 		this.maxArtifactSize = that.maxArtifactSize;
 		this.options = that.options;
-		this.ownerId = that.ownerId;
+		this.userId = that.userId;
 		this.peerId = that.peerId;
 		this.processed = that.processed;
 		this.refreshInterval = that.refreshInterval;
@@ -157,12 +157,12 @@ public class MLPPeerSubscription extends MLPTimestampedEntity implements Seriali
 		this.peerId = peerId;
 	}
 
-	public String getOwnerId() {
-		return ownerId;
+	public String getUserId() {
+		return userId;
 	}
 
-	public void setOwnerId(String userId) {
-		this.ownerId = userId;
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 
 	public String getSelector() {

@@ -82,6 +82,7 @@ public class MLPPeer extends MLPTimestampedEntity implements Serializable {
 
 	@Column(name = "WEB_URL", columnDefinition = "VARCHAR(512)")
 	@Size(max = 512)
+	@ApiModelProperty(required = true)
 	private String webUrl;
 
 	@Column(name = "IS_SELF", nullable = false, columnDefinition = "CHAR(1) DEFAULT 'N'")
@@ -99,21 +100,34 @@ public class MLPPeer extends MLPTimestampedEntity implements Serializable {
 	@Column(name = "CONTACT1", nullable = false, columnDefinition = "VARCHAR(100)")
 	@NotNull(message = "contact1 cannot be null")
 	@Size(max = 100)
-	@ApiModelProperty(required = true, example = "Sys Admin 212-555-1212")
+	@ApiModelProperty(required = true, value = "Contact information", example = "Sys Admin 212-555-1212")
 	private String contact1;
 
 	@Column(name = "STATUS_CD", nullable = false, columnDefinition = "CHAR(2)")
 	@NotNull(message = "statusCode cannot be null")
 	@Size(max = 2)
-	@ApiModelProperty(required = true, example = "AC")
+	@ApiModelProperty(required = true, value = "Peer active status", example = "AC")
 	private String statusCode;
 
-	@Column(name = "VALIDATION_STATUS_CD", nullable = false, columnDefinition = "CHAR(2)")
-	@NotNull(message = "validationStatusCode cannot be null")
+	/**
+	 * The Verification Status Code value set is defined by server-side
+	 * configuration.
+	 */
+	@Column(name = "LICENSE_STATUS_CD", columnDefinition = "CHAR(2)")
 	@Size(max = 2)
-	@ApiModelProperty(required = true, example = "NV")
-	private String validationStatusCode;
+	@ApiModelProperty(required = false, value = "Security-verification status", example = "IP")
+	private String licenseStatusCode;
 
+	/**
+	 * The Verification Status Code value set is defined by server-side
+	 * configuration.
+	 */
+	@Column(name = "VULNER_STATUS_CD", columnDefinition = "CHAR(2)")
+	@Size(max = 2)
+	@ApiModelProperty(required = false, value = "Security-verification status", example = "IP")
+	private String vulnerabilityStatusCode;
+
+	
 	/**
 	 * No-arg constructor.
 	 */
@@ -139,13 +153,10 @@ public class MLPPeer extends MLPTimestampedEntity implements Serializable {
 	 *            Primary contact details
 	 * @param statusCode
 	 *            Peer status code
-	 * @param validationStatusCode
-	 *            Peer validation code
 	 */
 	public MLPPeer(String name, String subjectName, String apiUrl, boolean isSelf, boolean isLocal, String contact1,
-			String statusCode, String validationStatusCode) {
-		if (name == null || subjectName == null || apiUrl == null || contact1 == null || statusCode == null
-				|| validationStatusCode == null)
+			String statusCode) {
+		if (name == null || subjectName == null || apiUrl == null || contact1 == null || statusCode == null)
 			throw new IllegalArgumentException("Null not permitted");
 		this.name = name;
 		this.subjectName = subjectName;
@@ -154,7 +165,6 @@ public class MLPPeer extends MLPTimestampedEntity implements Serializable {
 		this.isLocal = isLocal;
 		this.contact1 = contact1;
 		this.statusCode = statusCode;
-		this.validationStatusCode = validationStatusCode;
 	}
 
 	/**
@@ -170,11 +180,12 @@ public class MLPPeer extends MLPTimestampedEntity implements Serializable {
 		this.description = that.description;
 		this.isLocal = that.isLocal;
 		this.isSelf = that.isSelf;
+		this.licenseStatusCode = that.licenseStatusCode;
 		this.name = that.name;
 		this.peerId = that.peerId;
 		this.statusCode = that.statusCode;
 		this.subjectName = that.subjectName;
-		this.validationStatusCode = that.validationStatusCode;
+		this.vulnerabilityStatusCode = that.vulnerabilityStatusCode;
 		this.webUrl = that.webUrl;
 	}
 
@@ -326,17 +337,20 @@ public class MLPPeer extends MLPTimestampedEntity implements Serializable {
 		this.statusCode = statusCode;
 	}
 
-	public String getValidationStatusCode() {
-		return validationStatusCode;
+	public String getLicenseStatusCode() {
+		return licenseStatusCode;
 	}
 
-	/**
-	 * @param validationStatusCode
-	 *            A value obtained by calling
-	 *            {@link org.acumos.cds.ValidationStatusCode#toString()}.
-	 */
-	public void setValidationStatusCode(String validationStatusCode) {
-		this.validationStatusCode = validationStatusCode;
+	public void setLicenseStatusCode(String licenseStatusCode) {
+		this.licenseStatusCode = licenseStatusCode;
+	}
+
+	public String getVulnerabilityStatusCode() {
+		return vulnerabilityStatusCode;
+	}
+
+	public void setVulnerabilityStatusCode(String vulnerabilityStatusCode) {
+		this.vulnerabilityStatusCode = vulnerabilityStatusCode;
 	}
 
 	@Override

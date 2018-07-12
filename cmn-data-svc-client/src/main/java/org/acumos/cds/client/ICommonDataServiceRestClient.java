@@ -62,7 +62,6 @@ import org.acumos.cds.domain.MLPUserLoginProvider;
 import org.acumos.cds.domain.MLPUserNotifPref;
 import org.acumos.cds.domain.MLPUserNotification;
 import org.acumos.cds.domain.MLPValidationSequence;
-import org.acumos.cds.domain.MLPValidationStatus;
 import org.acumos.cds.domain.MLPValidationType;
 import org.acumos.cds.transport.RestPageRequest;
 import org.acumos.cds.transport.RestPageResponse;
@@ -168,15 +167,6 @@ public interface ICommonDataServiceRestClient {
 	List<MLPToolkitType> getToolkitTypes();
 
 	/**
-	 * Gets all validation status codes
-	 * 
-	 * @return List of validation status code-name pairs.
-	 * @deprecated Use {@link #getCodeNamePairs(CodeNameType)}
-	 */
-	@Deprecated
-	List<MLPValidationStatus> getValidationStatuses();
-
-	/**
 	 * Gets all validation type codes.
 	 * 
 	 * @return List of validation type code-name pairs.
@@ -253,8 +243,6 @@ public interface ICommonDataServiceRestClient {
 	 *            Solution active status; true for active, false for inactive
 	 * @param accessTypeCodes
 	 *            Access type codes (required)
-	 * @param validationStatusCodes
-	 *            Validation status codes (required)
 	 * @param date
 	 *            Date threshold
 	 * @param pageRequest
@@ -262,11 +250,11 @@ public interface ICommonDataServiceRestClient {
 	 * @return Page of solution objects.
 	 */
 	RestPageResponse<MLPSolution> findSolutionsByDate(boolean active, String[] accessTypeCodes,
-			String[] validationStatusCodes, Date date, RestPageRequest pageRequest);
+			Date date, RestPageRequest pageRequest);
 
 	/**
 	 * Finds solutions that match every specified condition. Special-purpose method
-	 * to support the dynamic search page on the portal interface.
+	 * to support the dynamic search page on the portal marketplace.
 	 * 
 	 * @param nameKeywords
 	 *            Keywords to perform "LIKE" search in Name field; ignored if null
@@ -276,7 +264,7 @@ public interface ICommonDataServiceRestClient {
 	 *            null or empty
 	 * @param active
 	 *            Solution active status; true for active, false for inactive
-	 * @param ownerIds
+	 * @param userIds
 	 *            User IDs who created the solution; ignored if null or empty
 	 * @param accessTypeCodes
 	 *            Access type codes; use four-letter sequence "null" to match a null
@@ -284,19 +272,23 @@ public interface ICommonDataServiceRestClient {
 	 * @param modelTypeCodes
 	 *            Model type codes; use four-letter sequence "null" to match a null
 	 *            value; ignored if null or empty
-	 * @param validationStatusCodes
-	 *            Validation status codes; use four-letter sequence "null" to match
-	 *            a null value; ignored if null or empty
 	 * @param tags
 	 *            Solution tag names; ignored if null or empty
+	 * @param authorKeywords
+	 *            Keywords to perform "LIKE" search in the Authors field; ignored if
+	 *            null or empty
+	 * @param publisherKeywords
+	 *            Keywords to perform "LIKE" search in the Publisher field; ignored
+	 *            if null or empty
 	 * @param pageRequest
 	 *            Page index, page size and sort information; defaults to page 0 of
 	 *            size 20 if null.
 	 * @return Page of solution objects.
 	 */
 	RestPageResponse<MLPSolution> findPortalSolutions(String[] nameKeywords, String[] descriptionKeywords,
-			boolean active, String[] ownerIds, String[] accessTypeCodes, String[] modelTypeCodes,
-			String[] validationStatusCodes, String[] tags, RestPageRequest pageRequest);
+			boolean active, String[] userIds, String[] accessTypeCodes, String[] modelTypeCodes,
+			String[] tags, String[] authorKeywords, String[] publisherKeywords,
+			RestPageRequest pageRequest);
 
 	/**
 	 * Finds solutions editable by the specified user ('my models'). This includes
@@ -322,9 +314,6 @@ public interface ICommonDataServiceRestClient {
 	 * @param modelTypeCodes
 	 *            Model type codes; use four-letter sequence "null" to match a null
 	 *            value; ignored if null or empty
-	 * @param validationStatusCodes
-	 *            Validation status codes; use four-letter sequence "null" to match
-	 *            a null value; ignored if null or empty
 	 * @param tags
 	 *            Solution tag names; ignored if null or empty
 	 * @param pageRequest
@@ -333,8 +322,7 @@ public interface ICommonDataServiceRestClient {
 	 * @return Page of solution objects.
 	 */
 	RestPageResponse<MLPSolution> findUserSolutions(String[] nameKeywords, String[] descriptionKeywords, boolean active,
-			String userId, String[] accessTypeCodes, String[] modelTypeCodes, String[] validationStatusCodes,
-			String[] tags, RestPageRequest pageRequest);
+			String userId, String[] accessTypeCodes, String[] modelTypeCodes, String[] tags, RestPageRequest pageRequest);
 
 	/**
 	 * Searches the solutions.
@@ -707,6 +695,18 @@ public interface ICommonDataServiceRestClient {
 	 * @return User object if a match for an active user is found.
 	 */
 	MLPUser loginUser(String name, String pass);
+
+	/**
+	 * Checks API credentials for the specified active user. Throws an exception if the
+	 * user is not found, is not active or the token does not match.
+	 * 
+	 * @param name
+	 *            login name or email address; both attributes are checked
+	 * @param apiToken
+	 *            clear-text API token
+	 * @return User object if a match for an active user is found.
+	 */
+	MLPUser loginApiUser(String name, String apiToken);
 
 	/**
 	 * Gets the user with the specified ID.

@@ -333,13 +333,14 @@ public class SolutionController extends AbstractController {
 			// All remaining parameters are optional
 			String[] nameKws = getOptStringArray(CCDSConstants.SEARCH_NAME, queryParameters);
 			String[] descKws = getOptStringArray(CCDSConstants.SEARCH_DESC, queryParameters);
-			String[] ownerIds = getOptStringArray(CCDSConstants.SEARCH_OWNERS, queryParameters);
+			String[] userIds = getOptStringArray(CCDSConstants.SEARCH_USERS, queryParameters);
 			String[] modelTypeCodes = getOptStringArray(CCDSConstants.SEARCH_MODEL_TYPES, queryParameters);
 			String[] accTypeCodes = getOptStringArray(CCDSConstants.SEARCH_ACCESS_TYPES, queryParameters);
-			String[] valStatusCodes = getOptStringArray(CCDSConstants.SEARCH_VAL_STATUSES, queryParameters);
 			String[] tags = getOptStringArray(CCDSConstants.SEARCH_TAGS, queryParameters);
-			Object result = solutionSearchService.findPortalSolutions(nameKws, descKws, active, ownerIds,
-					modelTypeCodes, accTypeCodes, valStatusCodes, tags, pageRequest);
+			String[] authKws = getOptStringArray(CCDSConstants.SEARCH_AUTH, queryParameters);
+			String[] pubKws = getOptStringArray(CCDSConstants.SEARCH_PUB, queryParameters);
+			Object result = solutionSearchService.findPortalSolutions(nameKws, descKws, active, userIds, modelTypeCodes,
+					accTypeCodes, tags, authKws, pubKws, pageRequest);
 			logger.audit(beginDate, "findPortalSolutions: query {}", queryParameters);
 			return result;
 		} catch (Exception ex) {
@@ -373,7 +374,7 @@ public class SolutionController extends AbstractController {
 		try {
 			// These parameters are required
 			String activeString = queryParameters.getFirst(CCDSConstants.SEARCH_ACTIVE);
-			String userId = queryParameters.getFirst(CCDSConstants.SEARCH_OWNERS);
+			String userId = queryParameters.getFirst(CCDSConstants.SEARCH_USERS);
 			if (activeString == null || activeString.length() == 0 || userId == null || userId.length() == 0)
 				throw new IllegalArgumentException("Missing parameter");
 			Boolean active = new Boolean(activeString);
@@ -382,10 +383,9 @@ public class SolutionController extends AbstractController {
 			String[] descKws = getOptStringArray(CCDSConstants.SEARCH_DESC, queryParameters);
 			String[] modelTypeCodes = getOptStringArray(CCDSConstants.SEARCH_MODEL_TYPES, queryParameters);
 			String[] accTypeCodes = getOptStringArray(CCDSConstants.SEARCH_ACCESS_TYPES, queryParameters);
-			String[] valStatusCodes = getOptStringArray(CCDSConstants.SEARCH_VAL_STATUSES, queryParameters);
 			String[] tags = getOptStringArray(CCDSConstants.SEARCH_TAGS, queryParameters);
 			Object result = solutionSearchService.findUserSolutions(nameKws, descKws, active, userId, modelTypeCodes,
-					accTypeCodes, valStatusCodes, tags, pageRequest);
+					accTypeCodes, tags, pageRequest);
 			logger.audit(beginDate, "findUserSolutions: query {}", queryParameters);
 			return result;
 		} catch (Exception ex) {
@@ -399,8 +399,7 @@ public class SolutionController extends AbstractController {
 	/**
 	 * @param queryParameters
 	 *            Map of String (field name) to String (value) for restricting the
-	 *            query. Expects access type codes (optional), validation status
-	 *            codes (optional), and date (required).
+	 *            query. Expects access type codes (optional) and date (required).
 	 * @param pageRequest
 	 *            Page and sort criteria
 	 * @param response
@@ -415,14 +414,13 @@ public class SolutionController extends AbstractController {
 		Date beginDate = new Date();
 		Boolean active = new Boolean(queryParameters.getFirst(CCDSConstants.SEARCH_ACTIVE));
 		String[] accessTypeCodes = getOptStringArray(CCDSConstants.SEARCH_ACCESS_TYPES, queryParameters);
-		String[] valStatusCodes = getOptStringArray(CCDSConstants.SEARCH_VAL_STATUSES, queryParameters);
 		String[] dateMillis = getOptStringArray(CCDSConstants.SEARCH_DATE, queryParameters);
 		if (dateMillis.length != 1) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "Missing date parameter in query", null);
 		}
 		Date date = new Date(Long.parseLong(dateMillis[0]));
-		Object result = solutionSearchService.findSolutionsByModifiedDate(active, accessTypeCodes, valStatusCodes, date,
+		Object result = solutionSearchService.findSolutionsByModifiedDate(active, accessTypeCodes, date,
 				pageRequest);
 		logger.audit(beginDate, "findSolutionsByDate: query {}", queryParameters);
 		return result;
@@ -687,8 +685,10 @@ public class SolutionController extends AbstractController {
 			// Validate enum codes
 			if (revision.getAccessTypeCode() != null)
 				super.validateCode(revision.getAccessTypeCode(), CodeNameType.ACCESS_TYPE);
-			if (revision.getValidationStatusCode() != null)
-				super.validateCode(revision.getValidationStatusCode(), CodeNameType.VALIDATION_STATUS);
+			if (revision.getLicenseStatusCode() != null)
+				super.validateCode(revision.getLicenseStatusCode(), CodeNameType.VERIFICATION_STATUS);
+			if (revision.getVulnerabilityStatusCode() != null)
+				super.validateCode(revision.getVulnerabilityStatusCode(), CodeNameType.VERIFICATION_STATUS);
 			String id = revision.getRevisionId();
 			if (id != null) {
 				UUID.fromString(id);
@@ -743,8 +743,10 @@ public class SolutionController extends AbstractController {
 			// Validate enum codes
 			if (revision.getAccessTypeCode() != null)
 				super.validateCode(revision.getAccessTypeCode(), CodeNameType.ACCESS_TYPE);
-			if (revision.getValidationStatusCode() != null)
-				super.validateCode(revision.getValidationStatusCode(), CodeNameType.VALIDATION_STATUS);
+			if (revision.getLicenseStatusCode() != null)
+				super.validateCode(revision.getLicenseStatusCode(), CodeNameType.VERIFICATION_STATUS);
+			if (revision.getVulnerabilityStatusCode() != null)
+				super.validateCode(revision.getVulnerabilityStatusCode(), CodeNameType.VERIFICATION_STATUS);
 			// Use the validated values
 			revision.setRevisionId(revisionId);
 			revision.setSolutionId(solutionId);
@@ -1390,8 +1392,9 @@ public class SolutionController extends AbstractController {
 		}
 		try {
 			// Validate enum codes
-			if (sv.getValidationStatusCode() != null)
-				super.validateCode(sv.getValidationStatusCode(), CodeNameType.VALIDATION_STATUS);
+			// TODO: remove
+			// if (sv.getValidationStatusCode() != null)
+			// 	super.validateCode(sv.getValidationStatusCode(), CodeNameType.VALIDATION_STATUS);
 			// type is required
 			super.validateCode(sv.getValidationTypeCode(), CodeNameType.VALIDATION_TYPE);
 			// Use path IDs
@@ -1445,8 +1448,9 @@ public class SolutionController extends AbstractController {
 		}
 		try {
 			// Validate enum codes
-			if (sv.getValidationStatusCode() != null)
-				super.validateCode(sv.getValidationStatusCode(), CodeNameType.VALIDATION_STATUS);
+			// TODO: REMOVE
+			//if (sv.getValidationStatusCode() != null)
+			//	super.validateCode(sv.getValidationStatusCode(), CodeNameType.VALIDATION_STATUS);
 			// type is required
 			super.validateCode(sv.getValidationTypeCode(), CodeNameType.VALIDATION_TYPE);
 			// Use path IDs

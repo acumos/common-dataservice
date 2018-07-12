@@ -68,8 +68,8 @@ public class CodeNameServiceImpl implements CodeNameService {
 			return codeNameProps.getSubscriptionScope();
 		case TOOLKIT_TYPE:
 			return codeNameProps.getToolkitType();
-		case VALIDATION_STATUS:
-			return codeNameProps.getValidationStatus();
+		case VERIFICATION_STATUS:
+			return codeNameProps.getVerificationStatus();
 		case VALIDATION_TYPE:
 			return codeNameProps.getValidationType();
 		}

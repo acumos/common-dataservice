@@ -133,39 +133,80 @@ public class UserController extends AbstractController {
 	}
 
 	/**
+	 * Checks specified credentials using either password or API token.
+	 * 
+	 * @param userOrEmail
+	 *            User name or email address
+	 * @param password
+	 *            If not null, checks for match on password hash
+	 * @param token
+	 *            If not null, checks for match on API token hash
+	 */
+	private Object login(String userOrEmail, String password, String token) {
+		Date beginDate = new Date();
+		if (password == null && token == null)
+			throw new IllegalArgumentException("Null auth credentials");
+		MLPUser user = userRepository.findByLoginOrEmail(userOrEmail);
+		if (user == null || !user.isActive()) {
+			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "Failed to find active user " + userOrEmail);
+		}
+		if (password != null && !BCrypt.checkpw(password, user.getLoginHash())) {
+			final String msg = "Failed to authenticate user by password";
+			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, msg, null);
+		}
+		if (token != null && !BCrypt.checkpw(token, user.getApiTokenHash())) {
+			final String msg = "Failed to authenticate user by API token";
+			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, msg, null);
+		}
+		// detach from Hibernate and wipe hashes
+		entityManager.detach(user);
+		user.clearHashes();
+		logger.audit(beginDate, "login: authenticated user {}", user.getLoginName());
+		return user;
+	}
+
+	/**
 	 * @param login
 	 *            Body with name and clear-text password
 	 * @param response
 	 *            HttpServletResponse
 	 * @return A user if found, an error otherwise.
 	 */
-	@ApiOperation(value = "Checks the specified credentials.  Searches both login name and email fields for the specified name.  Returns the user object if an active user exists with the specified credentials; answers bad request if no match is found.", response = MLPUser.class)
+	@ApiOperation(value = "Checks the specified user credentials for full access.  Searches both login name and email fields for the specified name.  Returns the user object if an active user exists with the specified credentials; answers bad request if no match is found.", response = MLPUser.class)
 	@RequestMapping(value = "/" + CCDSConstants.LOGIN_PATH, method = RequestMethod.POST)
 	@ResponseBody
-	public Object login(@RequestBody LoginTransport login, HttpServletResponse response) {
-		Date beginDate = new Date();
+	public Object loginUser(@RequestBody LoginTransport login, HttpServletResponse response) {
 		if (login.getName() == null || login.getName().trim().length() == 0 || login.getPass() == null
 				|| login.getPass().trim().length() == 0) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "Missing login name and/or password");
 		}
-		MLPUser user = userRepository.findByLoginOrEmail(login.getName());
-		if (user == null || !user.isActive()) {
+		Object loginResult = login(login.getName(), login.getPass(), null);
+		if (!(loginResult instanceof MLPUser))
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST,
-					"Failed to find active user " + login.getName());
-		}
-		if (!BCrypt.checkpw(login.getPass(), user.getLoginHash())) {
-			final String msg = "Failed to authenticate user";
-			logger.audit(beginDate, "login: {}: {}", msg, login.getName());
+		return loginResult;
+	}
+
+	/**
+	 * @param login
+	 *            Body with name and clear-text token
+	 * @param response
+	 *            HttpServletResponse
+	 * @return A user if found, an error otherwise.
+	 */
+	@ApiOperation(value = "Checks the specified user credentials for API access.  Searches both login name and email fields for the specified name.  Returns the user object if an active user exists with the specified credentials; answers bad request if no match is found.", response = MLPUser.class)
+	@RequestMapping(value = "/" + CCDSConstants.LOGIN_API_PATH, method = RequestMethod.POST)
+	@ResponseBody
+	public Object loginApi(@RequestBody LoginTransport login, HttpServletResponse response) {
+		if (login.getName() == null || login.getName().trim().length() == 0 || login.getPass() == null
+				|| login.getPass().trim().length() == 0) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, msg, null);
+			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "Missing login name and/or password");
 		}
-		// detach from Hibernate and wipe hash
-		entityManager.detach(user);
-		user.setLoginHash(null);
-		logger.audit(beginDate, "login: authenticated user {}", user.getLoginName());
-		return user;
+		Object loginResult = login(login.getName(), null, login.getPass());
+		if (!(loginResult instanceof MLPUser))
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+		return loginResult;
 	}
 
 	/**
@@ -233,10 +274,9 @@ public class UserController extends AbstractController {
 		Date beginDate = new Date();
 		Page<MLPUser> page = userRepository.findAll(pageable);
 		for (MLPUser user : page.getContent()) {
-			// detach from Hibernate
+			// detach from Hibernate and clear sensitive data
 			entityManager.detach(user);
-			// wipe password
-			user.setLoginHash(null);
+			user.clearHashes();
 		}
 		logger.audit(beginDate, "getUsers {}", pageable);
 		return page;
@@ -256,10 +296,9 @@ public class UserController extends AbstractController {
 		Date beginDate = new Date();
 		Page<MLPUser> page = userRepository.findBySearchTerm(term, pageable);
 		for (MLPUser user : page.getContent()) {
-			// detach from Hibernate
+			// detach from Hibernate and clear sensitive data
 			entityManager.detach(user);
-			// wipe password
-			user.setLoginHash(null);
+			user.clearHashes();
 		}
 		logger.audit(beginDate, "likeUsers: term {}", term);
 		return page;
@@ -291,12 +330,12 @@ public class UserController extends AbstractController {
 		try {
 			Map<String, Object> convertedQryParm = convertQueryParameters(MLPUser.class, queryParameters);
 			Page<MLPUser> userPage = userSearchService.findUsers(convertedQryParm, isOr, pageable);
-			// Wipe login hash values
+			// Wipe hash values
 			Iterator<MLPUser> userIter = userPage.iterator();
 			while (userIter.hasNext()) {
 				MLPUser user = userIter.next();
 				entityManager.detach(user);
-				user.setLoginHash(null);
+				user.clearHashes();
 			}
 			logger.audit(beginDate, "searchUsers: query {}", queryParameters);
 			return userPage;
@@ -325,9 +364,9 @@ public class UserController extends AbstractController {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + userId, null);
 		}
-		// detach from Hibernate and wipe password
+		// detach from Hibernate and wipe hashes
 		entityManager.detach(user);
-		user.setLoginHash(null);
+		user.clearHashes();
 		logger.audit(beginDate, "getUser: userId {}", userId);
 		return user;
 	}
@@ -356,19 +395,20 @@ public class UserController extends AbstractController {
 				}
 			}
 			// Create a hash if a clear-text password arrives
-			if (user.getLoginHash() != null) {
-				String pwHash = BCrypt.hashpw(user.getLoginHash(), BCrypt.gensalt());
-				user.setLoginHash(pwHash);
-			}
+			if (user.getLoginHash() != null)
+				user.setLoginHash(BCrypt.hashpw(user.getLoginHash(), BCrypt.gensalt()));
+			// Create a hash if a clear-text token arrives
+			if (user.getApiTokenHash() != null)
+				user.setApiTokenHash(BCrypt.hashpw(user.getApiTokenHash(), BCrypt.gensalt()));
 			// Create a new row
 			MLPUser newUser = userRepository.save(user);
 			response.setStatus(HttpServletResponse.SC_CREATED);
 			// This is a hack to create the location path.
 			response.setHeader(HttpHeaders.LOCATION, CCDSConstants.USER_PATH + "/" + newUser.getUserId());
 			// ALSO send back the model for client convenience,
-			// but first detach from Hibernate and wipe the hash
+			// but first detach from Hibernate and wipe all hashes
 			entityManager.detach(newUser);
-			newUser.setLoginHash(null);
+			newUser.clearHashes();
 			result = newUser;
 			logger.audit(beginDate, "createUser: userId {}", newUser.getUserId());
 			return result;
@@ -404,14 +444,16 @@ public class UserController extends AbstractController {
 		try {
 			// Use the path-parameter id; don't trust the one in the object
 			user.setUserId(userId);
-			// Hash password if present in request
-			if (user.getLoginHash() != null) {
-				String pwHash = BCrypt.hashpw(user.getLoginHash(), BCrypt.gensalt());
-				user.setLoginHash(pwHash);
-			} else {
-				// Preserve old password if not updated
+			// Hash password if present in request; otherwise use old value
+			if (user.getLoginHash() != null)
+				user.setLoginHash(BCrypt.hashpw(user.getLoginHash(), BCrypt.gensalt()));
+			else
 				user.setLoginHash(existingUser.getLoginHash());
-			}
+			// Hash API token if present in request; otherwise use old value
+			if (user.getApiTokenHash() != null)
+				user.setApiTokenHash(BCrypt.hashpw(user.getApiTokenHash(), BCrypt.gensalt()));
+			else
+				user.setApiTokenHash(existingUser.getApiTokenHash());
 			userRepository.save(user);
 			logger.audit(beginDate, "updateUser: userId {}", userId);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
