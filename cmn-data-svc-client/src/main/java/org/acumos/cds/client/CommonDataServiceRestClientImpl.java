@@ -75,7 +75,6 @@ import org.acumos.cds.domain.MLPUserNotifPref;
 import org.acumos.cds.domain.MLPUserNotification;
 import org.acumos.cds.domain.MLPUserRoleMap;
 import org.acumos.cds.domain.MLPValidationSequence;
-import org.acumos.cds.domain.MLPValidationStatus;
 import org.acumos.cds.domain.MLPValidationType;
 import org.acumos.cds.transport.CountTransport;
 import org.acumos.cds.transport.LoginTransport;
@@ -105,16 +104,16 @@ import org.springframework.web.util.UriComponentsBuilder;
 /**
  * <P>
  * Provides methods for accessing the Common Data Service API via REST. Supports
- * basic HTTP authentication. Clients should use the
- * {@link #getInstance(String, String, String)} method.
+ * basic HTTP authentication. Clients should use the one of the getInstance
+ * methods; e.g., {@link #getInstance(String, String, String)}.
  * </P>
  *
  * <P>
- * The server sets an HTTP error code on any failure and sends the details of
- * the failure. The Spring RestTemplate behavior on receiving a non-200-class
- * response is to throw
- * {@link org.springframework.web.client.HttpStatusCodeException}. The error
- * details from the server can be fetched by calling that class's
+ * The server sets an HTTP error code on a bad request or failure and returns
+ * the details to the client. On receiving a non-200-class response, the Spring
+ * RestTemplate throws
+ * {@link org.springframework.web.client.HttpStatusCodeException}. Clients
+ * should catch that exception and fetch error details by calling that class's
  * getResponseBodyAsString() method.
  * </P>
  */
@@ -123,8 +122,17 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 
 	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
+	/**
+	 * Base URL of the server
+	 */
 	private final String baseUrl;
+	/**
+	 * Spring REST template is constructed once and used repeatedly.
+	 */
 	private final RestTemplate restTemplate;
+	/**
+	 * Request ID optionally set by client to send to server.
+	 */
 	private String requestId;
 
 	/**
@@ -194,38 +202,53 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 	 * one is missing, no authentication is used.
 	 * 
 	 * Clients should use the static method
-	 * {@link #getInstance(String, String, String)} instead of this constructor.
+	 * {@link #getInstance(String, String, String, String)} instead of this
+	 * constructor.
 	 * 
 	 * @param webapiUrl
-	 *            URL of the web endpoint
+	 *            URL of the web endpoint with hostname and port
 	 * @param user
 	 *            user name; ignored if null
 	 * @param pass
 	 *            password; ignored if null
+	 * @param proxyUrl
+	 *            URL of the proxy with hostname and port; ignored if null
 	 */
-	public CommonDataServiceRestClientImpl(final String webapiUrl, final String user, final String pass) {
+	public CommonDataServiceRestClientImpl(final String webapiUrl, final String user, final String pass,
+			final String proxyUrl) {
 		if (webapiUrl == null)
 			throw new IllegalArgumentException("Null URL not permitted");
 
+		// Validate the URLs
 		URL url = null;
 		try {
 			url = new URL(webapiUrl);
 			baseUrl = url.toExternalForm();
 		} catch (MalformedURLException ex) {
-			throw new IllegalArgumentException("Failed to parse URL", ex);
+			throw new IllegalArgumentException("Failed to parse URL: " + webapiUrl, ex);
 		}
 		final HttpHost httpHost = new HttpHost(url.getHost(), url.getPort());
-
+		HttpHost proxyHost = null;
+		if (proxyUrl != null) {
+			try {
+				url = new URL(proxyUrl);
+			} catch (MalformedURLException ex) {
+				throw new IllegalArgumentException("Failed to parse URL: " + proxyUrl, ex);
+			}
+			proxyHost = new HttpHost(url.getHost(), url.getPort());
+		}
 		// Build a client with a credentials provider
-		CloseableHttpClient httpClient = null;
+		HttpClientBuilder builder = HttpClientBuilder.create();
 		if (user != null && pass != null) {
 			CredentialsProvider credsProvider = new BasicCredentialsProvider();
 			credsProvider.setCredentials(new AuthScope(httpHost), new UsernamePasswordCredentials(user, pass));
-			httpClient = HttpClientBuilder.create().setDefaultCredentialsProvider(credsProvider).build();
-		} else {
-			httpClient = HttpClientBuilder.create().build();
+			builder.setDefaultCredentialsProvider(credsProvider);
 		}
-		// Create request factory
+		// Add proxy if supplied
+		if (proxyHost != null)
+			builder.setProxy(proxyHost);
+		CloseableHttpClient httpClient = builder.build();
+		// Create request factory with the client
 		HttpComponentsClientHttpRequestFactoryBasicAuth requestFactory = new HttpComponentsClientHttpRequestFactoryBasicAuth(
 				httpHost);
 		requestFactory.setHttpClient(httpClient);
@@ -239,7 +262,7 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 
 	/**
 	 * Creates an instance to access the remote endpoint using the specified
-	 * template, which allows HTTP credentials, choice of route, etc.
+	 * template, which allows HTTP credentials, proxy, choice of route, etc.
 	 * 
 	 * Clients should use the static method
 	 * {@link #getInstance(String, RestTemplate)} instead of this constructor.
@@ -263,11 +286,11 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 	}
 
 	/**
-	 * Gets an instance to access a remote endpoint using the specified template.
-	 * This factory method is the preferred usage.
+	 * Gets an instance to access a remote endpoint using the specified URL and
+	 * credentials. This factory method should be used instead of a constructor.
 	 * 
 	 * @param webapiUrl
-	 *            URL of the web endpoint
+	 *            URL of the web endpoint with host and port
 	 * @param user
 	 *            user name; ignored if null
 	 * @param pass
@@ -275,14 +298,35 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 	 * @return Instance of ICommonDataServiceRestClient
 	 */
 	public static ICommonDataServiceRestClient getInstance(String webapiUrl, String user, String pass) {
-		return new CommonDataServiceRestClientImpl(webapiUrl, user, pass);
+		return new CommonDataServiceRestClientImpl(webapiUrl, user, pass, null);
+	}
+
+	/**
+	 * Gets an instance to access a remote endpoint using the specified URL,
+	 * credentials and proxy. This factory method should be used instead of a
+	 * constructor.
+	 * 
+	 * @param webapiUrl
+	 *            URL of the web endpoint with host and port
+	 * @param user
+	 *            user name; ignored if null
+	 * @param pass
+	 *            password; ignored if null
+	 * @param proxyUrl
+	 *            URL of the proxy with hostname and port
+	 * @return Instance of ICommonDataServiceRestClient
+	 */
+	public static ICommonDataServiceRestClient getInstance(String webapiUrl, String user, String pass,
+			String proxyUrl) {
+		return new CommonDataServiceRestClientImpl(webapiUrl, user, pass, proxyUrl);
 	}
 
 	/**
 	 * Gets an instance to access a remote endpoint using the specified template.
+	 * This factory method should be used instead of a constructor.
 	 * 
 	 * @param webapiUrl
-	 *            URL of the web endpoint
+	 *            URL of the web endpoint with host and port
 	 * @param restTemplate
 	 *            REST template
 	 * @return Instance of ICommonDataServiceRestClient
@@ -490,19 +534,6 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 	/** @deprecated Use {@link #getCodeNamePairs(CodeNameType)} */
 	@Override
 	@Deprecated
-	public List<MLPValidationStatus> getValidationStatuses() {
-		URI uri = buildUri(new String[] { CCDSConstants.CODE_PATH, CCDSConstants.VAL_PATH, CCDSConstants.STATUS_PATH },
-				null, null);
-		logger.debug("getValidationStatuses: uri {}", uri);
-		ResponseEntity<List<MLPValidationStatus>> response = restTemplate.exchange(uri, HttpMethod.GET, null,
-				new ParameterizedTypeReference<List<MLPValidationStatus>>() {
-				});
-		return response.getBody();
-	}
-
-	/** @deprecated Use {@link #getCodeNamePairs(CodeNameType)} */
-	@Override
-	@Deprecated
 	public List<MLPValidationType> getValidationTypes() {
 		URI uri = buildUri(new String[] { CCDSConstants.CODE_PATH, CCDSConstants.VAL_PATH, CCDSConstants.TYPE_PATH },
 				null, null);
@@ -577,11 +608,10 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 
 	@Override
 	public RestPageResponse<MLPSolution> findSolutionsByDate(boolean active, String[] accessTypeCodes,
-			String[] validationStatusCodes, Date date, RestPageRequest pageRequest) {
+			Date date, RestPageRequest pageRequest) {
 		HashMap<String, Object> parms = new HashMap<>();
 		parms.put(CCDSConstants.SEARCH_ACTIVE, active);
 		parms.put(CCDSConstants.SEARCH_ACCESS_TYPES, accessTypeCodes);
-		parms.put(CCDSConstants.SEARCH_VAL_STATUSES, validationStatusCodes);
 		parms.put(CCDSConstants.SEARCH_DATE, date.getTime());
 		URI uri = buildUri(
 				new String[] { CCDSConstants.SOLUTION_PATH, CCDSConstants.SEARCH_PATH, CCDSConstants.DATE_PATH }, parms,
@@ -595,8 +625,9 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 
 	@Override
 	public RestPageResponse<MLPSolution> findPortalSolutions(String[] nameKeywords, String[] descriptionKeywords,
-			boolean active, String[] ownerIds, String[] accessTypeCodes, String[] modelTypeCodes,
-			String[] validationStatusCodes, String[] tags, RestPageRequest pageRequest) {
+			boolean active, String[] userIds, String[] accessTypeCodes, String[] modelTypeCodes,
+			String[] tags, String[] authorKeywords, String[] publisherKeywords,
+			RestPageRequest pageRequest) {
 		HashMap<String, Object> parms = new HashMap<>();
 		// This is required
 		parms.put(CCDSConstants.SEARCH_ACTIVE, active);
@@ -604,16 +635,18 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 			parms.put(CCDSConstants.SEARCH_NAME, nameKeywords);
 		if (descriptionKeywords != null && descriptionKeywords.length > 0)
 			parms.put(CCDSConstants.SEARCH_DESC, descriptionKeywords);
-		if (ownerIds != null && ownerIds.length > 0)
-			parms.put(CCDSConstants.SEARCH_OWNERS, ownerIds);
+		if (userIds != null && userIds.length > 0)
+			parms.put(CCDSConstants.SEARCH_USERS, userIds);
 		if (accessTypeCodes != null && accessTypeCodes.length > 0)
 			parms.put(CCDSConstants.SEARCH_ACCESS_TYPES, accessTypeCodes);
 		if (modelTypeCodes != null && modelTypeCodes.length > 0)
 			parms.put(CCDSConstants.SEARCH_MODEL_TYPES, modelTypeCodes);
-		if (validationStatusCodes != null && validationStatusCodes.length > 0)
-			parms.put(CCDSConstants.SEARCH_VAL_STATUSES, validationStatusCodes);
 		if (tags != null && tags.length > 0)
 			parms.put(CCDSConstants.SEARCH_TAGS, tags);
+		if (authorKeywords != null && authorKeywords.length > 0)
+			parms.put(CCDSConstants.SEARCH_AUTH, authorKeywords);
+		if (publisherKeywords != null && publisherKeywords.length > 0)
+			parms.put(CCDSConstants.SEARCH_PUB, publisherKeywords);
 		URI uri = buildUri(
 				new String[] { CCDSConstants.SOLUTION_PATH, CCDSConstants.SEARCH_PATH, CCDSConstants.PORTAL_PATH },
 				parms, pageRequest);
@@ -627,12 +660,12 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 	@Override
 	public RestPageResponse<MLPSolution> findUserSolutions(String[] nameKeywords, String[] descriptionKeywords,
 			boolean active, String userId, String[] accessTypeCodes, String[] modelTypeCodes,
-			String[] validationStatusCodes, String[] tags, RestPageRequest pageRequest) {
+			String[] tags, RestPageRequest pageRequest) {
 		if (userId == null || userId.length() == 0)
 			throw new IllegalArgumentException("userId argument is required");
 		HashMap<String, Object> parms = new HashMap<>();
 		parms.put(CCDSConstants.SEARCH_ACTIVE, active);
-		parms.put(CCDSConstants.SEARCH_OWNERS, userId);
+		parms.put(CCDSConstants.SEARCH_USERS, userId);
 		if (nameKeywords != null && nameKeywords.length > 0)
 			parms.put(CCDSConstants.SEARCH_NAME, nameKeywords);
 		if (descriptionKeywords != null && descriptionKeywords.length > 0)
@@ -641,8 +674,6 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 			parms.put(CCDSConstants.SEARCH_ACCESS_TYPES, accessTypeCodes);
 		if (modelTypeCodes != null && modelTypeCodes.length > 0)
 			parms.put(CCDSConstants.SEARCH_MODEL_TYPES, modelTypeCodes);
-		if (validationStatusCodes != null && validationStatusCodes.length > 0)
-			parms.put(CCDSConstants.SEARCH_VAL_STATUSES, validationStatusCodes);
 		if (tags != null && tags.length > 0)
 			parms.put(CCDSConstants.SEARCH_TAGS, tags);
 		URI uri = buildUri(

@@ -35,7 +35,6 @@ import org.acumos.cds.ModelTypeCode;
 import org.acumos.cds.StepStatusCode;
 import org.acumos.cds.StepTypeCode;
 import org.acumos.cds.ToolkitTypeCode;
-import org.acumos.cds.ValidationStatusCode;
 import org.acumos.cds.ValidationTypeCode;
 import org.acumos.cds.domain.MLPAccessType;
 import org.acumos.cds.domain.MLPArtifact;
@@ -74,7 +73,6 @@ import org.acumos.cds.domain.MLPUserLoginProvider;
 import org.acumos.cds.domain.MLPUserNotifPref;
 import org.acumos.cds.domain.MLPUserNotification;
 import org.acumos.cds.domain.MLPValidationSequence;
-import org.acumos.cds.domain.MLPValidationStatus;
 import org.acumos.cds.domain.MLPValidationType;
 import org.acumos.cds.transport.RestPageRequest;
 import org.acumos.cds.transport.RestPageResponse;
@@ -353,16 +351,6 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 	/** @deprecated Use {@link #getCodeNamePairs(CodeNameType)} */
 	@Deprecated
 	@Override
-	public List<MLPValidationStatus> getValidationStatuses() {
-		List<MLPValidationStatus> list = new ArrayList<>();
-		for (ValidationStatusCode a : ValidationStatusCode.values())
-			list.add(new MLPValidationStatus(a.name(), a.getStatusName()));
-		return list;
-	}
-
-	/** @deprecated Use {@link #getCodeNamePairs(CodeNameType)} */
-	@Deprecated
-	@Override
 	public List<MLPValidationType> getValidationTypes() {
 		List<MLPValidationType> list = new ArrayList<>();
 		for (ValidationTypeCode a : ValidationTypeCode.values())
@@ -440,7 +428,7 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 
 	@Override
 	public RestPageResponse<MLPSolution> findSolutionsByDate(boolean active, String[] accessTypeCodes,
-			String[] validationStatusCodes, Date date, RestPageRequest pageRequest) {
+			Date date, RestPageRequest pageRequest) {
 		return solutionsByDate;
 	}
 
@@ -1437,8 +1425,9 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 
 	@Override
 	public RestPageResponse<MLPSolution> findPortalSolutions(String[] nameKeywords, String[] descriptionKeywords,
-			boolean active, String[] ownerIds, String[] accessTypeCodes, String[] modelTypeCodes,
-			String[] validationStatusCodes, String[] tags, RestPageRequest pageRequest) {
+			boolean active, String[] userIds, String[] accessTypeCodes, String[] modelTypeCodes,
+			String[] tags, String[] authKws, String[] pubKws,
+			RestPageRequest pageRequest) {
 		return this.portalSolutions;
 	}
 
@@ -1448,8 +1437,8 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 
 	@Override
 	public RestPageResponse<MLPSolution> findUserSolutions(String[] nameKeywords, String[] descriptionKeywords,
-			boolean active, String ownerId, String[] accessTypeCodes, String[] modelTypeCodes,
-			String[] validationStatusCodes, String[] tags, RestPageRequest pageRequest) {
+			boolean active, String userId, String[] accessTypeCodes, String[] modelTypeCodes,
+			String[] tags, RestPageRequest pageRequest) {
 		return this.userSolutions;
 	}
 

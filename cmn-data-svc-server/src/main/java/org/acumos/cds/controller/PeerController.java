@@ -170,7 +170,10 @@ public class PeerController extends AbstractController {
 			}
 			// Validate enum codes
 			super.validateCode(peer.getStatusCode(), CodeNameType.PEER_STATUS);
-			super.validateCode(peer.getValidationStatusCode(), CodeNameType.VALIDATION_STATUS);
+			if (peer.getLicenseStatusCode() != null)
+				super.validateCode(peer.getLicenseStatusCode(), CodeNameType.VERIFICATION_STATUS);
+			if (peer.getVulnerabilityStatusCode() != null)
+				super.validateCode(peer.getVulnerabilityStatusCode(), CodeNameType.VERIFICATION_STATUS);
 			// Create a new row
 			Object result = peerRepository.save(peer);
 			response.setStatus(HttpServletResponse.SC_CREATED);
@@ -210,7 +213,10 @@ public class PeerController extends AbstractController {
 		try {
 			// Validate enum codes
 			super.validateCode(peer.getStatusCode(), CodeNameType.PEER_STATUS);
-			super.validateCode(peer.getValidationStatusCode(), CodeNameType.VALIDATION_STATUS);
+			if (peer.getLicenseStatusCode() != null)
+				super.validateCode(peer.getLicenseStatusCode(), CodeNameType.VERIFICATION_STATUS);
+			if (peer.getVulnerabilityStatusCode() != null)
+				super.validateCode(peer.getVulnerabilityStatusCode(), CodeNameType.VERIFICATION_STATUS);
 			// Use the path-parameter id; don't trust the one in the object
 			peer.setPeerId(peerId);
 			// Update the existing row

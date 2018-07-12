@@ -276,20 +276,6 @@ public class CodeTableController extends AbstractController {
 	 * @deprecated Use {@link #getCodeNamePairs(String, HttpServletResponse)}
 	 * @param response
 	 *            HttpServletResponse
-	 * @return List of MLPCodeNamePair with validation status code-name pairs
-	 */
-	@ApiOperation(value = "Gets the list of validation status codes.", response = MLPCodeNamePair.class, responseContainer = "List")
-	@RequestMapping(value = "/" + CCDSConstants.VAL_PATH + "/" + CCDSConstants.STATUS_PATH, method = RequestMethod.GET)
-	@ResponseBody
-	@Deprecated
-	public Object getValidationStatusList(HttpServletResponse response) {
-		return getCodeNamePairs(CodeNameType.VALIDATION_STATUS.name(), response);
-	}
-
-	/**
-	 * @deprecated Use {@link #getCodeNamePairs(String, HttpServletResponse)}
-	 * @param response
-	 *            HttpServletResponse
 	 * @return List of MLPCodeNamePair with validation type code-name pairs
 	 */
 	@ApiOperation(value = "Gets the list of validation type codes.", response = MLPCodeNamePair.class, responseContainer = "List")

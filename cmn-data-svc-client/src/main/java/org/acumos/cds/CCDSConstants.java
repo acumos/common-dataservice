@@ -97,13 +97,15 @@ public abstract class CCDSConstants {
 	// Portal search interface
 	public static final String SEARCH_ACCESS_TYPES = "atc";
 	public static final String SEARCH_ACTIVE = "active";
-	public static final String SEARCH_OWNERS = "owner";
+	public static final String SEARCH_USERS = "user";
 	public static final String SEARCH_DESC = "desc";
 	public static final String SEARCH_MODEL_TYPES = "mtc";
 	public static final String SEARCH_NAME = "name";
 	public static final String SEARCH_TAGS = "tag";
 	public static final String SEARCH_VAL_STATUSES = "vsc";
 	public static final String SEARCH_DATE = "datems";
+	public static final String SEARCH_AUTH = "auth";
+	public static final String SEARCH_PUB = "pub";
 
 	// Sonar wants a private constructor, placed after all fields
 	private CCDSConstants() {
