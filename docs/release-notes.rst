@@ -23,6 +23,15 @@ Common Data Service Release Notes
 The client and server are released together.  The client is deployed as a jar file to a
 Maven Nexus repository. The server is deployed as a Docker image to a Docker registry.
 
+Version 1.16.0, ? July 2018
+----------------------------
+
+* Add column for solution picture (ACUMOS-1235)
+* Rename ownerId to userId in solution, revision, artifact, peer subscription (ACUMOS-1359)
+* Move provider in solution to publisher in revision (ACUMOS-1359)
+* Add support for proxy when getting a CDS client instance
+* Requires database schema version 1.16
+
 Version 1.15.4, 6 July 2018
 ---------------------------
 

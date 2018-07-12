@@ -153,7 +153,7 @@ public class FOMRepositoryTest {
 
 		logger.info("Querying for FOM via findPortalSolutions method");
 		Page<MLPSolution> byName = solutionSearchService.findPortalSolutions(nameKw, empty, true, empty, empty,
-				accTypes, valCodes, empty, pageable);
+				accTypes, valCodes, empty, empty, empty, pageable);
 		Assert.assertTrue(byName != null && byName.getNumberOfElements() > 0);
 		logger.info("Found sols by name via criteria: size {}", byName.getContent().size());
 
