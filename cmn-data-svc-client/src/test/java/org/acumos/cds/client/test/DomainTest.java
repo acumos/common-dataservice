@@ -70,6 +70,7 @@ import org.acumos.cds.domain.MLPUserRoleMap;
 import org.acumos.cds.domain.MLPValidationSequence;
 import org.acumos.cds.domain.MLPValidationStatus;
 import org.acumos.cds.domain.MLPValidationType;
+import org.acumos.cds.transport.AuthorTransport;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -91,7 +92,7 @@ public class DomainTest extends AbstractModelTest {
 		Assert.assertEquals(s4, m.getMetadata());
 		Assert.assertEquals(d2, m.getModified());
 		Assert.assertEquals(s5, m.getName());
-		Assert.assertEquals(s6, m.getOwnerId());
+		Assert.assertEquals(s6, m.getUserId());
 		Assert.assertEquals(i1, m.getSize());
 		Assert.assertEquals(s7, m.getUri());
 		Assert.assertEquals(s8, m.getVersion());
@@ -108,7 +109,7 @@ public class DomainTest extends AbstractModelTest {
 		m.setMetadata(s4);
 		m.setModified(d2);
 		m.setName(s5);
-		m.setOwnerId(s6);
+		m.setUserId(s6);
 		m.setSize(i1);
 		m.setUri(s7);
 		m.setVersion(s8);
@@ -385,7 +386,7 @@ public class DomainTest extends AbstractModelTest {
 		Assert.assertEquals(l1, m.getMaxArtifactSize());
 		Assert.assertEquals(d2, m.getModified());
 		Assert.assertEquals(s2, m.getOptions());
-		Assert.assertEquals(s3, m.getOwnerId());
+		Assert.assertEquals(s3, m.getUserId());
 		Assert.assertEquals(s4, m.getPeerId());
 		Assert.assertEquals(d3, m.getProcessed());
 		Assert.assertEquals(l2, m.getRefreshInterval());
@@ -403,7 +404,7 @@ public class DomainTest extends AbstractModelTest {
 		m.setMaxArtifactSize(l1);
 		m.setModified(d2);
 		m.setOptions(s2);
-		m.setOwnerId(s3);
+		m.setUserId(s3);
 		m.setPeerId(s4);
 		m.setProcessed(d3);
 		m.setRefreshInterval(l2);
@@ -771,11 +772,11 @@ public class DomainTest extends AbstractModelTest {
 		Assert.assertEquals(d2, m.getModified());
 		Assert.assertEquals(s4, m.getName());
 		Assert.assertEquals(s5, m.getOrigin());
-		Assert.assertEquals(s6, m.getOwnerId());
-		Assert.assertEquals(s7, m.getProvider());
-		Assert.assertEquals(s8, m.getSolutionId());
-		Assert.assertEquals(s9, m.getSourceId());
-		Assert.assertEquals(s10, m.getToolkitTypeCode());
+		Assert.assertEquals(s6, m.getUserId());
+		Assert.assertArrayEquals(by1, m.getPicture());
+		Assert.assertEquals(s7, m.getSolutionId());
+		Assert.assertEquals(s8, m.getSourceId());
+		Assert.assertEquals(s9, m.getToolkitTypeCode());
 	}
 
 	@Test
@@ -790,11 +791,11 @@ public class DomainTest extends AbstractModelTest {
 		m.setModified(d2);
 		m.setName(s4);
 		m.setOrigin(s5);
-		m.setOwnerId(s6);
-		m.setProvider(s7);
-		m.setSolutionId(s8);
-		m.setSourceId(s9);
-		m.setToolkitTypeCode(s10);
+		m.setUserId(s6);
+		m.setPicture(by1);
+		m.setSolutionId(s7);
+		m.setSourceId(s8);
+		m.setToolkitTypeCode(s9);
 		checkMLPSolution(m);
 		m = new MLPSolution(m);
 		checkMLPSolution(m);
@@ -993,6 +994,7 @@ public class DomainTest extends AbstractModelTest {
 		logger.info(pk.toString());
 	}
 
+	private final AuthorTransport author =new AuthorTransport("name", "contact");
 	private void checkMLPSolutionRevision(MLPSolutionRevision m) {
 		Assert.assertEquals(s1, m.getAccessTypeCode());
 		Assert.assertEquals(d1, m.getCreated());
@@ -1000,12 +1002,14 @@ public class DomainTest extends AbstractModelTest {
 		Assert.assertEquals(s3, m.getMetadata());
 		Assert.assertEquals(d2, m.getModified());
 		Assert.assertEquals(s4, m.getOrigin());
-		Assert.assertEquals(s5, m.getOwnerId());
+		Assert.assertEquals(s5, m.getPublisher());
 		Assert.assertEquals(s6, m.getRevisionId());
 		Assert.assertEquals(s7, m.getSolutionId());
 		Assert.assertEquals(s8, m.getSourceId());
-		Assert.assertEquals(s9, m.getValidationStatusCode());
-		Assert.assertEquals(s10, m.getVersion());
+		Assert.assertEquals(s9, m.getUserId());
+		Assert.assertEquals(s10, m.getValidationStatusCode());
+		Assert.assertEquals(s11, m.getVersion());
+		Assert.assertEquals(author, m.getAuthors()[0]);
 	}
 
 	@Test
@@ -1013,17 +1017,20 @@ public class DomainTest extends AbstractModelTest {
 		MLPSolutionRevision m = new MLPSolutionRevision(s1, s1, s1, s1, s1);
 		m = new MLPSolutionRevision();
 		m.setAccessTypeCode(s1);
+		AuthorTransport [] authors = new AuthorTransport[] {author};
+		m.setAuthors(authors);
 		m.setCreated(d1);
 		m.setDescription(s2);
 		m.setMetadata(s3);
 		m.setModified(d2);
 		m.setOrigin(s4);
-		m.setOwnerId(s5);
+		m.setPublisher(s5);
 		m.setRevisionId(s6);
 		m.setSolutionId(s7);
 		m.setSourceId(s8);
-		m.setValidationStatusCode(s9);
-		m.setVersion(s10);
+		m.setUserId(s9);
+		m.setValidationStatusCode(s10);
+		m.setVersion(s11);
 		checkMLPSolutionRevision(m);
 		m = new MLPSolutionRevision(m);
 		checkMLPSolutionRevision(m);

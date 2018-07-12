@@ -35,9 +35,9 @@ import io.swagger.annotations.ApiModelProperty;
 
 /**
  * Base model for an artifact. Maps all simple columns; maps no complex columns
- * that a subclass might want to map in alternate ways. For example the owner
- * column is not mapped here; that is a user ID reference to an MLPUser entity,
- * and could be exposed as a string or as an object via Hibernate magic.
+ * that a subclass might want to map in alternate ways. For example the user
+ * column is not mapped here; that is a reference to an MLPUser entity ID, and
+ * could be exposed as a string or as an object via Hibernate magic.
  */
 @MappedSuperclass
 public class MLPAbstractArtifact extends MLPTimestampedEntity {
