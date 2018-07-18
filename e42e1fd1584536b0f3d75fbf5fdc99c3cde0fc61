@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2be7beac_5499632c",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPAbstractSolutionRevision.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 87
+      },
+      "writtenOn": "2018-07-18T20:19:10Z",
+      "side": 1,
+      "message": "If we want to perform search for a particular publisher(s)  inside Solution Revision , will CDS be able to provide the API since list is maintained here.",
+      "range": {
+        "startLine": 106,
+        "startChar": 47,
+        "endLine": 106,
+        "endChar": 59
+      },
+      "revId": "e42e1fd1584536b0f3d75fbf5fdc99c3cde0fc61",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
