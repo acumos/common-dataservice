@@ -16,6 +16,24 @@
       "revId": "6649329b7d2dae4057d2b0e5858d6633337a36d9",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b8b35df6_46afb5c2",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/CommonDataServiceRestClientImpl.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 1016,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-07-19T21:41:24Z",
+      "side": 1,
+      "message": "On the server.  This usage is exactly parallel to loginUser: you (portal) send the username and clear-text password to test whether it\u0027s a match.  For loginApiUser you send the username and clear-text token.  Portal works in clear text; CDS accepts clear and stores hash.",
+      "parentUuid": "c8655a36_abdd2877",
+      "revId": "6649329b7d2dae4057d2b0e5858d6633337a36d9",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
