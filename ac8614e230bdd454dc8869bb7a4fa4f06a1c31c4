@@ -16,6 +16,24 @@
       "revId": "ac8614e230bdd454dc8869bb7a4fa4f06a1c31c4",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a00fd5de_3f6ce2f6",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/PeerController.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-07-23T21:07:45Z",
+      "side": 1,
+      "message": "I\u0027m restoring the 1.15 behavior, which had no null check.",
+      "parentUuid": "047130f7_73cd832d",
+      "revId": "ac8614e230bdd454dc8869bb7a4fa4f06a1c31c4",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
