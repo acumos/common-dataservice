@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "047130f7_73cd832d",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/PeerController.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-07-23T20:52:06Z",
+      "side": 1,
+      "message": "Can you comment why you removed the condition for null check?",
+      "revId": "ac8614e230bdd454dc8869bb7a4fa4f06a1c31c4",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
