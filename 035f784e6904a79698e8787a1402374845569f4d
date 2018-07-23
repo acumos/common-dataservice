@@ -19,6 +19,40 @@
     },
     {
       "key": {
+        "uuid": "c47a1bf6_44d7f43f",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPAbstractSolution.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-07-23T18:20:58Z",
+      "side": 1,
+      "message": "So does making it active means \"undelete\"? So can I assume the solution delete here only changes the flag status?",
+      "revId": "035f784e6904a79698e8787a1402374845569f4d",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faba5e7e_a483eed4",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPAbstractSolutionRevision.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-07-23T18:20:58Z",
+      "side": 1,
+      "message": "Aren\u0027t the licence status code and vulnerability status code mandatory?",
+      "revId": "035f784e6904a79698e8787a1402374845569f4d",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "63c8af0b_81e4206c",
         "filename": "cmn-data-svc-server/db-scripts/cds-mysql-downgrade-1.16-to-1.15.sql",
         "patchSetId": 8
