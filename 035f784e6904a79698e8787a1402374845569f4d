@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "cfe86ca6_168b7c90",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/ICommonDataServiceRestClient.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-07-23T18:05:25Z",
+      "side": 1,
+      "message": "Can the author field be null or empty? Isn\u0027t it mandatory?",
+      "revId": "035f784e6904a79698e8787a1402374845569f4d",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "63c8af0b_81e4206c",
         "filename": "cmn-data-svc-server/db-scripts/cds-mysql-downgrade-1.16-to-1.15.sql",
         "patchSetId": 8
