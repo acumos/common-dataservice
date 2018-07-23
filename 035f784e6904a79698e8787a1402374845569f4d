@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "63c8af0b_81e4206c",
+        "filename": "cmn-data-svc-server/db-scripts/cds-mysql-downgrade-1.16-to-1.15.sql",
+        "patchSetId": 8
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-07-23T17:29:28Z",
+      "side": 1,
+      "message": "The downgrade script should have the VALIDATION_STATUS_CD on C_SOLUTION_REV added. Otherwise the upgrade script fails on drop of this column. If you are planning to avoid this whole activity, then remove the drop statement for VALIDATION_STATUS_CD on C_SOLUTION_REV from upgrade script.",
+      "revId": "035f784e6904a79698e8787a1402374845569f4d",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
