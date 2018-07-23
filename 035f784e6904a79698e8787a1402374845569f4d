@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "85280b39_eee9fb5b",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/ICommonDataServiceRestClient.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-07-23T18:49:41Z",
+      "side": 1,
+      "message": "Yes it can be empty.  It\u0027s not needed for a private solution.  Gets populated during the publishing process.",
+      "parentUuid": "cfe86ca6_168b7c90",
+      "revId": "035f784e6904a79698e8787a1402374845569f4d",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c47a1bf6_44d7f43f",
         "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPAbstractSolution.java",
         "patchSetId": 8
@@ -30,6 +48,24 @@
       "writtenOn": "2018-07-23T18:20:58Z",
       "side": 1,
       "message": "So does making it active means \"undelete\"? So can I assume the solution delete here only changes the flag status?",
+      "revId": "035f784e6904a79698e8787a1402374845569f4d",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0235eb79_26895030",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPAbstractSolution.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-07-23T18:49:41Z",
+      "side": 1,
+      "message": "That\u0027s my best understanding.",
+      "parentUuid": "c47a1bf6_44d7f43f",
       "revId": "035f784e6904a79698e8787a1402374845569f4d",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "c4d2293a_afd4ccee",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPAbstractSolutionRevision.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-07-23T18:49:41Z",
+      "side": 1,
+      "message": "They are not",
+      "parentUuid": "faba5e7e_a483eed4",
+      "revId": "035f784e6904a79698e8787a1402374845569f4d",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "63c8af0b_81e4206c",
         "filename": "cmn-data-svc-server/db-scripts/cds-mysql-downgrade-1.16-to-1.15.sql",
         "patchSetId": 8
@@ -64,6 +118,24 @@
       "writtenOn": "2018-07-23T17:29:28Z",
       "side": 1,
       "message": "The downgrade script should have the VALIDATION_STATUS_CD on C_SOLUTION_REV added. Otherwise the upgrade script fails on drop of this column. If you are planning to avoid this whole activity, then remove the drop statement for VALIDATION_STATUS_CD on C_SOLUTION_REV from upgrade script.",
+      "revId": "035f784e6904a79698e8787a1402374845569f4d",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a1f41945_f63c7461",
+        "filename": "cmn-data-svc-server/db-scripts/cds-mysql-downgrade-1.16-to-1.15.sql",
+        "patchSetId": 8
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-07-23T18:49:41Z",
+      "side": 1,
+      "message": "Will do",
+      "parentUuid": "63c8af0b_81e4206c",
       "revId": "035f784e6904a79698e8787a1402374845569f4d",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
