@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a34c0693_b393249f",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPPeer.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-07-24T18:00:38Z",
+      "side": 1,
+      "message": "Why is there a \u00271\u0027 in Contact1?",
+      "revId": "37d13106eb9599ff6ef84aed6c134fd55c111f75",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
