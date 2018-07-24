@@ -16,6 +16,24 @@
       "revId": "37d13106eb9599ff6ef84aed6c134fd55c111f75",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "eb1e1857_7b1bbb6b",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPPeer.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-07-24T18:28:58Z",
+      "side": 1,
+      "message": "Long ago there were two fields: contact1, contact2. Now just one, but I didn\u0027t rename.\n\nPlease focus on the 1.16 changes.",
+      "parentUuid": "a34c0693_b393249f",
+      "revId": "37d13106eb9599ff6ef84aed6c134fd55c111f75",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
