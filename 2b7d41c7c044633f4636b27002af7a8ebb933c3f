@@ -16,6 +16,24 @@
       "revId": "2b7d41c7c044633f4636b27002af7a8ebb933c3f",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "64bef61b_9e792075",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPUser.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-08-02T17:32:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e9432992_ab1db9e3",
+      "revId": "2b7d41c7c044633f4636b27002af7a8ebb933c3f",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
