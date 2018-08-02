@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e9432992_ab1db9e3",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPUser.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-08-02T16:46:18Z",
+      "side": 1,
+      "message": "Please add to the comment here that when stored, it is in encrypted format.",
+      "revId": "2b7d41c7c044633f4636b27002af7a8ebb933c3f",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
