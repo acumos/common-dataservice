@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b84c2be3_13d88dc0",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/CCDSConstants.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-08-08T19:19:11Z",
+      "side": 1,
+      "message": "May want to abbreviate the path name as \"doc\" which is still self-explanatory.",
+      "revId": "adca71b0d5ab0853f55d89985ffc126cee242d9b",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
