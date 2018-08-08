@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3459ea83_5554e455",
+        "filename": "cmn-data-svc-server/db-scripts/cmn-data-svc-ddl-dml-mysql-1.17.sql",
+        "patchSetId": 4
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-08-08T15:56:28Z",
+      "side": 1,
+      "message": "Script is failing on C_DOCUMENT creation around this region (either user_id or timestamp). Please check.",
+      "revId": "8b8ca50037af738eed0026f2a9779a73fec4d6f0",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
