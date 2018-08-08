@@ -209,6 +209,24 @@
       "revId": "adca71b0d5ab0853f55d89985ffc126cee242d9b",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0262b3e5_7fecae25",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/DocumentController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-08-08T19:59:08Z",
+      "side": 1,
+      "message": "No delete method checks for existence - look around.  They catch the exception and report it on attempt to delete a non-existent entity.",
+      "parentUuid": "62820939_febe5fc7",
+      "revId": "adca71b0d5ab0853f55d89985ffc126cee242d9b",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
