@@ -16,6 +16,23 @@
       "revId": "adca71b0d5ab0853f55d89985ffc126cee242d9b",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2177a2e4_381779dd",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPAbstractDocument.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-08-08T19:21:42Z",
+      "side": 1,
+      "message": "So do we have a consensus if the version history of the documents will be maintained?",
+      "revId": "adca71b0d5ab0853f55d89985ffc126cee242d9b",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
