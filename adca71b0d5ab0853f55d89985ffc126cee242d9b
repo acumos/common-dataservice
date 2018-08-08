@@ -124,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "2d7f16da_471fea29",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPSolRevDocMap.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-08-08T19:43:54Z",
+      "side": 1,
+      "message": "I started that some time ago for clarity, and stuck with it on this new entity",
+      "parentUuid": "92c5f4a7_7e15d74c",
+      "revId": "adca71b0d5ab0853f55d89985ffc126cee242d9b",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "109be893_3a78bf2c",
         "filename": "cmn-data-svc-server/db-scripts/cmn-data-svc-ddl-dml-mysql-1.15.sql",
         "patchSetId": 6
@@ -135,6 +153,24 @@
       "writtenOn": "2018-08-08T19:41:45Z",
       "side": 1,
       "message": "Do you plan to account for this for upgrade and downgrade between 1.15 and 1.14 version?",
+      "revId": "adca71b0d5ab0853f55d89985ffc126cee242d9b",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8795724a_5845036c",
+        "filename": "cmn-data-svc-server/db-scripts/cmn-data-svc-ddl-dml-mysql-1.15.sql",
+        "patchSetId": 6
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-08-08T19:43:54Z",
+      "side": 1,
+      "message": "The upgrade scripts don\u0027t modify the role table, it\u0027s too risky.",
+      "parentUuid": "109be893_3a78bf2c",
       "revId": "adca71b0d5ab0853f55d89985ffc126cee242d9b",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
