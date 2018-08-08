@@ -62,13 +62,15 @@ import org.acumos.cds.transport.LoginTransport;
 import org.acumos.cds.transport.MLPTransportModel;
 import org.acumos.cds.transport.SuccessTransport;
 import org.acumos.cds.transport.UsersRoleRequest;
-import org.acumos.cds.util.EELFLoggerDelegate;
 import org.jasypt.util.text.BasicTextEncryptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.MultiValueMap;
@@ -91,10 +93,10 @@ import io.swagger.annotations.ApiOperation;
  * practices
  */
 @Controller
-@RequestMapping("/" + CCDSConstants.USER_PATH)
+@RequestMapping(value = "/" + CCDSConstants.USER_PATH, produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserController extends AbstractController {
 
-	private static final EELFLoggerDelegate logger = EELFLoggerDelegate.getLogger(MethodHandles.lookup().lookupClass());
+	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
 	// Use reasonable defaults in case configuration is missing
 	/**
@@ -145,9 +147,8 @@ public class UserController extends AbstractController {
 	@RequestMapping(value = CCDSConstants.COUNT_PATH, method = RequestMethod.GET)
 	@ResponseBody
 	public CountTransport getUserCount() {
-		Date beginDate = new Date();
+		logger.info("getUserCount");
 		Long count = userRepository.count();
-		logger.audit(beginDate, "getUserCount");
 		return new CountTransport(count);
 	}
 
@@ -180,7 +181,6 @@ public class UserController extends AbstractController {
 	 */
 	private Object checkUserCredentials(LoginTransport credentials, CredentialType credentialType,
 			HttpServletResponse response) {
-		Date beginDate = new Date();
 		if (credentials == null || credentials.getName() == null || credentials.getName().trim().isEmpty()
 				|| credentials.getPass() == null || credentials.getPass().trim().isEmpty()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -188,8 +188,7 @@ public class UserController extends AbstractController {
 		}
 		MLPUser user = userRepository.findByLoginOrEmail(credentials.getName());
 		if (user == null || !user.isActive()) {
-			logger.info(EELFLoggerDelegate.auditLogger, "checkUserCredentials: unknown or inactve: {}",
-					credentials.getName());
+			logger.info("checkUserCredentials: unknown or inactve: {}", credentials.getName());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			// This reveals that the username does not exist
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST,
@@ -198,23 +197,22 @@ public class UserController extends AbstractController {
 		if (user.getLoginFailCount() != null) {
 			// This is a second or subsequent failure
 			if (user.getLoginFailCount() < this.loginFailureCount) {
-				logger.info(EELFLoggerDelegate.auditLogger, "checkUserCredentials: user {} attempt after failure {}",
-						user.getLoginName(), Integer.toString(user.getLoginFailCount()));
+				logger.info("checkUserCredentials: user {} attempt after failure {}", user.getLoginName(),
+						Integer.toString(user.getLoginFailCount()));
 			} else {
 				// Exceeds threshold. Defend against null fail date in db.
 				long lastFailureTime = user.getLoginFailDate() == null ? new Date().getTime()
 						: user.getLoginFailDate().getTime();
 				long elapsedTimeSec = (new Date().getTime() - lastFailureTime) / 1000;
 				if (elapsedTimeSec < this.loginFailureBlockTimeSec) {
-					logger.info(EELFLoggerDelegate.auditLogger, "checkUserCredentials: user {} blocked for {} sec",
-							user.getLoginName(), Long.toString(this.loginFailureBlockTimeSec - elapsedTimeSec));
+					logger.info("checkUserCredentials: user {} blocked for {} sec", user.getLoginName(),
+							Long.toString(this.loginFailureBlockTimeSec - elapsedTimeSec));
 					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 					// This reveals that the username exists
 					return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST,
 							"Repeated login failures, user temporarily blocked");
 				} else {
-					logger.info(EELFLoggerDelegate.auditLogger, "checkUserCredentials: user {} block expired",
-							user.getLoginName());
+					logger.info("checkUserCredentials: user {} block expired", user.getLoginName());
 				}
 			}
 		}
@@ -231,8 +229,8 @@ public class UserController extends AbstractController {
 
 		if (!match) {
 			// Record the failure
-			logger.info(EELFLoggerDelegate.auditLogger, "checkUserCredentials: user {} failed auth type {}",
-					user.getLoginName(), credentialType.name());
+			logger.info("checkUserCredentials: user {} failed auth type {}", user.getLoginName(),
+					credentialType.name());
 			user.setLoginFailCount((short) (user.getLoginFailCount() == null ? 1 : user.getLoginFailCount() + 1));
 			user.setLoginFailDate(new Date());
 			userRepository.save(user);
@@ -241,14 +239,13 @@ public class UserController extends AbstractController {
 		}
 		// Success!
 		if (user.getLoginFailCount() != null) {
-			logger.info(EELFLoggerDelegate.auditLogger, "checkUserCredentials: clearing login failures for user {}",
-					user.getLoginName());
+			logger.info("checkUserCredentials: clearing login failures for user {}", user.getLoginName());
 			user.setLoginFailCount(null);
 			user.setLoginFailDate(null);
 		}
 		user.setLastLogin(new Date());
 		userRepository.save(user);
-		logger.audit(beginDate, "checkUserCredentials: authenticated user {}", user.getLoginName());
+		logger.info("checkUserCredentials: authenticated user {}", user.getLoginName());
 		entityManager.detach(user);
 		user.clearHashes();
 		if (user.getApiToken() != null)
@@ -267,6 +264,7 @@ public class UserController extends AbstractController {
 	@RequestMapping(value = "/" + CCDSConstants.LOGIN_PATH, method = RequestMethod.POST)
 	@ResponseBody
 	public Object loginUser(@RequestBody LoginTransport login, HttpServletResponse response) {
+		logger.info("loginUser: user name {}", login.getName());
 		return checkUserCredentials(login, CredentialType.PASSWORD, response);
 	}
 
@@ -281,6 +279,7 @@ public class UserController extends AbstractController {
 	@RequestMapping(value = "/" + CCDSConstants.LOGIN_API_PATH, method = RequestMethod.POST)
 	@ResponseBody
 	public Object loginApi(@RequestBody LoginTransport login, HttpServletResponse response) {
+		logger.info("loginApi: user name {}", login.getName());
 		return checkUserCredentials(login, CredentialType.API_TOKEN, response);
 	}
 
@@ -295,6 +294,7 @@ public class UserController extends AbstractController {
 	@RequestMapping(value = "/" + CCDSConstants.VERIFY_PATH, method = RequestMethod.POST)
 	@ResponseBody
 	public Object verifyUser(@RequestBody LoginTransport login, HttpServletResponse response) {
+		logger.info("verifyUser: user name {}", login.getName());
 		return checkUserCredentials(login, CredentialType.VERIFY_TOKEN, response);
 	}
 
@@ -312,7 +312,7 @@ public class UserController extends AbstractController {
 	@ResponseBody
 	public MLPTransportModel updatePassword(@PathVariable("userId") String userId,
 			@RequestBody MLPPasswordChangeRequest changeRequest, HttpServletResponse response) {
-		Date beginDate = new Date();
+		logger.info("updatePassword: userId {}", userId);
 		// Existing password may be null, but reject empty new password
 		if (changeRequest.getNewLoginPass() == null || changeRequest.getNewLoginPass().length() == 0) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -330,22 +330,21 @@ public class UserController extends AbstractController {
 			final boolean notNullAndMatch = user.getLoginHash() != null && changeRequest.getOldLoginPass() != null
 					&& BCrypt.checkpw(changeRequest.getOldLoginPass(), user.getLoginHash());
 			if (bothNull || notNullAndMatch) {
-				logger.info(EELFLoggerDelegate.auditLogger, "updatePassword: Change password for user {}",
-						user.getLoginName());
+				logger.info("updatePassword: Change password for user {}", user.getLoginName());
 				final String pwHash = BCrypt.hashpw(changeRequest.getNewLoginPass(), BCrypt.gensalt());
 				user.setLoginHash(pwHash);
 				userRepository.save(user);
-				logger.audit(beginDate, "updatePassword: updated user {}", user.getLoginName());
+				logger.info("updatePassword: updated user {}", user.getLoginName());
 				return new SuccessTransport(HttpServletResponse.SC_OK, null);
 			} else {
 				final String notMatched = "The old password did not match";
-				logger.audit(beginDate, "updatePassword: failed to update user {}", user.getLoginName());
+				logger.info("updatePassword: failed to update user {}", user.getLoginName());
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, notMatched, null);
 			}
 		} catch (Exception ex) {
 			// e.g., EmptyResultDataAccessException is NOT an internal server error
-			logger.error(EELFLoggerDelegate.errorLogger, "updatePassword failed: {}", ex.toString());
+			logger.error("updatePassword failed: {}", ex.toString());
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			return new ErrorTransport(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "updatePassword failed", ex);
 		}
@@ -360,7 +359,7 @@ public class UserController extends AbstractController {
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
 	public Page<MLPUser> getUsers(Pageable pageable) {
-		Date beginDate = new Date();
+		logger.info("getUsers {}", pageable);
 		Page<MLPUser> page = userRepository.findAll(pageable);
 		for (MLPUser user : page.getContent()) {
 			// detach from Hibernate and clear sensitive data
@@ -369,7 +368,6 @@ public class UserController extends AbstractController {
 			if (user.getApiToken() != null)
 				user.setApiToken(decryptWithJasypt(user.getApiToken()));
 		}
-		logger.audit(beginDate, "getUsers {}", pageable);
 		return page;
 	}
 
@@ -384,7 +382,7 @@ public class UserController extends AbstractController {
 	@RequestMapping(value = "/" + CCDSConstants.LIKE_PATH, method = RequestMethod.GET)
 	@ResponseBody
 	public Page<MLPUser> likeUsers(@RequestParam(CCDSConstants.TERM_PATH) String term, Pageable pageable) {
-		Date beginDate = new Date();
+		logger.info("likeUsers: term {}", term);
 		Page<MLPUser> page = userRepository.findBySearchTerm(term, pageable);
 		for (MLPUser user : page.getContent()) {
 			// detach from Hibernate and clear sensitive data
@@ -393,7 +391,6 @@ public class UserController extends AbstractController {
 			if (user.getApiToken() != null)
 				user.setApiToken(decryptWithJasypt(user.getApiToken()));
 		}
-		logger.audit(beginDate, "likeUsers: term {}", term);
 		return page;
 	}
 
@@ -412,7 +409,7 @@ public class UserController extends AbstractController {
 	@ResponseBody
 	public Object searchUsers(@RequestParam MultiValueMap<String, String> queryParameters, Pageable pageable,
 			HttpServletResponse response) {
-		Date beginDate = new Date();
+		logger.info("searchUsers: query {}", queryParameters);
 		cleanPageableParameters(queryParameters);
 		List<String> junction = queryParameters.remove(CCDSConstants.JUNCTION_QUERY_PARAM);
 		boolean isOr = junction != null && junction.size() == 1 && "o".equals(junction.get(0));
@@ -432,10 +429,9 @@ public class UserController extends AbstractController {
 				if (user.getApiToken() != null)
 					user.setApiToken(decryptWithJasypt(user.getApiToken()));
 			}
-			logger.audit(beginDate, "searchUsers: query {}", queryParameters);
 			return userPage;
 		} catch (Exception ex) {
-			logger.warn(EELFLoggerDelegate.errorLogger, "searchUsers failed: {}", ex.toString());
+			logger.warn("searchUsers failed: {}", ex.toString());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST,
 					ex.getCause() != null ? ex.getCause().getMessage() : "searchUsers failed", ex);
@@ -453,7 +449,7 @@ public class UserController extends AbstractController {
 	@RequestMapping(value = "/{userId}", method = RequestMethod.GET)
 	@ResponseBody
 	public Object getUser(@PathVariable("userId") String userId, HttpServletResponse response) {
-		Date beginDate = new Date();
+		logger.info("getUser: userId {}", userId);
 		MLPUser user = userRepository.findOne(userId);
 		if (user == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -464,7 +460,6 @@ public class UserController extends AbstractController {
 		user.clearHashes();
 		if (user.getApiToken() != null)
 			user.setApiToken(decryptWithJasypt(user.getApiToken()));
-		logger.audit(beginDate, "getUser: userId {}", userId);
 		return user;
 	}
 
@@ -506,7 +501,7 @@ public class UserController extends AbstractController {
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
 	public Object createUser(@RequestBody MLPUser user, HttpServletResponse response) {
-		Date beginDate = new Date();
+		logger.info("createUser: enter");
 		Object result;
 		try {
 			String id = user.getUserId();
@@ -535,11 +530,10 @@ public class UserController extends AbstractController {
 			entityManager.detach(newUser);
 			newUser.clearHashes();
 			result = newUser;
-			logger.audit(beginDate, "createUser: userId {}", newUser.getUserId());
 			return result;
 		} catch (Exception ex) {
 			Exception cve = findConstraintViolationException(ex);
-			logger.warn(EELFLoggerDelegate.errorLogger, "createUser failed: {}", cve.toString());
+			logger.warn("createUser failed: {}", cve.toString());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "createUser failed", cve);
 		}
@@ -559,7 +553,7 @@ public class UserController extends AbstractController {
 	@ResponseBody
 	public Object updateUser(@PathVariable("userId") String userId, @RequestBody MLPUser user,
 			HttpServletResponse response) {
-		Date beginDate = new Date();
+		logger.info("updateUser: userId {}", userId);
 		// Get the existing one
 		MLPUser existingUser = userRepository.findOne(userId);
 		if (existingUser == null) {
@@ -583,11 +577,10 @@ public class UserController extends AbstractController {
 			if (user.getApiToken() != null)
 				user.setApiToken(encryptWithJasypt(user.getApiToken()));
 			userRepository.save(user);
-			logger.audit(beginDate, "updateUser: userId {}", userId);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
 			Exception cve = findConstraintViolationException(ex);
-			logger.warn(EELFLoggerDelegate.errorLogger, "updateUser failed: {}", cve.toString());
+			logger.warn("updateUser failed: {}", cve.toString());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "updateUser failed", cve);
 		}
@@ -608,7 +601,7 @@ public class UserController extends AbstractController {
 	@RequestMapping(value = "/{userId}", method = RequestMethod.DELETE)
 	@ResponseBody
 	public MLPTransportModel deleteUser(@PathVariable("userId") String userId, HttpServletResponse response) {
-		Date beginDate = new Date();
+		logger.info("deleteUser: userId {}", userId);
 		try {
 			Iterable<MLPUserRoleMap> roles = userRoleMapRepository.findByUserId(userId);
 			if (roles != null)
@@ -620,11 +613,10 @@ public class UserController extends AbstractController {
 			if (notifs != null)
 				notifUserMapRepository.delete(notifs);
 			userRepository.delete(userId);
-			logger.audit(beginDate, "deleteUser: userId {}", userId);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
 			// e.g., EmptyResultDataAccessException is NOT an internal server error
-			logger.warn(EELFLoggerDelegate.errorLogger, "deleteUser failed: {}", ex.toString());
+			logger.warn("deleteUser failed: {}", ex.toString());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "deleteUser failed", ex);
 		}
@@ -640,9 +632,8 @@ public class UserController extends AbstractController {
 			+ CCDSConstants.COUNT_PATH, method = RequestMethod.GET)
 	@ResponseBody
 	public CountTransport getRoleUsersCount(@PathVariable("roleId") String roleId) {
-		Date beginDate = new Date();
+		logger.info("getRoleUsersCount: roleId {}", roleId);
 		Long count = userRoleMapRepository.getRoleUsersCount(roleId);
-		logger.audit(beginDate, "getRoleUsersCount: roleId {}", roleId);
 		return new CountTransport(count);
 	}
 
@@ -655,9 +646,8 @@ public class UserController extends AbstractController {
 	@RequestMapping(value = "/{userId}/" + CCDSConstants.ROLE_PATH, method = RequestMethod.GET)
 	@ResponseBody
 	public Iterable<MLPRole> getRolesForUser(@PathVariable("userId") String userId) {
-		Date beginDate = new Date();
+		logger.info("getRolesForUser: userId {}", userId);
 		Iterable<MLPRole> result = roleRepository.findByUser(userId);
-		logger.audit(beginDate, "getRolesForUser: userId {}", userId);
 		return result;
 	}
 
@@ -675,7 +665,7 @@ public class UserController extends AbstractController {
 	@ResponseBody
 	public Object addUserRole(@PathVariable("userId") String userId, @PathVariable("roleId") String roleId,
 			HttpServletResponse response) {
-		Date beginDate = new Date();
+		logger.info("addUserRole: userId {}, roleId {}", userId, roleId);
 		if (userRepository.findOne(userId) == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + userId, null);
@@ -684,7 +674,6 @@ public class UserController extends AbstractController {
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + roleId, null);
 		}
 		userRoleMapRepository.save(new MLPUserRoleMap(userId, roleId));
-		logger.audit(beginDate, "addUserRole: userId {}, roleId {}", userId, roleId);
 		return new SuccessTransport(HttpServletResponse.SC_OK, null);
 	}
 
@@ -702,7 +691,7 @@ public class UserController extends AbstractController {
 	@ResponseBody
 	public Object updateUserRoles(@PathVariable("userId") String userId, @RequestBody List<String> roleIds,
 			HttpServletResponse response) {
-		Date beginDate = new Date();
+		logger.info("updateUserRoles: user {}, roles {}", userId, roleIds);
 		if (userRepository.findOne(userId) == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + userId, null);
@@ -720,7 +709,6 @@ public class UserController extends AbstractController {
 		for (String roleId : roleIds) {
 			userRoleMapRepository.save(new MLPUserRoleMap(userId, roleId));
 		}
-		logger.audit(beginDate, "updateUserRoles: user {}, roles {}", userId, roleIds);
 		return new SuccessTransport(HttpServletResponse.SC_OK, null);
 	}
 
@@ -738,7 +726,7 @@ public class UserController extends AbstractController {
 	@ResponseBody
 	public Object dropUserRole(@PathVariable("userId") String userId, @PathVariable("roleId") String roleId,
 			HttpServletResponse response) {
-		Date beginDate = new Date();
+		logger.info("dropUserRole: userId {} roleId {}", userId, roleId);
 		if (userRepository.findOne(userId) == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + userId, null);
@@ -747,7 +735,6 @@ public class UserController extends AbstractController {
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + roleId, null);
 		}
 		userRoleMapRepository.delete(new MLPUserRoleMap(userId, roleId));
-		logger.audit(beginDate, "dropUserRole: userId {} roleId {}", userId, roleId);
 		return new SuccessTransport(HttpServletResponse.SC_OK, null);
 	}
 
@@ -765,7 +752,7 @@ public class UserController extends AbstractController {
 	@ResponseBody
 	public Object addOrDropUsersInRole(@PathVariable("roleId") String roleId,
 			@RequestBody UsersRoleRequest usersRoleRequest, HttpServletResponse response) {
-		Date beginDate = new Date();
+		logger.info("addOrDropUsersInRole: role {} users {}", roleId, String.join(", ", usersRoleRequest.getUserIds()));
 		// Validate entire request before making any change
 		if (roleRepository.findOne(roleId) == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -798,8 +785,6 @@ public class UserController extends AbstractController {
 			else
 				userRoleMapRepository.delete(new MLPUserRoleMap.UserRoleMapPK(userId, roleId));
 		}
-		logger.audit(beginDate, "addOrDropUsersInRole: role {} users {}", roleId,
-				String.join(", ", usersRoleRequest.getUserIds()));
 		return new SuccessTransport(HttpServletResponse.SC_OK, null);
 	}
 
@@ -821,7 +806,8 @@ public class UserController extends AbstractController {
 	public Object getUserLoginProvider(@PathVariable("userId") String userId,
 			@PathVariable("providerCode") String providerCode, @PathVariable("providerUserId") String providerUserId,
 			HttpServletResponse response) {
-		Date beginDate = new Date();
+		logger.info("getUserLoginProvider: userId {} providerCode {} providerUserId {}", userId, providerCode,
+				providerUserId);
 		if (userRepository.findOne(userId) == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + userId, null);
@@ -833,8 +819,6 @@ public class UserController extends AbstractController {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + pk, null);
 		}
-		logger.audit(beginDate, "getUserLoginProvider: userId {} providerCode {} providerUserId {}", userId,
-				providerCode, providerUserId);
 		return ulp;
 	}
 
@@ -849,14 +833,13 @@ public class UserController extends AbstractController {
 	@RequestMapping(value = "/{userId}/" + CCDSConstants.LOGIN_PROVIDER_PATH, method = RequestMethod.GET)
 	@ResponseBody
 	public Object getAllLoginProviders(@PathVariable("userId") String userId, HttpServletResponse response) {
-		Date beginDate = new Date();
+		logger.info("getAllLoginProviders: userId {}", userId);
 		if (userRepository.findOne(userId) == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + userId, null);
 		}
 		// this might be an empty list, which is ok.
 		Object result = userLoginProviderRepository.findByUserId(userId);
-		logger.audit(beginDate, "getAllLoginProviders: userId {}", userId);
 		return result;
 	}
 
@@ -880,7 +863,8 @@ public class UserController extends AbstractController {
 	public Object createUserLoginProvider(@PathVariable("userId") String userId,
 			@PathVariable("providerCode") String providerCode, @PathVariable("providerUserId") String providerUserId,
 			@RequestBody MLPUserLoginProvider ulp, HttpServletResponse response) {
-		Date beginDate = new Date();
+		logger.info("createUserLoginProvider: userId {} providerCode {} providerUserId {}", userId, providerCode,
+				providerUserId);
 		// Validate args
 		if (userRepository.findOne(userId) == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -899,13 +883,11 @@ public class UserController extends AbstractController {
 			response.setHeader(HttpHeaders.LOCATION,
 					"/" + CCDSConstants.USER_PATH + "/" + userId + "/" + CCDSConstants.LOGIN_PROVIDER_PATH + "/"
 							+ providerCode + "/" + CCDSConstants.LOGIN_PATH + "/" + providerUserId);
-			logger.audit(beginDate, "createUserLoginProvider: userId {} providerCode {} providerUserId {}", userId,
-					providerCode, providerUserId);
 			return result;
 		} catch (Exception ex) {
 			// e.g., EmptyResultDataAccessException is NOT an internal server error
 			Exception cve = findConstraintViolationException(ex);
-			logger.warn(EELFLoggerDelegate.errorLogger, "createUserLoginProvider failed: {}", cve.toString());
+			logger.warn("createUserLoginProvider failed: {}", cve.toString());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "createUserLoginProvider failed", cve);
 		}
@@ -931,7 +913,8 @@ public class UserController extends AbstractController {
 	public Object updateUserLoginProvider(@PathVariable("userId") String userId,
 			@PathVariable("providerCode") String providerCode, @PathVariable("providerUserId") String providerUserId,
 			@RequestBody MLPUserLoginProvider ulp, HttpServletResponse response) {
-		Date beginDate = new Date();
+		logger.info("updateUserLoginProvider: userId {} providerCode {} providerUserId {}", userId, providerCode,
+				providerUserId);
 		// Validate args
 		if (userRepository.findOne(userId) == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -953,13 +936,11 @@ public class UserController extends AbstractController {
 			ulp.setProviderCode(providerCode);
 			ulp.setProviderUserId(providerUserId);
 			userLoginProviderRepository.save(ulp);
-			logger.audit(beginDate, "updateUserLoginProvider: userId {} providerCode {} providerUserId {}", userId,
-					providerCode, providerUserId);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
 			// e.g., EmptyResultDataAccessException is NOT an internal server error
 			Exception cve = findConstraintViolationException(ex);
-			logger.warn(EELFLoggerDelegate.errorLogger, "updateUserLoginProvider failed: {}", cve.toString());
+			logger.warn("updateUserLoginProvider failed: {}", cve.toString());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "updateUserLoginProvider failed", cve);
 		}
@@ -983,17 +964,16 @@ public class UserController extends AbstractController {
 	public MLPTransportModel deleteLoginProvider(@PathVariable("userId") String userId,
 			@PathVariable("providerCode") String providerCode, @PathVariable("providerUserId") String providerUserId,
 			HttpServletResponse response) {
-		Date beginDate = new Date();
+		logger.info("deleteLoginProvider: userId {} providerCode {} providerUserId {}", userId, providerCode,
+				providerUserId);
 		try {
 			// Build a key for fetch
 			UserLoginProviderPK pk = new UserLoginProviderPK(userId, providerCode, providerUserId);
 			userLoginProviderRepository.delete(pk);
-			logger.audit(beginDate, "deleteLoginProvider: userId {} providerCode {} providerUserId {}", userId,
-					providerCode, providerUserId);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
 			// e.g., EmptyResultDataAccessException is NOT an internal server error
-			logger.warn(EELFLoggerDelegate.errorLogger, "deleteLoginProvider failed: {}", ex.toString());
+			logger.warn("deleteLoginProvider failed: {}", ex.toString());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "deleteLoginProvider failed", ex);
 		}
@@ -1014,14 +994,13 @@ public class UserController extends AbstractController {
 	@ResponseBody
 	public Object getFavoriteSolutions(@PathVariable("userId") String userId, Pageable pageRequest,
 			HttpServletResponse response) {
-		Date beginDate = new Date();
+		logger.info("getFavoriteSolutions: userId {}", userId);
 		if (userRepository.findOne(userId) == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + userId, null);
 		}
 		// this might be empty, which is ok.
 		Object result = solutionFavoriteRepository.findByUserId(userId, pageRequest);
-		logger.audit(beginDate, "getFavoriteSolutions: userId {}", userId);
 		return result;
 	}
 
@@ -1042,7 +1021,7 @@ public class UserController extends AbstractController {
 	@ResponseBody
 	public Object createSolutionFavorite(@PathVariable("solutionId") String solutionId,
 			@PathVariable("userId") String userId, @RequestBody MLPSolutionFavorite sfv, HttpServletResponse response) {
-		Date beginDate = new Date();
+		logger.info("createSolutionFavorite: solutionId {} userId {}", solutionId, userId);
 		if (solutionRepository.findOne(solutionId) == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + solutionId, null);
@@ -1060,12 +1039,11 @@ public class UserController extends AbstractController {
 			response.setStatus(HttpServletResponse.SC_CREATED);
 			response.setHeader(HttpHeaders.LOCATION, CCDSConstants.USER_PATH + "/" + sfv.getUserId() + "/"
 					+ CCDSConstants.FAVORITE_PATH + "/" + CCDSConstants.SOLUTION_PATH + "/" + sfv.getSolutionId());
-			logger.audit(beginDate, "createSolutionFavorite: solutionId {} userId {}", solutionId, userId);
 			return result;
 		} catch (Exception ex) {
 			// e.g., EmptyResultDataAccessException is NOT an internal server error
 			Exception cve = findConstraintViolationException(ex);
-			logger.error(EELFLoggerDelegate.errorLogger, "createSolutionFavorite failed: {}", cve.toString());
+			logger.error("createSolutionFavorite failed: {}", cve.toString());
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			return new ErrorTransport(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
 					ex.getCause() != null ? ex.getCause().getMessage() : "createSolutionFavorite failed", cve);
@@ -1087,16 +1065,15 @@ public class UserController extends AbstractController {
 	@ResponseBody
 	public MLPTransportModel deleteSolutionFavorite(@PathVariable("solutionId") String solutionId,
 			@PathVariable("userId") String userId, HttpServletResponse response) {
-		Date beginDate = new Date();
+		logger.info("deleteSolutionFavorite: solutionId {} userId {}", solutionId, userId);
 		try {
 			// Build a key for fetch
 			SolutionFavoritePK pk = new SolutionFavoritePK(solutionId, userId);
 			solutionFavoriteRepository.delete(pk);
-			logger.audit(beginDate, "deleteSolutionFavorite: solutionId {} userId {}", solutionId, userId);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
 			// e.g., EmptyResultDataAccessException is NOT an internal server error
-			logger.warn(EELFLoggerDelegate.errorLogger, "deleteSolutionFavorite failed: {}", ex.toString());
+			logger.warn("deleteSolutionFavorite failed: {}", ex.toString());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "deleteSolutionFavorite failed", ex);
 		}
@@ -1115,9 +1092,8 @@ public class UserController extends AbstractController {
 	@ResponseBody
 	public Iterable<MLPUserNotification> getActiveNotificationsForUser(@PathVariable("userId") String userId,
 			Pageable pageable) {
-		Date beginDate = new Date();
+		logger.info("getActiveNotificationsForUser: userId {}", userId);
 		Iterable<MLPUserNotification> result = notificationRepository.findActiveByUser(userId, pageable);
-		logger.audit(beginDate, "getActiveNotificationsForUser: userId {}", userId);
 		return result;
 	}
 
@@ -1139,7 +1115,7 @@ public class UserController extends AbstractController {
 	public Object addUserNotification(@PathVariable("userId") String userId,
 			@PathVariable("notificationId") String notificationId, @RequestBody MLPNotifUserMap notifUserMap,
 			HttpServletResponse response) {
-		Date beginDate = new Date();
+		logger.info("addUserNotification: user {}, notif {}", userId, notificationId);
 		if (userRepository.findOne(userId) == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + userId, null);
@@ -1150,7 +1126,6 @@ public class UserController extends AbstractController {
 		notifUserMap.setUserId(userId);
 		notifUserMap.setNotificationId(notificationId);
 		notifUserMapRepository.save(notifUserMap);
-		logger.audit(beginDate, "addUserNotification: user {}, notif {}", userId, notificationId);
 		return new SuccessTransport(HttpServletResponse.SC_OK, null);
 	}
 
@@ -1172,7 +1147,7 @@ public class UserController extends AbstractController {
 	public Object updateUserNotification(@PathVariable("userId") String userId,
 			@PathVariable("notificationId") String notificationId, @RequestBody MLPNotifUserMap notifUserMap,
 			HttpServletResponse response) {
-		Date beginDate = new Date();
+		logger.info("updateUserNotification: user {}, notif {}", userId, notificationId);
 		if (userRepository.findOne(userId) == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + userId, null);
@@ -1185,12 +1160,11 @@ public class UserController extends AbstractController {
 			notifUserMap.setNotificationId(notificationId);
 			notifUserMap.setUserId(userId);
 			notifUserMapRepository.save(notifUserMap);
-			logger.audit(beginDate, "updateUserNotification: user {}, notif {}", userId, notificationId);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
 			// e.g., EmptyResultDataAccessException is NOT an internal server error
 			Exception cve = findConstraintViolationException(ex);
-			logger.error(EELFLoggerDelegate.errorLogger, "updateUserNotification failed: {}", cve.toString());
+			logger.error("updateUserNotification failed: {}", cve.toString());
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			return new ErrorTransport(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
 					ex.getCause() != null ? ex.getCause().getMessage() : "updateUserNotification failed", cve);
@@ -1212,7 +1186,7 @@ public class UserController extends AbstractController {
 	@ResponseBody
 	public Object dropUserRecipient(@PathVariable("userId") String userId,
 			@PathVariable("notificationId") String notificationId, HttpServletResponse response) {
-		Date beginDate = new Date();
+		logger.info("dropUserRecipient: user {}, notif{}", userId, notificationId);
 		if (userRepository.findOne(userId) == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + userId, null);
@@ -1222,7 +1196,6 @@ public class UserController extends AbstractController {
 		}
 		MLPNotifUserMap map = new MLPNotifUserMap(notificationId, userId);
 		notifUserMapRepository.delete(map);
-		logger.audit(beginDate, "dropUserRecipient: user {}, notif{}", userId, notificationId);
 		return new SuccessTransport(HttpServletResponse.SC_OK, null);
 	}
 
@@ -1238,13 +1211,12 @@ public class UserController extends AbstractController {
 	@ResponseBody
 	public Object getUserNotificationPreference(@PathVariable("userNotifPrefId") Long userNotifPrefId,
 			HttpServletResponse response) {
-		Date beginDate = new Date();
+		logger.info("getUserNotificationPreference: userNotifPrefId {}", userNotifPrefId);
 		MLPUserNotifPref usrnp = notificationPreferenceRepository.findOne(userNotifPrefId);
 		if (usrnp == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + userNotifPrefId, null);
 		}
-		logger.audit(beginDate, "getUserNotificationPreference: userNotifPrefId {}", userNotifPrefId);
 		return usrnp;
 	}
 
@@ -1257,9 +1229,8 @@ public class UserController extends AbstractController {
 	@RequestMapping(value = "/{userId}/" + CCDSConstants.NOTIFICATION_PREF_PATH, method = RequestMethod.GET)
 	@ResponseBody
 	public Iterable<MLPUserNotifPref> getNotificationPreferencesForUser(@PathVariable("userId") String userId) {
-		Date beginDate = new Date();
+		logger.info("getNotificationPreferencesForUser: userId {}", userId);
 		Iterable<MLPUserNotifPref> result = notificationPreferenceRepository.findByUserId(userId);
-		logger.audit(beginDate, "getNotificationPreferencesForUser: userId {}", userId);
 		return result;
 	}
 
@@ -1275,7 +1246,7 @@ public class UserController extends AbstractController {
 	@ResponseBody
 	public Object createUserNotificationPreference(@RequestBody MLPUserNotifPref usrNotifPref,
 			HttpServletResponse response) {
-		Date beginDate = new Date();
+		logger.info("createUserNotificationPreference: userNotifPrefId {}", usrNotifPref.getUserNotifPrefId());
 		try {
 			// Validate enum codes
 			super.validateCode(usrNotifPref.getMsgSeverityCode(), CodeNameType.MESSAGE_SEVERITY);
@@ -1286,13 +1257,11 @@ public class UserController extends AbstractController {
 			// This is a hack to create the location path.
 			response.setHeader(HttpHeaders.LOCATION,
 					CCDSConstants.USER_PATH + "/" + CCDSConstants.NOTIFICATION_PREF_PATH);
-			logger.audit(beginDate, "createUserNotificationPreference: userNotifPrefId {}",
-					usrNotifPref.getUserNotifPrefId());
 			return result;
 		} catch (Exception ex) {
 			// e.g., EmptyResultDataAccessException is NOT an internal server error
 			Exception cve = findConstraintViolationException(ex);
-			logger.warn(EELFLoggerDelegate.errorLogger, "createUserNotificationPreference failed: {}", cve.toString());
+			logger.warn("createUserNotificationPreference failed: {}", cve.toString());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "createUserNotificationPreference failed",
 					cve);
@@ -1314,7 +1283,7 @@ public class UserController extends AbstractController {
 	@ResponseBody
 	public Object updateUserNotificationPreference(@PathVariable("userNotifPrefId") Long userNotifPrefId,
 			@RequestBody MLPUserNotifPref usrNotifPref, HttpServletResponse response) {
-		Date beginDate = new Date();
+		logger.info("updateUserNotificationPreference: userNotifPrefId {} ", userNotifPrefId);
 		// Get the existing one
 		MLPUserNotifPref existing = notificationPreferenceRepository.findOne(userNotifPrefId);
 		if (existing == null) {
@@ -1329,12 +1298,11 @@ public class UserController extends AbstractController {
 			usrNotifPref.setUserNotifPrefId(userNotifPrefId);
 			// Update the existing row
 			notificationPreferenceRepository.save(usrNotifPref);
-			logger.audit(beginDate, "updateUserNotificationPreference: userNotifPrefId {} ", userNotifPrefId);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
 			// e.g., EmptyResultDataAccessException is NOT an internal server error
 			Exception cve = findConstraintViolationException(ex);
-			logger.warn(EELFLoggerDelegate.errorLogger, "updateUserNotificationPreference failed: {}", cve.toString());
+			logger.warn("updateUserNotificationPreference failed: {}", cve.toString());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "updateUserNotificationPreference failed",
 					cve);
@@ -1354,14 +1322,13 @@ public class UserController extends AbstractController {
 	@ResponseBody
 	public MLPTransportModel deleteUserNotificationPreference(@PathVariable("userNotifPrefId") Long userNotifPrefId,
 			HttpServletResponse response) {
-		Date beginDate = new Date();
+		logger.info("deleteUserNotificationPreference: userNotifPrefId {} ", userNotifPrefId);
 		try {
 			notificationPreferenceRepository.delete(userNotifPrefId);
-			logger.audit(beginDate, "deleteUserNotificationPreference: userNotifPrefId {} ", userNotifPrefId);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
 			// e.g., EmptyResultDataAccessException is NOT an internal server error
-			logger.warn(EELFLoggerDelegate.errorLogger, "deleteUserNotificationPreference failed: {}", ex.toString());
+			logger.warn("deleteUserNotificationPreference failed: {}", ex.toString());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "deleteUserNotificationPreference failed",
 					ex);
@@ -1382,13 +1349,12 @@ public class UserController extends AbstractController {
 	@ResponseBody
 	public Object getUserDeployments(@PathVariable("userId") String userId, Pageable pageRequest,
 			HttpServletResponse response) {
-		Date beginDate = new Date();
+		logger.info("getUserDeployments: userId {} ", userId);
 		if (userRepository.findOne(userId) == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + userId, null);
 		}
 		Page<MLPSolutionDeployment> da = solutionDeploymentRepository.findByUserId(userId, pageRequest);
-		logger.audit(beginDate, "getUserDeployments: userId {} ", userId);
 		return da;
 	}
 
