@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7e5f13db_94ad914a",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/CCDSConstants.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-08-08T19:42:25Z",
+      "side": 1,
+      "message": "well, even as written it\u0027s shorter than DESCRIPTION.",
+      "parentUuid": "b84c2be3_13d88dc0",
+      "revId": "adca71b0d5ab0853f55d89985ffc126cee242d9b",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2177a2e4_381779dd",
         "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPAbstractDocument.java",
         "patchSetId": 6
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "ec82735c_965ded27",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPAbstractDocument.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-08-08T19:42:25Z",
+      "side": 1,
+      "message": "We do not.  I was hoping to hear from Vikas about this, but he has not said anything.  Again this is parallel to MLPArtifact#version",
+      "parentUuid": "2177a2e4_381779dd",
+      "revId": "adca71b0d5ab0853f55d89985ffc126cee242d9b",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "128c5946_c2a9b0ee",
         "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPAbstractDocument.java",
         "patchSetId": 6
@@ -47,6 +83,24 @@
       "writtenOn": "2018-08-08T19:27:51Z",
       "side": 1,
       "message": "May want to declare this as LONG instead?",
+      "revId": "adca71b0d5ab0853f55d89985ffc126cee242d9b",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3ccc5bce_91826859",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPAbstractDocument.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-08-08T19:42:25Z",
+      "side": 1,
+      "message": "This is parallel to MLPArtifact#size which is also Integer.",
+      "parentUuid": "128c5946_c2a9b0ee",
       "revId": "adca71b0d5ab0853f55d89985ffc126cee242d9b",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
