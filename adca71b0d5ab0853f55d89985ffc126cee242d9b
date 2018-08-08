@@ -50,6 +50,40 @@
       "revId": "adca71b0d5ab0853f55d89985ffc126cee242d9b",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "92c5f4a7_7e15d74c",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPSolRevDocMap.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-08-08T19:41:45Z",
+      "side": 1,
+      "message": "Why do you need to add \"COL_NAME\" suffix here?",
+      "revId": "adca71b0d5ab0853f55d89985ffc126cee242d9b",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "109be893_3a78bf2c",
+        "filename": "cmn-data-svc-server/db-scripts/cmn-data-svc-ddl-dml-mysql-1.15.sql",
+        "patchSetId": 6
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-08-08T19:41:45Z",
+      "side": 1,
+      "message": "Do you plan to account for this for upgrade and downgrade between 1.15 and 1.14 version?",
+      "revId": "adca71b0d5ab0853f55d89985ffc126cee242d9b",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
