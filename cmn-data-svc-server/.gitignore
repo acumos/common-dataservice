@@ -4,5 +4,6 @@
 /target/
 /logs/
 /derby.log
+/cmn-data-svc.log
 /application.properties
 /application-cognitadb.properties

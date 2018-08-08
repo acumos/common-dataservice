@@ -21,7 +21,6 @@
 package org.acumos.cds.controller;
 
 import java.lang.invoke.MethodHandles;
-import java.util.Date;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -36,8 +35,10 @@ import org.acumos.cds.repository.SolRevArtMapRepository;
 import org.acumos.cds.repository.SolutionRevisionRepository;
 import org.acumos.cds.transport.ErrorTransport;
 import org.acumos.cds.transport.SuccessTransport;
-import org.acumos.cds.util.EELFLoggerDelegate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -52,10 +53,10 @@ import io.swagger.annotations.ApiOperation;
  * solution, but an artifact can exist without a revision.
  */
 @Controller
-@RequestMapping("/" + CCDSConstants.REVISION_PATH)
+@RequestMapping(value = "/" + CCDSConstants.REVISION_PATH, produces = MediaType.APPLICATION_JSON_VALUE)
 public class RevisionController extends AbstractController {
 
-	private static final EELFLoggerDelegate logger = EELFLoggerDelegate.getLogger(MethodHandles.lookup().lookupClass());
+	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
 	@Autowired
 	private ArtifactRepository artifactRepository;
@@ -78,9 +79,8 @@ public class RevisionController extends AbstractController {
 	@ResponseBody
 	public Iterable<MLPArtifact> getRevisionArtifacts(@PathVariable("revisionId") String revisionId,
 			HttpServletResponse response) {
-		Date beginDate = new Date();
+		logger.info("getSolRevArtifacts: revisionId {}", revisionId);
 		Iterable<MLPArtifact> result = artifactRepository.findByRevision(revisionId);
-		logger.audit(beginDate, "getSolRevArtifacts: revisionId {}", revisionId);
 		return result;
 	}
 
@@ -99,10 +99,9 @@ public class RevisionController extends AbstractController {
 	@ResponseBody
 	public SuccessTransport addRevisionArtifact(@PathVariable("revisionId") String revisionId,
 			@PathVariable("artifactId") String artifactId, HttpServletResponse response) {
-		Date beginDate = new Date();
+		logger.info("addRevArtifact: revisionId {} artifactId {}", revisionId, artifactId);
 		MLPSolRevArtMap map = new MLPSolRevArtMap(revisionId, artifactId);
 		solRevArtMapRepository.save(map);
-		logger.audit(beginDate, "addRevArtifact: revisionId {} artifactId {}", revisionId, artifactId);
 		return new SuccessTransport(HttpServletResponse.SC_OK, null);
 	}
 
@@ -121,9 +120,8 @@ public class RevisionController extends AbstractController {
 	@ResponseBody
 	public SuccessTransport dropRevisionArtifact(@PathVariable("revisionId") String revisionId,
 			@PathVariable("artifactId") String artifactId, HttpServletResponse response) {
-		Date beginDate = new Date();
+		logger.info("dropRevArtifact: revisionId {} artifactId {}", revisionId, artifactId);
 		solRevArtMapRepository.delete(new MLPSolRevArtMap.SolRevArtMapPK(revisionId, artifactId));
-		logger.audit(beginDate, "dropRevArtifact: revisionId {} artifactId {}", revisionId, artifactId);
 		return new SuccessTransport(HttpServletResponse.SC_OK, null);
 	}
 
@@ -142,7 +140,7 @@ public class RevisionController extends AbstractController {
 	@ResponseBody
 	public Object getRevisionDescription(@PathVariable("revisionId") String revisionId,
 			@PathVariable("accessTypeCode") String accessTypeCode, HttpServletResponse response) {
-		Date beginDate = new Date();
+		logger.info("getRevisionDescription: revisionId {} accessTypeCode ", revisionId, accessTypeCode);
 		MLPRevisionDescription da = revisionDescRepository
 				.findOne(new MLPRevisionDescription.RevDescPK(revisionId, accessTypeCode));
 		if (da == null) {
@@ -150,7 +148,6 @@ public class RevisionController extends AbstractController {
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST,
 					NO_ENTRY_WITH_ID + revisionId + "/" + accessTypeCode, null);
 		}
-		logger.audit(beginDate, "getRevisionDescription: revisionId {} accessTypeCode ", revisionId, accessTypeCode);
 		return da;
 	}
 
@@ -172,7 +169,7 @@ public class RevisionController extends AbstractController {
 	public Object createRevisionDescription(@PathVariable("revisionId") String revisionId,
 			@PathVariable("accessTypeCode") String accessTypeCode, @RequestBody MLPRevisionDescription description,
 			HttpServletResponse response) {
-		Date beginDate = new Date();
+		logger.info("createRevisionDescription: revisionId {} accessTypeCode {}", revisionId, accessTypeCode);
 		if (revisionRepository.findOne(revisionId) == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + revisionId, null);
@@ -185,12 +182,10 @@ public class RevisionController extends AbstractController {
 			description.setAccessTypeCode(accessTypeCode);
 			// Create a new row
 			MLPRevisionDescription result = revisionDescRepository.save(description);
-			logger.audit(beginDate, "createRevisionDescription: revisionId {} accessTypeCode {}", revisionId,
-					accessTypeCode);
 			return result;
 		} catch (Exception ex) {
 			Exception cve = findConstraintViolationException(ex);
-			logger.warn(EELFLoggerDelegate.errorLogger, "createRevisionDescription failed: {}", cve.toString());
+			logger.warn("createRevisionDescription failed: {}", cve.toString());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "createRevisionDescription failed", cve);
 		}
@@ -214,7 +209,7 @@ public class RevisionController extends AbstractController {
 	public Object updateRevisionDescription(@PathVariable("revisionId") String revisionId,
 			@PathVariable("accessTypeCode") String accessTypeCode, @RequestBody MLPRevisionDescription description,
 			HttpServletResponse response) {
-		Date beginDate = new Date();
+		logger.info("updateRevisionDescription: revisionId {} accessTypeCode {}", revisionId, accessTypeCode);
 		// Get the existing one
 		MLPRevisionDescription existing = revisionDescRepository
 				.findOne(new MLPRevisionDescription.RevDescPK(revisionId, accessTypeCode));
@@ -229,12 +224,10 @@ public class RevisionController extends AbstractController {
 			description.setRevisionId(revisionId);
 			description.setAccessTypeCode(accessTypeCode);
 			revisionDescRepository.save(description);
-			logger.audit(beginDate, "updateRevisionDescription: revisionId {} accessTypeCode {}", revisionId,
-					accessTypeCode);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
 			Exception cve = findConstraintViolationException(ex);
-			logger.warn(EELFLoggerDelegate.errorLogger, "updateRevisionDescription failed: {}", cve.toString());
+			logger.warn("updateRevisionDescription failed: {}", cve.toString());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "updateRevisionDescription failed", cve);
 		}
@@ -255,15 +248,13 @@ public class RevisionController extends AbstractController {
 	@ResponseBody
 	public Object deleteRevisionDescription(@PathVariable("revisionId") String revisionId,
 			@PathVariable("accessTypeCode") String accessTypeCode, HttpServletResponse response) {
-		Date beginDate = new Date();
+		logger.info("deleteRevisionDescription: revisionId {} accessTypeCode {}", revisionId, accessTypeCode);
 		try {
 			revisionDescRepository.delete(new MLPRevisionDescription.RevDescPK(revisionId, accessTypeCode));
-			logger.audit(beginDate, "deleteRevisionDescription: revisionId {} accessTypeCode {}", revisionId,
-					accessTypeCode);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
 			// e.g., EmptyResultDataAccessException is NOT an internal server error
-			logger.warn(EELFLoggerDelegate.errorLogger, "deleteRevisionDescription failed: {}", ex.toString());
+			logger.warn("deleteRevisionDescription failed: {}", ex.toString());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "deleteRevisionDescription failed", ex);
 		}
