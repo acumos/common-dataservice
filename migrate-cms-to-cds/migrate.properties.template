@@ -1,0 +1,10 @@
+# properties for the CMS-to-CDS migration tool
+
+cds.url = http://cognita-dev1-vm01-core.eastus.cloudapp.azure.com:8001
+cds.user = 
+cds.pass = 
+
+# include host, port and base context path
+cms.url = http://cognita-dev1-vm01-core.eastus.cloudapp.azure.com:8085/site
+cms.user = 
+cms.pass = 
