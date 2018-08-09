@@ -1,0 +1,81 @@
+.. ===============LICENSE_START=======================================================
+.. Acumos CC-BY-4.0
+.. ===================================================================================
+.. Copyright (C) 2017 AT&T Intellectual Property & Tech Mahindra. All rights reserved.
+.. ===================================================================================
+.. This Acumos documentation file is distributed by AT&T and Tech Mahindra
+.. under the Creative Commons Attribution 4.0 International License (the "License");
+.. you may not use this file except in compliance with the License.
+.. You may obtain a copy of the License at
+..
+.. http://creativecommons.org/licenses/by/4.0
+..
+.. This file is distributed on an "AS IS" BASIS,
+.. WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+.. See the License for the specific language governing permissions and
+.. limitations under the License.
+.. ===============LICENSE_END=========================================================
+
+===================================
+CMS to CDS and Nexus Migration Tool
+===================================
+
+This document explains use of a utility that migrates user-supplied data from 
+the Hippo-CMS system to the Acumos Common Data Service and Acumos Nexus repository.
+This utility migrates the following data items:
+
+# Solution picture: a user can add a picture for a solution.
+# Revision descriptions: a user can add a description appropriate for the COMPANY
+access level and another description appropriate for the PUBLIC access level.
+In other words, every revision can have zero, one or two descriptions.
+# Revision supporting documents: a user can upload many supporting documents for a
+revision, one set visible at the COMPANY access level and another set of documents visible
+at the PUBLIC access level. In other words, every revision can have an arbitrary number
+of supporting documents, divided into two sets.
+
+Configuration
+-------------
+
+Use of the tool requires read access to CMS, and write access to CDS and Nexus.  
+After obtaining valid URLs and appropriate user names and passwords, enter them 
+in a file named "migrate.properties" using the following structure::
+
+	# must include host, port and base context path
+	cds.url = http://cognita-dev1-vm01-core.eastus.cloudapp.azure.com:8001/ccds
+	cds.user = 
+	cds.pass = 
+	
+	# must include host, port and base context path
+	cms.url = http://cognita-dev1-vm01-core.eastus.cloudapp.azure.com:8085/site
+	cms.user = 
+	cms.pass = 
+	
+	nexus.url = 
+	nexus.user = 
+	nexus.pass = 
+	# this is the group prefix; UUID will be appended
+	nexus.prefix = org.acumos
+	
+
+Build Instructions
+------------------
+
+Clone the repository and build the tool as follows::
+
+    git clone https://gerrit.acumos.org/r/common-dataservice
+    cd common-dataservice/migrate-cms-to-cds
+    mvn clean package
+
+
+Usage
+-----
+
+Launch the migration tool like this::
+
+    java target/migrate-cms-to-cds-1.0.0-SNAPSHOT-spring-boot.jar
+
+The tool expects to find file "migrate.properties" in the current directory. 
+It will write a log file to the current directory.
+
+In case of error, the tool can be run repeatedly on the same source and target.
+It will not re-migrate data to CDS for any item.
