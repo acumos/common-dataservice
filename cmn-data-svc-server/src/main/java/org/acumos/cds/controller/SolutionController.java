@@ -24,9 +24,11 @@ import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
@@ -480,9 +482,19 @@ public class SolutionController extends AbstractController {
 			}
 			// Ensure web stat object is empty
 			solution.setWebStats(null);
+			if (solution.getTags() != null) {
+				createMissingTags(solution);
+				
+			}
 			// Create a new row
 			// ALSO send back the model for client convenience
 			MLPSolution persisted = solutionRepository.save(solution);
+			if (solution.getTags() != null) {
+				for (MLPTag tag : solution.getTags()) {
+					solTagMapRepository.save(new MLPSolTagMap(persisted.getSolutionId(), tag.getTag()));
+				}
+			}
+			
 			// Cascade manually - create an empty web stats entry.
 			solutionWebRepository.save(new MLPSolutionWeb(persisted.getSolutionId()));
 			// This is a hack to create the location path.
@@ -498,6 +510,16 @@ public class SolutionController extends AbstractController {
 		}
 	}
 
+	private void createMissingTags(MLPSolution sol) {
+		for (MLPTag tag : sol.getTags()) {
+			Date beginDate = new Date();
+			if (tagRepository.findOne(tag.getTag()) == null) {
+				tagRepository.save(tag);
+				logger.audit(beginDate, "createTag: tag {}", tag);
+			} 
+		}
+	}
+	
 	/**
 	 * @param solutionId
 	 *            Path parameter with the row ID
@@ -529,8 +551,17 @@ public class SolutionController extends AbstractController {
 			solution.setSolutionId(solutionId);
 			// Discard any stats object; updates don't happen via this interface
 			solution.setWebStats(null);
+			if (solution.getTags() != null) {
+				createMissingTags(solution);
+				
+			}
 			solutionRepository.save(solution);
 			logger.audit(beginDate, "updateSolution: ID {}", solutionId);
+			if (solution.getTags() != null) {
+				for (MLPTag tag : solution.getTags()) {
+					solTagMapRepository.save(new MLPSolTagMap(solution.getSolutionId(), tag.getTag()));
+				}
+			}
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
 			Exception cve = findConstraintViolationException(ex);
@@ -820,16 +851,16 @@ public class SolutionController extends AbstractController {
 			HttpServletResponse response) {
 		Date beginDate = new Date();
 		if (tagRepository.findOne(tag) == null) {
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + tag, null);
-		} else if (solutionRepository.findOne(solutionId) == null) {
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + solutionId, null);
-		} else {
+			tagRepository.save(new MLPTag(tag));
+			logger.audit(beginDate, "createTag: tag {}", tag);
+		} 
+		if (solutionRepository.findOne(solutionId) != null) {
 			solTagMapRepository.save(new MLPSolTagMap(solutionId, tag));
 			logger.audit(beginDate, "addTag: solutionId {} tag {}", solutionId, tag);
-			return new SuccessTransport(HttpServletResponse.SC_OK, null);
-		}
+		} else 
+			logger.audit(beginDate, "Solution does not exist with ID", solutionId);
+		return new SuccessTransport(HttpServletResponse.SC_OK, null);
+		
 	}
 
 	/**
