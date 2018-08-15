@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "148e105e_8e4b0bf5",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/PeerController.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-08-15T15:01:32Z",
+      "side": 1,
+      "message": "Is this debug statement needed here?",
+      "revId": "fbcd7c8e951be9b9379816ed40b86f1a91a401ce",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
