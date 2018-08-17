@@ -70,6 +70,7 @@ import org.acumos.cds.transport.CountTransport;
 import org.acumos.cds.transport.ErrorTransport;
 import org.acumos.cds.transport.MLPTransportModel;
 import org.acumos.cds.transport.SuccessTransport;
+import org.acumos.cds.util.ApiPageable;
 import org.acumos.cds.util.EELFLoggerDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -194,6 +195,7 @@ public class SolutionController extends AbstractController {
 	@ApiOperation(value = "Gets a page of solutions, optionally sorted on fields.", response = MLPSolution.class, responseContainer = "Page")
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
+	@ApiPageable
 	public Page<MLPSolution> getSolutions(Pageable pageable, HttpServletResponse response) {
 		Date beginDate = new Date();
 		Page<MLPSolution> result = solutionRepository.findAll(pageable);
