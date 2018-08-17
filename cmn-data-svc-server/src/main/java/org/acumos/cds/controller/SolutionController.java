@@ -84,6 +84,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 
 /**
@@ -194,6 +196,15 @@ public class SolutionController extends AbstractController {
 	@ApiOperation(value = "Gets a page of solutions, optionally sorted on fields.", response = MLPSolution.class, responseContainer = "Page")
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
+	@ApiImplicitParams({
+			// This is actually dataType int?
+			@ApiImplicitParam(name = "page", dataType = "string", paramType = "query", value = "Results page you want to retrieve (0..N)"),
+			// This is actually dataType int?
+			@ApiImplicitParam(name = "size", dataType = "string", paramType = "query", value = "Number of records per page."),
+			@ApiImplicitParam(name = "sort", allowMultiple = true, dataType = "string", paramType = "query", //
+					value = "Sorting criteria in the format: property(,asc|desc). " //
+							+ "Default sort order is ascending. " //
+							+ "Multiple sort criteria are supported.") })
 	public Page<MLPSolution> getSolutions(Pageable pageable, HttpServletResponse response) {
 		Date beginDate = new Date();
 		Page<MLPSolution> result = solutionRepository.findAll(pageable);
