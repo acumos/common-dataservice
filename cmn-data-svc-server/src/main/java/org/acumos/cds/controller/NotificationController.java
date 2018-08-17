@@ -33,6 +33,7 @@ import org.acumos.cds.transport.CountTransport;
 import org.acumos.cds.transport.ErrorTransport;
 import org.acumos.cds.transport.MLPTransportModel;
 import org.acumos.cds.transport.SuccessTransport;
+import org.acumos.cds.util.ApiPageable;
 import org.acumos.cds.util.EELFLoggerDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -83,6 +84,7 @@ public class NotificationController extends AbstractController {
 	 * @return Page of notifications
 	 */
 	@ApiOperation(value = "Gets a page of notifications, optionally sorted.", response = MLPNotification.class, responseContainer = "Page")
+	@ApiPageable
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
 	public Page<MLPNotification> getNotifications(Pageable pageable) {

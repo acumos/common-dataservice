@@ -31,6 +31,7 @@ import org.acumos.cds.repository.TagRepository;
 import org.acumos.cds.transport.ErrorTransport;
 import org.acumos.cds.transport.MLPTransportModel;
 import org.acumos.cds.transport.SuccessTransport;
+import org.acumos.cds.util.ApiPageable;
 import org.acumos.cds.util.EELFLoggerDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -62,6 +63,7 @@ public class TagController extends AbstractController {
 	 * @return Page of tags
 	 */
 	@ApiOperation(value = "Gets a page of tags, optionally sorted.", response = MLPTag.class, responseContainer = "Page")
+	@ApiPageable
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
 	public Page<MLPTag> getTags(Pageable pageable) {

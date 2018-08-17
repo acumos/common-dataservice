@@ -27,6 +27,7 @@ Version 1.17.2, 17 Aug 2018
 ---------------------------
 
 * Revise message sent when user is locked out temporarily (ACUMOS-1597)
+* Document Pageable request parameters in Swagger (ACUMOS-1608)
 * Requires database schema version 1.17
 
 Version 1.17.1, 10 Aug 2018

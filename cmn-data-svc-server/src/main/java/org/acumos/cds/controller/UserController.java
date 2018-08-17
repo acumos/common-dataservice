@@ -62,6 +62,7 @@ import org.acumos.cds.transport.LoginTransport;
 import org.acumos.cds.transport.MLPTransportModel;
 import org.acumos.cds.transport.SuccessTransport;
 import org.acumos.cds.transport.UsersRoleRequest;
+import org.acumos.cds.util.ApiPageable;
 import org.acumos.cds.util.EELFLoggerDelegate;
 import org.jasypt.util.text.BasicTextEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -358,6 +359,7 @@ public class UserController extends AbstractController {
 	 * @return List of artifacts, for serialization as JSON
 	 */
 	@ApiOperation(value = "Gets a page of users, optionally sorted on fields.", response = MLPUser.class, responseContainer = "Page")
+	@ApiPageable
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
 	public Page<MLPUser> getUsers(Pageable pageable) {
@@ -382,6 +384,7 @@ public class UserController extends AbstractController {
 	 * @return List of users
 	 */
 	@ApiOperation(value = "Searches for users with names that contain the search term.", response = MLPUser.class, responseContainer = "Page")
+	@ApiPageable
 	@RequestMapping(value = "/" + CCDSConstants.LIKE_PATH, method = RequestMethod.GET)
 	@ResponseBody
 	public Page<MLPUser> likeUsers(@RequestParam(CCDSConstants.TERM_PATH) String term, Pageable pageable) {
@@ -409,6 +412,7 @@ public class UserController extends AbstractController {
 	 * @return Page of users, for serialization as JSON.
 	 */
 	@ApiOperation(value = "Searches for users using the field name - field value pairs specified as query parameters. Defaults to and (conjunction); send junction query parameter = o for or (disjunction).", response = MLPUser.class, responseContainer = "Page")
+	@ApiPageable
 	@RequestMapping(value = "/" + CCDSConstants.SEARCH_PATH, method = RequestMethod.GET)
 	@ResponseBody
 	public Object searchUsers(@RequestParam MultiValueMap<String, String> queryParameters, Pageable pageable,
@@ -1112,6 +1116,7 @@ public class UserController extends AbstractController {
 	 *         status
 	 */
 	@ApiOperation(value = "Gets active notifications for the specified user ID.", response = MLPUserNotification.class, responseContainer = "List")
+	@ApiPageable
 	@RequestMapping(value = "/{userId}/" + CCDSConstants.NOTIFICATION_PATH, method = RequestMethod.GET)
 	@ResponseBody
 	public Iterable<MLPUserNotification> getActiveNotificationsForUser(@PathVariable("userId") String userId,
