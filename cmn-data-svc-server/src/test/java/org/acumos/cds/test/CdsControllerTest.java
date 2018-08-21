@@ -174,7 +174,7 @@ public class CdsControllerTest {
 			cs = client.createSolution(cs);
 			logger.info("Created solution {}", cs);
 
-			cs.setDescription("some description");
+			cs.setOrigin("some origin");
 			client.updateSolution(cs);
 
 			MLPSolution fetched = client.getSolution(cs.getSolutionId());
@@ -182,7 +182,6 @@ public class CdsControllerTest {
 
 			MLPSolutionRevision cr = new MLPSolutionRevision(cs.getSolutionId(), "1.0R", cu.getUserId(),
 					AccessTypeCode.PB.name(), "NV");
-			cr.setDescription("Some description");
 			cr.setPublisher("Big Data Org");
 			cr = client.createSolutionRevision(cr);
 			logger.info("Created solution revision {}", cr);
@@ -190,6 +189,14 @@ public class CdsControllerTest {
 			// Query for the revision
 			MLPSolutionRevision crq = client.getSolutionRevision(cs.getSolutionId(), cr.getRevisionId());
 			Assert.assertNotNull(crq);
+
+			MLPRevisionDescription rd = new MLPRevisionDescription(cr.getRevisionId(), AccessTypeCode.PB.name(),
+					"A public revision description");
+			rd = client.createRevisionDescription(rd);
+
+			// query for the description
+			MLPRevisionDescription qrd = client.getRevisionDescription(cr.getRevisionId(), AccessTypeCode.PB.name());
+			Assert.assertEquals(rd, qrd);
 
 			final String version = "1.0A";
 			MLPArtifact ca = new MLPArtifact(version, ArtifactTypeCode.DI.toString(), "artifact name",
@@ -212,6 +219,7 @@ public class CdsControllerTest {
 			logger.info("Deleting objects");
 			client.dropSolutionRevisionArtifact(cs.getSolutionId(), cr.getRevisionId(), ca.getArtifactId());
 			client.deleteArtifact(ca.getArtifactId());
+			client.deleteRevisionDescription(cr.getRevisionId(), "PB");
 			client.deleteSolutionRevision(cs.getSolutionId(), cr.getRevisionId());
 			client.deleteSolution(cs.getSolutionId());
 			client.deleteUser(cu.getUserId());
@@ -651,7 +659,7 @@ public class CdsControllerTest {
 			// New feature: create tag upon adding
 			String instantTag = "instant-tag-just-add-water";
 			client.addSolutionTag(cs.getSolutionId(), instantTag);
-			
+
 			logger.info("Fetching back newly tagged solution");
 			MLPSolution s = client.getSolution(cs.getSolutionId());
 			Assert.assertTrue(s != null && !s.getTags().isEmpty() && s.getWebStats() != null);
