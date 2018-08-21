@@ -85,17 +85,19 @@ public abstract class AbstractSearchServiceImpl {
 	}
 
 	/**
-	 * Builds a disjunction ("OR") criterion to check approximate match of any value
-	 * in the list; null is not permitted.
+	 * Builds a criterion to check approximate match of values in the list; null is
+	 * not permitted.
 	 * 
 	 * @param fieldName
 	 *            POJO field name
 	 * @param values
 	 *            String values; null is forbidden
+	 * @param isConjunction
+	 *            If true connects the LIKE criteria with "AND" otherwise with "OR".
 	 * @return Criterion
 	 */
-	protected Criterion buildLikeListCriterion(String fieldName, String[] values) {
-		Junction junction = Restrictions.disjunction();
+	protected Criterion buildLikeListCriterion(String fieldName, String[] values, boolean isConjunction) {
+		Junction junction = isConjunction ? Restrictions.conjunction() : Restrictions.disjunction();
 		for (String v : values) {
 			if (v == null)
 				throw new IllegalArgumentException("Null not permitted in value list");
