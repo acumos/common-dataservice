@@ -27,6 +27,7 @@ import java.util.Set;
 
 import org.acumos.cds.domain.MLPArtifactFOM;
 import org.acumos.cds.domain.MLPPeer;
+import org.acumos.cds.domain.MLPRevisionDescription;
 import org.acumos.cds.domain.MLPSolutionFOM;
 import org.acumos.cds.domain.MLPSolutionRevisionFOM;
 import org.acumos.cds.domain.MLPUser;
@@ -78,6 +79,7 @@ public class FOMDomainTest {
 	final MLPSolutionFOM sol1 = new MLPSolutionFOM();
 	final MLPUser user1 = new MLPUser();
 	final Set<MLPSolutionRevisionFOM> revs = new HashSet<>();
+	final Set<MLPRevisionDescription> descs = new HashSet<>();
 
 	@Before
 	public void setup() {
@@ -159,6 +161,7 @@ public class FOMDomainTest {
 		logger.info(m.toMLPSolution().toString());
 	}
 
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testMLPSolutionRevisionFOM() {
 		Set<MLPArtifactFOM> arts = new HashSet<>();
@@ -167,6 +170,7 @@ public class FOMDomainTest {
 		m.setArtifacts(arts);
 		m.setCreated(d1);
 		m.setDescription(s2);
+		m.setDescriptions(descs);
 		m.setMetadata(s3);
 		m.setModified(d2);
 		m.setOrigin(s4);
@@ -181,6 +185,7 @@ public class FOMDomainTest {
 		Assert.assertEquals(d1, m.getCreated());
 		Assert.assertEquals(s1, m.getAccessTypeCode());
 		Assert.assertEquals(s2, m.getDescription());
+		Assert.assertEquals(descs, m.getDescriptions());
 		Assert.assertEquals(s3, m.getMetadata());
 		Assert.assertEquals(d2, m.getModified());
 		Assert.assertEquals(s4, m.getOrigin());

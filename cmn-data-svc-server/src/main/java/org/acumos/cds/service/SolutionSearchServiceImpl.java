@@ -86,6 +86,7 @@ public class SolutionSearchServiceImpl extends AbstractSearchServiceImpl impleme
 	private final String ownerAlias = "ownr";
 	private final String tagAlias = "tag";
 	private final String accAlias = "acc";
+	private final String descsAlias = "descs";
 	private final String solutionId = "solutionId";
 
 	/*
@@ -129,7 +130,7 @@ public class SolutionSearchServiceImpl extends AbstractSearchServiceImpl impleme
 
 	/**
 	 * Runs a query on the SolutionFOM entity, returns a page after converting
-	 * objects to plain solution.
+	 * objects to plain (non-FOM) MLPSolution
 	 * 
 	 * @param criteria
 	 *            Criteria to evaluate
@@ -168,13 +169,13 @@ public class SolutionSearchServiceImpl extends AbstractSearchServiceImpl impleme
 		return new PageImpl<>(items, pageable, foms.size());
 	}
 
-	/*
+	/**
 	 * This query checks properties of the solution AND associated entities
-	 * especially revisions, which requires an inner join and yields a large cross
-	 * product that Hibernate will coalesce. Because of the joins it's unsafe to
-	 * apply limit parameters at the database. Therefore this method fetches the
-	 * full result from the database then reduces the result size here, which is
-	 * inefficient.
+	 * especially revisions by AND-ing the criteria together. The query requires an
+	 * inner join and yields a large cross product that Hibernate will coalesce.
+	 * Because of the joins it's unsafe to apply limit (pagination) parameters at
+	 * the database. Therefore this method fetches the full result from the database
+	 * then reduces the result size here, which is inefficient.
 	 *
 	 * This implementation is made yet more awkward due to the requirement to
 	 * perform LIKE queries on certain fields.
@@ -190,11 +191,9 @@ public class SolutionSearchServiceImpl extends AbstractSearchServiceImpl impleme
 		criteria.add(Restrictions.eq("active", active));
 		if (nameKeywords != null && nameKeywords.length > 0)
 			criteria.add(buildLikeListCriterion("name", nameKeywords));
-		if (descKeywords != null && descKeywords.length > 0)
-			criteria.add(buildLikeListCriterion("description", descKeywords));
 		if (modelTypeCode != null && modelTypeCode.length > 0)
 			criteria.add(buildEqualsListCriterion("modelTypeCode", modelTypeCode));
-		if ((accessTypeCode != null && accessTypeCode.length > 0)
+		if ((accessTypeCode != null && accessTypeCode.length > 0) || (descKeywords != null && descKeywords.length > 0)
 				|| (validationStatusCode != null && validationStatusCode.length > 0)
 				|| (authorKeywords != null && authorKeywords.length > 0)
 				|| (publisherKeywords != null && publisherKeywords.length > 0)) {
@@ -207,6 +206,10 @@ public class SolutionSearchServiceImpl extends AbstractSearchServiceImpl impleme
 				criteria.add(buildLikeListCriterion(revAlias + ".authors", authorKeywords));
 			if (publisherKeywords != null && publisherKeywords.length > 0)
 				criteria.add(buildLikeListCriterion(revAlias + ".publisher", publisherKeywords));
+			if (descKeywords != null && descKeywords.length > 0) {
+				criteria.createAlias(revAlias + ".descriptions", descsAlias);
+				criteria.add(buildLikeListCriterion(descsAlias + ".description", descKeywords));
+			}
 		}
 		if (userIds != null && userIds.length > 0) {
 			criteria.createAlias("owner", ownerAlias);

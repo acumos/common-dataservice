@@ -271,11 +271,11 @@ public interface ICommonDataServiceRestClient {
 	 * to support the dynamic search page on the portal marketplace.
 	 * 
 	 * @param nameKeywords
-	 *            Keywords to perform "LIKE" search in Name field; ignored if null
-	 *            or empty
+	 *            Keywords to perform "LIKE" search in solution name field; ignored
+	 *            if null or empty
 	 * @param descriptionKeywords
-	 *            Keywords to perform "LIKE" search in Description field; ignored if
-	 *            null or empty
+	 *            Keywords to perform "LIKE" search in the revision description (any
+	 *            access type); ignored if null or empty
 	 * @param active
 	 *            Solution active status; true for active, false for inactive
 	 * @param userIds
@@ -346,12 +346,12 @@ public interface ICommonDataServiceRestClient {
 			String[] tags, RestPageRequest pageRequest);
 
 	/**
-	 * Searches the solutions.
+	 * Searches the solutions for matches on attribute values.
 	 * 
 	 * @param queryParameters
 	 *            Map of field-name, field-value pairs to use as query criteria.
-	 *            Accepts Boolean, Date, Integer, Long, String values; also Array of
-	 *            those types.
+	 *            Only fields defined on solution may be used. Accepts Boolean,
+	 *            Date, Integer, Long, String values; also Array of those types.
 	 * @param isOr
 	 *            If true, finds matches on any field-value pair (conditions are
 	 *            OR-ed together); otherwise finds matches on all field-value pairs

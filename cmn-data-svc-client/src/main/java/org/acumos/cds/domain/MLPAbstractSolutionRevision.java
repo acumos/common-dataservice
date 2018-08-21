@@ -47,11 +47,13 @@ public abstract class MLPAbstractSolutionRevision extends MLPTimestampedEntity {
 
 	/* package */ static final String TABLE_NAME = "C_SOLUTION_REV";
 	/* package */ static final String SOL_ID_COL_NAME = "SOLUTION_ID";
+	/* package */ static final String REVISION_ID_COL_NAME = "REVISION_ID";
+	/* package */ static final String ACCESS_TYPE_CODE_COL_NAME = "ACCESS_TYPE_CD";
 
 	@Id
 	@GeneratedValue(generator = "customUseOrGenerate")
 	@GenericGenerator(name = "customUseOrGenerate", strategy = "org.acumos.cds.util.UseExistingOrNewUUIDGenerator")
-	@Column(name = "REVISION_ID", nullable = false, updatable = false, columnDefinition = "CHAR(36)")
+	@Column(name = REVISION_ID_COL_NAME, nullable = false, updatable = false, columnDefinition = "CHAR(36)")
 	@Size(max = 36)
 	// Users MAY submit an ID; readOnly annotation must NOT be used
 	@ApiModelProperty(value = "UUID; omit for system-generated value", example = "12345678-abcd-90ab-cdef-1234567890ab")
@@ -64,6 +66,11 @@ public abstract class MLPAbstractSolutionRevision extends MLPTimestampedEntity {
 	@ApiModelProperty(required = true, value = "Free-text version string", example = "v1.0")
 	private String version;
 
+	/**
+	 * This is not used. Instead a separate table stores long descriptions for
+	 * different access-type codes.
+	 */
+	@Deprecated
 	@Column(name = "DESCRIPTION", columnDefinition = "VARCHAR(512)")
 	@Size(max = 512)
 	@ApiModelProperty(value = "Free-text description")
@@ -84,7 +91,7 @@ public abstract class MLPAbstractSolutionRevision extends MLPTimestampedEntity {
 	/**
 	 * The Access Type Code value set is defined by server-side configuration.
 	 */
-	@Column(name = "ACCESS_TYPE_CD", nullable = false, columnDefinition = "CHAR(2)")
+	@Column(name = ACCESS_TYPE_CODE_COL_NAME, nullable = false, columnDefinition = "CHAR(2)")
 	@NotNull(message = "Access type code cannot be null")
 	@Size(max = 2)
 	@ApiModelProperty(value = "Access type code that is valid for this site", example = "PB")
@@ -164,10 +171,23 @@ public abstract class MLPAbstractSolutionRevision extends MLPTimestampedEntity {
 		this.revisionId = revisionId;
 	}
 
+	/**
+	 * Use the per-access-type description instead.
+	 * 
+	 * @return Description
+	 */
+	@Deprecated
 	public String getDescription() {
 		return description;
 	}
 
+	/**
+	 * Use the per-access-type description instead.
+	 * 
+	 * @param description
+	 *            Description
+	 */
+	@Deprecated
 	public void setDescription(String description) {
 		this.description = description;
 	}

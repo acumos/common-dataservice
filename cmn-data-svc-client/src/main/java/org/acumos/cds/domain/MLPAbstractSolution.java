@@ -63,6 +63,10 @@ public abstract class MLPAbstractSolution extends MLPTimestampedEntity {
 	@ApiModelProperty(value = "Solution name", example = "My solution")
 	private String name;
 
+	/**
+	 * This is not used. Instead a separate table stores long descriptions for
+	 * revisions with appropriate access-type codes.
+	 */
 	@Column(name = "DESCRIPTION", columnDefinition = "VARCHAR(512)")
 	@Size(max = 512)
 	@ApiModelProperty(value = "Free-text description")
@@ -185,10 +189,21 @@ public abstract class MLPAbstractSolution extends MLPTimestampedEntity {
 		this.metadata = meta;
 	}
 
+	/**
+	 * Use the per-access-type description on the revision instead.
+	 * 
+	 * @return Description
+	 */
 	public String getDescription() {
 		return description;
 	}
 
+	/**
+	 * Use the per-access-type description on the revision instead.
+	 * 
+	 * @param desc
+	 *            Description
+	 */
 	public void setDescription(String desc) {
 		this.description = desc;
 	}

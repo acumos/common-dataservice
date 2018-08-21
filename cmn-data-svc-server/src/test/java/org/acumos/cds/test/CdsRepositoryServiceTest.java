@@ -480,35 +480,10 @@ public class CdsRepositoryServiceTest {
 					"Some bogus description");
 			revDesc = revisionDescRepository.save(revDesc);
 			Assert.assertNotNull(revDesc.getCreated());
-			revisionDescRepository.delete(new MLPRevisionDescription.RevDescPK(cr.getRevisionId(), "PB"));
-
-			MLPDocument doc = new MLPDocument();
-			doc.setName("doc name");
-			doc.setUri("http://doc.uri/");
-			doc.setSize(10);
-			doc.setUserId(cu.getUserId());
-			doc = documentRepository.save(doc);
-			Assert.assertNotNull(doc.getDocumentId());
-			Assert.assertNotNull(doc.getCreated());
-
-			logger.info("Adding document to revision");
-			MLPSolRevDocMap docMap = solRevDocMapRepository
-					.save(new MLPSolRevDocMap(cr.getRevisionId(), "PB", doc.getDocumentId()));
-			Assert.assertNotNull(docMap);
-			
-			Iterable<MLPDocument> docs = documentRepository.findByRevisionAccess(cr.getRevisionId(), "PB");
-			Assert.assertTrue(docs.iterator().hasNext());
-
-			logger.info("Cleaning up revision doc");
-			solRevDocMapRepository.delete(docMap);
-			documentRepository.delete(doc.getDocumentId());
-
-			docs = documentRepository.findByRevisionAccess(cr.getRevisionId(), "PB");
-			Assert.assertFalse(docs.iterator().hasNext());
 
 			logger.info("Finding portal solutions");
 			String[] solKw = { solName };
-			String[] descKw = { solDesc };
+			String[] descKw = { "bogus" }; // hey it's there
 			boolean active = true;
 			String[] userIds = { cu.getUserId() };
 			String[] modelTypeCodes = { ModelTypeCode.CL.name() };
@@ -549,6 +524,31 @@ public class CdsRepositoryServiceTest {
 				for (MLPArtifact a : arts)
 					logger.info("\t\tArtifact: " + a.toString());
 			}
+
+			MLPDocument doc = new MLPDocument();
+			doc.setName("doc name");
+			doc.setUri("http://doc.uri/");
+			doc.setSize(10);
+			doc.setUserId(cu.getUserId());
+			doc = documentRepository.save(doc);
+			Assert.assertNotNull(doc.getDocumentId());
+			Assert.assertNotNull(doc.getCreated());
+
+			logger.info("Adding document to revision");
+			MLPSolRevDocMap docMap = solRevDocMapRepository
+					.save(new MLPSolRevDocMap(cr.getRevisionId(), "PB", doc.getDocumentId()));
+			Assert.assertNotNull(docMap);
+
+			Iterable<MLPDocument> docs = documentRepository.findByRevisionAccess(cr.getRevisionId(), "PB");
+			Assert.assertTrue(docs.iterator().hasNext());
+
+			logger.info("Cleaning up revision");
+			revisionDescRepository.delete(new MLPRevisionDescription.RevDescPK(cr.getRevisionId(), "PB"));
+			solRevDocMapRepository.delete(docMap);
+			documentRepository.delete(doc.getDocumentId());
+
+			docs = documentRepository.findByRevisionAccess(cr.getRevisionId(), "PB");
+			Assert.assertFalse(docs.iterator().hasNext());
 
 			// Find by modified date
 			String[] accTypes = new String[] { AccessTypeCode.PR.name() };
