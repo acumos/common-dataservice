@@ -16,6 +16,23 @@
       "revId": "feaab2bf320531ea6866b624fdcd6d88feae9588",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6440fa36_a5e2784e",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPAbstractSolutionRevision.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-08-23T14:16:30Z",
+      "side": 1,
+      "message": "If you follow this column naming format, shouldn\u0027t it be used for other columns too for consistency?",
+      "revId": "feaab2bf320531ea6866b624fdcd6d88feae9588",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
