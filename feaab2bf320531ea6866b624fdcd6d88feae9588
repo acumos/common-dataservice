@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "c4a18f22_8ff79bb3",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPAbstractSolution.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-08-23T19:35:24Z",
+      "side": 1,
+      "message": "This is not used.  Why resize an unused column?",
+      "parentUuid": "2e1bb5f0_5ba3f946",
+      "revId": "feaab2bf320531ea6866b624fdcd6d88feae9588",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6440fa36_a5e2784e",
         "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPAbstractSolutionRevision.java",
         "patchSetId": 4
@@ -30,6 +48,24 @@
       "writtenOn": "2018-08-23T14:16:30Z",
       "side": 1,
       "message": "If you follow this column naming format, shouldn\u0027t it be used for other columns too for consistency?",
+      "revId": "feaab2bf320531ea6866b624fdcd6d88feae9588",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e3c1c131_3ef5b85b",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPAbstractSolutionRevision.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-08-23T19:35:24Z",
+      "side": 1,
+      "message": "I don\u0027t remember why I changed this.  I will revert.",
+      "parentUuid": "6440fa36_a5e2784e",
       "revId": "feaab2bf320531ea6866b624fdcd6d88feae9588",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
