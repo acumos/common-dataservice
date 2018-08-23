@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2e1bb5f0_5ba3f946",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPAbstractSolution.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-08-23T14:13:08Z",
+      "side": 1,
+      "message": "Maybe increase the max size of this?",
+      "revId": "feaab2bf320531ea6866b624fdcd6d88feae9588",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
