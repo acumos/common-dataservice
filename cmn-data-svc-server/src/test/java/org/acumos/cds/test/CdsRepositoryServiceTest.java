@@ -500,16 +500,14 @@ public class CdsRepositoryServiceTest {
 
 			String[] ids = { cs.getSolutionId() };
 			Page<MLPSolution> idSearchResult = solutionSearchService.findPortalSolutionsByKw(ids, active, userIds,
-					modelTypeCodes, accTypeCodes, searchTags,
-					new PageRequest(0, 2, Direction.ASC, "name"));
+					modelTypeCodes, accTypeCodes, searchTags, new PageRequest(0, 2, Direction.ASC, "name"));
 			Assert.assertTrue(idSearchResult != null && idSearchResult.getNumberOfElements() == 1);
 			logger.info("Found models by id total " + idSearchResult.getTotalElements());
-			
+
 			// All keywords must occur in the same field to match
 			String[] kw = { "Big", "Data" };
 			Page<MLPSolution> kwSearchResult = solutionSearchService.findPortalSolutionsByKw(kw, active, userIds,
-					modelTypeCodes, accTypeCodes, searchTags,
-					new PageRequest(0, 2, Direction.ASC, "name"));
+					modelTypeCodes, accTypeCodes, searchTags, new PageRequest(0, 2, Direction.ASC, "name"));
 			Assert.assertTrue(kwSearchResult != null && kwSearchResult.getNumberOfElements() > 0);
 			logger.info("Found models by kw total " + kwSearchResult.getTotalElements());
 
@@ -678,6 +676,8 @@ public class CdsRepositoryServiceTest {
 			Assert.assertTrue(thread.getThreadId() != null);
 			logger.info("Created thread {}", thread);
 
+			long threadCount = threadRepository.countBySolutionIdAndRevisionId(cs.getSolutionId(), cr.getRevisionId());
+			Assert.assertTrue(threadCount > 0);
 			Page<MLPThread> threads = threadRepository.findBySolutionIdAndRevisionId(cs.getSolutionId(),
 					cr.getRevisionId(), new PageRequest(0, 5, null));
 			Assert.assertTrue(threads != null && threads.getNumberOfElements() > 0);

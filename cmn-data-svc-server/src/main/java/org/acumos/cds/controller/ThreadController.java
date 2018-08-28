@@ -76,7 +76,7 @@ public class ThreadController extends AbstractController {
 	@ResponseBody
 	public CountTransport getThreadCount() {
 		logger.info("getThreadCount");
-		Long count = threadRepository.count();
+		long count = threadRepository.count();
 		return new CountTransport(count);
 	}
 
@@ -93,6 +93,24 @@ public class ThreadController extends AbstractController {
 		logger.info("getThreads {}", pageable);
 		Page<MLPThread> result = threadRepository.findAll(pageable);
 		return result;
+	}
+
+	/**
+	 * @param solutionId
+	 *            Solution ID
+	 * @param revisionId
+	 *            Revision ID
+	 * @return Page of threads for specified solution and revision
+	 */
+	@ApiOperation(value = "Gets the count of threads for the solution and revision IDs.", response = CountTransport.class)
+	@RequestMapping(value = CCDSConstants.SOLUTION_PATH + "/{solutionId}/" + CCDSConstants.REVISION_PATH
+			+ "/{revisionId}/" + CCDSConstants.COUNT_PATH, method = RequestMethod.GET)
+	@ResponseBody
+	public CountTransport getSolutionRevisionThreadCount(@PathVariable("solutionId") String solutionId,
+			@PathVariable("revisionId") String revisionId) {
+		logger.info("getSolutionRevisionThreadCount: solutionId {} revisionId {}", solutionId, revisionId);
+		long count = threadRepository.countBySolutionIdAndRevisionId(solutionId, revisionId);
+		return new CountTransport(count);
 	}
 
 	/**
