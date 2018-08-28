@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "80bf321d_56992de8",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/ThreadController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-08-28T20:57:55Z",
+      "side": 1,
+      "message": "Returns thread page count, right? Please update the comment aptly.",
+      "revId": "a8170cfc0ad92cef746b9e1a25393e8b10893b89",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
