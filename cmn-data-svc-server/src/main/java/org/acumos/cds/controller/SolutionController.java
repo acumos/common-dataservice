@@ -63,7 +63,6 @@ import org.acumos.cds.repository.SolutionRevisionRepository;
 import org.acumos.cds.repository.SolutionValidationRepository;
 import org.acumos.cds.repository.SolutionWebRepository;
 import org.acumos.cds.repository.StepResultRepository;
-import org.acumos.cds.repository.TagRepository;
 import org.acumos.cds.repository.UserRepository;
 import org.acumos.cds.service.SolutionSearchService;
 import org.acumos.cds.transport.CountTransport;
@@ -124,8 +123,6 @@ public class SolutionController extends AbstractController {
 	private SolutionRevisionRepository solutionRevisionRepository;
 	@Autowired
 	private SolutionSearchService solutionSearchService;
-	@Autowired
-	private TagRepository tagRepository;
 	@Autowired
 	private SolutionValidationRepository solutionValidationRepository;
 	@Autowired
@@ -239,11 +236,6 @@ public class SolutionController extends AbstractController {
 	public Object findSolutionsByTag(@RequestParam("tag") String tag, Pageable pageRequest,
 			HttpServletResponse response) {
 		logger.info("findSolutionsByTag {}", tag);
-		MLPTag existing = tagRepository.findOne(tag);
-		if (existing == null) {
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + tag, null);
-		}
 		Page<MLPSolution> result = solutionRepository.findByTag(tag, pageRequest);
 		return result;
 	}
@@ -516,7 +508,7 @@ public class SolutionController extends AbstractController {
 			// Ensure web stat object is empty
 			solution.setWebStats(null);
 			// Cascade manually - create user-supplied tags as needed
-			createMissingTags(solution);
+			createMissingTags(solution.getTags());
 			// Create a new row
 			// ALSO send back the model for client convenience
 			MLPSolution persisted = solutionRepository.save(solution);
@@ -533,22 +525,7 @@ public class SolutionController extends AbstractController {
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "createSolution failed", cve);
 		}
 	}
-
-	/**
-	 * Adds entries to the tags table as needed.
-	 * 
-	 * @param solution
-	 *            MLPSolution
-	 */
-	private void createMissingTags(MLPSolution solution) {
-		for (MLPTag tag : solution.getTags()) {
-			if (tagRepository.findOne(tag.getTag()) == null) {
-				tagRepository.save(tag);
-				logger.info("createMissingTags: tag {}", tag);
-			}
-		}
-	}
-
+	
 	/**
 	 * @param solutionId
 	 *            Path parameter with the row ID
@@ -581,7 +558,7 @@ public class SolutionController extends AbstractController {
 			// Discard any stats object; updates don't happen via this interface
 			solution.setWebStats(null);
 			// Cascade manually - create user-supplied tags as needed
-			createMissingTags(solution);
+			createMissingTags(solution.getTags());
 			solutionRepository.save(solution);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {

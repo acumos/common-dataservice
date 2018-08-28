@@ -62,6 +62,7 @@ import org.acumos.cds.domain.MLPPeer;
 import org.acumos.cds.domain.MLPPeerGroup;
 import org.acumos.cds.domain.MLPPeerSolAccMap;
 import org.acumos.cds.domain.MLPPeerSubscription;
+import org.acumos.cds.domain.MLPPublishRequest;
 import org.acumos.cds.domain.MLPRevisionDescription;
 import org.acumos.cds.domain.MLPRole;
 import org.acumos.cds.domain.MLPRoleFunction;
@@ -971,6 +972,20 @@ public class CdsControllerTest {
 			client.dropCompositeSolutionMember(cs.getSolutionId(), csOrg.getSolutionId());
 			kids = client.getCompositeSolutionMembers(cs.getSolutionId());
 			Assert.assertTrue(kids != null && kids.size() == 0);
+
+			MLPPublishRequest pubReq = new MLPPublishRequest(cs.getSolutionId(), cr.getRevisionId(), cu.getUserId(),
+					"PE");
+			pubReq = client.createPublishRequest(pubReq);
+			Assert.assertNotNull(pubReq.getRequestId());
+			MLPPublishRequest reqFound = client.getPublishRequest(pubReq.getRequestId());
+			Assert.assertNotNull(reqFound);
+			logger.info("First publish request {}", reqFound);
+			HashMap<String, Object> queryParameters = new HashMap<>();
+			queryParameters.put("solutionId", cs.getSolutionId());
+			RestPageResponse<MLPPublishRequest> pubReqPage = client.searchPublishRequests(queryParameters, false,
+					new RestPageRequest(0, 5));
+			Assert.assertTrue(pubReqPage.getNumberOfElements() > 0);
+			client.deletePublishRequest(pubReq.getRequestId());
 
 			if (cleanup) {
 				logger.info("Deleting newly created instances");
@@ -3264,6 +3279,55 @@ public class CdsControllerTest {
 			throw new Exception("Unexpected success");
 		} catch (HttpStatusCodeException ex) {
 			logger.info("Get user soln deps failed as expected: {}", ex.getResponseBodyAsString());
+		}
+
+		try {
+			client.getPublishRequest(99999L);
+			throw new Exception("Unexpected success");
+		} catch (HttpStatusCodeException ex) {
+			logger.info("get publish request failed as expected: {}", ex.getResponseBodyAsString());
+		}
+		try {
+			HashMap<String, Object> restr = new HashMap<>();
+			client.searchPublishRequests(restr, true, new RestPageRequest(0, 1));
+			throw new Exception("Unexpected success");
+		} catch (HttpStatusCodeException ex) {
+			logger.info("search publish request empty failed as expected: {}", ex.getResponseBodyAsString());
+		}
+		try {
+			HashMap<String, Object> restr = new HashMap<>();
+			restr.put("bogus", "value");
+			client.searchPublishRequests(restr, true, new RestPageRequest(0, 1));
+			throw new Exception("Unexpected success");
+		} catch (HttpStatusCodeException ex) {
+			logger.info("search publish request bad field failed as expected: {}", ex.getResponseBodyAsString());
+		}
+		try {
+			client.createPublishRequest(new MLPPublishRequest());
+			throw new Exception("Unexpected success");
+		} catch (HttpStatusCodeException ex) {
+			logger.info("create publish request failed as expected: {}", ex.getResponseBodyAsString());
+		}
+		try {
+			client.createPublishRequest(new MLPPublishRequest("bogus", "name", "bogus", "bogus"));
+			throw new Exception("Unexpected success");
+		} catch (HttpStatusCodeException ex) {
+			logger.info("create publish request failed on bad status code as expected: {}",
+					ex.getResponseBodyAsString());
+		}
+		try {
+			MLPPublishRequest stepResult = new MLPPublishRequest();
+			stepResult.setRequestId(999L);
+			client.updatePublishRequest(stepResult);
+			throw new Exception("Unexpected success");
+		} catch (HttpStatusCodeException ex) {
+			logger.info("update publish request failed as expected: {}", ex.getResponseBodyAsString());
+		}
+		try {
+			client.deletePublishRequest(999L);
+			throw new Exception("Unexpected success");
+		} catch (HttpStatusCodeException ex) {
+			logger.info("delete publish request failed as expected: {}", ex.getResponseBodyAsString());
 		}
 
 		try {

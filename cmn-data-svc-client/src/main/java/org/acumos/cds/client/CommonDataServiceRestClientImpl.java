@@ -51,6 +51,7 @@ import org.acumos.cds.domain.MLPPeerGrpMemMap;
 import org.acumos.cds.domain.MLPPeerPeerAccMap;
 import org.acumos.cds.domain.MLPPeerSolAccMap;
 import org.acumos.cds.domain.MLPPeerSubscription;
+import org.acumos.cds.domain.MLPPublishRequest;
 import org.acumos.cds.domain.MLPRevisionDescription;
 import org.acumos.cds.domain.MLPRole;
 import org.acumos.cds.domain.MLPRoleFunction;
@@ -1983,8 +1984,8 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 	}
 
 	@Override
-	public MLPStepResult getStepResult(long stepResultId) {
-		URI uri = buildUri(new String[] { CCDSConstants.STEP_RESULT_PATH, Long.toString(stepResultId) }, null, null);
+	public MLPStepResult getStepResult(long publishRequestId) {
+		URI uri = buildUri(new String[] { CCDSConstants.PUBLISH_REQUEST_PATH, Long.toString(publishRequestId) }, null, null);
 		logger.debug("getStepResult: uri {}", uri);
 		ResponseEntity<MLPStepResult> response = restTemplate.exchange(uri, HttpMethod.GET, null,
 				new ParameterizedTypeReference<MLPStepResult>() {
@@ -1994,7 +1995,7 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 
 	@Override
 	public RestPageResponse<MLPStepResult> getStepResults(RestPageRequest pageRequest) {
-		URI uri = buildUri(new String[] { CCDSConstants.STEP_RESULT_PATH }, null, pageRequest);
+		URI uri = buildUri(new String[] { CCDSConstants.PUBLISH_REQUEST_PATH }, null, pageRequest);
 		logger.debug("getStepResults: uri {}", uri);
 		ResponseEntity<RestPageResponse<MLPStepResult>> response = restTemplate.exchange(uri, HttpMethod.GET, null,
 				new ParameterizedTypeReference<RestPageResponse<MLPStepResult>>() {
@@ -2007,7 +2008,7 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 			RestPageRequest pageRequest) {
 		Map<String, Object> copy = new HashMap<>(queryParameters);
 		copy.put(CCDSConstants.JUNCTION_QUERY_PARAM, isOr ? "o" : "a");
-		URI uri = buildUri(new String[] { CCDSConstants.STEP_RESULT_PATH, CCDSConstants.SEARCH_PATH }, copy,
+		URI uri = buildUri(new String[] { CCDSConstants.PUBLISH_REQUEST_PATH, CCDSConstants.SEARCH_PATH }, copy,
 				pageRequest);
 		logger.debug("searchStepResults: uri {}", uri);
 		ResponseEntity<RestPageResponse<MLPStepResult>> response = restTemplate.exchange(uri, HttpMethod.GET, null,
@@ -2017,23 +2018,23 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 	}
 
 	@Override
-	public MLPStepResult createStepResult(MLPStepResult stepResult) {
-		URI uri = buildUri(new String[] { CCDSConstants.STEP_RESULT_PATH }, null, null);
+	public MLPStepResult createStepResult(MLPStepResult publishRequest) {
+		URI uri = buildUri(new String[] { CCDSConstants.PUBLISH_REQUEST_PATH }, null, null);
 		logger.debug("createStepResult: uri {}", uri);
-		return restTemplate.postForObject(uri, stepResult, MLPStepResult.class);
+		return restTemplate.postForObject(uri, publishRequest, MLPStepResult.class);
 	}
 
 	@Override
-	public void updateStepResult(MLPStepResult stepResult) {
-		URI uri = buildUri(new String[] { CCDSConstants.STEP_RESULT_PATH, Long.toString(stepResult.getStepResultId()) },
+	public void updateStepResult(MLPStepResult publishRequest) {
+		URI uri = buildUri(new String[] { CCDSConstants.PUBLISH_REQUEST_PATH, Long.toString(publishRequest.getStepResultId()) },
 				null, null);
 		logger.debug("updateStepResult: url {}", uri);
-		restTemplate.put(uri, stepResult);
+		restTemplate.put(uri, publishRequest);
 	}
 
 	@Override
-	public void deleteStepResult(Long stepResultId) {
-		URI uri = buildUri(new String[] { CCDSConstants.STEP_RESULT_PATH, Long.toString(stepResultId) }, null, null);
+	public void deleteStepResult(Long publishRequestId) {
+		URI uri = buildUri(new String[] { CCDSConstants.PUBLISH_REQUEST_PATH, Long.toString(publishRequestId) }, null, null);
 		logger.debug("deleteStepResult: url {}", uri);
 		restTemplate.delete(uri);
 	}
@@ -2405,6 +2406,62 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 		URI uri = buildUri(new String[] { CCDSConstants.REVISION_PATH, revisionId, CCDSConstants.ACCESS_PATH,
 				accessTypeCode, CCDSConstants.DOCUMENT_PATH, documentId }, null, null);
 		logger.debug("dropSolutionRevisionDocument: url {}", uri);
+		restTemplate.delete(uri);
+	}
+
+	@Override
+	public MLPPublishRequest getPublishRequest(long publishRequestId) {
+		URI uri = buildUri(new String[] { CCDSConstants.PUBLISH_REQUEST_PATH, Long.toString(publishRequestId) }, null, null);
+		logger.debug("getPublishRequest: uri {}", uri);
+		ResponseEntity<MLPPublishRequest> response = restTemplate.exchange(uri, HttpMethod.GET, null,
+				new ParameterizedTypeReference<MLPPublishRequest>() {
+				});
+		return response.getBody();
+	}
+
+	@Override
+	public RestPageResponse<MLPPublishRequest> getPublishRequests(RestPageRequest pageRequest) {
+		URI uri = buildUri(new String[] { CCDSConstants.PUBLISH_REQUEST_PATH }, null, pageRequest);
+		logger.debug("getPublishRequests: uri {}", uri);
+		ResponseEntity<RestPageResponse<MLPPublishRequest>> response = restTemplate.exchange(uri, HttpMethod.GET, null,
+				new ParameterizedTypeReference<RestPageResponse<MLPPublishRequest>>() {
+				});
+		return response.getBody();
+	}
+
+	@Override
+	public RestPageResponse<MLPPublishRequest> searchPublishRequests(Map<String, Object> queryParameters, boolean isOr,
+			RestPageRequest pageRequest) {
+		Map<String, Object> copy = new HashMap<>(queryParameters);
+		copy.put(CCDSConstants.JUNCTION_QUERY_PARAM, isOr ? "o" : "a");
+		URI uri = buildUri(new String[] { CCDSConstants.PUBLISH_REQUEST_PATH, CCDSConstants.SEARCH_PATH }, copy,
+				pageRequest);
+		logger.debug("searchPublishRequests: uri {}", uri);
+		ResponseEntity<RestPageResponse<MLPPublishRequest>> response = restTemplate.exchange(uri, HttpMethod.GET, null,
+				new ParameterizedTypeReference<RestPageResponse<MLPPublishRequest>>() {
+				});
+		return response.getBody();
+	}
+
+	@Override
+	public MLPPublishRequest createPublishRequest(MLPPublishRequest publishRequest) {
+		URI uri = buildUri(new String[] { CCDSConstants.PUBLISH_REQUEST_PATH }, null, null);
+		logger.debug("createPublishRequest: uri {}", uri);
+		return restTemplate.postForObject(uri, publishRequest, MLPPublishRequest.class);
+	}
+
+	@Override
+	public void updatePublishRequest(MLPPublishRequest publishRequest) {
+		URI uri = buildUri(new String[] { CCDSConstants.PUBLISH_REQUEST_PATH, Long.toString(publishRequest.getRequestId()) },
+				null, null);
+		logger.debug("updatePublishRequest: url {}", uri);
+		restTemplate.put(uri, publishRequest);
+	}
+
+	@Override
+	public void deletePublishRequest(long publishRequestId) {
+		URI uri = buildUri(new String[] { CCDSConstants.PUBLISH_REQUEST_PATH, Long.toString(publishRequestId) }, null, null);
+		logger.debug("deletePublishRequest: url {}", uri);
 		restTemplate.delete(uri);
 	}
 
