@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "23994a9f_adffea9b",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPDataset.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 3
+      },
+      "writtenOn": "2018-08-28T20:02:22Z",
+      "side": 1,
+      "message": "This table is not in sql file, so the build will fail looking for the table. Please check with Chris L to find the details on how and where to create the sql file.",
+      "range": {
+        "startLine": 42,
+        "startChar": 15,
+        "endLine": 42,
+        "endChar": 24
+      },
+      "revId": "9d20e5aeacc74be087b7f9eab4fc14c3a7feb793",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
