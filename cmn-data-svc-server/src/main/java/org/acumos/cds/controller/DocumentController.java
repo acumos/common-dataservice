@@ -2,9 +2,9 @@
  * ===============LICENSE_START=======================================================
  * Acumos
  * ===================================================================================
- * Copyright (C) 2017 AT&T Intellectual Property & Tech Mahindra. All rights reserved.
+ * Copyright (C) 2017 AT&T Intellectual Property. All rights reserved.
  * ===================================================================================
- * This Acumos software file is distributed by AT&T and Tech Mahindra
+ * This Acumos software file is distributed by AT&T
  * under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
