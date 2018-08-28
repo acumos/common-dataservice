@@ -39,12 +39,14 @@ import org.acumos.cds.domain.MLPSolution;
 import org.acumos.cds.domain.MLPSolutionDeployment;
 import org.acumos.cds.domain.MLPSolutionFavorite;
 import org.acumos.cds.domain.MLPSolutionFavorite.SolutionFavoritePK;
+import org.acumos.cds.domain.MLPTag;
 import org.acumos.cds.domain.MLPUser;
 import org.acumos.cds.domain.MLPUserLoginProvider;
 import org.acumos.cds.domain.MLPUserLoginProvider.UserLoginProviderPK;
 import org.acumos.cds.domain.MLPUserNotifPref;
 import org.acumos.cds.domain.MLPUserNotification;
 import org.acumos.cds.domain.MLPUserRoleMap;
+import org.acumos.cds.domain.MLPUserTagMap;
 import org.acumos.cds.repository.NotifUserMapRepository;
 import org.acumos.cds.repository.NotificationRepository;
 import org.acumos.cds.repository.RoleRepository;
@@ -55,6 +57,7 @@ import org.acumos.cds.repository.UserLoginProviderRepository;
 import org.acumos.cds.repository.UserNotificationPreferenceRepository;
 import org.acumos.cds.repository.UserRepository;
 import org.acumos.cds.repository.UserRoleMapRepository;
+import org.acumos.cds.repository.UserTagMapRepository;
 import org.acumos.cds.service.UserSearchService;
 import org.acumos.cds.transport.CountTransport;
 import org.acumos.cds.transport.ErrorTransport;
@@ -140,6 +143,8 @@ public class UserController extends AbstractController {
 	private SolutionRepository solutionRepository;
 	@Autowired
 	private SolutionDeploymentRepository solutionDeploymentRepository;
+	@Autowired
+	private UserTagMapRepository userTagMapRepository;
 
 	/**
 	 * @return Model that maps String to Object, for serialization as JSON
@@ -1363,6 +1368,64 @@ public class UserController extends AbstractController {
 		}
 		Page<MLPSolutionDeployment> da = solutionDeploymentRepository.findByUserId(userId, pageRequest);
 		return da;
+	}
+
+	/**
+	 * @param userId
+	 *            user ID
+	 * @param tag
+	 *            tag to add
+	 * @param response
+	 *            HttpServletResponse
+	 * @return Success indicator
+	 */
+	@ApiOperation(value = "Adds a tag to the user.", response = SuccessTransport.class)
+	@RequestMapping(value = "/{userId}/" + CCDSConstants.TAG_PATH + "/{tag}", method = RequestMethod.POST)
+	@ResponseBody
+	public Object addUserTag(@PathVariable("userId") String userId, @PathVariable("tag") String tag,
+			HttpServletResponse response) {
+		logger.info("addSolutionTag: userId {} tag {}", userId, tag);
+		if (userRepository.findOne(userId) == null) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + userId, null);
+		} else if (userTagMapRepository.findOne(new MLPUserTagMap.UserTagMapPK(userId, tag)) != null) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "Already has tag " + tag, null);
+		}
+		if (tagRepository.findOne(tag) == null) {
+			// Tags are cheap & easy to create, so make life easy for client
+			tagRepository.save(new MLPTag(tag));
+			logger.info("addUserTag: created tag {}", tag);
+		}
+		userTagMapRepository.save(new MLPUserTagMap(userId, tag));
+		return new SuccessTransport(HttpServletResponse.SC_OK, null);
+	}
+
+	/**
+	 * @param userId
+	 *            user ID
+	 * @param tag
+	 *            tag to remove
+	 * @param response
+	 *            HttpServletResponse
+	 * @return Success indicator
+	 */
+	@ApiOperation(value = "Drops a tag from the user.", response = SuccessTransport.class)
+	@RequestMapping(value = "/{userId}/" + CCDSConstants.TAG_PATH + "/{tag}", method = RequestMethod.DELETE)
+	@ResponseBody
+	public Object dropSolutionTag(@PathVariable("userId") String userId, @PathVariable("tag") String tag,
+			HttpServletResponse response) {
+		logger.info("dropTag: userId {} tag {}", userId, tag);
+		if (userRepository.findOne(userId) == null) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + userId, null);
+		} else if (userTagMapRepository.findOne(new MLPUserTagMap.UserTagMapPK(userId, tag)) == null) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + tag, null);
+		} else {
+			userTagMapRepository.delete(new MLPUserTagMap.UserTagMapPK(userId, tag));
+			return new SuccessTransport(HttpServletResponse.SC_OK, null);
+		}
 	}
 
 }
