@@ -36,6 +36,7 @@ import org.acumos.cds.domain.MLPPeer;
 import org.acumos.cds.domain.MLPPeerGroup;
 import org.acumos.cds.domain.MLPPeerSolAccMap;
 import org.acumos.cds.domain.MLPPeerSubscription;
+import org.acumos.cds.domain.MLPPublishRequest;
 import org.acumos.cds.domain.MLPRevisionDescription;
 import org.acumos.cds.domain.MLPRole;
 import org.acumos.cds.domain.MLPRoleFunction;
@@ -469,7 +470,6 @@ public class MockClientTest {
 		RestPageResponse<MLPStepResult> stepResults = new RestPageResponse<>();
 		client.setStepResults(stepResults);
 		Assert.assertTrue(stepResults == client.getStepResults(pageRequest));
-
 		MLPStepResult stepResult = new MLPStepResult();
 		client.setStepResult(stepResult);
 		Assert.assertTrue(stepResult == client.createStepResult(stepResult));
@@ -484,6 +484,15 @@ public class MockClientTest {
 		Assert.assertTrue(peerGroup == client.createPeerGroup(peerGroup));
 		client.updatePeerGroup(peerGroup);
 		client.deletePeerGroup(0L);
+
+		RestPageResponse<MLPPublishRequest> publishRequests = new RestPageResponse<>();
+		client.setPublishRequests(publishRequests);
+		Assert.assertTrue(publishRequests == client.getPublishRequests(pageRequest));
+		MLPPublishRequest publishRequest = new MLPPublishRequest();
+		client.setPublishRequest(publishRequest);
+		Assert.assertTrue(publishRequest == client.createPublishRequest(publishRequest));
+		client.updatePublishRequest(publishRequest);
+		client.deletePublishRequest(0L);
 
 		RestPageResponse<MLPSolutionGroup> solGroups = new RestPageResponse<>();
 		client.setSolutionGroups(solGroups);

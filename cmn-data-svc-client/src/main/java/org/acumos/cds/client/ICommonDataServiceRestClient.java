@@ -40,6 +40,7 @@ import org.acumos.cds.domain.MLPPeer;
 import org.acumos.cds.domain.MLPPeerGroup;
 import org.acumos.cds.domain.MLPPeerSolAccMap;
 import org.acumos.cds.domain.MLPPeerSubscription;
+import org.acumos.cds.domain.MLPPublishRequest;
 import org.acumos.cds.domain.MLPRevisionDescription;
 import org.acumos.cds.domain.MLPRole;
 import org.acumos.cds.domain.MLPRoleFunction;
@@ -2226,4 +2227,67 @@ public interface ICommonDataServiceRestClient {
 	 */
 	void dropSolutionRevisionDocument(String revisionId, String accessTypeCode, String documentId);
 
+	/**
+	 * Gets a publish request.
+	 * 
+	 * @param publishRequestId
+	 *            Publish request ID
+	 * @return MLPPublishRequest
+	 */
+	MLPPublishRequest getPublishRequest(long publishRequestId);
+
+	/**
+	 * Gets a page of publish requests.
+	 * 
+	 * @param pageRequest
+	 *            Page index, page size and sort information; defaults to page 0 of
+	 *            size 20 if null.
+	 * @return Page of publish request objects.
+	 */
+	RestPageResponse<MLPPublishRequest> getPublishRequests(RestPageRequest pageRequest);
+
+	/**
+	 * Searches publish requests.
+	 * 
+	 * @param queryParameters
+	 *            Map of field-name, field-value pairs to use as query criteria.
+	 *            Accepts Boolean, Date, Integer, Long, String values; also Array of
+	 *            those types.
+	 * @param isOr
+	 *            If true, finds matches on any field-value pair (conditions are
+	 *            OR-ed together); otherwise finds matches on all field-value pairs
+	 *            (conditions are AND-ed together).
+	 * @param pageRequest
+	 *            Page index, page size and sort information; defaults to page 0 of
+	 *            size 20 if null.
+	 * @return Page of publish request objects
+	 */
+	RestPageResponse<MLPPublishRequest> searchPublishRequests(Map<String, Object> queryParameters, boolean isOr,
+			RestPageRequest pageRequest);
+
+	/**
+	 * Creates a publish request.
+	 * 
+	 * @param publishRequest
+	 *            result Publish Request data.
+	 * @return Complete object, with generated information such as ID
+	 */
+	MLPPublishRequest createPublishRequest(MLPPublishRequest publishRequest);
+
+	/**
+	 * Updates a publish request.
+	 * 
+	 * @param publishRequest
+	 *            Publish Request data
+	 */
+	void updatePublishRequest(MLPPublishRequest publishRequest);
+
+	/**
+	 * Deletes a publish request.
+	 * 
+	 * @param publishRequestId
+	 *            publishRequest ID
+	 */
+	void deletePublishRequest(long publishRequestId);
+	
 }
