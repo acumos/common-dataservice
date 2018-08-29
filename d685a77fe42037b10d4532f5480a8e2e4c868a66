@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fef565af_3f78381f",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/PublishRequestStatusCode.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 87
+      },
+      "writtenOn": "2018-08-29T18:13:08Z",
+      "side": 1,
+      "message": "Is Withdrawn not needed",
+      "revId": "d685a77fe42037b10d4532f5480a8e2e4c868a66",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
