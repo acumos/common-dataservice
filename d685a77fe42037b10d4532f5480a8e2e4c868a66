@@ -16,6 +16,23 @@
       "revId": "d685a77fe42037b10d4532f5480a8e2e4c868a66",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a68bec0f_d8239867",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPPublishRequest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 87
+      },
+      "writtenOn": "2018-08-29T18:14:26Z",
+      "side": 1,
+      "message": "Do we need a pending flag here or some other Mapping table",
+      "revId": "d685a77fe42037b10d4532f5480a8e2e4c868a66",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
