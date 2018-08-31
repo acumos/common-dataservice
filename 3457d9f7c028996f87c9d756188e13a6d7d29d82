@@ -16,6 +16,23 @@
       "revId": "3457d9f7c028996f87c9d756188e13a6d7d29d82",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d3eb0314_4ffd55ca",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/CommonDataServiceRestClientImpl.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 2480,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-08-31T20:57:30Z",
+      "side": 1,
+      "message": "Do you want to provide another method to check the publish requests for which revisions within a solution are pending?",
+      "revId": "3457d9f7c028996f87c9d756188e13a6d7d29d82",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
