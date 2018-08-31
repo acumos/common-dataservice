@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "402140e3_fcceafbe",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/AccessTypeCode.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-08-31T20:02:47Z",
+      "side": 1,
+      "message": "No, I don\u0027t want to disrupt working code.",
+      "parentUuid": "077b59ce_69acc29b",
+      "revId": "d9e1bd713ef233ea2708f4bae36eb9d59411880a",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "614d0a61_21073b5e",
         "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPPublishRequest.java",
         "patchSetId": 10
@@ -47,6 +65,24 @@
       "writtenOn": "2018-08-31T19:54:44Z",
       "side": 1,
       "message": "\u003e Please include not null annotations in the below relevant columns",
+      "parentUuid": "614d0a61_21073b5e",
+      "revId": "d9e1bd713ef233ea2708f4bae36eb9d59411880a",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e589b9a4_da3e1423",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPPublishRequest.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-08-31T20:02:47Z",
+      "side": 1,
+      "message": "Ok\n\u003eOk",
       "parentUuid": "614d0a61_21073b5e",
       "revId": "d9e1bd713ef233ea2708f4bae36eb9d59411880a",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
