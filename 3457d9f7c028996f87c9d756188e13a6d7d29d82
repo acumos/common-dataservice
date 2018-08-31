@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0e718116_1979dedc",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/CommonDataServiceRestClientImpl.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 2034,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-08-31T20:39:57Z",
+      "side": 1,
+      "message": "What is the rationale behind using publishRequest parameters in the CRUD operations for step result?",
+      "revId": "3457d9f7c028996f87c9d756188e13a6d7d29d82",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
