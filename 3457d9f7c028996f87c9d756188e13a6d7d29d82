@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "c31cd7ad_1c957f7b",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/CommonDataServiceRestClientImpl.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 2034,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-08-31T21:22:16Z",
+      "side": 1,
+      "message": "That is another good catch, totally bogus.",
+      "parentUuid": "0e718116_1979dedc",
+      "revId": "3457d9f7c028996f87c9d756188e13a6d7d29d82",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d3eb0314_4ffd55ca",
         "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/CommonDataServiceRestClientImpl.java",
         "patchSetId": 12
@@ -30,6 +48,24 @@
       "writtenOn": "2018-08-31T20:57:30Z",
       "side": 1,
       "message": "Do you want to provide another method to check the publish requests for which revisions within a solution are pending?",
+      "revId": "3457d9f7c028996f87c9d756188e13a6d7d29d82",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7bbf7983_e050fd74",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/CommonDataServiceRestClientImpl.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 2480,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-08-31T21:22:16Z",
+      "side": 1,
+      "message": "I don\u0027t see a need for that - please explain the use case",
+      "parentUuid": "d3eb0314_4ffd55ca",
       "revId": "3457d9f7c028996f87c9d756188e13a6d7d29d82",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
