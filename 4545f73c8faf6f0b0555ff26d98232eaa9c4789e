@@ -16,6 +16,57 @@
       "revId": "4545f73c8faf6f0b0555ff26d98232eaa9c4789e",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8969614a_36d63b88",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/DocumentController.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-08-31T21:38:54Z",
+      "side": 1,
+      "message": "May be remove the above comment set?",
+      "revId": "4545f73c8faf6f0b0555ff26d98232eaa9c4789e",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cc1d4932_665fe1c1",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/DocumentController.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-08-31T21:38:54Z",
+      "side": 1,
+      "message": "Why did you change document to entity in the value for \"value\" key in CRUD operations on document?",
+      "revId": "4545f73c8faf6f0b0555ff26d98232eaa9c4789e",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9dbb0be7_7ce0e17f",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/DocumentController.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-08-31T21:38:54Z",
+      "side": 1,
+      "message": "Correct typo in info parameter above",
+      "revId": "4545f73c8faf6f0b0555ff26d98232eaa9c4789e",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
