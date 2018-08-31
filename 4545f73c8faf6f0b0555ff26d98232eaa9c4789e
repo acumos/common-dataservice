@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf201624_3f065502",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/CodeTableController.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-08-31T21:32:36Z",
+      "side": 1,
+      "message": "May be remove the above comment set as well for getAccessTypeList?",
+      "revId": "4545f73c8faf6f0b0555ff26d98232eaa9c4789e",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
