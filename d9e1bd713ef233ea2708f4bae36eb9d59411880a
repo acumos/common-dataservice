@@ -87,6 +87,23 @@
       "revId": "d9e1bd713ef233ea2708f4bae36eb9d59411880a",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3e077770_1a07c3d5",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPUser.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-08-31T20:04:19Z",
+      "side": 1,
+      "message": "Remove the above comment, its a duplication.",
+      "revId": "d9e1bd713ef233ea2708f4bae36eb9d59411880a",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
