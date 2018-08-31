@@ -107,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "ffc1d241_f7ec3497",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPUser.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-08-31T20:16:29Z",
+      "side": 1,
+      "message": "Duplicate of what?  This is useful for people who use the method.",
+      "parentUuid": "3e077770_1a07c3d5",
+      "revId": "d9e1bd713ef233ea2708f4bae36eb9d59411880a",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7ea5f4f7_59c2a1f5",
         "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPUserTagMap.java",
         "patchSetId": 10
@@ -118,6 +136,24 @@
       "writtenOn": "2018-08-31T20:10:18Z",
       "side": 1,
       "message": "Max is 32, right?",
+      "revId": "d9e1bd713ef233ea2708f4bae36eb9d59411880a",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "680c5223_10f23758",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPUserTagMap.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-08-31T20:16:29Z",
+      "side": 1,
+      "message": "Right good catch",
+      "parentUuid": "7ea5f4f7_59c2a1f5",
       "revId": "d9e1bd713ef233ea2708f4bae36eb9d59411880a",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
