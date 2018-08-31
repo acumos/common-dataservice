@@ -33,6 +33,24 @@
       "revId": "d9e1bd713ef233ea2708f4bae36eb9d59411880a",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f8d39fdf_514feb7a",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPPublishRequest.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-08-31T19:54:44Z",
+      "side": 1,
+      "message": "\u003e Please include not null annotations in the below relevant columns",
+      "parentUuid": "614d0a61_21073b5e",
+      "revId": "d9e1bd713ef233ea2708f4bae36eb9d59411880a",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
