@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "077b59ce_69acc29b",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/AccessTypeCode.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-08-31T19:15:41Z",
+      "side": 1,
+      "message": "Maybe then change the value for this code to \"Company\" then?",
+      "revId": "d9e1bd713ef233ea2708f4bae36eb9d59411880a",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
