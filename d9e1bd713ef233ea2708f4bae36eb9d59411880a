@@ -104,6 +104,23 @@
       "revId": "d9e1bd713ef233ea2708f4bae36eb9d59411880a",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ea5f4f7_59c2a1f5",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPUserTagMap.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-08-31T20:10:18Z",
+      "side": 1,
+      "message": "Max is 32, right?",
+      "revId": "d9e1bd713ef233ea2708f4bae36eb9d59411880a",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
