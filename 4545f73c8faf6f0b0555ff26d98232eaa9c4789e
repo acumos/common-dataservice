@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "84bfc9fa_de8f2fad",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/CodeTableController.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-09-01T00:55:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf201624_3f065502",
+      "revId": "4545f73c8faf6f0b0555ff26d98232eaa9c4789e",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8969614a_36d63b88",
         "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/DocumentController.java",
         "patchSetId": 14
@@ -30,6 +48,24 @@
       "writtenOn": "2018-08-31T21:38:54Z",
       "side": 1,
       "message": "May be remove the above comment set?",
+      "revId": "4545f73c8faf6f0b0555ff26d98232eaa9c4789e",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9643afb3_bca00af1",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/DocumentController.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-09-01T00:55:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8969614a_36d63b88",
       "revId": "4545f73c8faf6f0b0555ff26d98232eaa9c4789e",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "d8edd860_1fdae2d9",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/DocumentController.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-09-01T00:55:37Z",
+      "side": 1,
+      "message": "used that same description everywhere.",
+      "parentUuid": "cc1d4932_665fe1c1",
+      "revId": "4545f73c8faf6f0b0555ff26d98232eaa9c4789e",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9dbb0be7_7ce0e17f",
         "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/DocumentController.java",
         "patchSetId": 14
@@ -64,6 +118,24 @@
       "writtenOn": "2018-08-31T21:38:54Z",
       "side": 1,
       "message": "Correct typo in info parameter above",
+      "revId": "4545f73c8faf6f0b0555ff26d98232eaa9c4789e",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f593396d_a5a6d969",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/DocumentController.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-09-01T00:55:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9dbb0be7_7ce0e17f",
       "revId": "4545f73c8faf6f0b0555ff26d98232eaa9c4789e",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
