@@ -521,7 +521,10 @@ public class MockClientTest {
 		List<MLPPeer> peerAccessList = new ArrayList<>();
 		client.setPeerAccess(peerAccessList);
 		Assert.assertTrue(peerAccessList == client.getPeerAccess("peerId"));
-
+		RestPageResponse<MLPSolution> restrictedSolutions = new RestPageResponse<>();
+		client.setRestrictedSolutions(restrictedSolutions);
+		Assert.assertTrue(restrictedSolutions == client.findRestrictedSolutions("peerId", new RestPageRequest()));
+		
 		List<String> members = new ArrayList<>();
 		client.setCompositeSolutionMembers(members);
 		Assert.assertTrue(members == client.getCompositeSolutionMembers("id"));
