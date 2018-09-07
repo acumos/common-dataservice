@@ -1716,7 +1716,7 @@ public class CdsControllerTest {
 		Assert.assertNotNull("User ID", cu.getUserId());
 		logger.info("Created user " + cu.getUserId());
 
-		MLPSolution cs = new MLPSolution("solutionName", cu.getUserId(), false);
+		MLPSolution cs = new MLPSolution("solutionName", cu.getUserId(), true);
 		cs = client.createSolution(cs);
 		Assert.assertNotNull("Solution ID", cs.getSolutionId());
 		logger.info("Created solution " + cs.getSolutionId());
@@ -1773,6 +1773,9 @@ public class CdsControllerTest {
 
 		long access = client.checkPeerSolutionAccess(pr.getPeerId(), cs.getSolutionId());
 		Assert.assertTrue(access > 0);
+		RestPageResponse<MLPSolution> restrSols = client.findRestrictedSolutions(pr.getPeerId(),
+				new RestPageRequest(0, 5));
+		Assert.assertTrue(restrSols != null && restrSols.getNumberOfElements() > 0);
 
 		client.unmapPeerSolutionGroups(pg1.getGroupId(), sg.getGroupId());
 		maps = client.getPeerSolutionGroupMaps(new RestPageRequest());
@@ -1794,7 +1797,7 @@ public class CdsControllerTest {
 		Assert.assertTrue(peersInGroup != null && peersInGroup.getNumberOfElements() == 0);
 
 		access = client.checkPeerSolutionAccess(pr.getPeerId(), cs.getSolutionId());
-		Assert.assertTrue(access <= 0);
+		Assert.assertTrue(access == 0);
 
 		// Invalid cases
 		try {

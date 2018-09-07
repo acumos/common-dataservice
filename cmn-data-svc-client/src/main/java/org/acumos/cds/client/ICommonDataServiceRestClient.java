@@ -2011,7 +2011,9 @@ public interface ICommonDataServiceRestClient {
 
 	/**
 	 * Checks whether the specified peer ID may access the specified solution ID via
-	 * peer group, solution group and so on.
+	 * peer group, solution group and so on by counting the number of paths that
+	 * grant the access; i.e., peer membership in peer group, solution membership in
+	 * solution group, etc.
 	 * 
 	 * @param peerId
 	 *            Peer ID
@@ -2030,6 +2032,18 @@ public interface ICommonDataServiceRestClient {
 	 * @return List of accessible peers
 	 */
 	List<MLPPeer> getPeerAccess(String peerId);
+
+	/**
+	 * Searches for active solutions available to the specified peer due to
+	 * appropriate entries in the peer-group, peer-solution-group and solution-group
+	 * membership mapping tables.
+	 *
+	 * @param peerId
+	 * @param pageRequest
+	 * @return Page of MLPSolution accessible to the specified peer, which may be
+	 *         none
+	 */
+	RestPageResponse<MLPSolution> findRestrictedSolutions(String peerId, RestPageRequest pageRequest);
 
 	/**
 	 * Creates a user notification preference.
