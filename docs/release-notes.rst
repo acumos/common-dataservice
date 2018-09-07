@@ -27,6 +27,7 @@ Version 1.18.1, ? Sep 2018
 --------------------------
 
 * Defend against null arguments (ACUMOS-1696)
+* Adjust database scripts for C_PEER_SUB PROCESSED_DATE column (ACUMOS-1703)
 * Refactor artifact-search controller annotations for Swagger web UI
 * Add example federation selector to Swagger annotation
 * Increase default memory limit to 1GB

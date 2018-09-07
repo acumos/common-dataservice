@@ -20,6 +20,8 @@
 -- FROM version 1.18.x TO version 1.17.x.
 -- No database is specified to allow flexible deployment!
 
+-- 3
+ALTER TABLE C_PEER_SUB CHANGE PROCESSED_DATE PROCESSED_DATE TIMESTAMP;
 -- 2
 DROP TABLE C_PUBLISH_REQUEST;
 -- 1
