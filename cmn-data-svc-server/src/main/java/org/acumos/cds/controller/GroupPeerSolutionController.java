@@ -32,6 +32,7 @@ import org.acumos.cds.domain.MLPPeerGrpMemMap;
 import org.acumos.cds.domain.MLPPeerPeerAccMap;
 import org.acumos.cds.domain.MLPPeerSolAccMap;
 import org.acumos.cds.domain.MLPSolGrpMemMap;
+import org.acumos.cds.domain.MLPSolution;
 import org.acumos.cds.domain.MLPSolutionGroup;
 import org.acumos.cds.repository.PeerGroupRepository;
 import org.acumos.cds.repository.PeerGrpMemMapRepository;
@@ -66,6 +67,8 @@ import io.swagger.annotations.ApiResponses;
 /**
  * Provides methods to manage peer groups and solution groups, peer group and
  * solution group memberships, and also peer group and solution group access.
+ * 
+ * The prefix "group" is pretty generic.
  */
 @Controller
 @RequestMapping(value = "/" + CCDSConstants.GROUP_PATH, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -513,6 +516,18 @@ public class GroupPeerSolutionController extends AbstractController {
 		}
 		long count = peerSolAccMapRepository.checkPeerSolutionAccess(peerId, solutionId);
 		return new CountTransport(count);
+	}
+
+	@ApiOperation(value = "Gets a page of non-public solutions accessible to specified peer", response = MLPSolution.class, responseContainer = "Page")
+	@ApiPageable
+	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
+	@RequestMapping(value = CCDSConstants.PEER_PATH + "/{peerId}/"
+			+ CCDSConstants.SOLUTION_PATH, method = RequestMethod.GET)
+	@ResponseBody
+	public Page<MLPSolution> getRestrictedSolutions(@PathVariable("peerId") String peerId, Pageable pageRequest,
+			HttpServletResponse response) {
+		logger.info("getRestrictedSolutions: peerId {} ", peerId);
+		return solutionRepository.findRestrictedSolutions(peerId, pageRequest);
 	}
 
 	@ApiOperation(value = "Gets peers accessible to the specified peer.", response = MLPPeer.class, responseContainer = "List")
