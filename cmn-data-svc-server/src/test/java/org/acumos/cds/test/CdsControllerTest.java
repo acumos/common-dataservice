@@ -1716,7 +1716,7 @@ public class CdsControllerTest {
 		Assert.assertNotNull("User ID", cu.getUserId());
 		logger.info("Created user " + cu.getUserId());
 
-		MLPSolution cs = new MLPSolution("solutionName", cu.getUserId(), false);
+		MLPSolution cs = new MLPSolution("solutionName", cu.getUserId(), true);
 		cs = client.createSolution(cs);
 		Assert.assertNotNull("Solution ID", cs.getSolutionId());
 		logger.info("Created solution " + cs.getSolutionId());
@@ -1771,8 +1771,11 @@ public class CdsControllerTest {
 		maps = client.getPeerSolutionGroupMaps(new RestPageRequest());
 		Assert.assertTrue(maps != null && maps.getNumberOfElements() > 0);
 
-		long access = client.checkPeerSolutionAccess(pr.getPeerId(), cs.getSolutionId());
+		long access = client.checkRestrictedAccessSolution(pr.getPeerId(), cs.getSolutionId());
 		Assert.assertTrue(access > 0);
+		RestPageResponse<MLPSolution> restrSols = client.findRestrictedAccessSolutions(pr.getPeerId(),
+				new RestPageRequest(0, 5));
+		Assert.assertTrue(restrSols != null && restrSols.getNumberOfElements() > 0);
 
 		client.unmapPeerSolutionGroups(pg1.getGroupId(), sg.getGroupId());
 		maps = client.getPeerSolutionGroupMaps(new RestPageRequest());
@@ -1793,8 +1796,8 @@ public class CdsControllerTest {
 		peersInGroup = client.getPeersInGroup(pg1.getGroupId(), new RestPageRequest());
 		Assert.assertTrue(peersInGroup != null && peersInGroup.getNumberOfElements() == 0);
 
-		access = client.checkPeerSolutionAccess(pr.getPeerId(), cs.getSolutionId());
-		Assert.assertTrue(access <= 0);
+		access = client.checkRestrictedAccessSolution(pr.getPeerId(), cs.getSolutionId());
+		Assert.assertTrue(access == 0);
 
 		// Invalid cases
 		try {
@@ -1969,13 +1972,13 @@ public class CdsControllerTest {
 			logger.info("unmap peer peer groups failed as expected: {}", ex.getResponseBodyAsString());
 		}
 		try {
-			client.checkPeerSolutionAccess("peerId", "solutionId");
+			client.checkRestrictedAccessSolution("peerId", "solutionId");
 			throw new Exception("Unexpected success");
 		} catch (HttpStatusCodeException ex) {
 			logger.info("checkPeerSolutionAccess failed as expected: {}", ex.getResponseBodyAsString());
 		}
 		try {
-			client.checkPeerSolutionAccess(pr.getPeerId(), "solutionId");
+			client.checkRestrictedAccessSolution(pr.getPeerId(), "solutionId");
 			throw new Exception("Unexpected success");
 		} catch (HttpStatusCodeException ex) {
 			logger.info("checkPeerSolutionAccess failed as expected: {}", ex.getResponseBodyAsString());

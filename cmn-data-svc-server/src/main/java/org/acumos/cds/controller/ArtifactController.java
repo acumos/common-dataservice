@@ -128,6 +128,7 @@ public class ArtifactController extends AbstractController {
 	private final String uriField = "uri";
 	private final String versionField = "version";
 	private final String userIdField = "userId";
+
 	@ApiOperation(value = "Searches for artifacts with attributes matching the values specified as query parameters. " //
 			+ "Defaults to match all (conjunction); send junction query parameter '_j=o' to match any (disjunction).", //
 			response = MLPArtifact.class, responseContainer = "Page")
