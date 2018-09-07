@@ -487,7 +487,7 @@ public class SolutionController extends AbstractController {
 	@ResponseBody
 	public Object incrementViewCount(@PathVariable("solutionId") String solutionId, HttpServletResponse response) {
 		logger.info("incrementViewCount: ID {}", solutionId);
-		// Get the existing one
+		// Get the existing one; the update command doesn't fail on invalid ID
 		MLPSolutionWeb existing = solutionWebRepository.findOne(solutionId);
 		if (existing == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -756,19 +756,6 @@ public class SolutionController extends AbstractController {
 			@PathVariable("userId") String userId, @PathVariable("artifactId") String artifactId,
 			@RequestBody MLPSolutionDownload sd, HttpServletResponse response) {
 		logger.info("createSolutionDownload: solutionId {} userId {} artifactId {}", solutionId, userId, artifactId);
-		// These validations duplicate the constraints but are much user friendlier.
-		if (solutionRepository.findOne(solutionId) == null) {
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + solutionId, null);
-		}
-		if (artifactRepository.findOne(artifactId) == null) {
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + artifactId, null);
-		}
-		if (userRepository.findOne(userId) == null) {
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + userId, null);
-		}
 		try {
 			// Create a new row using path IDs
 			sd.setSolutionId(solutionId);
@@ -782,10 +769,11 @@ public class SolutionController extends AbstractController {
 			updateSolutionDownloadStats(solutionId);
 			return result;
 		} catch (Exception ex) {
-			logger.error("createSolutionDownload failed: {}", ex.toString());
-			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			return new ErrorTransport(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-					ex.getCause() != null ? ex.getCause().getMessage() : "createSolutionDownload failed", ex);
+			Exception cve = findConstraintViolationException(ex);
+			logger.error("createSolutionDownload failed: {}", cve.toString());
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST,
+					ex.getCause() != null ? ex.getCause().getMessage() : "createSolutionDownload failed", cve);
 		}
 	}
 

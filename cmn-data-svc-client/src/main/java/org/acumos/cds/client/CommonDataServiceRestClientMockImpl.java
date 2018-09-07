@@ -222,6 +222,7 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 	private RestPageResponse<MLPPublishRequest> publishRequests;
 	private RestPageResponse<MLPPublishRequest> searchPublishRequests;
 	private MLPPublishRequest publishRequest;
+	private RestPageResponse<MLPSolution> restrictedSolutions;
 
 	/**
 	 * No-argument constructor.
@@ -1699,7 +1700,7 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 	}
 
 	@Override
-	public long checkPeerSolutionAccess(String peerId, String solutionId) {
+	public long checkRestrictedAccessSolution(String peerId, String solutionId) {
 		return peerSolutionAccess;
 	}
 
@@ -1710,6 +1711,15 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 	@Override
 	public List<MLPPeer> getPeerAccess(String peerId) {
 		return peerAccessList;
+	}
+
+	public void setRestrictedSolutions(RestPageResponse<MLPSolution> restrictedSolutions) {
+		this.restrictedSolutions = restrictedSolutions;
+	}
+
+	@Override
+	public RestPageResponse<MLPSolution> findRestrictedAccessSolutions(String peerId, RestPageRequest pageRequest) {
+		return restrictedSolutions;
 	}
 
 	@Override
