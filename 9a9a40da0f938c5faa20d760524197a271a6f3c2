@@ -16,6 +16,24 @@
       "revId": "9a9a40da0f938c5faa20d760524197a271a6f3c2",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "02aa791a_b6fb5ead",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/GroupPeerSolutionController.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-09-10T20:15:22Z",
+      "side": 1,
+      "message": "Made the method parallel with addPeerToGroup.  The preconditions are checked so there\u0027s very little chance of user error causing a failure.",
+      "parentUuid": "251efe09_3897ddba",
+      "revId": "9a9a40da0f938c5faa20d760524197a271a6f3c2",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
