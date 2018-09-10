@@ -69,6 +69,23 @@
       "revId": "9a9a40da0f938c5faa20d760524197a271a6f3c2",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fe4d3c5f_56f82661",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/repository/SolutionRepository.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-09-10T22:21:29Z",
+      "side": 1,
+      "message": "Why is findByModifiedDate functionality removed?",
+      "revId": "9a9a40da0f938c5faa20d760524197a271a6f3c2",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
