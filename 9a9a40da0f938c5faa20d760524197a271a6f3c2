@@ -86,6 +86,24 @@
       "revId": "9a9a40da0f938c5faa20d760524197a271a6f3c2",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "60fb9f5b_22856f6c",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/repository/SolutionRepository.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-09-10T22:40:34Z",
+      "side": 1,
+      "message": "Because I moved it to the SearchService, forgot to remove it from here",
+      "parentUuid": "fe4d3c5f_56f82661",
+      "revId": "9a9a40da0f938c5faa20d760524197a271a6f3c2",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
