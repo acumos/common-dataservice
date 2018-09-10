@@ -34,6 +34,23 @@
       "revId": "9a9a40da0f938c5faa20d760524197a271a6f3c2",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "060cdbae_11df2075",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/NotificationController.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-09-10T20:57:08Z",
+      "side": 1,
+      "message": "May be add missing user id check here?",
+      "revId": "9a9a40da0f938c5faa20d760524197a271a6f3c2",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
