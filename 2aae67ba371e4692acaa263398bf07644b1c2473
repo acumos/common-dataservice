@@ -16,6 +16,24 @@
       "revId": "2aae67ba371e4692acaa263398bf07644b1c2473",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6a0db174_9128370f",
+        "filename": "cmn-data-svc-server/db-scripts/cmn-data-svc-ddl-dml-mysql-1.18.sql",
+        "patchSetId": 3
+      },
+      "lineNbr": 530,
+      "author": {
+        "id": 87
+      },
+      "writtenOn": "2018-09-11T18:28:16Z",
+      "side": 1,
+      "message": "To be in sync with Portal Code which is using that name",
+      "parentUuid": "931b7e0a_c4f26de7",
+      "revId": "2aae67ba371e4692acaa263398bf07644b1c2473",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
