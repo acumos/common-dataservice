@@ -537,7 +537,9 @@ INSERT INTO C_SITE_CONFIG (CONFIG_KEY, CONFIG_VAL) VALUES (
 -- Initial user, role setups for admin
 INSERT INTO C_USER (USER_ID, LOGIN_NAME, LOGIN_HASH, FIRST_NAME, LAST_NAME, EMAIL) VALUES ('12345678-abcd-90ab-cdef-1234567890ab', 'admin', '$2a$10$nogCM69/Vc0rEsZbHXlEm.nxSdGuD88Kd6NlW6fnKJz3AIz0PdOwa', 'Acumos', 'Admin', 'noreply@acumos.org');
 
--- Role name is case sensitive
+-- Role names are case sensitive
 INSERT INTO C_ROLE (ROLE_ID, NAME, ACTIVE_YN) VALUES ('8c850f07-4352-4afd-98b1-00cbceca569f', 'Admin', 'Y');
+INSERT INTO C_ROLE (ROLE_ID, NAME, ACTIVE_YN) VALUES ('9d961018-5464-5b0e-a9c2-11dcdfdb67a0', 'Publish', 'Y');
 
 INSERT INTO C_USER_ROLE_MAP (USER_ID, ROLE_ID) VALUES ('12345678-abcd-90ab-cdef-1234567890ab', '8c850f07-4352-4afd-98b1-00cbceca569f');
+INSERT INTO C_USER_ROLE_MAP (USER_ID, ROLE_ID) VALUES ('12345678-abcd-90ab-cdef-1234567890ab', '9d961018-5464-5b0e-a9c2-11dcdfdb67a0');
