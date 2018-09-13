@@ -77,9 +77,9 @@ Clone the Git repository and build the tool as follows::
 Usage
 -----
 
-Run the migration tool like this::
+Run the migration tool as below, after replacing "x" with the current version number::
 
-    java target/migrate-cms-to-cds-1.0.0-SNAPSHOT-spring-boot.jar
+    java -jar target/migrate-cms-to-cds-1.0.x-SNAPSHOT-spring-boot.jar
 
 The tool expects to find file "migrate.properties" in the current directory.
 It will write a log file to the current directory.
