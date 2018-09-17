@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fe5f27e0_26f674a1",
+        "filename": "docs/release-notes.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-09-17T20:06:40Z",
+      "side": 1,
+      "message": "Please put the specific date when this change is going in",
+      "revId": "ea0454c6fa5eb6b4b48ec5be5db0521c4bcd5cbe",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
