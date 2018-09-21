@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f7a4a51b_1947d669",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/ICommonDataServiceRestClient.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-09-21T13:44:19Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this entail partial matches search also?",
+      "revId": "b2bf599c0c0aed089a90e8abb38139c5633f57fd",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
