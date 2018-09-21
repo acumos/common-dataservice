@@ -16,6 +16,24 @@
       "revId": "b2bf599c0c0aed089a90e8abb38139c5633f57fd",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d05c2716_015743d6",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/ICommonDataServiceRestClient.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-09-21T13:46:32Z",
+      "side": 1,
+      "message": "I\u0027m just documenting the behavior.  It searches for exact matches.  There are \"like\" (approximate match) searches for some entities, but not all.  This is yet another reason why we need a full-text search solution, instead of database column search.",
+      "parentUuid": "f7a4a51b_1947d669",
+      "revId": "b2bf599c0c0aed089a90e8abb38139c5633f57fd",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
