@@ -51,6 +51,24 @@
       "revId": "b2bf599c0c0aed089a90e8abb38139c5633f57fd",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e978585c_77d20330",
+        "filename": "cmn-data-svc-server/src/main/resources/application.properties",
+        "patchSetId": 4
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-09-24T15:46:41Z",
+      "side": 1,
+      "message": "Yes they are very helpful for debugging, but generate a horrible amount of text to stdout that docker must keep in its logs.  When the CDS is being used in a production-like mode I think this is not appropriate, which is why I changed this flag.",
+      "parentUuid": "8a60b891_586a8914",
+      "revId": "b2bf599c0c0aed089a90e8abb38139c5633f57fd",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
