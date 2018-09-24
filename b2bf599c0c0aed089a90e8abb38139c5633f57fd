@@ -34,6 +34,23 @@
       "revId": "b2bf599c0c0aed089a90e8abb38139c5633f57fd",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8a60b891_586a8914",
+        "filename": "cmn-data-svc-server/src/main/resources/application.properties",
+        "patchSetId": 4
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-09-24T15:41:58Z",
+      "side": 1,
+      "message": "Aren\u0027t these statements helpful for debugging purposes?",
+      "revId": "b2bf599c0c0aed089a90e8abb38139c5633f57fd",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
