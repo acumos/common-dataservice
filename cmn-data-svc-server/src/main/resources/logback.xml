@@ -35,14 +35,10 @@
 	<property name="p_msg" value="%replace(%replace(%msg){'\t', '\\\\t'}){'\n','\\\\n'}" />
 	<property name="p_exc" value="%replace(%replace(%rootException){'\t', '\\\\t'}){'\n','\\\\n'}" />
 	<property name="p_mrk" value="%replace(%replace(%marker){'\t', '\\\\t'}){'\n','\\\\n'}" />
-	<property name="singleLinePattern" value="%nopexception${p_tim}\t${p_thr}\t${p_lvl}\t${p_log}\t${p_mdc}\t${p_msg}\t${p_exc}\t${p_mrk}\t%n" />
-	<property name="multiLinePattern" value="%nopexception${p_tim}\t${p_thr}\t${p_lvl}\t${p_log}\t%mdc\t%msg\t%rootException\t%marker\t%n" />
-
-	<appender name="console-all" class="ch.qos.logback.core.ConsoleAppender">
-		<encoder>
-			<pattern>${multiLinePattern}</pattern>
-		</encoder>
-	</appender>
+	<property name="no_mdc" value="%X{DO_NOT_REPEAT_MDC}" /> <!-- a no-op -->
+	<property name="singleLineAthenaPattern" value="%date{&quot;yyyy-MM-dd'T'HH:mm:ss.SSSXXX&quot;,UTC}|%X{EntryTimestamp}|%X{InvokeTimestamp}|%X{RequestID}|%X{InvocationID}|%X{InstanceUUID}|%X{ServiceInstanceID}|${p_thr}|%X{ServiceName}|%X{PartnerName}|%X{StatusCode}|%X{ResponseCode}|%X{ResponseDescription}|%.-5level|%X{Severity}|%X{ServerIPAddress}|%X{Timer}|%X{ServerFQDN}|%X{ClientIPAddress}|%X{VirtualServerName}|%X{ContextName}|%X{TargetEntity}|%X{ClassName}|%X{TargetElement}|%X{User}|${p_log}|${no_mdc}|%msg|${p_mrk}%n" />
+	<property name="singleLineBoreasPattern" value="%nopexception${p_tim}\t${p_thr}\t${p_lvl}\t${p_log}\t${p_mdc}\t${p_msg}\t${p_exc}\t${p_mrk}\t%n" />
+	<property name="multiLineBoreasPattern" value="%nopexception${p_tim}\t${p_thr}\t${p_lvl}\t${p_log}\t%mdc\t%msg\t%rootException\t%marker\t%n" />
 
 	<!-- Passes only events with level WARN or above -->
 	<appender name="console-warn" class="ch.qos.logback.core.ConsoleAppender">
@@ -50,7 +46,7 @@
 			<level>WARN</level>
 		</filter>
 		<encoder>
-			<pattern>${multiLinePattern}</pattern>
+			<pattern>${singleLineAthenaPattern}</pattern>
 		</encoder>
 	</appender>
 
@@ -66,7 +62,7 @@
 			<maxFileSize>5MB</maxFileSize>
 		</triggeringPolicy>
 		<encoder>
-			<pattern>${singleLinePattern}</pattern>
+			<pattern>${singleLineAthenaPattern}</pattern>
 		</encoder>
 	</appender>
 
@@ -86,7 +82,7 @@
 		<logger name="org.hibernate.SQL" level="DEBUG" />
 	-->
 	<!-- Setting root level to debug yields *enormous* output from Spring,
-		 limit the verbose output by setting these also:
+		 limit that verbose output by setting these also:
 		<logger name="org.apache.http" level="INFO" />
 		<logger name="org.springframework.web.client" level="INFO" />
 		<logger name="org.springframework.beans.factory.support" level="INFO"/>
