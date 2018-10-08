@@ -66,18 +66,7 @@
 	<property name="p_27_no_mdc"            value="%X{DO_NOT_REPEAT_MDC}" /> <!-- a no-op -->
 	<property name="p_28_message"           value="${Message}" />
 	<property name="p_29_marker"            value="${Marker}" />
-	<property name="singleLineAthenaPattern" value="%nopexception${p_1_LogTimestamp}|${p_2_EntryTimestamp}|${p_3_InvokeTimestamp}|${p_4_RequestID}|${p_5_InvocationID}|${p_6_InstanceID}|${p_7_ServiceInstanceID}|${p_8_thread}|${p_9_ServiceName}|${p_10_PartnerName}|${p_11_StatusCode}|${p_12_ResponseCode}|${p_13_ResponseDesc}|${p_14_level}|${p_15_Severity}|${p_16_ServerIPAddress}|${p_17_ElapsedTime}|${p_18_ServerFQDN}|${p_19_ClientIPAddress}|${p_20_VirtualServerName}|${p_21_ContextName}|${p_22_TargetEntity}|${p_23_TargetServiceName}|${p_24_TargetElement}|${p_25_User}|${p_26_logger}|${p_27_no_mdc}|${p_28_message}|${p_29_marker}%n" />
-    
-	<property name="p_tim" value="%d{&quot;yyyy-MM-dd'T'HH:mm:ss.SSSXXX&quot;, UTC}" />
-	<property name="p_thr" value="%thread" />
-	<property name="p_lvl" value="%level" />
-	<property name="p_log" value="%logger" />
-	<property name="p_mdc" value="%replace(%replace(%mdc){'\t','\\\\t'}){'\n', '\\\\n'}" />
-	<property name="p_msg" value="%replace(%replace(%msg){'\t', '\\\\t'}){'\n','\\\\n'}" />
-	<property name="p_exc" value="%replace(%replace(%rootException){'\t', '\\\\t'}){'\n','\\\\n'}" />
-	<property name="p_mrk" value="%replace(%replace(%marker){'\t', '\\\\t'}){'\n','\\\\n'}" />
-	<property name="singleLineBoreasPattern" value="%nopexception${p_tim}\t${p_thr}\t${p_lvl}\t${p_log}\t${p_mdc}\t${p_msg}\t${p_exc}\t${p_mrk}\t%n" />
-	<property name="multiLineBoreasPattern" value="%nopexception${p_tim}\t${p_thr}\t${p_lvl}\t${p_log}\t%mdc\t%msg\t%rootException\t%marker\t%n" />
+	<property name="singleLineAthenaPattern" value="${p_1_LogTimestamp}|${p_2_EntryTimestamp}|${p_3_InvokeTimestamp}|${p_4_RequestID}|${p_5_InvocationID}|${p_6_InstanceID}|${p_7_ServiceInstanceID}|${p_8_thread}|${p_9_ServiceName}|${p_10_PartnerName}|${p_11_StatusCode}|${p_12_ResponseCode}|${p_13_ResponseDesc}|${p_14_level}|${p_15_Severity}|${p_16_ServerIPAddress}|${p_17_ElapsedTime}|${p_18_ServerFQDN}|${p_19_ClientIPAddress}|${p_20_VirtualServerName}|${p_21_ContextName}|${p_22_TargetEntity}|${p_23_TargetServiceName}|${p_24_TargetElement}|${p_25_User}|${p_26_logger}|${p_27_no_mdc}|${p_28_message}%n" />
 
 	<!-- Passes only events with level WARN or above -->
 	<appender name="console-warn" class="ch.qos.logback.core.ConsoleAppender">
