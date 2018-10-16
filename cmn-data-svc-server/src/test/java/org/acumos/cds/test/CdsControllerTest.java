@@ -782,7 +782,9 @@ public class CdsControllerTest {
 			Assert.assertNotNull(doc);
 
 			try {
-				client.createDocument(new MLPDocument(doc.getDocumentId(), "name", "uri", 100, "user"));
+				MLPDocument doc2 = new MLPDocument("name", "uri", 100, "user");
+				doc2.setDocumentId(doc.getDocumentId());
+				client.createDocument(doc2);
 				throw new Exception("Unexpected success");
 			} catch (HttpStatusCodeException ex) {
 				logger.info("Failed to create new doc with existing ID as expected");
@@ -3418,14 +3420,7 @@ public class CdsControllerTest {
 			logger.info("get document failed as expected: {}", ex.getResponseBodyAsString());
 		}
 		try {
-			MLPDocument doc = new MLPDocument("bogusId", "name", "uri", 100, "bogusUserId");
-			doc = client.createDocument(doc);
-			throw new Exception("Unexpected success");
-		} catch (HttpStatusCodeException ex) {
-			logger.info("create document failed as expected: {}", ex.getResponseBodyAsString());
-		}
-		try {
-			MLPDocument doc = new MLPDocument("bogusId", "name", "uri", 100, "bogusUserId");
+			MLPDocument doc = new MLPDocument("name", "uri", 100, "bogusUserId");
 			client.updateDocument(doc);
 			throw new Exception("Unexpected success");
 		} catch (HttpStatusCodeException ex) {
