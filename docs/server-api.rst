@@ -16,23 +16,10 @@
 .. limitations under the License.
 .. ===============LICENSE_END=========================================================
 
-.. Acumos Common Data Service documentation master
+==============================
+Common Data Service Server API
+==============================
 
-===================
-Common Data Service
-===================
+This page documents the server API delivered in the Athena release, which is version 1.18.4.
 
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
-
-   overview.rst
-   requirements.rst
-   client.rst
-   server.rst
-   server-api.rst
-   migrate.rst
-   release-notes.rst
-
-* :ref:`search`
+.. swaggerv2doc:: cds-api-docs-1.18.4.json
