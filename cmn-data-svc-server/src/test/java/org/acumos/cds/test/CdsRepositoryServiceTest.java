@@ -648,8 +648,8 @@ public class CdsRepositoryServiceTest {
 			Thread.sleep(1000);
 			ca.setDescription(ca.getDescription() + " a bit more");
 			artifactRepository.save(ca);
-			Page<MLPSolution> recentlyUpdated = solutionSearchService.findSolutionsByModifiedDate(true, accTypes, valCodes,
-					justAboutNow, new PageRequest(0, 5, null));
+			Page<MLPSolution> recentlyUpdated = solutionSearchService.findSolutionsByModifiedDate(true, accTypes,
+					valCodes, justAboutNow, new PageRequest(0, 5, null));
 			Assert.assertTrue(recentlyUpdated != null && recentlyUpdated.getNumberOfElements() == 1);
 			logger.info("Found recently updated sols {}", recentlyUpdated);
 
@@ -1127,7 +1127,7 @@ public class CdsRepositoryServiceTest {
 	 * Searches the exception-cause stack for a constraint-violation exceptions.
 	 * 
 	 * @param t
-	 *            Throwable
+	 *              Throwable
 	 * @return ConstraintViolationException if found; otherwise null.
 	 */
 	private ConstraintViolationException findConstraintViolationException(Throwable t) {
@@ -1247,6 +1247,8 @@ public class CdsRepositoryServiceTest {
 			nm.setUserId(cu.getUserId());
 			nm = notifUserMapRepository.save(nm);
 
+			long count = notificationRepository.countActiveUnreadByUser(cu.getUserId());
+			Assert.assertEquals(1, count);
 			Page<MLPUserNotification> notifs = notificationRepository.findActiveByUser(cu.getUserId(),
 					new PageRequest(0, 5));
 			Assert.assertFalse(notifs.getContent().isEmpty());
