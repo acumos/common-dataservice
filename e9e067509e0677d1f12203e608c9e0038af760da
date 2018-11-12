@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3afc5190_be86e0ac",
+        "filename": "docs/release-notes.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-11-12T21:35:41Z",
+      "side": 1,
+      "message": "Put in the date please",
+      "revId": "e9e067509e0677d1f12203e608c9e0038af760da",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
