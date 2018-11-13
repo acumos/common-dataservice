@@ -136,11 +136,11 @@ public class FOMDomainTest {
 		m.setModified(d2);
 		m.setName(s4);
 		m.setOrigin(s5);
-		m.setOwner(user1);
 		m.setSource(peer1);
 		m.setRevisions(revs);
 		m.setSolutionId(s7);
 		m.setToolkitTypeCode(s8);
+		m.setUser(user1);
 		Assert.assertEquals(b1, m.isActive());
 		Assert.assertEquals(d1, m.getCreated());
 		Assert.assertEquals(s2, m.getMetadata());
@@ -148,11 +148,11 @@ public class FOMDomainTest {
 		Assert.assertEquals(d2, m.getModified());
 		Assert.assertEquals(s4, m.getName());
 		Assert.assertEquals(s5, m.getOrigin());
-		Assert.assertEquals(user1, m.getOwner());
 		Assert.assertEquals(peer1, m.getSource());
 		Assert.assertTrue(revs == m.getRevisions());
 		Assert.assertEquals(s7, m.getSolutionId());
 		Assert.assertEquals(s8, m.getToolkitTypeCode());
+		Assert.assertEquals(user1, m.getUser());
 		Assert.assertFalse(m.equals(null));
 		Assert.assertFalse(m.equals(new Object()));
 		Assert.assertTrue(m.equals(m));
