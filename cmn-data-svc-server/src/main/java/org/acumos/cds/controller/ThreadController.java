@@ -21,11 +21,13 @@
 package org.acumos.cds.controller;
 
 import java.lang.invoke.MethodHandles;
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.acumos.cds.CCDSConstants;
+import org.acumos.cds.MLPResponse;
 import org.acumos.cds.domain.MLPComment;
 import org.acumos.cds.domain.MLPThread;
 import org.acumos.cds.repository.CommentRepository;
@@ -115,14 +117,14 @@ public class ThreadController extends AbstractController {
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "{threadId}", method = RequestMethod.GET)
 	@ResponseBody
-	public Object getThread(@PathVariable("threadId") String threadId, HttpServletResponse response) {
+	public MLPResponse getThread(@PathVariable("threadId") String threadId, HttpServletResponse response) {
 		logger.info("getThread: threadId {}", threadId);
-		MLPThread thread = threadRepository.findOne(threadId);
-		if (thread == null) {
+		Optional<MLPThread> thread = threadRepository.findById(threadId);
+		if (!thread.isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + threadId, null);
 		}
-		return thread;
+		return thread.get();
 	}
 
 	@ApiOperation(value = "Creates a new entity and generates an ID if needed. Returns bad request on constraint violation etc.", //
@@ -130,13 +132,13 @@ public class ThreadController extends AbstractController {
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
-	public Object createThread(@RequestBody MLPThread thread, HttpServletResponse response) {
+	public MLPResponse createThread(@RequestBody MLPThread thread, HttpServletResponse response) {
 		logger.info("createThread: thread {}", thread);
 		try {
 			String id = thread.getThreadId();
 			if (id != null) {
 				UUID.fromString(id);
-				if (threadRepository.findOne(id) != null) {
+				if (threadRepository.findById(id).isPresent()) {
 					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 					return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "ID exists: " + id);
 				}
@@ -161,12 +163,11 @@ public class ThreadController extends AbstractController {
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "{threadId}", method = RequestMethod.PUT)
 	@ResponseBody
-	public Object updateThread(@PathVariable("threadId") String threadId, @RequestBody MLPThread thread,
+	public MLPTransportModel updateThread(@PathVariable("threadId") String threadId, @RequestBody MLPThread thread,
 			HttpServletResponse response) {
 		logger.info("updateThread: threadId {}", threadId);
-		// Get the existing one
-		MLPThread existing = threadRepository.findOne(threadId);
-		if (existing == null) {
+		// Check the existing one
+		if (!threadRepository.findById(threadId).isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + threadId, null);
 		}
@@ -194,7 +195,7 @@ public class ThreadController extends AbstractController {
 		try {
 			// cascade the delete
 			commentRepository.deleteByThreadId(threadId);
-			threadRepository.delete(threadId);
+			threadRepository.deleteById(threadId);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
 			// e.g., EmptyResultDataAccessException is NOT an internal server error
@@ -221,8 +222,8 @@ public class ThreadController extends AbstractController {
 	public Object getThreadComments(@PathVariable("threadId") String threadId, Pageable pageable,
 			HttpServletResponse response) {
 		logger.info("getThreadComments: threadId {}", threadId);
-		MLPThread thread = threadRepository.findOne(threadId);
-		if (thread == null) {
+		Optional<MLPThread> thread = threadRepository.findById(threadId);
+		if (!thread.isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + threadId, null);
 		}
@@ -258,15 +259,15 @@ public class ThreadController extends AbstractController {
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "{threadId}/" + CCDSConstants.COMMENT_PATH + "/{commentId}", method = RequestMethod.GET)
 	@ResponseBody
-	public Object getComment(@PathVariable("threadId") String threadId, @PathVariable("commentId") String commentId,
-			HttpServletResponse response) {
+	public MLPResponse getComment(@PathVariable("threadId") String threadId,
+			@PathVariable("commentId") String commentId, HttpServletResponse response) {
 		logger.info("getComment: threadId {} commentId {}", threadId, commentId);
-		MLPComment comment = commentRepository.findOne(commentId);
-		if (comment == null) {
+		Optional<MLPComment> comment = commentRepository.findById(commentId);
+		if (!comment.isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + commentId, null);
 		}
-		return comment;
+		return comment.get();
 	}
 
 	@ApiOperation(value = "Creates a new entity and generates an ID if needed. Returns bad request on constraint violation etc.", //
@@ -274,27 +275,27 @@ public class ThreadController extends AbstractController {
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "{threadId}/" + CCDSConstants.COMMENT_PATH, method = RequestMethod.POST)
 	@ResponseBody
-	public Object createComment(@PathVariable("threadId") String threadId, @RequestBody MLPComment comment,
+	public MLPResponse createComment(@PathVariable("threadId") String threadId, @RequestBody MLPComment comment,
 			HttpServletResponse response) {
 		logger.info("createComment: threadId {}", threadId);
 		try {
 			String id = comment.getCommentId();
 			if (id != null) {
 				UUID.fromString(id);
-				if (commentRepository.findOne(id) != null) {
+				if (commentRepository.findById(id).isPresent()) {
 					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 					return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "ID exists: " + id);
 				}
 			}
-			if (comment.getParentId() != null && commentRepository.findOne(comment.getParentId()) == null) {
+			if (comment.getParentId() != null && !commentRepository.findById(comment.getParentId()).isPresent()) {
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + comment.getParentId());
 			}
-			if (threadRepository.findOne(comment.getThreadId()) == null) {
+			if (!threadRepository.findById(comment.getThreadId()).isPresent()) {
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + comment.getThreadId());
 			}
-			if (userRepository.findOne(comment.getUserId()) == null) {
+			if (!userRepository.findById(comment.getUserId()).isPresent()) {
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + comment.getUserId());
 			}
@@ -318,24 +319,24 @@ public class ThreadController extends AbstractController {
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "{threadId}/" + CCDSConstants.COMMENT_PATH + "/{commentId}", method = RequestMethod.PUT)
 	@ResponseBody
-	public Object updateComment(@PathVariable("threadId") String threadId, @PathVariable("commentId") String commentId,
-			@RequestBody MLPComment comment, HttpServletResponse response) {
+	public MLPTransportModel updateComment(@PathVariable("threadId") String threadId,
+			@PathVariable("commentId") String commentId, @RequestBody MLPComment comment,
+			HttpServletResponse response) {
 		logger.info("updateComment: threadId {} commentId {}", threadId, commentId);
 		// Get the existing one
-		MLPComment existing = commentRepository.findOne(commentId);
-		if (existing == null) {
+		if (!commentRepository.findById(commentId).isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + commentId, null);
 		}
-		if (comment.getParentId() != null && commentRepository.findOne(comment.getParentId()) == null) {
+		if (comment.getParentId() != null && !commentRepository.findById(comment.getParentId()).isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + comment.getParentId());
 		}
-		if (threadRepository.findOne(comment.getThreadId()) == null) {
+		if (!threadRepository.findById(comment.getThreadId()).isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + comment.getThreadId());
 		}
-		if (userRepository.findOne(comment.getUserId()) == null) {
+		if (!userRepository.findById(comment.getUserId()).isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + comment.getUserId());
 		}
@@ -362,7 +363,7 @@ public class ThreadController extends AbstractController {
 			@PathVariable("commentId") String commentId, HttpServletResponse response) {
 		logger.info("deleteComment: threadId {} commentId {}", threadId, commentId);
 		try {
-			commentRepository.delete(commentId);
+			commentRepository.deleteById(commentId);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
 			// e.g., EmptyResultDataAccessException is NOT an internal server error

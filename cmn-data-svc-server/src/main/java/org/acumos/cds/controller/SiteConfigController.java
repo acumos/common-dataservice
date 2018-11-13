@@ -21,10 +21,12 @@
 package org.acumos.cds.controller;
 
 import java.lang.invoke.MethodHandles;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.acumos.cds.CCDSConstants;
+import org.acumos.cds.MLPResponse;
 import org.acumos.cds.domain.MLPSiteConfig;
 import org.acumos.cds.repository.SiteConfigRepository;
 import org.acumos.cds.repository.UserRepository;
@@ -64,35 +66,35 @@ public class SiteConfigController extends AbstractController {
 	@ApiOperation(value = "Gets the site configuration value for the specified key.", response = SuccessTransport.class)
 	@RequestMapping(value = "/{configKey}", method = RequestMethod.GET)
 	@ResponseBody
-	public Object getSiteConfig(@PathVariable("configKey") String configKey, HttpServletResponse response) {
+	public MLPResponse getSiteConfig(@PathVariable("configKey") String configKey, HttpServletResponse response) {
 		logger.info("getSiteConfig key {}", configKey);
-		MLPSiteConfig da = siteConfigRepository.findOne(configKey);
-		if (da == null) {
+		Optional<MLPSiteConfig> da = siteConfigRepository.findById(configKey);
+		if (!da.isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + configKey, null);
 		}
-		return da;
+		return da.get();
 	}
 
 	@ApiOperation(value = "Creates a new site configuration record. Returns bad request on constraint violation etc.", response = MLPSiteConfig.class)
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
-	public Object createSiteConfig(@RequestBody MLPSiteConfig siteConfig, HttpServletResponse response) {
+	public MLPResponse createSiteConfig(@RequestBody MLPSiteConfig siteConfig, HttpServletResponse response) {
 		logger.info("createSiteConfig: config key {}", siteConfig.getConfigKey());
-		if (siteConfigRepository.findOne(siteConfig.getConfigKey()) != null) {
+		if (siteConfigRepository.findById(siteConfig.getConfigKey()).isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "Key exists: " + siteConfig.getConfigKey(),
 					null);
 		}
 		// UserID is optional
-		if (siteConfig.getUserId() != null && userRepository.findOne(siteConfig.getUserId()) == null) {
+		if (siteConfig.getUserId() != null && !userRepository.findById(siteConfig.getUserId()).isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + siteConfig.getUserId(),
 					null);
 		}
 		try {
-			Object result = siteConfigRepository.save(siteConfig);
+			MLPSiteConfig result = siteConfigRepository.save(siteConfig);
 			response.setStatus(HttpServletResponse.SC_CREATED);
 			// This is a hack to create the location path.
 			response.setHeader(HttpHeaders.LOCATION, CCDSConstants.CONFIG_PATH + "/" + siteConfig.getConfigKey());
@@ -111,17 +113,16 @@ public class SiteConfigController extends AbstractController {
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{configKey}", method = RequestMethod.PUT)
 	@ResponseBody
-	public Object updateSiteConfig(@PathVariable("configKey") String configKey, @RequestBody MLPSiteConfig siteConfig,
+	public MLPTransportModel updateSiteConfig(@PathVariable("configKey") String configKey, @RequestBody MLPSiteConfig siteConfig,
 			HttpServletResponse response) {
 		logger.info("updateSiteConfig key {}", configKey);
-		// Get the existing one
-		MLPSiteConfig existing = siteConfigRepository.findOne(configKey);
-		if (existing == null) {
+		// Check the existing one
+		if (!siteConfigRepository.findById(configKey).isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + configKey, null);
 		}
 		try {
-			// Use the path-parameter id; don't trust the one in the object
+			// Use the path-parameter id; don't trust the supplied value
 			siteConfig.setConfigKey(configKey);
 			siteConfigRepository.save(siteConfig);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
@@ -143,7 +144,7 @@ public class SiteConfigController extends AbstractController {
 			HttpServletResponse response) {
 		logger.info("deleteSiteConfig key {}", configKey);
 		try {
-			siteConfigRepository.delete(configKey);
+			siteConfigRepository.deleteById(configKey);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
 			// e.g., EmptyResultDataAccessException is NOT an internal server error

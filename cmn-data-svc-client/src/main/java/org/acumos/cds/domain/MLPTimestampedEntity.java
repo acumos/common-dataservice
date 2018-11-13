@@ -37,7 +37,7 @@ import io.swagger.annotations.ApiModelProperty;
  * Spring has a bit of magic for everything, must use @MappedSuperclass here.
  */
 @MappedSuperclass
-public abstract class MLPTimestampedEntity implements MLPEntity {
+public abstract class MLPTimestampedEntity implements MLPDomainModel {
 
 	@CreationTimestamp
 	@Column(name = "CREATED_DATE", nullable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT '0000-00-00 00:00:00'")

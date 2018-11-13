@@ -41,7 +41,7 @@ import io.swagger.annotations.ApiModelProperty;
 @Entity
 @IdClass(MLPPeerPeerAccMap.PeerPeerAccMapPK.class)
 @Table(name = MLPPeerPeerAccMap.TABLE_NAME)
-public class MLPPeerPeerAccMap implements MLPEntity, Serializable {
+public class MLPPeerPeerAccMap implements MLPDomainModel, Serializable {
 
 	private static final long serialVersionUID = -8184725585346886508L;
 

@@ -43,7 +43,7 @@ import io.swagger.annotations.ApiModelProperty;
 @Entity
 @IdClass(NotifUserMapPK.class)
 @Table(name = "C_NOTIF_USER_MAP")
-public class MLPNotifUserMap implements MLPEntity, Serializable {
+public class MLPNotifUserMap implements MLPDomainModel, Serializable {
 
 	/**
 	 * Embedded key for Hibernate

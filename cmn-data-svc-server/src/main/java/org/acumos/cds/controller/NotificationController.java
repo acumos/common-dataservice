@@ -21,12 +21,14 @@
 package org.acumos.cds.controller;
 
 import java.lang.invoke.MethodHandles;
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.acumos.cds.CCDSConstants;
 import org.acumos.cds.CodeNameType;
+import org.acumos.cds.MLPResponse;
 import org.acumos.cds.domain.MLPNotifUserMap;
 import org.acumos.cds.domain.MLPNotification;
 import org.acumos.cds.domain.MLPUserNotifPref;
@@ -104,19 +106,19 @@ public class NotificationController extends AbstractController {
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
-	public Object createNotification(@RequestBody MLPNotification notif, HttpServletResponse response) {
+	public MLPResponse createNotification(@RequestBody MLPNotification notif, HttpServletResponse response) {
 		logger.info("createNotification: notification {} ", notif);
 		try {
 			String id = notif.getNotificationId();
 			if (id != null) {
 				UUID.fromString(id);
-				if (notificationRepository.findOne(id) != null) {
+				if (notificationRepository.findById(id).isPresent()) {
 					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 					return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "ID exists: " + id);
 				}
 			}
 			// Create a new row
-			Object result = notificationRepository.save(notif);
+			MLPNotification result = notificationRepository.save(notif);
 			response.setStatus(HttpServletResponse.SC_CREATED);
 			// This is a hack to create the location path.
 			response.setHeader(HttpHeaders.LOCATION, CCDSConstants.NOTIFICATION_PATH + "/" + notif.getNotificationId());
@@ -135,12 +137,11 @@ public class NotificationController extends AbstractController {
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{notificationId}", method = RequestMethod.PUT)
 	@ResponseBody
-	public Object updateNotification(@PathVariable("notificationId") String notifId, @RequestBody MLPNotification notif,
+	public MLPTransportModel updateNotification(@PathVariable("notificationId") String notifId, @RequestBody MLPNotification notif,
 			HttpServletResponse response) {
 		logger.info("updateNotification: notifId {} ", notifId);
-		// Get the existing one
-		MLPNotification existing = notificationRepository.findOne(notifId);
-		if (existing == null) {
+		// Check that one exists
+		if (!notificationRepository.findById(notifId).isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + notifId, null);
 		}
@@ -167,7 +168,7 @@ public class NotificationController extends AbstractController {
 			HttpServletResponse response) {
 		logger.info("deleteNotification: notifId {} ", notifId);
 		try {
-			notificationRepository.delete(notifId);
+			notificationRepository.deleteById(notifId);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
 			// e.g., EmptyResultDataAccessException is NOT an internal server error
@@ -203,14 +204,15 @@ public class NotificationController extends AbstractController {
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{notificationId}/" + CCDSConstants.USER_PATH + "/{userId}", method = RequestMethod.POST)
 	@ResponseBody
-	public Object addUserNotification(@PathVariable("userId") String userId,
+	public MLPTransportModel addUserNotification(@PathVariable("userId") String userId,
 			@PathVariable("notificationId") String notificationId, @RequestBody MLPNotifUserMap notifUserMap,
 			HttpServletResponse response) {
 		logger.info("addUserNotification: user {}, notif {}", userId, notificationId);
-		if (userRepository.findOne(userId) == null) {
+		if (! userRepository.findById(userId).isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + userId, null);
-		} else if (notificationRepository.findOne(notificationId) == null) {
+		}
+		if (! notificationRepository.findById(notificationId).isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + notificationId, null);
 		}
@@ -226,15 +228,15 @@ public class NotificationController extends AbstractController {
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{notificationId}/" + CCDSConstants.USER_PATH + "/{userId}", method = RequestMethod.PUT)
 	@ResponseBody
-	public Object updateUserNotification(@PathVariable("userId") String userId,
+	public MLPTransportModel updateUserNotification(@PathVariable("userId") String userId,
 			@PathVariable("notificationId") String notificationId, @RequestBody MLPNotifUserMap notifUserMap,
 			HttpServletResponse response) {
 		logger.info("updateUserNotification: user {}, notif {}", userId, notificationId);
-		if (userRepository.findOne(userId) == null) {
+		if (! userRepository.findById(userId).isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + userId, null);
 		}
-		if (notificationRepository.findOne(notificationId) == null) {
+		if (! notificationRepository.findById(notificationId).isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + notificationId, null);
 		}
@@ -257,7 +259,7 @@ public class NotificationController extends AbstractController {
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{notificationId}/" + CCDSConstants.USER_PATH + "/{userId}", method = RequestMethod.DELETE)
 	@ResponseBody
-	public Object dropUserRecipient(@PathVariable("userId") String userId,
+	public MLPTransportModel dropUserRecipient(@PathVariable("userId") String userId,
 			@PathVariable("notificationId") String notificationId, HttpServletResponse response) {
 		logger.info("dropUserRecipient: user {}, notif{}", userId, notificationId);
 		try {
@@ -276,15 +278,15 @@ public class NotificationController extends AbstractController {
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = CCDSConstants.NOTIFICATION_PREF_PATH + "/{userNotifPrefId}", method = RequestMethod.GET)
 	@ResponseBody
-	public Object getUserNotificationPreference(@PathVariable("userNotifPrefId") Long userNotifPrefId,
+	public MLPResponse getUserNotificationPreference(@PathVariable("userNotifPrefId") Long userNotifPrefId,
 			HttpServletResponse response) {
 		logger.info("getUserNotificationPreference: userNotifPrefId {}", userNotifPrefId);
-		MLPUserNotifPref usrnp = notificationPreferenceRepository.findOne(userNotifPrefId);
-		if (usrnp == null) {
+		Optional<MLPUserNotifPref> usrnp = notificationPreferenceRepository.findById(userNotifPrefId);
+		if (! usrnp.isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + userNotifPrefId, null);
 		}
-		return usrnp;
+		return usrnp.get();
 	}
 
 	@ApiOperation(value = "Gets notification preferences for the specified user ID.", //
@@ -303,7 +305,7 @@ public class NotificationController extends AbstractController {
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = CCDSConstants.NOTIFICATION_PREF_PATH, method = RequestMethod.POST)
 	@ResponseBody
-	public Object createUserNotificationPreference(@RequestBody MLPUserNotifPref usrNotifPref,
+	public MLPResponse createUserNotificationPreference(@RequestBody MLPUserNotifPref usrNotifPref,
 			HttpServletResponse response) {
 		logger.info("createUserNotificationPreference: userNotifPrefId {}", usrNotifPref.getUserNotifPrefId());
 		try {
@@ -311,7 +313,7 @@ public class NotificationController extends AbstractController {
 			super.validateCode(usrNotifPref.getMsgSeverityCode(), CodeNameType.MESSAGE_SEVERITY);
 			super.validateCode(usrNotifPref.getNotfDelvMechCode(), CodeNameType.NOTIFICATION_DELIVERY_MECHANISM);
 			// Create a new row
-			Object result = notificationPreferenceRepository.save(usrNotifPref);
+			MLPUserNotifPref result = notificationPreferenceRepository.save(usrNotifPref);
 			response.setStatus(HttpServletResponse.SC_CREATED);
 			// This is a hack to create the location path.
 			response.setHeader(HttpHeaders.LOCATION,
@@ -332,12 +334,11 @@ public class NotificationController extends AbstractController {
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = CCDSConstants.NOTIFICATION_PREF_PATH + "/{userNotifPrefId}", method = RequestMethod.PUT)
 	@ResponseBody
-	public Object updateUserNotificationPreference(@PathVariable("userNotifPrefId") Long userNotifPrefId,
+	public MLPTransportModel updateUserNotificationPreference(@PathVariable("userNotifPrefId") Long userNotifPrefId,
 			@RequestBody MLPUserNotifPref usrNotifPref, HttpServletResponse response) {
 		logger.info("updateUserNotificationPreference: userNotifPrefId {} ", userNotifPrefId);
-		// Get the existing one
-		MLPUserNotifPref existing = notificationPreferenceRepository.findOne(userNotifPrefId);
-		if (existing == null) {
+		// Check the existing one
+		if (! notificationPreferenceRepository.findById(userNotifPrefId).isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + userNotifPrefId, null);
 		}
@@ -369,7 +370,7 @@ public class NotificationController extends AbstractController {
 			HttpServletResponse response) {
 		logger.info("deleteUserNotificationPreference: userNotifPrefId {} ", userNotifPrefId);
 		try {
-			notificationPreferenceRepository.delete(userNotifPrefId);
+			notificationPreferenceRepository.deleteById(userNotifPrefId);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
 			// e.g., EmptyResultDataAccessException is NOT an internal server error

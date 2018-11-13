@@ -48,7 +48,7 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @Entity
 @Table(name = "C_SOLUTION_WEB")
-public class MLPSolutionWeb implements MLPEntity, Serializable {
+public class MLPSolutionWeb implements MLPDomainModel, Serializable {
 
 	/* package */ static final String SOL_ID_COL_NAME = "SOLUTION_ID";
 

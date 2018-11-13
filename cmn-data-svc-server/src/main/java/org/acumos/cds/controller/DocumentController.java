@@ -21,11 +21,13 @@
 package org.acumos.cds.controller;
 
 import java.lang.invoke.MethodHandles;
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.acumos.cds.CCDSConstants;
+import org.acumos.cds.MLPResponse;
 import org.acumos.cds.domain.MLPDocument;
 import org.acumos.cds.repository.DocumentRepository;
 import org.acumos.cds.transport.ErrorTransport;
@@ -61,14 +63,14 @@ public class DocumentController extends AbstractController {
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{documentId}", method = RequestMethod.GET)
 	@ResponseBody
-	public Object getDocument(@PathVariable("documentId") String documentId, HttpServletResponse response) {
+	public MLPResponse getDocument(@PathVariable("documentId") String documentId, HttpServletResponse response) {
 		logger.info("getDocument ID {}", documentId);
-		MLPDocument da = documentRepository.findOne(documentId);
-		if (da == null) {
+		Optional<MLPDocument> da = documentRepository.findById(documentId);
+		if (! da.isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + documentId, null);
 		}
-		return da;
+		return da.get();
 	}
 
 	@ApiOperation(value = "Creates a new entity and generates an ID if needed. Returns bad request on constraint violation etc.", //
@@ -76,19 +78,19 @@ public class DocumentController extends AbstractController {
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
-	public Object createDocument(@RequestBody MLPDocument document, HttpServletResponse response) {
+	public MLPResponse createDocument(@RequestBody MLPDocument document, HttpServletResponse response) {
 		logger.info("createDocument entry");
 		try {
 			String id = document.getDocumentId();
 			if (id != null) {
 				UUID.fromString(id);
-				if (documentRepository.findOne(id) != null) {
+				if (documentRepository.findById(id).isPresent()) {
 					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 					return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "ID exists: " + id);
 				}
 			}
 			// Create a new row
-			Object result = documentRepository.save(document);
+			MLPDocument result = documentRepository.save(document);
 			response.setStatus(HttpServletResponse.SC_CREATED);
 			// This is a hack to create the location path.
 			response.setHeader(HttpHeaders.LOCATION, CCDSConstants.DOCUMENT_PATH + "/" + document.getDocumentId());
@@ -107,12 +109,12 @@ public class DocumentController extends AbstractController {
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{documentId}", method = RequestMethod.PUT)
 	@ResponseBody
-	public Object updateDocument(@PathVariable("documentId") String documentId, @RequestBody MLPDocument document,
+	public MLPResponse updateDocument(@PathVariable("documentId") String documentId, @RequestBody MLPDocument document,
 			HttpServletResponse response) {
 		logger.info("updateDocument ID {}", documentId);
 		// Check for existing because the Hibernate save() method doesn't distinguish
-		MLPDocument existing = documentRepository.findOne(documentId);
-		if (existing == null) {
+		Optional<MLPDocument> existing = documentRepository.findById(documentId);
+		if (! existing.isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + documentId, null);
 		}
@@ -140,7 +142,7 @@ public class DocumentController extends AbstractController {
 			HttpServletResponse response) {
 		logger.info("deleteDocument ID {}", documentId);
 		try {
-			documentRepository.delete(documentId);
+			documentRepository.deleteById(documentId);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
 			// e.g., EmptyResultDataAccessException is NOT an internal server error

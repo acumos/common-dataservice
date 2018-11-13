@@ -100,9 +100,9 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpStatusCodeException;
@@ -125,11 +125,11 @@ public class CdsControllerTest {
 	private final String s64 = "12345678901234567890123456789012345678901234567890123456789012345";
 
 	// From properties
-	@Value("${server.contextPath}")
+	@Value("${server.servlet.context-path}")
 	private String contextPath;
-	@Value("${security.user.name}")
+	@Value("${spring.security.user.name}")
 	private String userName;
-	@Value("${security.user.password}")
+	@Value("${spring.security.user.password}")
 	private String password;
 	// Created by Spring black magic
 	// https://spring.io/guides/gs/testing-web/

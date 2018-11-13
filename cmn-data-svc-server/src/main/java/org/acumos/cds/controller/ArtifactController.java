@@ -23,11 +23,13 @@ package org.acumos.cds.controller;
 import java.lang.invoke.MethodHandles;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.acumos.cds.CCDSConstants;
+import org.acumos.cds.MLPResponse;
 import org.acumos.cds.domain.MLPArtifact;
 import org.acumos.cds.domain.MLPSolutionRevision;
 import org.acumos.cds.repository.ArtifactRepository;
@@ -95,14 +97,14 @@ public class ArtifactController extends AbstractController {
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{artifactId}", method = RequestMethod.GET)
 	@ResponseBody
-	public Object getArtifact(@PathVariable("artifactId") String artifactId, HttpServletResponse response) {
+	public MLPResponse getArtifact(@PathVariable("artifactId") String artifactId, HttpServletResponse response) {
 		logger.info("getArtifact ID {}", artifactId);
-		MLPArtifact da = artifactRepository.findOne(artifactId);
-		if (da == null) {
+		Optional<MLPArtifact> da = artifactRepository.findById(artifactId);
+		if (!da.isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + artifactId, null);
 		}
-		return da;
+		return da.get();
 	}
 
 	@ApiOperation(value = "Searches for entities with names or descriptions that contain the search term using the like operator.", //
@@ -183,8 +185,8 @@ public class ArtifactController extends AbstractController {
 	public Object getRevisionsForArtifact(@PathVariable("artifactId") String artifactId, HttpServletResponse response) {
 		logger.info("getRevisionsForArtifact ID {}", artifactId);
 		// Validate the artifact ID because an empty result is ambiguous.
-		MLPArtifact da = artifactRepository.findOne(artifactId);
-		if (da == null) {
+		Optional<MLPArtifact> da = artifactRepository.findById(artifactId);
+		if (!da.isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + artifactId, null);
 		}
@@ -196,19 +198,19 @@ public class ArtifactController extends AbstractController {
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
-	public Object createArtifact(@RequestBody MLPArtifact artifact, HttpServletResponse response) {
+	public MLPResponse createArtifact(@RequestBody MLPArtifact artifact, HttpServletResponse response) {
 		logger.info("createArtifact artifact {}", artifact);
 		try {
 			String id = artifact.getArtifactId();
 			if (id != null) {
 				UUID.fromString(id);
-				if (artifactRepository.findOne(id) != null) {
+				if (artifactRepository.findById(id).isPresent()) {
 					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 					return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "ID exists: " + id);
 				}
 			}
 			// Create a new row
-			Object result = artifactRepository.save(artifact);
+			MLPArtifact result = artifactRepository.save(artifact);
 			response.setStatus(HttpServletResponse.SC_CREATED);
 			// This is a hack to create the location path.
 			response.setHeader(HttpHeaders.LOCATION, CCDSConstants.ARTIFACT_PATH + "/" + artifact.getArtifactId());
@@ -227,12 +229,12 @@ public class ArtifactController extends AbstractController {
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{artifactId}", method = RequestMethod.PUT)
 	@ResponseBody
-	public Object updateArtifact(@PathVariable("artifactId") String artifactId, @RequestBody MLPArtifact artifact,
+	public MLPResponse updateArtifact(@PathVariable("artifactId") String artifactId, @RequestBody MLPArtifact artifact,
 			HttpServletResponse response) {
 		logger.info("updateArtifact ID {}", artifactId);
 		// Check for existing because the Hibernate save() method doesn't distinguish
-		MLPArtifact existing = artifactRepository.findOne(artifactId);
-		if (existing == null) {
+		Optional<MLPArtifact> existing = artifactRepository.findById(artifactId);
+		if (!existing.isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + artifactId, null);
 		}
@@ -260,7 +262,7 @@ public class ArtifactController extends AbstractController {
 			HttpServletResponse response) {
 		logger.info("deleteArtifact ID {}", artifactId);
 		try {
-			artifactRepository.delete(artifactId);
+			artifactRepository.deleteById(artifactId);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
 			// e.g., EmptyResultDataAccessException is NOT an internal server error

@@ -33,7 +33,7 @@ import org.acumos.cds.domain.MLPSolutionFOM;
 import org.hibernate.AssertionFailure;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
-import org.hibernate.SessionFactory;
+import org.hibernate.Session;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Disjunction;
@@ -43,7 +43,6 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.criterion.Subqueries;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -88,9 +87,6 @@ public class SolutionSearchServiceImpl extends AbstractSearchServiceImpl impleme
 
 	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-	@Autowired
-	private SessionFactory sessionFactory;
-
 	private final String revAlias = "revs";
 	private final String artAlias = "arts";
 	private final String ownerAlias = "ownr";
@@ -117,32 +113,34 @@ public class SolutionSearchServiceImpl extends AbstractSearchServiceImpl impleme
 	public Page<MLPSolution> findSolutions(Map<String, ? extends Object> queryParameters, boolean isOr,
 			Pageable pageable) {
 
-		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MLPSolution.class);
-		super.buildCriteria(criteria, queryParameters, isOr);
+		try (Session session = getSessionFactory().openSession()) {
+			Criteria criteria = session.createCriteria(MLPSolution.class);
+			super.buildCriteria(criteria, queryParameters, isOr);
 
-		// Adjust fetch mode to block Hibernate from using left outer join;
-		// instead it runs a select to get tags for each solution in the result.
-		criteria.setFetchMode("tags", FetchMode.SELECT);
+			// Adjust fetch mode to block Hibernate from using left outer join;
+			// instead it runs a select to get tags for each solution in the result.
+			criteria.setFetchMode("tags", FetchMode.SELECT);
 
-		// Count the total rows
-		criteria.setProjection(Projections.rowCount());
-		Long count = (Long) criteria.uniqueResult();
-		if (count == 0)
-			return new PageImpl<>(new ArrayList<>(), pageable, count);
+			// Count the total rows
+			criteria.setProjection(Projections.rowCount());
+			Long count = (Long) criteria.uniqueResult();
+			if (count == 0)
+				return new PageImpl<>(new ArrayList<>(), pageable, count);
 
-		// Reset the count criteria
-		criteria.setProjection(null);
-		// This should not do any harm; had problems elsewhere without
-		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		// Add pagination and sorting to limit size
-		super.applyPageableCriteria(criteria, pageable);
-		// Ensure a total order using the ID field.
-		criteria.addOrder(Order.asc("solutionId"));
+			// Reset the count criteria
+			criteria.setProjection(null);
+			// This should not do any harm; had problems elsewhere without
+			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+			// Add pagination and sorting to limit size
+			super.applyPageableCriteria(criteria, pageable);
+			// Ensure a total order using the ID field.
+			criteria.addOrder(Order.asc("solutionId"));
 
-		// Get a page of results and send it back with the total available
-		List<MLPSolution> items = criteria.list();
-		logger.info("findSolutions: result size={}", items.size());
-		return new PageImpl<>(items, pageable, count);
+			// Get a page of results and send it back with the total available
+			List<MLPSolution> items = criteria.list();
+			logger.info("findSolutions: result size={}", items.size());
+			return new PageImpl<>(items, pageable, count);
+		}
 	}
 
 	/**
@@ -174,10 +172,10 @@ public class SolutionSearchServiceImpl extends AbstractSearchServiceImpl impleme
 
 		// Get a page of FOM solutions and convert each to plain solution
 		List<MLPSolution> items = new ArrayList<>();
-		int lastItemInPage = pageable.getOffset() + pageable.getPageSize();
-		int limit = lastItemInPage < foms.size() ? lastItemInPage : foms.size();
-		for (int i = pageable.getOffset(); i < limit; ++i) {
-			Object o = foms.get(i);
+		long lastItemInPage = pageable.getOffset() + pageable.getPageSize();
+		long limit = lastItemInPage < foms.size() ? lastItemInPage : foms.size();
+		for (long i = pageable.getOffset(); i < limit; ++i) {
+			Object o = foms.get((int) i);
 			if (o instanceof MLPSolutionFOM)
 				items.add(((MLPSolutionFOM) o).toMLPSolution());
 			else
@@ -200,50 +198,52 @@ public class SolutionSearchServiceImpl extends AbstractSearchServiceImpl impleme
 			String[] tags, String[] authorKeywords, String[] publisherKeywords, Pageable pageable) {
 
 		// build the query using FOM to access child attributes
-		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MLPSolutionFOM.class, solAlias);
-		// Attributes on the solution
-		criteria.add(Restrictions.eq("active", active));
-		if (nameKeywords != null && nameKeywords.length > 0)
-			criteria.add(buildLikeListCriterion("name", nameKeywords, true));
-		if (modelTypeCode != null && modelTypeCode.length > 0)
-			criteria.add(buildEqualsListCriterion("modelTypeCode", modelTypeCode));
-		if ((accessTypeCode != null && accessTypeCode.length > 0) //
-				|| (descKeywords != null && descKeywords.length > 0)
-				|| (validationStatusCode != null && validationStatusCode.length > 0)
-				|| (authorKeywords != null && authorKeywords.length > 0)
-				|| (publisherKeywords != null && publisherKeywords.length > 0)) {
-			// revisions are optional, but a solution without them is useless
-			criteria.createAlias("revisions", revAlias);
-			if (accessTypeCode != null && accessTypeCode.length > 0)
-				criteria.add(buildEqualsListCriterion(revAlias + ".accessTypeCode", accessTypeCode));
-			if (validationStatusCode != null && validationStatusCode.length > 0)
-				criteria.add(buildEqualsListCriterion(revAlias + ".validationStatusCode", validationStatusCode));
-			if (authorKeywords != null && authorKeywords.length > 0)
-				criteria.add(buildLikeListCriterion(revAlias + ".authors", authorKeywords, true));
-			if (publisherKeywords != null && publisherKeywords.length > 0)
-				criteria.add(buildLikeListCriterion(revAlias + ".publisher", publisherKeywords, true));
-			if (descKeywords != null && descKeywords.length > 0) {
-				criteria.createAlias(revAlias + ".descriptions", descsAlias,
-						org.hibernate.sql.JoinType.LEFT_OUTER_JOIN);
-				criteria.add(buildLikeListCriterion(descsAlias + ".description", descKeywords, true));
+		try (Session session = getSessionFactory().openSession()) {
+			Criteria criteria = session.createCriteria(MLPSolutionFOM.class, solAlias);
+			// Attributes on the solution
+			criteria.add(Restrictions.eq("active", active));
+			if (nameKeywords != null && nameKeywords.length > 0)
+				criteria.add(buildLikeListCriterion("name", nameKeywords, true));
+			if (modelTypeCode != null && modelTypeCode.length > 0)
+				criteria.add(buildEqualsListCriterion("modelTypeCode", modelTypeCode));
+			if ((accessTypeCode != null && accessTypeCode.length > 0) //
+					|| (descKeywords != null && descKeywords.length > 0)
+					|| (validationStatusCode != null && validationStatusCode.length > 0)
+					|| (authorKeywords != null && authorKeywords.length > 0)
+					|| (publisherKeywords != null && publisherKeywords.length > 0)) {
+				// revisions are optional, but a solution without them is useless
+				criteria.createAlias("revisions", revAlias);
+				if (accessTypeCode != null && accessTypeCode.length > 0)
+					criteria.add(buildEqualsListCriterion(revAlias + ".accessTypeCode", accessTypeCode));
+				if (validationStatusCode != null && validationStatusCode.length > 0)
+					criteria.add(buildEqualsListCriterion(revAlias + ".validationStatusCode", validationStatusCode));
+				if (authorKeywords != null && authorKeywords.length > 0)
+					criteria.add(buildLikeListCriterion(revAlias + ".authors", authorKeywords, true));
+				if (publisherKeywords != null && publisherKeywords.length > 0)
+					criteria.add(buildLikeListCriterion(revAlias + ".publisher", publisherKeywords, true));
+				if (descKeywords != null && descKeywords.length > 0) {
+					criteria.createAlias(revAlias + ".descriptions", descsAlias,
+							org.hibernate.sql.JoinType.LEFT_OUTER_JOIN);
+					criteria.add(buildLikeListCriterion(descsAlias + ".description", descKeywords, true));
+				}
 			}
+			if (userIds != null && userIds.length > 0) {
+				criteria.createAlias("owner", ownerAlias);
+				criteria.add(Restrictions.in(ownerAlias + ".userId", userIds));
+			}
+			if (tags != null && tags.length > 0) {
+				// https://stackoverflow.com/questions/51992269/hibernate-java-criteria-query-for-instances-with-multiple-collection-members-lik
+				DetachedCriteria subquery = DetachedCriteria.forClass(MLPSolutionFOM.class, subqAlias)
+						.add(Restrictions.eqProperty(subqAlias + ".id", solAlias + ".id")) //
+						.createAlias("tags", tagsFieldAlias) //
+						.add(Restrictions.in(tagValueField, tags)) //
+						.setProjection(Projections.count(tagValueField));
+				criteria.add(Subqueries.eq((long) tags.length, subquery));
+			}
+			Page<MLPSolution> result = runSolutionFomQuery(criteria, pageable);
+			logger.info("findPortalSolutions: result size={}", result.getNumberOfElements());
+			return result;
 		}
-		if (userIds != null && userIds.length > 0) {
-			criteria.createAlias("owner", ownerAlias);
-			criteria.add(Restrictions.in(ownerAlias + ".userId", userIds));
-		}
-		if (tags != null && tags.length > 0) {
-			// https://stackoverflow.com/questions/51992269/hibernate-java-criteria-query-for-instances-with-multiple-collection-members-lik
-			DetachedCriteria subquery = DetachedCriteria.forClass(MLPSolutionFOM.class, subqAlias)
-					.add(Restrictions.eqProperty(subqAlias + ".id", solAlias + ".id")) //
-					.createAlias("tags", tagsFieldAlias) //
-					.add(Restrictions.in(tagValueField, tags)) //
-					.setProjection(Projections.count(tagValueField));
-			criteria.add(Subqueries.eq((long) tags.length, subquery));
-		}
-		Page<MLPSolution> result = runSolutionFomQuery(criteria, pageable);
-		logger.info("findPortalSolutions: result size={}", result.getNumberOfElements());
-		return result;
 	}
 
 	/**
@@ -264,48 +264,50 @@ public class SolutionSearchServiceImpl extends AbstractSearchServiceImpl impleme
 			String userId, String[] modelTypeCode, String[] accessTypeCode, String[] validationStatusCode,
 			String[] tags, Pageable pageable) {
 
-		// build the query using FOM to access child attributes
-		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MLPSolutionFOM.class, solAlias);
-		// Find user's own models AND others via access map which requires outer join
-		criteria.createAlias("owner", ownerAlias);
-		Criterion owner = Restrictions.eq(ownerAlias + ".userId", userId);
-		criteria.createAlias("accessUsers", accAlias, org.hibernate.sql.JoinType.LEFT_OUTER_JOIN);
-		Criterion access = Restrictions.eq(accAlias + ".userId", userId);
-		criteria.add(Restrictions.or(owner, access));
+		try (Session session = getSessionFactory().openSession()) {
+			// build the query using FOM to access child attributes
+			Criteria criteria = session.createCriteria(MLPSolutionFOM.class, solAlias);
+			// Find user's own models AND others via access map which requires outer join
+			criteria.createAlias("owner", ownerAlias);
+			Criterion owner = Restrictions.eq(ownerAlias + ".userId", userId);
+			criteria.createAlias("accessUsers", accAlias, org.hibernate.sql.JoinType.LEFT_OUTER_JOIN);
+			Criterion access = Restrictions.eq(accAlias + ".userId", userId);
+			criteria.add(Restrictions.or(owner, access));
 
-		// Attributes on the solution
-		criteria.add(Restrictions.eq("active", active));
-		if (nameKeywords != null && nameKeywords.length > 0)
-			criteria.add(buildLikeListCriterion("name", nameKeywords, false));
-		if (modelTypeCode != null && modelTypeCode.length > 0)
-			criteria.add(buildEqualsListCriterion("modelTypeCode", modelTypeCode));
-		if ((accessTypeCode != null && accessTypeCode.length > 0) //
-				|| (descKeywords != null && descKeywords.length > 0) //
-				|| (validationStatusCode != null && validationStatusCode.length > 0)) {
-			// revisions are optional, but a solution without them is useless
-			criteria.createAlias("revisions", revAlias);
-			if (accessTypeCode != null && accessTypeCode.length > 0)
-				criteria.add(buildEqualsListCriterion(revAlias + ".accessTypeCode", accessTypeCode));
-			if (validationStatusCode != null && validationStatusCode.length > 0)
-				criteria.add(buildEqualsListCriterion(revAlias + ".validationStatusCode", validationStatusCode));
-			if (descKeywords != null && descKeywords.length > 0) {
-				criteria.createAlias(revAlias + ".descriptions", descsAlias,
-						org.hibernate.sql.JoinType.LEFT_OUTER_JOIN);
-				criteria.add(buildLikeListCriterion(descsAlias + ".description", descKeywords, false));
+			// Attributes on the solution
+			criteria.add(Restrictions.eq("active", active));
+			if (nameKeywords != null && nameKeywords.length > 0)
+				criteria.add(buildLikeListCriterion("name", nameKeywords, false));
+			if (modelTypeCode != null && modelTypeCode.length > 0)
+				criteria.add(buildEqualsListCriterion("modelTypeCode", modelTypeCode));
+			if ((accessTypeCode != null && accessTypeCode.length > 0) //
+					|| (descKeywords != null && descKeywords.length > 0) //
+					|| (validationStatusCode != null && validationStatusCode.length > 0)) {
+				// revisions are optional, but a solution without them is useless
+				criteria.createAlias("revisions", revAlias);
+				if (accessTypeCode != null && accessTypeCode.length > 0)
+					criteria.add(buildEqualsListCriterion(revAlias + ".accessTypeCode", accessTypeCode));
+				if (validationStatusCode != null && validationStatusCode.length > 0)
+					criteria.add(buildEqualsListCriterion(revAlias + ".validationStatusCode", validationStatusCode));
+				if (descKeywords != null && descKeywords.length > 0) {
+					criteria.createAlias(revAlias + ".descriptions", descsAlias,
+							org.hibernate.sql.JoinType.LEFT_OUTER_JOIN);
+					criteria.add(buildLikeListCriterion(descsAlias + ".description", descKeywords, false));
+				}
 			}
+			if (tags != null && tags.length > 0) {
+				// https://stackoverflow.com/questions/51992269/hibernate-java-criteria-query-for-instances-with-multiple-collection-members-lik
+				DetachedCriteria subquery = DetachedCriteria.forClass(MLPSolutionFOM.class, subqAlias)
+						.add(Restrictions.eqProperty(subqAlias + ".id", solAlias + ".id")) //
+						.createAlias("tags", tagsFieldAlias) //
+						.add(Restrictions.in(tagValueField, tags)) //
+						.setProjection(Projections.count(tagValueField));
+				criteria.add(Subqueries.eq((long) tags.length, subquery));
+			}
+			Page<MLPSolution> result = runSolutionFomQuery(criteria, pageable);
+			logger.info("findUserSolutions: result size={}", result.getNumberOfElements());
+			return result;
 		}
-		if (tags != null && tags.length > 0) {
-			// https://stackoverflow.com/questions/51992269/hibernate-java-criteria-query-for-instances-with-multiple-collection-members-lik
-			DetachedCriteria subquery = DetachedCriteria.forClass(MLPSolutionFOM.class, subqAlias)
-					.add(Restrictions.eqProperty(subqAlias + ".id", solAlias + ".id")) //
-					.createAlias("tags", tagsFieldAlias) //
-					.add(Restrictions.in(tagValueField, tags)) //
-					.setProjection(Projections.count(tagValueField));
-			criteria.add(Subqueries.eq((long) tags.length, subquery));
-		}
-		Page<MLPSolution> result = runSolutionFomQuery(criteria, pageable);
-		logger.info("findUserSolutions: result size={}", result.getNumberOfElements());
-		return result;
 	}
 
 	/**
@@ -318,40 +320,42 @@ public class SolutionSearchServiceImpl extends AbstractSearchServiceImpl impleme
 	public Page<MLPSolution> findSolutionsByModifiedDate(boolean active, String[] accessTypeCode,
 			String[] validationStatusCode, Date date, Pageable pageable) {
 
-		// build the query using FOM to access child attributes
-		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MLPSolutionFOM.class, solAlias);
-		// A solution should ALWAYS have revisions.
-		criteria.createAlias("revisions", revAlias);
-		// A revision should ALWAYS have artifacts
-		criteria.createAlias(revAlias + ".artifacts", artAlias);
-		// A revision MAY have descriptions
-		criteria.createAlias(revAlias + ".descriptions", descsAlias, org.hibernate.sql.JoinType.LEFT_OUTER_JOIN);
-		// A revision MAY have documents
-		criteria.createAlias(revAlias + ".documents", docsAlias, org.hibernate.sql.JoinType.LEFT_OUTER_JOIN);
-		// Attributes on the solution
-		criteria.add(Restrictions.eq("active", active));
-		if (accessTypeCode != null && accessTypeCode.length > 0)
-			criteria.add(Restrictions.in(revAlias + ".accessTypeCode", accessTypeCode));
-		if (validationStatusCode != null && validationStatusCode.length > 0)
-			criteria.add(Restrictions.in(revAlias + ".validationStatusCode", validationStatusCode));
-		// Construct a disjunction to find any updated item.
-		// Unfortunately this requires hard-coded field names
-		Criterion solModified = Restrictions.ge("modified", date);
-		Criterion revModified = Restrictions.ge(revAlias + ".modified", date);
-		Criterion descModified = Restrictions.ge(descsAlias + ".modified", date);
-		Criterion docModified = Restrictions.ge(docsAlias + ".modified", date);
-		Criterion artModified = Restrictions.ge(artAlias + ".modified", date);
-		Disjunction itemModifiedAfter = Restrictions.disjunction();
-		itemModifiedAfter.add(solModified);
-		itemModifiedAfter.add(revModified);
-		itemModifiedAfter.add(descModified);
-		itemModifiedAfter.add(docModified);
-		itemModifiedAfter.add(artModified);
-		criteria.add(itemModifiedAfter);
+		try (Session session = getSessionFactory().openSession()) {
+			// build the query using FOM to access child attributes
+			Criteria criteria = session.createCriteria(MLPSolutionFOM.class, solAlias);
+			// A solution should ALWAYS have revisions.
+			criteria.createAlias("revisions", revAlias);
+			// A revision should ALWAYS have artifacts
+			criteria.createAlias(revAlias + ".artifacts", artAlias);
+			// A revision MAY have descriptions
+			criteria.createAlias(revAlias + ".descriptions", descsAlias, org.hibernate.sql.JoinType.LEFT_OUTER_JOIN);
+			// A revision MAY have documents
+			criteria.createAlias(revAlias + ".documents", docsAlias, org.hibernate.sql.JoinType.LEFT_OUTER_JOIN);
+			// Attributes on the solution
+			criteria.add(Restrictions.eq("active", active));
+			if (accessTypeCode != null && accessTypeCode.length > 0)
+				criteria.add(Restrictions.in(revAlias + ".accessTypeCode", accessTypeCode));
+			if (validationStatusCode != null && validationStatusCode.length > 0)
+				criteria.add(Restrictions.in(revAlias + ".validationStatusCode", validationStatusCode));
+			// Construct a disjunction to find any updated item.
+			// Unfortunately this requires hard-coded field names
+			Criterion solModified = Restrictions.ge("modified", date);
+			Criterion revModified = Restrictions.ge(revAlias + ".modified", date);
+			Criterion descModified = Restrictions.ge(descsAlias + ".modified", date);
+			Criterion docModified = Restrictions.ge(docsAlias + ".modified", date);
+			Criterion artModified = Restrictions.ge(artAlias + ".modified", date);
+			Disjunction itemModifiedAfter = Restrictions.disjunction();
+			itemModifiedAfter.add(solModified);
+			itemModifiedAfter.add(revModified);
+			itemModifiedAfter.add(descModified);
+			itemModifiedAfter.add(docModified);
+			itemModifiedAfter.add(artModified);
+			criteria.add(itemModifiedAfter);
 
-		Page<MLPSolution> result = runSolutionFomQuery(criteria, pageable);
-		logger.info("findSolutionsByModifiedDate: result size={}", result.getNumberOfElements());
-		return result;
+			Page<MLPSolution> result = runSolutionFomQuery(criteria, pageable);
+			logger.info("findSolutionsByModifiedDate: result size={}", result.getNumberOfElements());
+			return result;
+		}
 	}
 
 	/*
@@ -361,44 +365,47 @@ public class SolutionSearchServiceImpl extends AbstractSearchServiceImpl impleme
 	public Page<MLPSolution> findPortalSolutionsByKw(String[] keywords, boolean active, String[] userIds,
 			String[] modelTypeCode, String[] accessTypeCode, String[] tags, Pageable pageable) {
 
-		// build the query using FOM to access child attributes
-		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MLPSolutionFOM.class, solAlias);
-		criteria.add(Restrictions.eq("active", active));
-		// A solution should ALWAYS have revisions.
-		criteria.createAlias("revisions", revAlias);
-		// Descriptions are optional, so must use outer join
-		if (keywords != null && keywords.length > 0) {
-			criteria.createAlias(revAlias + ".descriptions", descsAlias, org.hibernate.sql.JoinType.LEFT_OUTER_JOIN);
-			Disjunction keywordDisjunction = Restrictions.disjunction();
-			keywordDisjunction.add(buildLikeListCriterion("name", keywords, false));
-			keywordDisjunction.add(buildLikeListCriterion(descsAlias + ".description", keywords, false));
-			keywordDisjunction.add(buildLikeListCriterion(revAlias + ".authors", keywords, false));
-			keywordDisjunction.add(buildLikeListCriterion(revAlias + ".publisher", keywords, false));
-			// Also match on IDs, but exact only
-			keywordDisjunction.add(buildEqualsListCriterion("solutionId", keywords));
-			keywordDisjunction.add(buildEqualsListCriterion(revAlias + ".revisionId", keywords));
-			criteria.add(keywordDisjunction);
+		try (Session session = getSessionFactory().openSession()) {
+			// build the query using FOM to access child attributes
+			Criteria criteria = session.createCriteria(MLPSolutionFOM.class, solAlias);
+			criteria.add(Restrictions.eq("active", active));
+			// A solution should ALWAYS have revisions.
+			criteria.createAlias("revisions", revAlias);
+			// Descriptions are optional, so must use outer join
+			if (keywords != null && keywords.length > 0) {
+				criteria.createAlias(revAlias + ".descriptions", descsAlias,
+						org.hibernate.sql.JoinType.LEFT_OUTER_JOIN);
+				Disjunction keywordDisjunction = Restrictions.disjunction();
+				keywordDisjunction.add(buildLikeListCriterion("name", keywords, false));
+				keywordDisjunction.add(buildLikeListCriterion(descsAlias + ".description", keywords, false));
+				keywordDisjunction.add(buildLikeListCriterion(revAlias + ".authors", keywords, false));
+				keywordDisjunction.add(buildLikeListCriterion(revAlias + ".publisher", keywords, false));
+				// Also match on IDs, but exact only
+				keywordDisjunction.add(buildEqualsListCriterion("solutionId", keywords));
+				keywordDisjunction.add(buildEqualsListCriterion(revAlias + ".revisionId", keywords));
+				criteria.add(keywordDisjunction);
+			}
+			if (modelTypeCode != null && modelTypeCode.length > 0)
+				criteria.add(buildEqualsListCriterion("modelTypeCode", modelTypeCode));
+			if (accessTypeCode != null && accessTypeCode.length > 0)
+				criteria.add(buildEqualsListCriterion(revAlias + ".accessTypeCode", accessTypeCode));
+			if (userIds != null && userIds.length > 0) {
+				criteria.createAlias("owner", ownerAlias);
+				criteria.add(Restrictions.in(ownerAlias + ".userId", userIds));
+			}
+			if (tags != null && tags.length > 0) {
+				// https://stackoverflow.com/questions/51992269/hibernate-java-criteria-query-for-instances-with-multiple-collection-members-lik
+				DetachedCriteria subquery = DetachedCriteria.forClass(MLPSolutionFOM.class, subqAlias)
+						.add(Restrictions.eqProperty(subqAlias + ".id", solAlias + ".id")) //
+						.createAlias("tags", tagsFieldAlias) //
+						.add(Restrictions.in(tagValueField, tags)) //
+						.setProjection(Projections.count(tagValueField));
+				criteria.add(Subqueries.eq((long) tags.length, subquery));
+			}
+			Page<MLPSolution> result = runSolutionFomQuery(criteria, pageable);
+			logger.info("findPortalSolutionsByKw: result size={}", result.getNumberOfElements());
+			return result;
 		}
-		if (modelTypeCode != null && modelTypeCode.length > 0)
-			criteria.add(buildEqualsListCriterion("modelTypeCode", modelTypeCode));
-		if (accessTypeCode != null && accessTypeCode.length > 0)
-			criteria.add(buildEqualsListCriterion(revAlias + ".accessTypeCode", accessTypeCode));
-		if (userIds != null && userIds.length > 0) {
-			criteria.createAlias("owner", ownerAlias);
-			criteria.add(Restrictions.in(ownerAlias + ".userId", userIds));
-		}
-		if (tags != null && tags.length > 0) {
-			// https://stackoverflow.com/questions/51992269/hibernate-java-criteria-query-for-instances-with-multiple-collection-members-lik
-			DetachedCriteria subquery = DetachedCriteria.forClass(MLPSolutionFOM.class, subqAlias)
-					.add(Restrictions.eqProperty(subqAlias + ".id", solAlias + ".id")) //
-					.createAlias("tags", tagsFieldAlias) //
-					.add(Restrictions.in(tagValueField, tags)) //
-					.setProjection(Projections.count(tagValueField));
-			criteria.add(Subqueries.eq((long) tags.length, subquery));
-		}
-		Page<MLPSolution> result = runSolutionFomQuery(criteria, pageable);
-		logger.info("findPortalSolutionsByKw: result size={}", result.getNumberOfElements());
-		return result;
 	}
 
 	/*
@@ -407,54 +414,58 @@ public class SolutionSearchServiceImpl extends AbstractSearchServiceImpl impleme
 	@Override
 	public Page<MLPSolution> findPortalSolutionsByKwAndTags(String[] keywords, boolean active, String[] userIds,
 			String[] modelTypeCode, String[] accessTypeCode, String[] allTags, String[] anyTags, Pageable pageable) {
-		// build the query using FOM to access child attributes
-		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MLPSolutionFOM.class, solAlias);
-		criteria.add(Restrictions.eq("active", active));
-		// A solution should ALWAYS have revisions.
-		criteria.createAlias("revisions", revAlias);
-		// Descriptions are optional, so must use outer join
-		if (keywords != null && keywords.length > 0) {
-			criteria.createAlias(revAlias + ".descriptions", descsAlias, org.hibernate.sql.JoinType.LEFT_OUTER_JOIN);
-			Disjunction keywordDisjunction = Restrictions.disjunction();
-			keywordDisjunction.add(buildLikeListCriterion("name", keywords, false));
-			keywordDisjunction.add(buildLikeListCriterion(descsAlias + ".description", keywords, false));
-			keywordDisjunction.add(buildLikeListCriterion(revAlias + ".authors", keywords, false));
-			keywordDisjunction.add(buildLikeListCriterion(revAlias + ".publisher", keywords, false));
-			// Also match on IDs, but exact only
-			keywordDisjunction.add(buildEqualsListCriterion("solutionId", keywords));
-			keywordDisjunction.add(buildEqualsListCriterion(revAlias + ".revisionId", keywords));
-			criteria.add(keywordDisjunction);
+
+		try (Session session = getSessionFactory().openSession()) {
+			// build the query using FOM to access child attributes
+			Criteria criteria = session.createCriteria(MLPSolutionFOM.class, solAlias);
+			criteria.add(Restrictions.eq("active", active));
+			// A solution should ALWAYS have revisions.
+			criteria.createAlias("revisions", revAlias);
+			// Descriptions are optional, so must use outer join
+			if (keywords != null && keywords.length > 0) {
+				criteria.createAlias(revAlias + ".descriptions", descsAlias,
+						org.hibernate.sql.JoinType.LEFT_OUTER_JOIN);
+				Disjunction keywordDisjunction = Restrictions.disjunction();
+				keywordDisjunction.add(buildLikeListCriterion("name", keywords, false));
+				keywordDisjunction.add(buildLikeListCriterion(descsAlias + ".description", keywords, false));
+				keywordDisjunction.add(buildLikeListCriterion(revAlias + ".authors", keywords, false));
+				keywordDisjunction.add(buildLikeListCriterion(revAlias + ".publisher", keywords, false));
+				// Also match on IDs, but exact only
+				keywordDisjunction.add(buildEqualsListCriterion("solutionId", keywords));
+				keywordDisjunction.add(buildEqualsListCriterion(revAlias + ".revisionId", keywords));
+				criteria.add(keywordDisjunction);
+			}
+			if (modelTypeCode != null && modelTypeCode.length > 0)
+				criteria.add(buildEqualsListCriterion("modelTypeCode", modelTypeCode));
+			if (accessTypeCode != null && accessTypeCode.length > 0)
+				criteria.add(buildEqualsListCriterion(revAlias + ".accessTypeCode", accessTypeCode));
+			if (userIds != null && userIds.length > 0) {
+				criteria.createAlias("owner", ownerAlias);
+				criteria.add(Restrictions.in(ownerAlias + ".userId", userIds));
+			}
+			if (allTags != null && allTags.length > 0) {
+				// https://stackoverflow.com/questions/51992269/hibernate-java-criteria-query-for-instances-with-multiple-collection-members-lik
+				DetachedCriteria allTagsQuery = DetachedCriteria.forClass(MLPSolutionFOM.class, subqAlias)
+						.add(Restrictions.eqProperty(subqAlias + ".id", solAlias + ".id")) //
+						.createAlias("tags", tagsFieldAlias) //
+						.add(Restrictions.in(tagValueField, allTags)) //
+						.setProjection(Projections.count(tagValueField));
+				criteria.add(Subqueries.eq((long) allTags.length, allTagsQuery));
+			}
+			if (anyTags != null && anyTags.length > 0) {
+				final String subq2Alias = "subsol2";
+				final String tag2Alias = "anytag";
+				final String tag2ValueField = tag2Alias + ".tag";
+				DetachedCriteria anyTagsQuery = DetachedCriteria.forClass(MLPSolutionFOM.class, subq2Alias)
+						.add(Restrictions.eqProperty(subq2Alias + ".id", solAlias + ".id")) //
+						.createAlias("tags", tag2Alias) //
+						.add(Restrictions.in(tag2ValueField, anyTags)).setProjection(Projections.count(tag2ValueField));
+				criteria.add(Subqueries.lt(0L, anyTagsQuery));
+			}
+			Page<MLPSolution> result = runSolutionFomQuery(criteria, pageable);
+			logger.debug("findPortalSolutionsByKwAndTags: result size={}", result.getNumberOfElements());
+			return result;
 		}
-		if (modelTypeCode != null && modelTypeCode.length > 0)
-			criteria.add(buildEqualsListCriterion("modelTypeCode", modelTypeCode));
-		if (accessTypeCode != null && accessTypeCode.length > 0)
-			criteria.add(buildEqualsListCriterion(revAlias + ".accessTypeCode", accessTypeCode));
-		if (userIds != null && userIds.length > 0) {
-			criteria.createAlias("owner", ownerAlias);
-			criteria.add(Restrictions.in(ownerAlias + ".userId", userIds));
-		}
-		if (allTags != null && allTags.length > 0) {
-			// https://stackoverflow.com/questions/51992269/hibernate-java-criteria-query-for-instances-with-multiple-collection-members-lik
-			DetachedCriteria allTagsQuery = DetachedCriteria.forClass(MLPSolutionFOM.class, subqAlias)
-					.add(Restrictions.eqProperty(subqAlias + ".id", solAlias + ".id")) //
-					.createAlias("tags", tagsFieldAlias) //
-					.add(Restrictions.in(tagValueField, allTags)) //
-					.setProjection(Projections.count(tagValueField));
-			criteria.add(Subqueries.eq((long) allTags.length, allTagsQuery));
-		}
-		if (anyTags != null && anyTags.length > 0) {
-			final String subq2Alias = "subsol2";
-			final String tag2Alias = "anytag";
-			final String tag2ValueField = tag2Alias + ".tag";
-			DetachedCriteria anyTagsQuery = DetachedCriteria.forClass(MLPSolutionFOM.class, subq2Alias)
-					.add(Restrictions.eqProperty(subq2Alias + ".id", solAlias + ".id")) //
-					.createAlias("tags", tag2Alias) //
-					.add(Restrictions.in(tag2ValueField, anyTags)).setProjection(Projections.count(tag2ValueField));
-			criteria.add(Subqueries.lt(0L, anyTagsQuery));
-		}
-		Page<MLPSolution> result = runSolutionFomQuery(criteria, pageable);
-		logger.info("findPortalSolutionsByKwAndTags: result size={}", result.getNumberOfElements());
-		return result;
 	}
 
 }

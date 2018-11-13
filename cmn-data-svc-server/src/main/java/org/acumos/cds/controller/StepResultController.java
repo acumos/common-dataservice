@@ -22,11 +22,13 @@ package org.acumos.cds.controller;
 import java.lang.invoke.MethodHandles;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.acumos.cds.CCDSConstants;
 import org.acumos.cds.CodeNameType;
+import org.acumos.cds.MLPResponse;
 import org.acumos.cds.domain.MLPPublishRequest;
 import org.acumos.cds.domain.MLPStepResult;
 import org.acumos.cds.repository.StepResultRepository;
@@ -81,14 +83,14 @@ public class StepResultController extends AbstractController {
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{stepResultId}", method = RequestMethod.GET)
 	@ResponseBody
-	public Object getStepResult(@PathVariable("stepResultId") Long stepResultId, HttpServletResponse response) {
+	public MLPResponse getStepResult(@PathVariable("stepResultId") Long stepResultId, HttpServletResponse response) {
 		logger.info("getStepResult: stepResultId {}", stepResultId);
-		MLPStepResult sr = stepResultRepository.findOne(stepResultId);
-		if (sr == null) {
+		Optional<MLPStepResult> sr = stepResultRepository.findById(stepResultId);
+		if (!sr.isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + stepResultId, null);
 		}
-		return sr;
+		return sr.get();
 	}
 
 	/*
@@ -170,7 +172,7 @@ public class StepResultController extends AbstractController {
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
-	public Object createStepResult(@RequestBody MLPStepResult stepResult, HttpServletResponse response) {
+	public MLPResponse createStepResult(@RequestBody MLPStepResult stepResult, HttpServletResponse response) {
 		logger.info("createStepResult: enter");
 		try {
 			// Validate enum codes
@@ -197,12 +199,11 @@ public class StepResultController extends AbstractController {
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{stepResultId}", method = RequestMethod.PUT)
 	@ResponseBody
-	public Object updateStepResult(@PathVariable("stepResultId") Long stepResultId,
+	public MLPTransportModel updateStepResult(@PathVariable("stepResultId") Long stepResultId,
 			@RequestBody MLPStepResult stepResult, HttpServletResponse response) {
 		logger.info("updateStepResult: stepResultId {}", stepResultId);
-		// Get the existing one
-		MLPStepResult existing = stepResultRepository.findOne(stepResultId);
-		if (existing == null) {
+		// Check the existing one
+		if (!stepResultRepository.findById(stepResultId).isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + stepResultId, null);
 		}
@@ -233,7 +234,7 @@ public class StepResultController extends AbstractController {
 			HttpServletResponse response) {
 		logger.info("deleteStepResult: stepResultId {}", stepResultId);
 		try {
-			stepResultRepository.delete(stepResultId);
+			stepResultRepository.deleteById(stepResultId);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
 			// e.g., EmptyResultDataAccessException is NOT an internal server error
