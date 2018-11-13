@@ -72,7 +72,6 @@ import org.slf4j.LoggerFactory;
 /**
  * Tests getters and setters of client-side domain (model) classes.
  */
-@SuppressWarnings("deprecation")
 public class DomainTest extends AbstractModelTest {
 
 	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());

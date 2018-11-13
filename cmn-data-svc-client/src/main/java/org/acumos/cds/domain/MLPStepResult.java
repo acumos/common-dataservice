@@ -40,7 +40,7 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @Entity
 @Table(name = "C_STEP_RESULT")
-public class MLPStepResult implements MLPEntity, Serializable {
+public class MLPStepResult implements MLPDomainModel, Serializable {
 
 	private static final long serialVersionUID = -595148641870461125L;
 

@@ -75,9 +75,9 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpStatusCodeException;
@@ -99,11 +99,11 @@ public class CdsControllerTest {
 	private final String s64 = "12345678901234567890123456789012345678901234567890123456789012345";
 
 	// From properties
-	@Value("${server.contextPath}")
+	@Value("${server.servlet.context-path}")
 	private String contextPath;
-	@Value("${security.user.name}")
+	@Value("${spring.security.user.name}")
 	private String userName;
-	@Value("${security.user.password}")
+	@Value("${spring.security.user.password}")
 	private String password;
 	// Created by Spring black magic
 	// https://spring.io/guides/gs/testing-web/
@@ -680,7 +680,7 @@ public class CdsControllerTest {
 			RestPageResponse<MLPSolution> sl2 = client.findSolutionsByTag(tagName1, new RestPageRequest(0, 5));
 			Assert.assertTrue(sl2 != null && sl2.getNumberOfElements() > 0);
 
-			// Add user access
+			// Add user access for this inactive user
 			client.addSolutionUserAccess(cs.getSolutionId(), inactiveUser.getUserId());
 
 			// Query two ways
@@ -823,16 +823,16 @@ public class CdsControllerTest {
 			// Check fetch by ID to ensure both are found
 			logger.info("Querying for solutions by id");
 			String[] ids = { cs.getSolutionId(), csOrg.getSolutionId() };
-			RestPageResponse<MLPSolution> idSearchResult = client.findPortalSolutionsByKw(ids, true, null, null, null,
-					null, new RestPageRequest(0, 2));
+			RestPageResponse<MLPSolution> idSearchResult = client.findPortalSolutionsByKwAndTags(ids, true, null, null, null,
+					null, null, new RestPageRequest(0, 2));
 			Assert.assertTrue(idSearchResult != null && idSearchResult.getNumberOfElements() == 2);
 			logger.info("Found models by id total " + idSearchResult.getTotalElements());
 
 			// Both keywords must occur in the same field for a match
 			logger.info("Querying for solutions by keyword");
 			String[] kw = { "solution", "organization" };
-			RestPageResponse<MLPSolution> kwSearchResult = client.findPortalSolutionsByKw(kw, true, null, null, null,
-					null, new RestPageRequest(0, 2));
+			RestPageResponse<MLPSolution> kwSearchResult = client.findPortalSolutionsByKwAndTags(kw, true, null, null, null,
+					null, null, new RestPageRequest(0, 2));
 			Assert.assertTrue(kwSearchResult != null && kwSearchResult.getNumberOfElements() > 0);
 			logger.info("Found models by kw total " + kwSearchResult.getTotalElements());
 
@@ -846,10 +846,12 @@ public class CdsControllerTest {
 			MLPSolution taggedSol = allAnyTagsSearchResult.getContent().get(0);
 			Assert.assertTrue(taggedSol.getTags().contains(new MLPTag(tagName1)));
 
+			// Check this finds solutions by shared-with-user ID
 			logger.info("Querying for user solutions via flexible i/f");
 			RestPageResponse<MLPSolution> userSols = client.findUserSolutions(null, null, true,
 					inactiveUser.getUserId(), null, null, null, new RestPageRequest(0, 5));
-			Assert.assertTrue(userSols != null && userSols.getNumberOfElements() > 0);
+			Assert.assertNotNull(userSols);
+			Assert.assertNotEquals(0, userSols.getNumberOfElements());
 
 			// find active solutions
 			String[] nameKw = null;
@@ -1985,18 +1987,6 @@ public class CdsControllerTest {
 			throw new Exception("Unexpected success");
 		} catch (HttpStatusCodeException ex) {
 			logger.info("unmap peer peer groups failed as expected: {}", ex.getResponseBodyAsString());
-		}
-		try {
-			client.checkRestrictedAccessSolution("peerId", "solutionId");
-			throw new Exception("Unexpected success");
-		} catch (HttpStatusCodeException ex) {
-			logger.info("checkPeerSolutionAccess failed as expected: {}", ex.getResponseBodyAsString());
-		}
-		try {
-			client.checkRestrictedAccessSolution(pr.getPeerId(), "solutionId");
-			throw new Exception("Unexpected success");
-		} catch (HttpStatusCodeException ex) {
-			logger.info("checkPeerSolutionAccess failed as expected: {}", ex.getResponseBodyAsString());
 		}
 		Assert.assertTrue(client.getPeerAccess("bogus peer id").isEmpty());
 
@@ -3223,12 +3213,6 @@ public class CdsControllerTest {
 		} catch (HttpStatusCodeException ex) {
 			logger.info("add composite solution member failed on bad sol id as expected: {}",
 					ex.getResponseBodyAsString());
-		}
-		try {
-			client.getSolutionPicture("bogus");
-			throw new Exception("Unexpected success");
-		} catch (HttpStatusCodeException ex) {
-			logger.info("get sol pic failed on bad ID as expected: {}", ex.getResponseBodyAsString());
 		}
 		try {
 			client.saveSolutionPicture("bogus", new byte[0]);
