@@ -36,7 +36,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 @Entity
 @Table(name = "C_NOTIF_USER_PREF")
-public class MLPUserNotifPref implements MLPEntity, Serializable {
+public class MLPUserNotifPref implements MLPDomainModel, Serializable {
 
 	private static final long serialVersionUID = -2662643459576197438L;
 

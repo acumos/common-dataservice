@@ -22,10 +22,9 @@ package org.acumos.cds.controller;
 
 import java.lang.invoke.MethodHandles;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.persistence.EntityManager;
@@ -33,6 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.acumos.cds.CCDSConstants;
 import org.acumos.cds.CodeNameType;
+import org.acumos.cds.MLPResponse;
 import org.acumos.cds.domain.MLPNotifUserMap;
 import org.acumos.cds.domain.MLPPasswordChangeRequest;
 import org.acumos.cds.domain.MLPRole;
@@ -185,7 +185,7 @@ public class UserController extends AbstractController {
 	 * @param response
 	 *                           HttpServletResponse
 	 */
-	private Object checkUserCredentials(LoginTransport credentials, CredentialType credentialType,
+	private MLPResponse checkUserCredentials(LoginTransport credentials, CredentialType credentialType,
 			HttpServletResponse response) {
 		if (credentials == null || credentials.getName() == null || credentials.getName().trim().isEmpty()
 				|| credentials.getPass() == null || credentials.getPass().trim().isEmpty()) {
@@ -268,7 +268,7 @@ public class UserController extends AbstractController {
 			response = MLPUser.class)
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/" + CCDSConstants.LOGIN_PATH, method = RequestMethod.POST)
-	public Object loginUser(@RequestBody LoginTransport login, HttpServletResponse response) {
+	public MLPResponse loginUser(@RequestBody LoginTransport login, HttpServletResponse response) {
 		logger.debug("loginUser: user name {}", login.getName());
 		return checkUserCredentials(login, CredentialType.PASSWORD, response);
 	}
@@ -280,7 +280,7 @@ public class UserController extends AbstractController {
 			response = MLPUser.class)
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/" + CCDSConstants.LOGIN_API_PATH, method = RequestMethod.POST)
-	public Object loginApi(@RequestBody LoginTransport login, HttpServletResponse response) {
+	public MLPResponse loginApi(@RequestBody LoginTransport login, HttpServletResponse response) {
 		logger.debug("loginApi: user name {}", login.getName());
 		return checkUserCredentials(login, CredentialType.API_TOKEN, response);
 	}
@@ -292,7 +292,7 @@ public class UserController extends AbstractController {
 			response = MLPUser.class)
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/" + CCDSConstants.VERIFY_PATH, method = RequestMethod.POST)
-	public Object verifyUser(@RequestBody LoginTransport login, HttpServletResponse response) {
+	public MLPResponse verifyUser(@RequestBody LoginTransport login, HttpServletResponse response) {
 		logger.debug("verifyUser: user name {}", login.getName());
 		return checkUserCredentials(login, CredentialType.VERIFY_TOKEN, response);
 	}
@@ -312,14 +312,15 @@ public class UserController extends AbstractController {
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "Missing or null new password", null);
 		}
 		// Get the existing user
-		MLPUser user = userRepository.findOne(userId);
-		if (user == null || !user.isActive()) {
+		Optional<MLPUser> opt = userRepository.findById(userId);
+		if (!opt.isPresent() || !opt.get().isActive()) {
 			logger.warn("updatePassword failed for ID {}", userId);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST,
 					"Failed to find active user with ID " + userId, null);
 		}
 		try {
+			MLPUser user = opt.get();
 			final boolean bothNull = user.getLoginHash() == null && changeRequest.getOldLoginPass() == null;
 			final boolean notNullAndMatch = user.getLoginHash() != null && changeRequest.getOldLoginPass() != null
 					&& BCrypt.checkpw(changeRequest.getOldLoginPass(), user.getLoginHash());
@@ -416,28 +417,15 @@ public class UserController extends AbstractController {
 			Pageable pageRequest, HttpServletResponse response) {
 		logger.debug("searchUsers enter");
 		boolean isOr = junction != null && "o".equals(junction);
-		Map<String, Object> queryParameters = new HashMap<>();
-		if (firstName != null)
-			queryParameters.put(firstNameField, firstName);
-		if (middleName != null)
-			queryParameters.put(middleNameField, middleName);
-		if (lastName != null)
-			queryParameters.put(lastNameField, lastName);
-		if (orgName != null)
-			queryParameters.put(orgNameField, orgName);
-		if (email != null)
-			queryParameters.put(emailField, email);
-		if (loginName != null)
-			queryParameters.put(loginNameField, loginName);
-		if (active != null)
-			queryParameters.put(activeField, active);
-		if (queryParameters.size() == 0) {
+		if (firstName == null && middleName == null && lastName == null && orgName == null && email == null
+				&& loginName == null && active == null) {
 			logger.warn("searchUsers missing query");
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "Missing query", null);
 		}
 		try {
-			Page<MLPUser> userPage = userSearchService.findUsers(queryParameters, isOr, pageRequest);
+			Page<MLPUser> userPage = userSearchService.findUsers(firstName, middleName, lastName, orgName, email,
+					loginName, active, isOr, pageRequest);
 			// Wipe hash values
 			Iterator<MLPUser> userIter = userPage.iterator();
 			while (userIter.hasNext()) {
@@ -461,14 +449,15 @@ public class UserController extends AbstractController {
 	@RequestMapping(value = "/{userId}", method = RequestMethod.GET)
 	public MLPUser getUser(@PathVariable("userId") String userId) {
 		logger.debug("getUser: userId {}", userId);
-		MLPUser user = userRepository.findOne(userId);
-		if (user != null) {
-			// detach from Hibernate and wipe hashes
-			entityManager.detach(user);
-			user.clearHashes();
-			if (user.getApiToken() != null)
-				user.setApiToken(decryptWithJasypt(user.getApiToken()));
-		}
+		Optional<MLPUser> da = userRepository.findById(userId);
+		if (!da.isPresent())
+			return null;
+		// detach from Hibernate and wipe hashes
+		MLPUser user = da.get();
+		entityManager.detach(user);
+		user.clearHashes();
+		if (user.getApiToken() != null)
+			user.setApiToken(decryptWithJasypt(user.getApiToken()));
 		return user;
 	}
 
@@ -502,15 +491,15 @@ public class UserController extends AbstractController {
 			response = MLPUser.class)
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(method = RequestMethod.POST)
-	public Object createUser(@RequestBody MLPUser user, HttpServletResponse response) {
+	public MLPResponse createUser(@RequestBody MLPUser user, HttpServletResponse response) {
 		// Do not log clear-text passwords or tokens!
 		logger.debug("createUser: loginName {}", user.getLoginName());
-		Object result;
+
 		try {
 			String id = user.getUserId();
 			if (id != null) {
 				UUID.fromString(id);
-				if (userRepository.findOne(id) != null) {
+				if (userRepository.findById(id).isPresent()) {
 					logger.warn("createUser failed for ID {}", id);
 					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 					return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "ID exists: " + id);
@@ -533,8 +522,7 @@ public class UserController extends AbstractController {
 			// but first detach from Hibernate and wipe all hashes
 			entityManager.detach(newUser);
 			newUser.clearHashes();
-			result = newUser;
-			return result;
+			return newUser;
 		} catch (Exception ex) {
 			Exception cve = findConstraintViolationException(ex);
 			logger.warn("createUser failed: {}", cve.toString());
@@ -547,17 +535,18 @@ public class UserController extends AbstractController {
 			response = SuccessTransport.class)
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{userId}", method = RequestMethod.PUT)
-	public Object updateUser(@PathVariable("userId") String userId, @RequestBody MLPUser user,
+	public MLPTransportModel updateUser(@PathVariable("userId") String userId, @RequestBody MLPUser user,
 			HttpServletResponse response) {
 		logger.debug("updateUser: userId {}", userId);
 		// Get the existing one
-		MLPUser existingUser = userRepository.findOne(userId);
-		if (existingUser == null) {
+		Optional<MLPUser> opt = userRepository.findById(userId);
+		if (!opt.isPresent()) {
 			logger.warn("updateUser failed for ID {}", userId);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + userId, null);
 		}
 		try {
+			MLPUser existingUser = opt.get();
 			// Use the path-parameter id; don't trust the one in the object
 			user.setUserId(userId);
 			// Hash any clear-text sensitive user credentials; otherwise use old value
@@ -597,14 +586,14 @@ public class UserController extends AbstractController {
 		try {
 			Iterable<MLPUserRoleMap> roles = userRoleMapRepository.findByUserId(userId);
 			if (roles != null)
-				userRoleMapRepository.delete(roles);
+				userRoleMapRepository.deleteAll(roles);
 			Iterable<MLPUserLoginProvider> logins = userLoginProviderRepository.findByUserId(userId);
 			if (logins != null)
-				userLoginProviderRepository.delete(logins);
+				userLoginProviderRepository.deleteAll(logins);
 			Iterable<MLPNotifUserMap> notifs = notifUserMapRepository.findByUserId(userId);
 			if (notifs != null)
-				notifUserMapRepository.delete(notifs);
-			userRepository.delete(userId);
+				notifUserMapRepository.deleteAll(notifs);
+			userRepository.deleteById(userId);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
 			// e.g., EmptyResultDataAccessException is NOT an internal server error
@@ -634,14 +623,14 @@ public class UserController extends AbstractController {
 			response = SuccessTransport.class)
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{userId}/" + CCDSConstants.ROLE_PATH + "/{roleId}", method = RequestMethod.POST)
-	public Object addUserRole(@PathVariable("userId") String userId, @PathVariable("roleId") String roleId,
+	public MLPTransportModel addUserRole(@PathVariable("userId") String userId, @PathVariable("roleId") String roleId,
 			HttpServletResponse response) {
 		logger.debug("addUserRole: userId {}, roleId {}", userId, roleId);
-		if (userRepository.findOne(userId) == null) {
+		if (!userRepository.findById(userId).isPresent()) {
 			logger.warn("addUserRole failed for user ID {}", userId);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + userId, null);
-		} else if (roleRepository.findOne(roleId) == null) {
+		} else if (!roleRepository.findById(roleId).isPresent()) {
 			logger.warn("addUserRole failed for role ID {}", roleId);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + roleId, null);
@@ -654,16 +643,16 @@ public class UserController extends AbstractController {
 			response = SuccessTransport.class)
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{userId}/" + CCDSConstants.ROLE_PATH, method = RequestMethod.PUT)
-	public Object updateUserRoles(@PathVariable("userId") String userId, @RequestBody List<String> roleIds,
+	public MLPTransportModel updateUserRoles(@PathVariable("userId") String userId, @RequestBody List<String> roleIds,
 			HttpServletResponse response) {
 		logger.debug("updateUserRoles: user {}, roles {}", userId, roleIds);
-		if (userRepository.findOne(userId) == null) {
+		if (!userRepository.findById(userId).isPresent()) {
 			logger.warn("updateUserRoles failed for user ID {}", userId);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + userId, null);
 		}
 		for (String roleId : roleIds) {
-			if (roleRepository.findOne(roleId) == null) {
+			if (!roleRepository.findById(roleId).isPresent()) {
 				logger.warn("updateUserRoles failed for role ID {}", roleId);
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + roleId, null);
@@ -671,7 +660,7 @@ public class UserController extends AbstractController {
 		}
 		// Remove all existing role assignments
 		Iterable<MLPUserRoleMap> existing = userRoleMapRepository.findByUserId(userId);
-		userRoleMapRepository.delete(existing);
+		userRoleMapRepository.deleteAll(existing);
 		// Create new ones
 		for (String roleId : roleIds) {
 			userRoleMapRepository.save(new MLPUserRoleMap(userId, roleId));
@@ -679,20 +668,10 @@ public class UserController extends AbstractController {
 		return new SuccessTransport(HttpServletResponse.SC_OK, null);
 	}
 
-	/**
-	 * @param userId
-	 *                     user ID
-	 * @param roleId
-	 *                     role to drop
-	 * @param response
-	 *                     HttpServletResponse
-	 * @return Success indicator. This never fails, even if neither the user nor
-	 *         role ID exists.
-	 */
 	@ApiOperation(value = "Drops a role from the user.", response = SuccessTransport.class)
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{userId}/" + CCDSConstants.ROLE_PATH + "/{roleId}", method = RequestMethod.DELETE)
-	public Object dropUserRole(@PathVariable("userId") String userId, @PathVariable("roleId") String roleId,
+	public MLPTransportModel dropUserRole(@PathVariable("userId") String userId, @PathVariable("roleId") String roleId,
 			HttpServletResponse response) {
 		logger.debug("dropUserRole: userId {} roleId {}", userId, roleId);
 		userRoleMapRepository.delete(new MLPUserRoleMap(userId, roleId));
@@ -703,12 +682,12 @@ public class UserController extends AbstractController {
 			response = SuccessTransport.class)
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = CCDSConstants.ROLE_PATH + "/{roleId}", method = RequestMethod.PUT)
-	public Object addOrDropUsersInRole(@PathVariable("roleId") String roleId,
+	public MLPTransportModel addOrDropUsersInRole(@PathVariable("roleId") String roleId,
 			@RequestBody UsersRoleRequest usersRoleRequest, HttpServletResponse response) {
 		logger.debug("addOrDropUsersInRole: role {} users {}", roleId,
 				String.join(", ", usersRoleRequest.getUserIds()));
 		// Validate entire request before making any change
-		if (roleRepository.findOne(roleId) == null) {
+		if (!roleRepository.findById(roleId).isPresent()) {
 			logger.warn("addOrDropUsersInRole failed for role ID {}", roleId);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + roleId, null);
@@ -719,7 +698,7 @@ public class UserController extends AbstractController {
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "No users", null);
 		}
 		for (String userId : usersRoleRequest.getUserIds()) {
-			if (userRepository.findOne(userId) == null) {
+			if (!userRepository.findById(userId).isPresent()) {
 				logger.warn("addOrDropUsersInRole failed for user ID {}", userId);
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + userId, null);
@@ -727,7 +706,7 @@ public class UserController extends AbstractController {
 		}
 		for (String userId : usersRoleRequest.getUserIds()) {
 			MLPUserRoleMap.UserRoleMapPK pk = new MLPUserRoleMap.UserRoleMapPK(userId, roleId);
-			boolean exists = userRoleMapRepository.findOne(pk) != null;
+			boolean exists = userRoleMapRepository.findById(pk).isPresent();
 			if (exists && usersRoleRequest.isAdd()) {
 				logger.warn("addOrDropUsersInRole user {} in role", userId);
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -742,7 +721,7 @@ public class UserController extends AbstractController {
 			if (usersRoleRequest.isAdd())
 				userRoleMapRepository.save(new MLPUserRoleMap(userId, roleId));
 			else
-				userRoleMapRepository.delete(new MLPUserRoleMap.UserRoleMapPK(userId, roleId));
+				userRoleMapRepository.deleteById(new MLPUserRoleMap.UserRoleMapPK(userId, roleId));
 		}
 		return new SuccessTransport(HttpServletResponse.SC_OK, null);
 	}
@@ -758,7 +737,8 @@ public class UserController extends AbstractController {
 				providerUserId);
 		// Build a key for fetch
 		UserLoginProviderPK pk = new UserLoginProviderPK(userId, providerCode, providerUserId);
-		return userLoginProviderRepository.findOne(pk);
+		Optional<MLPUserLoginProvider> da = userLoginProviderRepository.findById(pk);
+		return da.isPresent() ? da.get() : null;
 	}
 
 	@ApiOperation(value = "Gets all login providers for the specified user. Answers empty if none are found.", //
@@ -774,13 +754,13 @@ public class UserController extends AbstractController {
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{userId}/" + CCDSConstants.LOGIN_PROVIDER_PATH + "/{providerCode}/"
 			+ CCDSConstants.LOGIN_PATH + "/{providerUserId}", method = RequestMethod.POST)
-	public Object createUserLoginProvider(@PathVariable("userId") String userId,
+	public MLPResponse createUserLoginProvider(@PathVariable("userId") String userId,
 			@PathVariable("providerCode") String providerCode, @PathVariable("providerUserId") String providerUserId,
 			@RequestBody MLPUserLoginProvider ulp, HttpServletResponse response) {
 		logger.debug("createUserLoginProvider: userId {} providerCode {} providerUserId {}", userId, providerCode,
 				providerUserId);
 		// Validate args
-		if (userRepository.findOne(userId) == null) {
+		if (!userRepository.findById(userId).isPresent()) {
 			logger.warn("createUserLoginProvider failed for ID {}", userId);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + userId, null);
@@ -792,7 +772,7 @@ public class UserController extends AbstractController {
 			ulp.setUserId(userId);
 			ulp.setProviderCode(providerCode);
 			ulp.setProviderUserId(providerUserId);
-			Object result = userLoginProviderRepository.save(ulp);
+			MLPUserLoginProvider result = userLoginProviderRepository.save(ulp);
 			response.setStatus(HttpServletResponse.SC_CREATED);
 			// This is a hack to create the location path.
 			response.setHeader(HttpHeaders.LOCATION,
@@ -812,13 +792,13 @@ public class UserController extends AbstractController {
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{userId}/" + CCDSConstants.LOGIN_PROVIDER_PATH + "/{providerCode}/"
 			+ CCDSConstants.LOGIN_PATH + "/{providerUserId}", method = RequestMethod.PUT)
-	public Object updateUserLoginProvider(@PathVariable("userId") String userId,
+	public MLPTransportModel updateUserLoginProvider(@PathVariable("userId") String userId,
 			@PathVariable("providerCode") String providerCode, @PathVariable("providerUserId") String providerUserId,
 			@RequestBody MLPUserLoginProvider ulp, HttpServletResponse response) {
 		logger.debug("updateUserLoginProvider: userId {} providerCode {} providerUserId {}", userId, providerCode,
 				providerUserId);
 		// Validate args
-		if (userRepository.findOne(userId) == null) {
+		if (!userRepository.findById(userId).isPresent()) {
 			logger.warn("updateUserLoginProvider failed for ID {}", userId);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + userId, null);
@@ -826,8 +806,7 @@ public class UserController extends AbstractController {
 		// Get the existing one
 		// Build a key for fetch
 		UserLoginProviderPK pk = new UserLoginProviderPK(userId, providerCode, providerUserId);
-		MLPUserLoginProvider existing = userLoginProviderRepository.findOne(pk);
-		if (existing == null) {
+		if (!userLoginProviderRepository.findById(pk).isPresent()) {
 			logger.warn("updateUserLoginProvider failed for key {}", pk);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + pk, null);
@@ -862,7 +841,7 @@ public class UserController extends AbstractController {
 		try {
 			// Build a key for fetch
 			UserLoginProviderPK pk = new UserLoginProviderPK(userId, providerCode, providerUserId);
-			userLoginProviderRepository.delete(pk);
+			userLoginProviderRepository.deleteById(pk);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
 			// e.g., EmptyResultDataAccessException is NOT an internal server error
@@ -889,15 +868,15 @@ public class UserController extends AbstractController {
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{userId}/" + CCDSConstants.FAVORITE_PATH + "/" + CCDSConstants.SOLUTION_PATH
 			+ "/{solutionId}", method = RequestMethod.POST)
-	public Object createSolutionFavorite(@PathVariable("solutionId") String solutionId,
+	public MLPResponse createSolutionFavorite(@PathVariable("solutionId") String solutionId,
 			@PathVariable("userId") String userId, @RequestBody MLPSolutionFavorite sfv, HttpServletResponse response) {
 		logger.debug("createSolutionFavorite: solutionId {} userId {}", solutionId, userId);
-		if (solutionRepository.findOne(solutionId) == null) {
+		if (!solutionRepository.findById(solutionId).isPresent()) {
 			logger.warn("createSolutionFavorite failed for sol ID {}", solutionId);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + solutionId, null);
 		}
-		if (userRepository.findOne(userId) == null) {
+		if (!userRepository.findById(userId).isPresent()) {
 			logger.warn("createSolutionFavorite failed for usr ID {}", userId);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + userId, null);
@@ -907,7 +886,7 @@ public class UserController extends AbstractController {
 			// Use path IDs
 			sfv.setSolutionId(solutionId);
 			sfv.setUserId(userId);
-			Object result = solutionFavoriteRepository.save(sfv);
+			MLPSolutionFavorite result = solutionFavoriteRepository.save(sfv);
 			response.setStatus(HttpServletResponse.SC_CREATED);
 			response.setHeader(HttpHeaders.LOCATION, CCDSConstants.USER_PATH + "/" + sfv.getUserId() + "/"
 					+ CCDSConstants.FAVORITE_PATH + "/" + CCDSConstants.SOLUTION_PATH + "/" + sfv.getSolutionId());
@@ -933,7 +912,7 @@ public class UserController extends AbstractController {
 		try {
 			// Build a key for fetch
 			SolutionFavoritePK pk = new SolutionFavoritePK(solutionId, userId);
-			solutionFavoriteRepository.delete(pk);
+			solutionFavoriteRepository.deleteById(pk);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
 			// e.g., EmptyResultDataAccessException is NOT an internal server error
@@ -957,17 +936,20 @@ public class UserController extends AbstractController {
 			response = SuccessTransport.class)
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{userId}/" + CCDSConstants.TAG_PATH + "/{tag}", method = RequestMethod.POST)
-	public Object addUserTag(@PathVariable("userId") String userId, @PathVariable("tag") String tag,
+	public MLPTransportModel addUserTag(@PathVariable("userId") String userId, @PathVariable("tag") String tag,
 			HttpServletResponse response) {
 		logger.debug("addUserTag: userId {} tag {}", userId, tag);
-		if (userRepository.findOne(userId) == null) {
+		if (!userRepository.findById(userId).isPresent()) {
+			logger.warn("addUserTag failed for user {}", userId);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + userId, null);
-		} else if (userTagMapRepository.findOne(new MLPUserTagMap.UserTagMapPK(userId, tag)) != null) {
+		}
+		if (userTagMapRepository.findById(new MLPUserTagMap.UserTagMapPK(userId, tag)).isPresent()) {
+			logger.warn("addUserTag failed for existing tag {}", tag);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "Already has tag " + tag, null);
 		}
-		if (tagRepository.findOne(tag) == null) {
+		if (!tagRepository.findById(tag).isPresent()) {
 			// Tags are cheap & easy to create, so make life easy for client
 			tagRepository.save(new MLPTag(tag));
 			logger.debug("addUserTag: created tag {}", tag);
@@ -980,11 +962,11 @@ public class UserController extends AbstractController {
 			response = SuccessTransport.class)
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{userId}/" + CCDSConstants.TAG_PATH + "/{tag}", method = RequestMethod.DELETE)
-	public Object dropUserTag(@PathVariable("userId") String userId, @PathVariable("tag") String tag,
+	public MLPTransportModel dropUserTag(@PathVariable("userId") String userId, @PathVariable("tag") String tag,
 			HttpServletResponse response) {
 		logger.debug("dropTag: userId {} tag {}", userId, tag);
 		try {
-			userTagMapRepository.delete(new MLPUserTagMap.UserTagMapPK(userId, tag));
+			userTagMapRepository.deleteById(new MLPUserTagMap.UserTagMapPK(userId, tag));
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
 			// e.g., EmptyResultDataAccessException is NOT an internal server error
