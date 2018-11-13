@@ -20,51 +20,45 @@
 
 package org.acumos.cds.service;
 
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Map;
+import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Root;
+
+import org.acumos.cds.domain.MLPDomainModel;
 import org.hibernate.Criteria;
+import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 /**
- * Factors code out of search implementations
+ * Factors code out of search-service implementations
  */
 public abstract class AbstractSearchServiceImpl {
 
+	@Autowired
+	private EntityManagerFactory entityManagerFactory;
+
+	@Autowired
+	protected EntityManager entityManager;
+
 	/**
-	 * Populates a criteria object for Hibernate.
+	 * Gets the session factory from the entity manager factory. Factored out for
+	 * convenience of subclasses.
 	 * 
-	 * @param criteria
-	 *                            Criteria object to extend
-	 * @param queryParameters
-	 *                            Map of field name - field value pairs. Value may
-	 *                            be a scalar or array. An "equals" criterion is
-	 *                            created for scalar values. An "in" criterion is
-	 *                            created for array values.
-	 * @param isOr
-	 *                            If true, treat the query as a disjunction; else as
-	 *                            a conjunction.
+	 * @return SessionFactory
 	 */
-	protected void buildCriteria(Criteria criteria, Map<String, ? extends Object> queryParameters, boolean isOr) {
-		Junction junction = isOr ? Restrictions.disjunction() : Restrictions.conjunction();
-		criteria.add(junction);
-		for (Map.Entry<String, ? extends Object> entry : queryParameters.entrySet()) {
-			if (entry.getValue() == null)
-				throw new IllegalArgumentException("Unexpected null value in query parameters");
-			Criterion criterion = null;
-			if (entry.getValue().getClass().isArray()) {
-				Object[] array = (Object[]) entry.getValue();
-				criterion = Restrictions.in(entry.getKey(), array);
-			} else {
-				criterion = Restrictions.eq(entry.getKey(), entry.getValue());
-			}
-			junction.add(criterion);
-		}
+	protected SessionFactory getSessionFactory() {
+		return entityManagerFactory.unwrap(SessionFactory.class);
 	}
 
 	/**
@@ -135,7 +129,8 @@ public abstract class AbstractSearchServiceImpl {
 	 *                     Pageable
 	 */
 	protected void applyFirstMaxCriteria(Criteria criteria, Pageable pageable) {
-		criteria.setFirstResult(pageable.getOffset());
+		// getOffset() yielded int, changed to yield long; when will Criteria change?
+		criteria.setFirstResult((int) pageable.getOffset());
 		criteria.setMaxResults(pageable.getPageSize());
 	}
 
@@ -160,4 +155,29 @@ public abstract class AbstractSearchServiceImpl {
 		}
 	}
 
+	/**
+	 * Builds a list of sort orders suitable for supplying to the orderBy clause of
+	 * a query.
+	 * 
+	 * @param cb
+	 *                 Criteria Builder
+	 * @param from
+	 *                 Root item
+	 * @param sort
+	 *                 Spring sorting criteria
+	 * @return List of javax.persistence.criteria.Order
+	 */
+	protected List<javax.persistence.criteria.Order> buildOrderList(CriteriaBuilder cb,
+			Root<? extends MLPDomainModel> from, Sort sort) {
+		List<javax.persistence.criteria.Order> jpaOrderList = new ArrayList<>();
+		Iterator<org.springframework.data.domain.Sort.Order> sprOrderIter = sort.iterator();
+		while (sprOrderIter.hasNext()) {
+			org.springframework.data.domain.Sort.Order sprOrder = sprOrderIter.next();
+			if (sprOrder.isAscending())
+				jpaOrderList.add(cb.asc(from.get(sprOrder.getProperty())));
+			else
+				jpaOrderList.add(cb.desc(from.get(sprOrder.getProperty())));
+		}
+		return jpaOrderList;
+	}
 }

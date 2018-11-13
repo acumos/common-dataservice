@@ -245,42 +245,65 @@ public interface ICommonDataServiceRestClient {
 			RestPageRequest pageRequest);
 
 	/**
-	 * Finds solutions that match every specified condition. Special-purpose method
-	 * to support the dynamic search page on the portal marketplace.
+	 * Gets a page of solutions matching all query parameters. Each parameter can be
+	 * a set of values, and a match is found for that parameter if ANY ONE of the
+	 * values matches. In other words, this is a conjunction of disjunctions.
+	 * Special-purpose method to support the dynamic search page on the portal
+	 * marketplace.
 	 * 
 	 * @param nameKeywords
-	 *                                Keywords to perform "LIKE" search in solution
-	 *                                name field; ignored if null or empty
-	 * @param descriptionKeywords
-	 *                                Keywords to perform "LIKE" search in the
-	 *                                revision description (any access type);
+	 *                                Searches the name field for ANY of the
+	 *                                keywords using case-insensitive LIKE after
+	 *                                surrounding with wildcard '%' characters;
 	 *                                ignored if null or empty
+	 * 
+	 * @param descriptionKeywords
+	 *                                Searches all revision descriptions for ANY of
+	 *                                the keywords by using a case-insensitive LIKE
+	 *                                after surrounding each keyword with wildcard
+	 *                                '%' characters; ignored if null or empty
+	 * 
 	 * @param active
 	 *                                Solution active status; true for active, false
 	 *                                for inactive
+	 * 
 	 * @param userIds
-	 *                                User IDs who created the solution; ignored if
-	 *                                null or empty
-	 * @param accessTypeCodes
-	 *                                Access type codes; use four-letter sequence
-	 *                                "null" to match a null value; ignored if null
-	 *                                or empty
+	 *                                Limits match to solutions with associated user
+	 *                                (creator) that matches ANY of the specified
+	 *                                values; ignored if null or empty
+	 * 
 	 * @param modelTypeCodes
-	 *                                Model type codes; use four-letter sequence
-	 *                                "null" to match a null value; ignored if null
+	 *                                Limits match to solutions with ANY of the
+	 *                                specified values including null (which is
+	 *                                different from the special-case 4-character
+	 *                                sequence "null"); ignored if null or empty
+	 * 
+	 * @param accessTypeCodes
+	 *                                Limits match to solutions containing revisions
+	 *                                with ANY of the specified values including
+	 *                                null (which is different from the special-case
+	 *                                4-character sequence "null"); ignored if null
 	 *                                or empty
+	 * 
 	 * @param tags
-	 *                                Solution tag names; ignored if null or empty
+	 *                                Limits match to solutions with ANY of the
+	 *                                specified tags; ignored if null or empty
+	 * 
 	 * @param authorKeywords
-	 *                                Keywords to perform "LIKE" search in the
-	 *                                Authors field; ignored if null or empty
+	 *                                Limits match to solutions with a revision
+	 *                                containing an author field with ANY of the
+	 *                                specified keywords by using a case-insensitive
+	 *                                LIKE after surrounding each keyword with
+	 *                                wildcard '%' characters; ignored if null or
+	 *                                empty
+	 * 
 	 * @param publisherKeywords
-	 *                                Keywords to perform "LIKE" search in the
-	 *                                Publisher field; ignored if null or empty
+	 *                                Same as author, but on the publisher field.
+	 * 
 	 * @param pageRequest
 	 *                                Page index, page size and sort information;
 	 *                                defaults to page 0 of size 20 if null.
-	 * @return Page of solution objects.
+	 * @return Page of solution objects, which may be empty
 	 */
 	RestPageResponse<MLPSolution> findPortalSolutions(String[] nameKeywords, String[] descriptionKeywords,
 			boolean active, String[] userIds, String[] accessTypeCodes, String[] modelTypeCodes, String[] tags,

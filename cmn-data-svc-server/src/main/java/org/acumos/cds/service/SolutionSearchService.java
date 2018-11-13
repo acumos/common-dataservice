@@ -21,77 +21,70 @@
 package org.acumos.cds.service;
 
 import java.util.Date;
-import java.util.Map;
 
 import org.acumos.cds.domain.MLPSolution;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-/**
- * Defines methods to query solution information.
- */
 public interface SolutionSearchService {
 
 	/**
-	 * Searches for instances matching all or one of the query parameters, depending
-	 * on the isOr parameter.
+	 * Searches for instances matching all or any one of the query parameters,
+	 * depending on the isOr parameter; case is ignored in all String matches.
 	 * 
-	 * @param queryParameters
-	 *                            field-name, field-value pairs. Value may be scalar
-	 *                            or array.
+	 * @param name
+	 *                            Name; ignored if null
+	 * @param active
+	 *                            Active status; ignored if null
+	 * @param userId
+	 *                            User ID; ignored if null
+	 * @param sourceId
+	 *                            Source ID; ignored if null
+	 * @param modelTypeCode
+	 *                            Model type code; ignored if null
+	 * @param toolkitTypeCode
+	 *                            Toolkit type code; ignored if null
+	 * @param origin
+	 *                            Origin; ignored if null
 	 * @param isOr
 	 *                            If true, the query is a disjunction ("or");
 	 *                            otherwise the query is a conjunction ("and").
 	 * @param pageable
 	 *                            Page and sort criteria
 	 * @return Page of instances, which may be empty.
+	 * 
 	 */
-	Page<MLPSolution> findSolutions(Map<String, ? extends Object> queryParameters, boolean isOr, Pageable pageable);
+	Page<MLPSolution> findSolutions(String name, Boolean active, String userId, String sourceId, String modelTypeCode,
+			String toolkitTypeCode, String origin, boolean isOr, Pageable pageable);
 
 	/**
-	 * Gets a page of solutions matching all query parameters.
+	 * Searches for solutions.
 	 * 
+	 * @see org.acumos.cds.client.ICommonDataServiceRestClient#findPortalSolutions(String[],
+	 *      String[], boolean, String[], String[], String[], String[], String[],
+	 *      String[], org.acumos.cds.transport.RestPageRequest)
+	 *      findPortalSolutions() for complete documentation
 	 * @param nameKeywords
-	 *                                Searches the name field for the keywords using
-	 *                                case-insensitive LIKE after surrounding with
-	 *                                wildcard '%' characters; ignored if null or
-	 *                                empty
+	 *                                names
 	 * @param descriptionKeywords
-	 *                                Searches the revision descriptions for the
-	 *                                keywords using case-insensitive LIKE after
-	 *                                surrounding with wildcard '%' characters;
-	 *                                ignored if null or empty
+	 *                                descriptions
 	 * @param active
-	 *                                Active status: true or false; required.
+	 *                                true/false
 	 * @param userIds
-	 *                                Limits match to solutions with one of the
-	 *                                specified values; ignored if null or empty
+	 *                                user IDs
 	 * @param modelTypeCodes
-	 *                                Limits match to solutions with one of the
-	 *                                specified values including null (not the
-	 *                                4-character sequence "null"); ignored if null
-	 *                                or empty
+	 *                                codes
 	 * @param accessTypeCodes
-	 *                                Limits match to solutions containing revisions
-	 *                                with one of the specified values including
-	 *                                null (not the 4-character sequence "null");
-	 *                                ignored if null or empty
+	 *                                codes
 	 * @param tags
-	 *                                Limits match to solutions with one of the
-	 *                                specified tags; ignored if null or empty
+	 *                                tags
 	 * @param authorKeywords
-	 *                                Searches the author field for the keywords
-	 *                                using case-insensitive LIKE after surrounding
-	 *                                each with wildcard '%' characters; ignored if
-	 *                                null or empty
+	 *                                authors
 	 * @param publisherKeywords
-	 *                                Searches the publisher field for the keywords
-	 *                                using case-insensitive LIKE after surrounding
-	 *                                each with wildcard '%' characters; ignored if
-	 *                                null or empty
+	 *                                publishers
 	 * @param pageable
-	 *                                Page and sort info
-	 * @return Page of matches
+	 *                                page
+	 * @return Page of solutions
 	 */
 	Page<MLPSolution> findPortalSolutions(String[] nameKeywords, String[] descriptionKeywords, boolean active,
 			String[] userIds, String[] modelTypeCodes, String[] accessTypeCodes, String[] tags, String[] authorKeywords,
