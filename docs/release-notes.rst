@@ -23,7 +23,7 @@ Common Data Service Release Notes
 The client and server are released together.  The client is deployed as a jar file to a
 Maven Nexus repository. The server is deployed as a Docker image to a Docker registry.
 
-Version 2.0.0, 11 Dec 2018
+Version 2.0.0, 21 Dec 2018
 --------------------------
 
 * Extend table c_solution_rev with columns for security verification (`ACUMOS-1376 <https://jira.acumos.org/browse/ACUMOS-1376>`_)
@@ -32,6 +32,7 @@ Version 2.0.0, 11 Dec 2018
 * Revise controllers to reduce query time and log warnings on bad requests (`ACUMOS-1697 <https://jira.acumos.org/browse/ACUMOS-1697>`_)
 * Use tab-separated MDC-style log output format (`ACUMOS-1752 <https://jira.acumos.org/browse/ACUMOS-1752>`_)
 * Add method to get user unread notification count (`ACUMOS-1883 <https://jira.acumos.org/browse/ACUMOS-1883>`_)
+* Upgrade to Spring-Boot version 2.1 (`ACUMOS-1926 <https://jira.acumos.org/browse/ACUMOS-1926>`_)
 * Validate URI parameters in Artifact and Document (`ACUMOS-1927 <https://jira.acumos.org/browse/ACUMOS-1927>`_)
 * Drop unused validation entities and features (`ACUMOS-1931 <https://jira.acumos.org/browse/ACUMOS-1931>`_)
 * Support site content key-value pairs (`ACUMOS-1936 <https://jira.acumos.org/browse/ACUMOS-1936>`_)
