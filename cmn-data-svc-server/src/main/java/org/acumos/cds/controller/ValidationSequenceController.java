@@ -105,7 +105,7 @@ public class ValidationSequenceController extends AbstractController {
 		try {
 			// Build a key for fetch
 			ValidationSequencePK pk = new ValidationSequencePK(sequence, valTypeCode);
-			validationSequenceRepository.delete(pk);
+			validationSequenceRepository.deleteById(pk);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
 			// e.g., EmptyResultDataAccessException is NOT an internal server error

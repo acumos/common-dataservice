@@ -175,7 +175,7 @@ public class FOMRepositoryTest {
 
 		// Via Hibernate constraint
 		logger.info("Querying for FOM via search services");
-		Pageable pageable = new PageRequest(0, 6, null);
+		Pageable pageable = PageRequest.of(0, 6);
 
 		logger.info("Querying for FOM via findPortalSolutions method");
 		Page<MLPSolution> byName = solutionSearchService.findPortalSolutions(nameKw, empty, true, empty, empty,

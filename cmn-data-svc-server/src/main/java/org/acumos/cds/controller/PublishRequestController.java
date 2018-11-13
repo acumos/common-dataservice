@@ -22,11 +22,13 @@ package org.acumos.cds.controller;
 import java.lang.invoke.MethodHandles;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.acumos.cds.CCDSConstants;
 import org.acumos.cds.CodeNameType;
+import org.acumos.cds.MLPResponse;
 import org.acumos.cds.domain.MLPPublishRequest;
 import org.acumos.cds.repository.PublishRequestRepository;
 import org.acumos.cds.service.PublishRequestSearchService;
@@ -80,14 +82,14 @@ public class PublishRequestController extends AbstractController {
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{requestId}", method = RequestMethod.GET)
 	@ResponseBody
-	public Object getPublishRequest(@PathVariable("requestId") long requestId, HttpServletResponse response) {
+	public MLPResponse getPublishRequest(@PathVariable("requestId") long requestId, HttpServletResponse response) {
 		logger.info("getPublishRequest: requestId {}", requestId);
-		MLPPublishRequest sr = publishRequestRepository.findOne(requestId);
-		if (sr == null) {
+		Optional<MLPPublishRequest> sr = publishRequestRepository.findById(requestId);
+		if (!sr.isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + requestId, null);
 		}
-		return sr;
+		return sr.get();
 	}
 
 	/*
@@ -154,7 +156,7 @@ public class PublishRequestController extends AbstractController {
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
-	public Object createPublishRequest(@RequestBody MLPPublishRequest publishRequest, HttpServletResponse response) {
+	public MLPResponse createPublishRequest(@RequestBody MLPPublishRequest publishRequest, HttpServletResponse response) {
 		logger.info("createPublishRequest: enter");
 		try {
 			// Validate enum codes
@@ -179,12 +181,11 @@ public class PublishRequestController extends AbstractController {
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{requestId}", method = RequestMethod.PUT)
 	@ResponseBody
-	public Object updatePublishRequest(@PathVariable("requestId") long requestId,
+	public MLPTransportModel updatePublishRequest(@PathVariable("requestId") long requestId,
 			@RequestBody MLPPublishRequest publishRequest, HttpServletResponse response) {
 		logger.info("updatePublishRequest: requestId {}", requestId);
-		// Get the existing one
-		MLPPublishRequest existing = publishRequestRepository.findOne(requestId);
-		if (existing == null) {
+		// Check the existing one
+		if (!publishRequestRepository.findById(requestId).isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + requestId, null);
 		}
@@ -213,7 +214,7 @@ public class PublishRequestController extends AbstractController {
 			HttpServletResponse response) {
 		logger.info("deletePublishRequest: requestId {}", requestId);
 		try {
-			publishRequestRepository.delete(requestId);
+			publishRequestRepository.deleteById(requestId);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
 			// e.g., EmptyResultDataAccessException is NOT an internal server error

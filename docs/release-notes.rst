@@ -28,6 +28,7 @@ Version 2.0.0, 21 Nov 2018
 
 * Use tab-separated MDC-style log output format (`ACUMOS-1752 <https://jira.acumos.org/browse/ACUMOS-1752>`_)
 * Add method to get user unread notification count (`ACUMOS-1883 <https://jira.acumos.org/browse/ACUMOS-1883>`_)
+* Upgrade to Spring-Boot version 2.1 (`ACUMOS-1926 <https://jira.acumos.org/browse/ACUMOS-1926>`_)
 * Validate URI parameters in Artifact and Document (`ACUMOS-1927 <https://jira.acumos.org/browse/ACUMOS-1927>`_)
 * Revise restricted-federation query method to use page parameter
 * Requires database schema version 2.0

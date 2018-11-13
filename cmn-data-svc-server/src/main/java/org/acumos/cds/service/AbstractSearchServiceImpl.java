@@ -23,11 +23,15 @@ package org.acumos.cds.service;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.persistence.EntityManagerFactory;
+
 import org.hibernate.Criteria;
+import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
@@ -35,6 +39,19 @@ import org.springframework.data.domain.Sort;
  * Factors code out of search implementations
  */
 public abstract class AbstractSearchServiceImpl {
+
+	@Autowired
+	private EntityManagerFactory entityManagerFactory;
+
+	/**
+	 * Gets the session factory from the entity manager factory. Factored out for
+	 * convenience of subclasses.
+	 * 
+	 * @return SessionFactory
+	 */
+	protected SessionFactory getSessionFactory() {
+		return entityManagerFactory.unwrap(SessionFactory.class);
+	}
 
 	/**
 	 * Populates a criteria object for Hibernate.
@@ -135,7 +152,8 @@ public abstract class AbstractSearchServiceImpl {
 	 *                     Pageable
 	 */
 	protected void applyFirstMaxCriteria(Criteria criteria, Pageable pageable) {
-		criteria.setFirstResult(pageable.getOffset());
+		// getOffset() yielded int, changed to yield long; when will Criteria change?
+		criteria.setFirstResult((int) pageable.getOffset());
 		criteria.setMaxResults(pageable.getPageSize());
 	}
 

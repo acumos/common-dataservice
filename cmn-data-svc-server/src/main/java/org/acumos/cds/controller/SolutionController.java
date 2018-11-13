@@ -28,12 +28,14 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.acumos.cds.CCDSConstants;
 import org.acumos.cds.CodeNameType;
+import org.acumos.cds.MLPResponse;
 import org.acumos.cds.domain.MLPArtifact;
 import org.acumos.cds.domain.MLPCompSolMap;
 import org.acumos.cds.domain.MLPSolRevArtMap;
@@ -147,7 +149,8 @@ public class SolutionController extends AbstractController {
 	private void updateSolutionDownloadStats(String solutionId) {
 		Long count = solutionDownloadRepository.getSolutionDownloadCount(solutionId);
 		if (count != null) {
-			MLPSolutionWeb stats = solutionWebRepository.findOne(solutionId);
+			Optional<MLPSolutionWeb> o = solutionWebRepository.findById(solutionId);
+			MLPSolutionWeb stats = o.get();
 			stats.setDownloadCount(count);
 			stats.setLastDownload(new Date());
 			solutionWebRepository.save(stats);
@@ -167,7 +170,8 @@ public class SolutionController extends AbstractController {
 		Long count = solutionRatingRepository.getSolutionRatingCount(solutionId);
 		Double avg = solutionRatingRepository.getSolutionRatingAverage(solutionId);
 		if (count != null && avg != null) {
-			MLPSolutionWeb stats = solutionWebRepository.findOne(solutionId);
+			Optional<MLPSolutionWeb> o = solutionWebRepository.findById(solutionId);
+			MLPSolutionWeb stats = o.get();
 			stats.setRatingCount(count);
 			stats.setRatingAverageTenths(Math.round(10 * avg));
 			solutionWebRepository.save(stats);
@@ -462,14 +466,14 @@ public class SolutionController extends AbstractController {
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{solutionId}", method = RequestMethod.GET)
 	@ResponseBody
-	public Object getSolution(@PathVariable("solutionId") String solutionId, HttpServletResponse response) {
+	public MLPResponse getSolution(@PathVariable("solutionId") String solutionId, HttpServletResponse response) {
 		logger.info("getSolution: ID {}", solutionId);
-		MLPSolution da = solutionRepository.findOne(solutionId);
-		if (da == null) {
+		Optional<MLPSolution> da = solutionRepository.findById(solutionId);
+		if (!da.isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + solutionId, null);
 		}
-		return da;
+		return da.get();
 	}
 
 	@ApiOperation(value = "Creates a new entity and generates an ID if needed. Returns bad request on constraint violation etc.", //
@@ -477,7 +481,7 @@ public class SolutionController extends AbstractController {
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
-	public Object createSolution(@RequestBody MLPSolution solution, HttpServletResponse response) {
+	public MLPResponse createSolution(@RequestBody MLPSolution solution, HttpServletResponse response) {
 		logger.info("createSolution: enter");
 		try {
 			// Validate enum codes
@@ -488,7 +492,7 @@ public class SolutionController extends AbstractController {
 			String id = solution.getSolutionId();
 			if (id != null) {
 				UUID.fromString(id);
-				if (solutionRepository.findOne(id) != null) {
+				if (solutionRepository.findById(id).isPresent()) {
 					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 					return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "Solution exists with ID " + id);
 				}
@@ -519,12 +523,11 @@ public class SolutionController extends AbstractController {
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{solutionId}", method = RequestMethod.PUT)
 	@ResponseBody
-	public Object updateSolution(@PathVariable("solutionId") String solutionId, @RequestBody MLPSolution solution,
+	public MLPTransportModel updateSolution(@PathVariable("solutionId") String solutionId, @RequestBody MLPSolution solution,
 			HttpServletResponse response) {
 		logger.info("updateSolution: ID {}", solutionId);
-		// Get the existing one
-		MLPSolution existing = solutionRepository.findOne(solutionId);
-		if (existing == null) {
+		// Check the existing one
+		if (!solutionRepository.findById(solutionId).isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + solutionId, null);
 		}
@@ -555,11 +558,10 @@ public class SolutionController extends AbstractController {
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{solutionId}/" + CCDSConstants.VIEW_PATH, method = RequestMethod.PUT)
 	@ResponseBody
-	public Object incrementViewCount(@PathVariable("solutionId") String solutionId, HttpServletResponse response) {
+	public MLPTransportModel incrementViewCount(@PathVariable("solutionId") String solutionId, HttpServletResponse response) {
 		logger.info("incrementViewCount: ID {}", solutionId);
-		// Get the existing one; the update command doesn't fail on invalid ID
-		MLPSolutionWeb existing = solutionWebRepository.findOne(solutionId);
-		if (existing == null) {
+		// Check the existing one; the update command doesn't fail on invalid ID
+		if (!solutionWebRepository.findById(solutionId).isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + solutionId, null);
 		}
@@ -600,17 +602,16 @@ public class SolutionController extends AbstractController {
 			solutionFavoriteRepository.deleteBySolutionId(solutionId);
 			stepResultRepository.deleteBySolutionId(solutionId);
 			// The web stats are annotated as optional, so be cautious when deleting
-			MLPSolutionWeb webStats = solutionWebRepository.findOne(solutionId);
-			if (webStats != null)
-				solutionWebRepository.delete(solutionId);
+			if (solutionWebRepository.findById(solutionId).isPresent())
+				solutionWebRepository.deleteById(solutionId);
 			for (MLPSolutionRevision r : solutionRevisionRepository.findBySolutionIdIn(new String[] { solutionId })) {
 				for (MLPArtifact a : artifactRepository.findByRevision(r.getRevisionId()))
 					solRevArtMapRepository
-							.delete(new MLPSolRevArtMap.SolRevArtMapPK(r.getRevisionId(), a.getArtifactId()));
+							.deleteById(new MLPSolRevArtMap.SolRevArtMapPK(r.getRevisionId(), a.getArtifactId()));
 				// do NOT delete artifacts!
 				solutionRevisionRepository.delete(r);
 			}
-			solutionRepository.delete(solutionId);
+			solutionRepository.deleteById(solutionId);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
 			// e.g., EmptyResultDataAccessException is NOT an internal server error
@@ -639,15 +640,15 @@ public class SolutionController extends AbstractController {
 	@RequestMapping(value = "/{solutionId}/" + CCDSConstants.REVISION_PATH
 			+ "/{revisionId}", method = RequestMethod.GET)
 	@ResponseBody
-	public Object getSolutionRevision(@PathVariable("solutionId") String solutionId,
+	public MLPResponse getSolutionRevision(@PathVariable("solutionId") String solutionId,
 			@PathVariable("revisionId") String revisionId, HttpServletResponse response) {
 		logger.info("getSolutionRevision: solutionId {} revisionId {}", solutionId, revisionId);
-		MLPSolutionRevision da = solutionRevisionRepository.findOne(revisionId);
-		if (da == null) {
+		Optional<MLPSolutionRevision> da = solutionRevisionRepository.findById(revisionId);
+		if (!da.isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + revisionId, null);
 		}
-		return da;
+		return da.get();
 	}
 
 	@ApiOperation(value = "Creates a new solution revision and generates an ID if needed. Returns bad request on constraint violation etc.", //
@@ -655,10 +656,10 @@ public class SolutionController extends AbstractController {
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{solutionId}/" + CCDSConstants.REVISION_PATH, method = RequestMethod.POST)
 	@ResponseBody
-	public Object createSolutionRevision(@PathVariable("solutionId") String solutionId,
+	public MLPResponse createSolutionRevision(@PathVariable("solutionId") String solutionId,
 			@RequestBody MLPSolutionRevision revision, HttpServletResponse response) {
 		logger.info("createSolutionRevision: solutionId {}", solutionId);
-		if (solutionRepository.findOne(solutionId) == null) {
+		if (!solutionRepository.findById(solutionId).isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + solutionId, null);
 		}
@@ -671,7 +672,7 @@ public class SolutionController extends AbstractController {
 			String id = revision.getRevisionId();
 			if (id != null) {
 				UUID.fromString(id);
-				if (solutionRevisionRepository.findOne(id) != null) {
+				if (solutionRevisionRepository.findById(id).isPresent()) {
 					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 					return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "Revision exists with ID " + id);
 				}
@@ -694,15 +695,15 @@ public class SolutionController extends AbstractController {
 	@RequestMapping(value = "/{solutionId}/" + CCDSConstants.REVISION_PATH
 			+ "/{revisionId}", method = RequestMethod.PUT)
 	@ResponseBody
-	public Object updateSolutionRevision(@PathVariable("solutionId") String solutionId,
+	public MLPTransportModel updateSolutionRevision(@PathVariable("solutionId") String solutionId,
 			@PathVariable("revisionId") String revisionId, @RequestBody MLPSolutionRevision revision,
 			HttpServletResponse response) {
 		logger.info("updateSolutionRevision: solution ID {}, revision ID {}", solutionId, revisionId);
-		if (solutionRepository.findOne(solutionId) == null) {
+		if (!solutionRepository.findById(solutionId).isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + solutionId, null);
 		}
-		if (solutionRevisionRepository.findOne(revisionId) == null) {
+		if (!solutionRevisionRepository.findById(revisionId).isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + revisionId, null);
 		}
@@ -731,11 +732,11 @@ public class SolutionController extends AbstractController {
 	@RequestMapping(value = "/{solutionId}/" + CCDSConstants.REVISION_PATH
 			+ "/{revisionId}", method = RequestMethod.DELETE)
 	@ResponseBody
-	public Object deleteSolutionRevision(@PathVariable("solutionId") String solutionId,
+	public MLPTransportModel deleteSolutionRevision(@PathVariable("solutionId") String solutionId,
 			@PathVariable("revisionId") String revisionId, HttpServletResponse response) {
 		logger.info("deleteSolutionRevision: solutionId {} revisionId {}", solutionId, revisionId);
 		try {
-			solutionRevisionRepository.delete(revisionId);
+			solutionRevisionRepository.deleteById(revisionId);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
 			// e.g., EmptyResultDataAccessException is NOT an internal server error
@@ -758,17 +759,18 @@ public class SolutionController extends AbstractController {
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{solutionId}/" + CCDSConstants.TAG_PATH + "/{tag}", method = RequestMethod.POST)
 	@ResponseBody
-	public Object addSolutionTag(@PathVariable("solutionId") String solutionId, @PathVariable("tag") String tag,
+	public MLPTransportModel addSolutionTag(@PathVariable("solutionId") String solutionId, @PathVariable("tag") String tag,
 			HttpServletResponse response) {
 		logger.info("addSolutionTag: solutionId {} tag {}", solutionId, tag);
-		if (solutionRepository.findOne(solutionId) == null) {
+		if (!solutionRepository.findById(solutionId).isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + solutionId, null);
-		} else if (solTagMapRepository.findOne(new MLPSolTagMap.SolTagMapPK(solutionId, tag)) != null) {
+		}
+		if (solTagMapRepository.findById(new MLPSolTagMap.SolTagMapPK(solutionId, tag)).isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "Already has tag " + tag, null);
 		}
-		if (tagRepository.findOne(tag) == null) {
+		if (!tagRepository.findById(tag).isPresent()) {
 			// Tags are cheap & easy to create, so make life easy for client
 			tagRepository.save(new MLPTag(tag));
 			logger.info("addSolutionTag: created tag {}", tag);
@@ -782,11 +784,11 @@ public class SolutionController extends AbstractController {
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{solutionId}/" + CCDSConstants.TAG_PATH + "/{tag}", method = RequestMethod.DELETE)
 	@ResponseBody
-	public Object dropSolutionTag(@PathVariable("solutionId") String solutionId, @PathVariable("tag") String tag,
+	public MLPTransportModel dropSolutionTag(@PathVariable("solutionId") String solutionId, @PathVariable("tag") String tag,
 			HttpServletResponse response) {
 		logger.info("dropSolutionTag: solutionId {} tag {}", solutionId, tag);
 		try {
-			solTagMapRepository.delete(new MLPSolTagMap.SolTagMapPK(solutionId, tag));
+			solTagMapRepository.deleteById(new MLPSolTagMap.SolTagMapPK(solutionId, tag));
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
 			// e.g., EmptyResultDataAccessException is NOT an internal server error
@@ -805,7 +807,7 @@ public class SolutionController extends AbstractController {
 	public Object getSolutionDownloads(@PathVariable("solutionId") String solutionId, Pageable pageRequest,
 			HttpServletResponse response) {
 		logger.info("getSolutionDownloads: solutionId {}", solutionId);
-		if (solutionRepository.findOne(solutionId) == null) {
+		if (!solutionRepository.findById(solutionId).isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + solutionId, null);
 		}
@@ -818,7 +820,7 @@ public class SolutionController extends AbstractController {
 	@RequestMapping(value = "/{solutionId}/" + CCDSConstants.DOWNLOAD_PATH + "/" + CCDSConstants.ARTIFACT_PATH
 			+ "/{artifactId}/" + CCDSConstants.USER_PATH + "/{userId}", method = RequestMethod.POST)
 	@ResponseBody
-	public Object createSolutionDownload(@PathVariable("solutionId") String solutionId,
+	public MLPResponse createSolutionDownload(@PathVariable("solutionId") String solutionId,
 			@PathVariable("userId") String userId, @PathVariable("artifactId") String artifactId,
 			@RequestBody MLPSolutionDownload sd, HttpServletResponse response) {
 		logger.info("createSolutionDownload: solutionId {} userId {} artifactId {}", solutionId, userId, artifactId);
@@ -827,7 +829,7 @@ public class SolutionController extends AbstractController {
 			sd.setSolutionId(solutionId);
 			sd.setUserId(userId);
 			sd.setArtifactId(artifactId);
-			Object result = solutionDownloadRepository.save(sd);
+			MLPSolutionDownload result = solutionDownloadRepository.save(sd);
 			response.setStatus(HttpServletResponse.SC_CREATED);
 			response.setHeader(HttpHeaders.LOCATION, CCDSConstants.SOLUTION_PATH + "/" + sd.getSolutionId() + "/"
 					+ CCDSConstants.DOWNLOAD_PATH + sd.getDownloadId());
@@ -853,7 +855,7 @@ public class SolutionController extends AbstractController {
 			@PathVariable("downloadId") Long downloadId, HttpServletResponse response) {
 		logger.info("deleteSolutionDownload: solutionId {} downloadId {}", solutionId, downloadId);
 		try { // Build a key for fetch
-			solutionDownloadRepository.delete(downloadId);
+			solutionDownloadRepository.deleteById(downloadId);
 			// Update cache!
 			updateSolutionDownloadStats(solutionId);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
@@ -873,7 +875,7 @@ public class SolutionController extends AbstractController {
 	public Object getListOfSolutionRating(@PathVariable("solutionId") String solutionId, Pageable pageRequest,
 			HttpServletResponse response) {
 		logger.info("getListOfSolutionRating: solutionId {}", solutionId);
-		if (solutionRepository.findOne(solutionId) == null) {
+		if (!solutionRepository.findById(solutionId).isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + solutionId, null);
 		}
@@ -890,8 +892,8 @@ public class SolutionController extends AbstractController {
 			@PathVariable("userId") String userId, HttpServletResponse response) {
 		logger.info("getSolutionRating: solutionId {} userId {}", solutionId, userId);
 		SolutionRatingPK pk = new SolutionRatingPK(solutionId, userId);
-		MLPSolutionRating da = solutionRatingRepository.findOne(pk);
-		if (da == null) {
+		Optional<MLPSolutionRating> da = solutionRatingRepository.findById(pk);
+		if (!da.isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + pk);
 		}
@@ -905,11 +907,11 @@ public class SolutionController extends AbstractController {
 	public Object createSolutionRating(@PathVariable("solutionId") String solutionId,
 			@PathVariable("userId") String userId, @RequestBody MLPSolutionRating sr, HttpServletResponse response) {
 		logger.info("createSolutionRating: solutionId {} userId {}", solutionId, userId);
-		if (solutionRepository.findOne(solutionId) == null) {
+		if (!solutionRepository.findById(solutionId).isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + solutionId, null);
 		}
-		if (userRepository.findOne(userId) == null) {
+		if (!userRepository.findById(userId).isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + userId, null);
 		}
@@ -942,10 +944,9 @@ public class SolutionController extends AbstractController {
 	public Object updateSolutionRating(@PathVariable("solutionId") String solutionId,
 			@PathVariable("userId") String userId, @RequestBody MLPSolutionRating sr, HttpServletResponse response) {
 		logger.info("updateSolutionRating: solutionId {} userId {}", solutionId, userId);
-		// Get the existing one
+		// Check the existing one
 		SolutionRatingPK pk = new SolutionRatingPK(solutionId, userId);
-		MLPSolutionRating existing = solutionRatingRepository.findOne(pk);
-		if (existing == null) {
+		if (!solutionRatingRepository.findById(pk).isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + pk, null);
 		}
@@ -978,7 +979,7 @@ public class SolutionController extends AbstractController {
 		try {
 			// Build a key for fetch
 			SolutionRatingPK pk = new SolutionRatingPK(solutionId, userId);
-			solutionRatingRepository.delete(pk);
+			solutionRatingRepository.deleteById(pk);
 			// Update cache!
 			updateSolutionRatingStats(solutionId);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
@@ -997,12 +998,12 @@ public class SolutionController extends AbstractController {
 	@ResponseBody
 	public Object getSolutionWebStats(@PathVariable("solutionId") String solutionId, HttpServletResponse response) {
 		logger.info("getSolutionWebStats: solutionId {}", solutionId);
-		MLPSolutionWeb stats = solutionWebRepository.findOne(solutionId);
-		if (stats == null) {
+		Optional<MLPSolutionWeb> stats = solutionWebRepository.findById(solutionId);
+		if (!stats.isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + solutionId, null);
 		}
-		return stats;
+		return stats.get();
 	}
 
 	@ApiOperation(value = "Gets access-control list of users for the specified solution.", //
@@ -1024,16 +1025,16 @@ public class SolutionController extends AbstractController {
 	public Object addUserToSolutionACL(@PathVariable("solutionId") String solutionId,
 			@PathVariable("userId") String userId, HttpServletResponse response) {
 		logger.info("addUserToSolutionACL: solution {}, user {}", solutionId, userId);
-		if (solutionRepository.findOne(solutionId) == null) {
+		if (!solutionRepository.findById(solutionId).isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + solutionId, null);
-		} else if (userRepository.findOne(userId) == null) {
+		}
+		if (!userRepository.findById(userId).isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + userId, null);
-		} else {
-			solUserAccMapRepository.save(new MLPSolUserAccMap(solutionId, userId));
-			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		}
+		solUserAccMapRepository.save(new MLPSolUserAccMap(solutionId, userId));
+		return new SuccessTransport(HttpServletResponse.SC_OK, null);
 	}
 
 	@ApiOperation(value = "Drops a user from the ACL for the specified solution. Returns bad request if an ID is not found", //
@@ -1046,7 +1047,7 @@ public class SolutionController extends AbstractController {
 			@PathVariable("userId") String userId, HttpServletResponse response) {
 		logger.info("dropUserFromSolutionACL: solution {}, user {}", solutionId, userId);
 		try {
-			solUserAccMapRepository.delete(new MLPSolUserAccMap.SolUserAccessMapPK(solutionId, userId));
+			solUserAccMapRepository.deleteById(new MLPSolUserAccMap.SolUserAccessMapPK(solutionId, userId));
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
 			// e.g., EmptyResultDataAccessException is NOT an internal server error
@@ -1097,11 +1098,11 @@ public class SolutionController extends AbstractController {
 			@PathVariable("revisionId") String revisionId, @PathVariable("taskId") String taskId,
 			@RequestBody MLPSolutionValidation sv, HttpServletResponse response) {
 		logger.info("createSolutionValidation: solutionId {} revisionId {} taskId {}", solutionId, revisionId, taskId);
-		if (solutionRepository.findOne(solutionId) == null) {
+		if (!solutionRepository.findById(solutionId).isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + solutionId, null);
 		}
-		if (solutionRevisionRepository.findOne(revisionId) == null) {
+		if (!solutionRevisionRepository.findById(revisionId).isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + revisionId, null);
 		}
@@ -1140,10 +1141,9 @@ public class SolutionController extends AbstractController {
 			@PathVariable("revisionId") String revisionId, @PathVariable("taskId") String taskId,
 			@RequestBody MLPSolutionValidation sv, HttpServletResponse response) {
 		logger.info("updateSolutionValidation: solutionId {} revisionId {} taskId {}", solutionId, revisionId, taskId);
-		// Get the existing one
+		// Check the existing one
 		SolutionValidationPK pk = new SolutionValidationPK(solutionId, revisionId, taskId);
-		MLPSolutionValidation existing = solutionValidationRepository.findOne(pk);
-		if (existing == null) {
+		if (!solutionValidationRepository.findById(pk).isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + pk, null);
 		}
@@ -1180,7 +1180,7 @@ public class SolutionController extends AbstractController {
 		logger.info("deleteSolutionValidation: solutionId {} revisionId {} taskId {}", solutionId, revisionId, taskId);
 		try {
 			SolutionValidationPK pk = new SolutionValidationPK(solutionId, revisionId, taskId);
-			solutionValidationRepository.delete(pk);
+			solutionValidationRepository.deleteById(pk);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
 			// e.g., EmptyResultDataAccessException is NOT an internal server error
@@ -1200,11 +1200,11 @@ public class SolutionController extends AbstractController {
 	public Object getSolutionDeployments(@PathVariable("solutionId") String solutionId,
 			@PathVariable("revisionId") String revisionId, Pageable pageRequest, HttpServletResponse response) {
 		logger.info("getSolutionDeployments: solutionId {} revisionId {}", solutionId, revisionId);
-		if (solutionRepository.findOne(solutionId) == null) {
+		if (!solutionRepository.findById(solutionId).isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + solutionId, null);
 		}
-		if (solutionRevisionRepository.findOne(revisionId) == null) {
+		if (!solutionRevisionRepository.findById(revisionId).isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + revisionId, null);
 		}
@@ -1223,15 +1223,15 @@ public class SolutionController extends AbstractController {
 			HttpServletResponse response) {
 		logger.info("getUserSolutionRevisionDeployments: solutionId {} revisionId {} userId {}", solutionId, revisionId,
 				userId);
-		if (solutionRepository.findOne(solutionId) == null) {
+		if (!solutionRepository.findById(solutionId).isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + solutionId, null);
 		}
-		if (solutionRevisionRepository.findOne(revisionId) == null) {
+		if (!solutionRevisionRepository.findById(revisionId).isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + revisionId, null);
 		}
-		if (userRepository.findOne(userId) == null) {
+		if (!userRepository.findById(userId).isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + userId, null);
 		}
@@ -1249,15 +1249,15 @@ public class SolutionController extends AbstractController {
 			@PathVariable("revisionId") String revisionId, @RequestBody MLPSolutionDeployment sd,
 			HttpServletResponse response) {
 		logger.info("createSolutionDeployment: solutionId {} revisionId {}", solutionId, revisionId);
-		if (solutionRepository.findOne(solutionId) == null) {
+		if (!solutionRepository.findById(solutionId).isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + solutionId, null);
 		}
-		if (solutionRevisionRepository.findOne(revisionId) == null) {
+		if (!solutionRevisionRepository.findById(revisionId).isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + revisionId, null);
 		}
-		if (userRepository.findOne(sd.getUserId()) == null) {
+		if (!userRepository.findById(sd.getUserId()).isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + sd.getUserId(), null);
 		}
@@ -1268,7 +1268,7 @@ public class SolutionController extends AbstractController {
 			String id = sd.getDeploymentId();
 			if (id != null) {
 				UUID.fromString(id);
-				if (solutionDeploymentRepository.findOne(id) != null) {
+				if (solutionDeploymentRepository.findById(id).isPresent()) {
 					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 					return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "Deployment exists with ID " + id);
 				}
@@ -1278,7 +1278,7 @@ public class SolutionController extends AbstractController {
 			sd.setSolutionId(solutionId);
 			sd.setRevisionId(revisionId);
 			// do NOT null out the deployment ID
-			Object result = solutionDeploymentRepository.save(sd);
+			MLPSolutionDeployment result = solutionDeploymentRepository.save(sd);
 			response.setStatus(HttpServletResponse.SC_CREATED);
 			response.setHeader(HttpHeaders.LOCATION,
 					CCDSConstants.SOLUTION_PATH + "/" + sd.getSolutionId() + "/" + CCDSConstants.REVISION_PATH
@@ -1299,12 +1299,12 @@ public class SolutionController extends AbstractController {
 	@RequestMapping(value = "/{solutionId}/" + CCDSConstants.REVISION_PATH + "/{revisionId}/"
 			+ CCDSConstants.DEPLOY_PATH + "/{deploymentId}", method = RequestMethod.PUT)
 	@ResponseBody
-	public Object updateSolutionDeployment(@PathVariable("solutionId") String solutionId,
+	public MLPTransportModel updateSolutionDeployment(@PathVariable("solutionId") String solutionId,
 			@PathVariable("revisionId") String revisionId, @PathVariable("deploymentId") String deploymentId,
 			@RequestBody MLPSolutionDeployment sd, HttpServletResponse response) {
 		logger.info("updateSolutionDeployment: solutionId {} revisionId {} deploymentId {}", solutionId, revisionId,
 				deploymentId);
-		if (solutionDeploymentRepository.findOne(deploymentId) == null) {
+		if (!solutionDeploymentRepository.findById(deploymentId).isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + deploymentId, null);
 		}
@@ -1337,7 +1337,7 @@ public class SolutionController extends AbstractController {
 		logger.info("updateSolutionDeployment: solutionId {} revisionId {} deploymentId {}", solutionId, revisionId,
 				deploymentId);
 		try {
-			solutionDeploymentRepository.delete(deploymentId);
+			solutionDeploymentRepository.deleteById(deploymentId);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
 			// e.g., EmptyResultDataAccessException is NOT an internal server error
@@ -1366,19 +1366,19 @@ public class SolutionController extends AbstractController {
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{parentId}/" + CCDSConstants.COMPOSITE_PATH + "/{childId}", method = RequestMethod.POST)
 	@ResponseBody
-	public Object addCompositeSolutionMember(@PathVariable("parentId") String parentId,
+	public MLPTransportModel addCompositeSolutionMember(@PathVariable("parentId") String parentId,
 			@PathVariable("childId") String childId, HttpServletResponse response) {
 		logger.info("addCompositeSolutionMember: parentId {} childId {}", parentId, childId);
-		if (solutionRepository.findOne(parentId) == null) {
+		if (!solutionRepository.findById(parentId).isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + parentId, null);
-		} else if (solutionRepository.findOne(childId) == null) {
+		}
+		if (!solutionRepository.findById(childId).isPresent()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + childId, null);
-		} else {
-			compSolMapRepository.save(new MLPCompSolMap(parentId, childId));
-			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		}
+		compSolMapRepository.save(new MLPCompSolMap(parentId, childId));
+		return new SuccessTransport(HttpServletResponse.SC_OK, null);
 	}
 
 	@ApiOperation(value = "Drops a child from the parent composite solution. Returns bad request if an ID is not found.", //
@@ -1386,7 +1386,7 @@ public class SolutionController extends AbstractController {
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{parentId}/" + CCDSConstants.COMPOSITE_PATH + "/{childId}", method = RequestMethod.DELETE)
 	@ResponseBody
-	public Object dropCompositeSolutionMember(@PathVariable("parentId") String parentId,
+	public MLPTransportModel dropCompositeSolutionMember(@PathVariable("parentId") String parentId,
 			@PathVariable("childId") String childId, HttpServletResponse response) {
 		logger.info("dropCompositeSolutionMember: parentId {} childId {}", parentId, childId);
 		try {
