@@ -23,9 +23,8 @@ package org.acumos.cds.test;
 import java.lang.invoke.MethodHandles;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 import javax.validation.ConstraintViolationException;
 
@@ -198,7 +197,7 @@ public class CdsRepositoryServiceTest {
 	@Autowired
 	private SolutionSearchService solutionSearchService;
 	@Autowired
-	private UserSearchService userService;
+	private UserSearchService userSearchService;
 	@Autowired
 	private StepResultRepository stepResultRepository;
 	@Autowired
@@ -274,14 +273,17 @@ public class CdsRepositoryServiceTest {
 			Assert.assertEquals(cu.getCreated(), changedCreate);
 
 			// Fetch it back
-			HashMap<String, Object> restr = new HashMap<>();
-			restr.put("firstName", firstName);
-			restr.put("lastName", lastName);
-			Page<MLPUser> userPage = userService.findUsers(restr, true, new PageRequest(0, 5, null));
+			Page<MLPUser> userPage = userSearchService.findUsers(firstName, null, lastName, null, null, null, null,
+					false, PageRequest.of(0, 5));
 			Assert.assertTrue(userPage.getNumberOfElements() > 0);
 			MLPUser testUser = userPage.iterator().next();
 			logger.info("testUser is " + testUser);
 			logger.info("cu.getUserID is " + cu.getUserId());
+
+			// Test search with every argument and empty result
+			Page<MLPUser> emptySteps = userSearchService.findUsers("bogus", "bogus", "bogus", "bogus", "bogus", "bogus",
+					Boolean.TRUE, false, PageRequest.of(0, 5));
+			Assert.assertTrue(emptySteps.isEmpty());
 
 			MLPNotification notif = null;
 			notif = new MLPNotification();
@@ -336,10 +338,14 @@ public class CdsRepositoryServiceTest {
 			Assert.assertNotNull(pr.getCreated());
 
 			// Fetch back
-			Map<String, String> peerParms = new HashMap<>();
-			peerParms.put("name", pr.getName());
-			Page<MLPPeer> searchPeers = peerSearchService.findPeers(peerParms, false, new PageRequest(0, 5, null));
+			Page<MLPPeer> searchPeers = peerSearchService.findPeers(pr.getName(), null, null, null, null, null, false,
+					PageRequest.of(0, 5));
 			Assert.assertTrue(searchPeers.getNumberOfElements() == 1);
+
+			// Test search with empty result
+			Page<MLPPeer> emptyPeers = peerSearchService.findPeers("bogus", "bogus", "bogus", "bogus", "bogus", "bogus",
+					false, PageRequest.of(0, 5));
+			Assert.assertTrue(emptyPeers.isEmpty());
 
 			MLPPeerSubscription ps = new MLPPeerSubscription(pr.getPeerId(), cu.getUserId(),
 					SubscriptionScopeCode.FL.name(), AccessTypeCode.PB.name());
@@ -369,9 +375,7 @@ public class CdsRepositoryServiceTest {
 			Assert.assertTrue(count > 0);
 			logger.info("Role count: {}", count);
 
-			Map<String, String> roleParms = new HashMap<>();
-			roleParms.put("name", cr2.getName());
-			Page<MLPRole> searchRoles = roleSearchService.findRoles(roleParms, false, new PageRequest(0, 5, null));
+			Page<MLPRole> searchRoles = roleSearchService.findRoles(cr2.getName(), null, false, PageRequest.of(0, 5));
 			Assert.assertTrue(searchRoles.getNumberOfElements() == 1);
 
 			MLPRoleFunction crf = new MLPRoleFunction();
@@ -389,8 +393,9 @@ public class CdsRepositoryServiceTest {
 			logger.info("Count of users in role: {}", usersInRole);
 
 			logger.info("Checking role content");
-			MLPRole res = roleRepository.findOne(cr2.getRoleId());
-			Assert.assertNotNull(res.getRoleId());
+			Optional<MLPRole> opt = roleRepository.findById(cr2.getRoleId());
+			Assert.assertTrue(opt.isPresent());
+			Assert.assertNotNull(opt.get().getRoleId());
 
 			Iterable<MLPRoleFunction> resrf = roleFunctionRepository.findByRoleId(cr2.getRoleId());
 			Assert.assertTrue(resrf.iterator().hasNext());
@@ -402,13 +407,13 @@ public class CdsRepositoryServiceTest {
 			Iterable<MLPRole> roleList = roleRepository.findByUser(UserID);
 			logger.info("Role list {}", roleList);
 
-			userRoleMapRepository.delete(new MLPUserRoleMap.UserRoleMapPK(cu.getUserId(), cr2.getRoleId()));
+			userRoleMapRepository.deleteById(new MLPUserRoleMap.UserRoleMapPK(cu.getUserId(), cr2.getRoleId()));
 
 			logger.info("Deleting test role function");
 			roleFunctionRepository.delete(roleFuncOne);
 
 			logger.info("Deleting test role");
-			roleRepository.delete(cr2.getRoleId());
+			roleRepository.deleteById(cr2.getRoleId());
 
 			logger.info("Creating artifacts");
 			MLPArtifact ca = new MLPArtifact();
@@ -431,11 +436,14 @@ public class CdsRepositoryServiceTest {
 			Assert.assertTrue(artifactRepository.count() >= 2);
 
 			// Fetch artifact back
-			Map<String, String> artParms = new HashMap<>();
-			artParms.put("name", ca.getName());
-			Page<MLPArtifact> searchArts = artifactSearchService.findArtifacts(artParms, false,
-					new PageRequest(0, 5, null));
+			Page<MLPArtifact> searchArts = artifactSearchService.findArtifacts(null, ca.getName(), null, null, null,
+					false, PageRequest.of(0, 5));
 			Assert.assertTrue(searchArts.getNumberOfElements() == 1);
+
+			// Test search with empty result
+			Page<MLPArtifact> emptyArts = artifactSearchService.findArtifacts("bogus", "bogus", "bogus", "bogus",
+					"bogus", false, PageRequest.of(0, 5));
+			Assert.assertTrue(emptyArts.isEmpty());
 
 			MLPTag solTag1 = new MLPTag("soltag1");
 			solTag1 = solutionTagRepository.save(solTag1);
@@ -473,24 +481,14 @@ public class CdsRepositoryServiceTest {
 			logger.info("Created solution 2 " + cs2.getSolutionId());
 
 			// Search with single values
-			Map<String, String> solParms = new HashMap<>();
-			solParms.put("name", solName);
-			solParms.put("description", solDesc);
 			// Limit to one result, which helps detect Hibernate issues
 			// of creating a cross-product when it should not
-			Page<MLPSolution> searchSols = solutionSearchService.findSolutions(solParms, false,
-					new PageRequest(0, 1, null));
+			Page<MLPSolution> searchSols = solutionSearchService.findSolutions(solName, null, null, null, null, null,
+					null, false, PageRequest.of(0, 5));
 			// Ensure a single result; had a bug with dupes due to tags
 			Assert.assertEquals(searchSols.getContent().size(), 1);
 			// Ensure both tags were retrieved
 			Assert.assertEquals(searchSols.getContent().get(0).getTags().size(), 2);
-
-			// Search with a list of values
-			Map<String, Object> solListParms = new HashMap<>();
-			solListParms.put("name", new String[] { cs.getName() });
-			Page<MLPSolution> searchPageSols = solutionSearchService.findSolutions(solListParms, false,
-					new PageRequest(0, 5, null));
-			Assert.assertFalse(searchPageSols.getContent().isEmpty());
 
 			MLPSolutionRevision cr = new MLPSolutionRevision(cs.getSolutionId(), "1.0X", cu.getUserId(),
 					AccessTypeCode.PR.name());
@@ -549,7 +547,7 @@ public class CdsRepositoryServiceTest {
 
 			String[] ids = { cs.getSolutionId() };
 			Page<MLPSolution> idSearchResult = solutionSearchService.findPortalSolutionsByKw(ids, active, userIds,
-					modelTypeCodes, accTypeCodes, searchTags, new PageRequest(0, 2, Direction.ASC, "name"));
+					modelTypeCodes, accTypeCodes, searchTags, PageRequest.of(0, 2, Direction.ASC, "name"));
 			Assert.assertTrue(idSearchResult != null && idSearchResult.getNumberOfElements() == 1);
 			logger.info("Found models by id total " + idSearchResult.getTotalElements());
 
@@ -557,7 +555,7 @@ public class CdsRepositoryServiceTest {
 			String[] allTags = new String[] { solTag1.getTag() };
 			String[] anyTags = new String[] { solTag2.getTag(), "other" };
 			Page<MLPSolution> allAnyTagsSearchResult = solutionSearchService.findPortalSolutionsByKwAndTags(null,
-					active, userIds, modelTypeCodes, accTypeCodes, allTags, anyTags, new PageRequest(0, 5));
+					active, userIds, modelTypeCodes, accTypeCodes, allTags, anyTags, PageRequest.of(0, 5));
 			Assert.assertTrue(allAnyTagsSearchResult != null && allAnyTagsSearchResult.getNumberOfElements() > 0);
 			MLPSolution taggedSol = allAnyTagsSearchResult.getContent().get(0);
 			Assert.assertTrue(taggedSol.getTags().contains(solTag1) && taggedSol.getTags().contains(solTag2));
@@ -565,22 +563,23 @@ public class CdsRepositoryServiceTest {
 			// All keywords must occur in the same field to match
 			String[] kw = { "Big", "Data" };
 			Page<MLPSolution> kwSearchResult = solutionSearchService.findPortalSolutionsByKw(kw, active, userIds,
-					modelTypeCodes, accTypeCodes, searchTags, new PageRequest(0, 2, Direction.ASC, "name"));
+					modelTypeCodes, accTypeCodes, searchTags, PageRequest.of(0, 2, Direction.ASC, "name"));
 			Assert.assertTrue(kwSearchResult != null && kwSearchResult.getNumberOfElements() > 0);
 			logger.info("Found models by kw total " + kwSearchResult.getTotalElements());
 
 			logger.info("Querying for artifact by partial match");
-			Iterable<MLPArtifact> al = artifactRepository.findBySearchTerm("name", new PageRequest(0, 5, null));
+			Iterable<MLPArtifact> al = artifactRepository.findBySearchTerm("name", PageRequest.of(0, 5));
 			Assert.assertTrue(al != null && al.iterator().hasNext());
 			logger.info("Artifact list {}", al);
 
 			logger.info("Querying for solution by id");
-			MLPSolution si = solutionRepository.findOne(cs.getSolutionId());
-			Assert.assertTrue(si != null);
+			Optional<MLPSolution> optSol = solutionRepository.findById(cs.getSolutionId());
+			Assert.assertTrue(optSol.isPresent());
+			MLPSolution si = optSol.get();
 			logger.info("Found solution: " + si.toString());
 
 			logger.info("Querying for solution by partial match");
-			Iterable<MLPSolution> sl = solutionRepository.findBySearchTerm("name", new PageRequest(0, 5, null));
+			Iterable<MLPSolution> sl = solutionRepository.findBySearchTerm("name", PageRequest.of(0, 5));
 			Assert.assertTrue(sl != null && sl.iterator().hasNext());
 
 			logger.info("Querying for revisions by solution");
@@ -614,9 +613,9 @@ public class CdsRepositoryServiceTest {
 			Assert.assertTrue(docs.iterator().hasNext());
 
 			logger.info("Cleaning up revision");
-			revisionDescRepository.delete(new MLPRevisionDescription.RevDescPK(cr.getRevisionId(), "PB"));
+			revisionDescRepository.deleteById(new MLPRevisionDescription.RevDescPK(cr.getRevisionId(), "PB"));
 			solRevDocMapRepository.delete(docMap);
-			documentRepository.delete(doc.getDocumentId());
+			documentRepository.deleteById(doc.getDocumentId());
 
 			docs = documentRepository.findByRevisionAccess(cr.getRevisionId(), "PB");
 			Assert.assertFalse(docs.iterator().hasNext());
@@ -660,7 +659,7 @@ public class CdsRepositoryServiceTest {
 
 			logger.info("Querying for solution downloads for the specified solution ID");
 			Iterable<MLPSolutionDownload> soldown = solutionDownloadRepository.findBySolutionId(cs.getSolutionId(),
-					new PageRequest(0, 5, null));
+					PageRequest.of(0, 5));
 			logger.info("solutionDownloadRepository list {}", soldown);
 
 			MLPSolutionRating solrate = new MLPSolutionRating(cs.getSolutionId(), cu.getUserId(), 2);
@@ -672,7 +671,7 @@ public class CdsRepositoryServiceTest {
 
 			logger.info("Querying for solution rating for the specified solution ID");
 			Iterable<MLPSolutionRating> solrating = solutionRatingRepository.findBySolutionId(cs.getSolutionId(),
-					new PageRequest(0, 5, null));
+					PageRequest.of(0, 5));
 			logger.info("SolutionRatingRepository list: {}", solrating);
 
 			logger.info("Creating solution tag");
@@ -704,16 +703,16 @@ public class CdsRepositoryServiceTest {
 				logger.info("\tRevision for artifact: " + r.toString());
 
 			logger.info("Querying for revisions by search term");
-			Page<MLPSolutionRevision> rl = revisionRepository.findBySearchTerm("Some", new PageRequest(0, 5, null));
+			Page<MLPSolutionRevision> rl = revisionRepository.findBySearchTerm("Some", PageRequest.of(0, 5));
 			Assert.assertFalse(rl.getContent().isEmpty());
 			logger.info("Revision list: {}", rl);
 
 			logger.info("Querying for user by partial match");
-			Page<MLPUser> sul = userRepository.findBySearchTerm("Test", new PageRequest(0, 5, null));
+			Page<MLPUser> sul = userRepository.findBySearchTerm("Test", PageRequest.of(0, 5));
 			Assert.assertFalse(sul.getContent().isEmpty());
 			logger.info("User list: {}", sul);
 
-			Page<MLPSolution> solByTag = solutionRepository.findByTag("Java", new PageRequest(0, 5, null));
+			Page<MLPSolution> solByTag = solutionRepository.findByTag("Java", PageRequest.of(0, 5));
 			logger.info("Solutions by tag: {}", solByTag);
 			Assert.assertFalse(solByTag.getContent().isEmpty());
 
@@ -730,7 +729,8 @@ public class CdsRepositoryServiceTest {
 			logger.info("Found user: {}", founduser);
 
 			logger.info("Dropping artifact from revision");
-			solRevArtMapRepository.delete(new MLPSolRevArtMap.SolRevArtMapPK(cr.getRevisionId(), ca.getArtifactId()));
+			solRevArtMapRepository
+					.deleteById(new MLPSolRevArtMap.SolRevArtMapPK(cr.getRevisionId(), ca.getArtifactId()));
 			logger.info("Dropped" + cr.getRevisionId() + " and " + ca.getArtifactId());
 
 			MLPSiteConfig cc = new MLPSiteConfig("repotest-siteconfig", " { \"json\" : \"block\" }");
@@ -746,7 +746,7 @@ public class CdsRepositoryServiceTest {
 			long threadCount = threadRepository.countBySolutionIdAndRevisionId(cs.getSolutionId(), cr.getRevisionId());
 			Assert.assertTrue(threadCount > 0);
 			Page<MLPThread> threads = threadRepository.findBySolutionIdAndRevisionId(cs.getSolutionId(),
-					cr.getRevisionId(), new PageRequest(0, 5, null));
+					cr.getRevisionId(), PageRequest.of(0, 5));
 			Assert.assertTrue(threads != null && threads.getNumberOfElements() > 0);
 
 			MLPComment mc = commentRepository.save(new MLPComment(thread.getThreadId(), cu.getUserId(), "c"));
@@ -754,15 +754,14 @@ public class CdsRepositoryServiceTest {
 			Assert.assertTrue(crc > 0);
 			long tcc = commentRepository.countThreadComments(thread.getThreadId());
 			Assert.assertTrue(tcc > 0);
-			Page<MLPComment> commentList = commentRepository.findByThreadId(thread.getThreadId(),
-					new PageRequest(0, 5));
+			Page<MLPComment> commentList = commentRepository.findByThreadId(thread.getThreadId(), PageRequest.of(0, 5));
 			Assert.assertTrue(commentList != null && commentList.hasContent());
 			Page<MLPComment> solRevComments = commentRepository.findBySolutionIdAndRevisionId(cs.getSolutionId(),
-					cr.getRevisionId(), new PageRequest(0, 5, null));
+					cr.getRevisionId(), PageRequest.of(0, 5));
 			Assert.assertTrue(solRevComments != null && solRevComments.hasContent());
 
-			commentRepository.delete(mc.getCommentId());
-			threadRepository.delete(thread.getThreadId());
+			commentRepository.deleteById(mc.getCommentId());
+			threadRepository.deleteById(thread.getThreadId());
 
 			// Composite solution support was added very late
 			MLPCompSolMap compSolMap = new MLPCompSolMap(cs.getSolutionId(), cs.getSolutionId());
@@ -774,7 +773,7 @@ public class CdsRepositoryServiceTest {
 			logger.info("Comp sol map child is {}", compSolMap.getChildId());
 			MLPCompSolMap.CompSolMapPK compSolMapKey = new MLPCompSolMap.CompSolMapPK(cs.getSolutionId(),
 					cs.getSolutionId());
-			compSolMapRepository.delete(compSolMapKey);
+			compSolMapRepository.deleteById(compSolMapKey);
 
 			MLPPublishRequest pubReq = new MLPPublishRequest(cs.getSolutionId(), cr.getRevisionId(), cu.getUserId(),
 					"PE");
@@ -782,28 +781,33 @@ public class CdsRepositoryServiceTest {
 			Assert.assertNotNull(pubReq.getRequestId());
 			long reqCountTrans = publishRequestRepository.count();
 			Assert.assertTrue(reqCountTrans > 0);
-			MLPPublishRequest reqFound = publishRequestRepository.findOne(pubReq.getRequestId());
-			Assert.assertNotNull(reqFound);
-			logger.info("First publish request {}", reqFound);
-			HashMap<String, Object> queryParameters = new HashMap<>();
-			queryParameters.put("solutionId", cs.getSolutionId());
-			Page<MLPPublishRequest> pubReqPage = publishRequestSearchService.findPublishRequests(queryParameters, false,
-					new PageRequest(0, 5, null));
+			Optional<MLPPublishRequest> optPubReq = publishRequestRepository.findById(pubReq.getRequestId());
+			Assert.assertTrue(optPubReq.isPresent());
+			logger.info("First publish request {}", optPubReq.get());
+
+			Page<MLPPublishRequest> pubReqPage = publishRequestSearchService.findPublishRequests(cs.getSolutionId(),
+					null, null, null, null, false, PageRequest.of(0, 5));
 			Assert.assertTrue(pubReqPage.getNumberOfElements() > 0);
-			publishRequestRepository.delete(pubReq.getRequestId());
+
+			// Test search with empty result
+			Page<MLPPublishRequest> emptyPubReqs = publishRequestSearchService.findPublishRequests("bogus", "bogus",
+					"bogus", "bogus", "bogus", false, PageRequest.of(0, 5));
+			Assert.assertTrue(emptyPubReqs.isEmpty());
+
+			publishRequestRepository.deleteById(pubReq.getRequestId());
 
 			if (cleanup) {
 				logger.info("Removing newly added entities");
 				solRevArtMapRepository
-						.delete(new MLPSolRevArtMap.SolRevArtMapPK(rev2.getRevisionId(), ca2.getArtifactId()));
+						.deleteById(new MLPSolRevArtMap.SolRevArtMapPK(rev2.getRevisionId(), ca2.getArtifactId()));
 				revisionRepository.delete(rev2);
 				revisionRepository.delete(cr);
 				solutionRatingRepository.delete(solrate);
 				MLPSolTagMap.SolTagMapPK solTagMapKey = new MLPSolTagMap.SolTagMapPK(cs.getSolutionId(), tag1.getTag());
-				solTagMapRepository.delete(solTagMapKey);
+				solTagMapRepository.deleteById(solTagMapKey);
 				solutionDownloadRepository.delete(sd);
-				solutionRepository.delete(cs2.getSolutionId());
-				solutionRepository.delete(cs.getSolutionId());
+				solutionRepository.deleteById(cs2.getSolutionId());
+				solutionRepository.deleteById(cs.getSolutionId());
 				artifactRepository.delete(ca2);
 				artifactRepository.delete(ca);
 				peerSubscriptionRepository.delete(ps);
@@ -812,17 +816,17 @@ public class CdsRepositoryServiceTest {
 				notificationRepository.delete(notif);
 				siteConfigRepository.delete(cc);
 				userLoginProviderRepository.delete(ulp);
-				userRepository.delete(cu.getUserId());
+				userRepository.deleteById(cu.getUserId());
 
-				if (solutionRepository.findOne(cs.getSolutionId()) != null)
+				if (solutionRepository.findById(cs.getSolutionId()).isPresent())
 					throw new Exception("Found a deleted solution: " + cs.getSolutionId());
-				if (artifactRepository.findOne(ca.getArtifactId()) != null)
+				if (artifactRepository.findById(ca.getArtifactId()).isPresent())
 					throw new Exception("Found a deleted artifact: " + ca.getArtifactId());
-				if (peerRepository.findOne(pr.getPeerId()) != null)
+				if (peerRepository.findById(pr.getPeerId()).isPresent())
 					throw new Exception("Found a deleted peer: " + pr.getPeerId());
-				if (peerSubscriptionRepository.findOne(ps.getSubId()) != null)
+				if (peerSubscriptionRepository.findById(ps.getSubId()).isPresent())
 					throw new Exception("Found a deleted peer sub: " + ps.getSubId());
-				if (userRepository.findOne(cu.getUserId()) != null)
+				if (userRepository.findById(cu.getUserId()).isPresent())
 					throw new Exception("Found a deleted user: " + cu.getUserId());
 			}
 
@@ -883,16 +887,13 @@ public class CdsRepositoryServiceTest {
 
 			// Search by partial match
 			logger.info("Searching for user by partial match");
-			Iterable<MLPUser> userLikeList = userRepository.findBySearchTerm("First", new PageRequest(0, 5));
+			Iterable<MLPUser> userLikeList = userRepository.findBySearchTerm("First", PageRequest.of(0, 5));
 			Assert.assertTrue(userLikeList.iterator().hasNext());
 
 			// Fetch it back
 			logger.info("Searching for user by exact match");
-			HashMap<String, Object> restr = new HashMap<>();
-			// restr.put("active", true);
-			restr.put("firstName", firstName);
-			restr.put("lastName", lastName);
-			Page<MLPUser> userPage = userService.findUsers(restr, false, new PageRequest(0, 5));
+			Page<MLPUser> userPage = userSearchService.findUsers(firstName, null, lastName, null, null, null, null,
+					false, PageRequest.of(0, 5));
 			Assert.assertTrue(userPage.getNumberOfElements() == 1);
 
 			MLPUserLoginProvider ulp = new MLPUserLoginProvider();
@@ -965,8 +966,9 @@ public class CdsRepositoryServiceTest {
 			final Long countBefore = cs.getViewCount();
 			logger.info("Solution view count before: " + countBefore);
 			solutionRepository.incrementViewCount(cs.getSolutionId());
-			cs = solutionRepository.findOne(cs.getSolutionId());
-			final Long countAfter = cs.getViewCount();
+			Optional<MLPSolution> optSol = solutionRepository.findById(cs.getSolutionId());
+			Assert.assertTrue(optSol.isPresent());
+			final Long countAfter = optSol.get().getViewCount();
 			logger.info("Solution view count after: " + countAfter);
 			Assert.assertNotEquals(countBefore, countAfter);
 
@@ -975,9 +977,10 @@ public class CdsRepositoryServiceTest {
 			solTagMapRepository.save(solTagMap1);
 
 			// Get the solution by ID
-			MLPSolution solById = solutionRepository.findOne(cs.getSolutionId());
-			Assert.assertTrue(solById != null && !solById.getTags().isEmpty());
-			logger.info("Fetched solution: " + solById);
+			Optional<MLPSolution> optSolById = solutionRepository.findById(cs.getSolutionId());
+			Assert.assertTrue(optSolById.isPresent());
+			Assert.assertTrue(!optSolById.get().getTags().isEmpty());
+			logger.info("Fetched solution: " + optSolById.get());
 
 			// Query for tags on the solution
 			Iterable<MLPTag> solTags = solutionTagRepository.findBySolution(cs.getSolutionId());
@@ -1040,12 +1043,13 @@ public class CdsRepositoryServiceTest {
 			logger.info("Solution rating average: " + avgRating);
 
 			logger.info("Querying for solution by id");
-			MLPSolution si = solutionRepository.findOne(cs.getSolutionId());
-			Assert.assertTrue(si != null);
-			logger.info("Found solution: " + si.toString());
+			Optional<MLPSolution> optSi = solutionRepository.findById(cs.getSolutionId());
+			Assert.assertTrue(optSi.isPresent());
+			MLPSolution si = optSi.get();
+			logger.info("Found solution: {}", si);
 
 			logger.info("Querying for solution by partial match");
-			Iterable<MLPSolution> sl = solutionRepository.findBySearchTerm("name", new PageRequest(0, 5, null));
+			Iterable<MLPSolution> sl = solutionRepository.findBySearchTerm("name", PageRequest.of(0, 5));
 			Assert.assertTrue(sl != null && sl.iterator().hasNext());
 
 			logger.info("Querying for revisions by solution");
@@ -1070,37 +1074,37 @@ public class CdsRepositoryServiceTest {
 				logger.info("Removing newly added entities");
 				MLPSolTagMap.SolTagMapPK solTagMapKey = new MLPSolTagMap.SolTagMapPK(cs.getSolutionId(), tag1.getTag());
 				solUserAccMapRepository.delete(solUserAccMap);
-				solTagMapRepository.delete(solTagMapKey);
+				solTagMapRepository.deleteById(solTagMapKey);
 				solutionRatingRepository.delete(ur);
 				solutionDownloadRepository.delete(sd);
 				solRevArtMapRepository
-						.delete(new MLPSolRevArtMap.SolRevArtMapPK(cr.getRevisionId(), ca.getArtifactId()));
+						.deleteById(new MLPSolRevArtMap.SolRevArtMapPK(cr.getRevisionId(), ca.getArtifactId()));
 				revisionRepository.delete(cr);
-				solutionRepository.delete(cs.getSolutionId());
-				solutionRepository.delete(cs2.getSolutionId());
+				solutionRepository.deleteById(cs.getSolutionId());
+				solutionRepository.deleteById(cs2.getSolutionId());
 				artifactRepository.delete(ca);
 				peerSubscriptionRepository.delete(ps);
 				peerRepository.delete(pr);
 				userLoginProviderRepository.delete(ulp);
-				userRepository.delete(cu.getUserId());
+				userRepository.deleteById(cu.getUserId());
 				solutionTagRepository.delete(tag1);
 
-				if (solutionRepository.findOne(cs.getSolutionId()) != null)
+				if (solutionRepository.findById(cs.getSolutionId()).isPresent())
 					throw new Exception("Found a deleted solution: " + cs.getSolutionId());
-				if (artifactRepository.findOne(ca.getArtifactId()) != null)
+				if (artifactRepository.findById(ca.getArtifactId()).isPresent())
 					throw new Exception("Found a deleted artifact: " + ca.getArtifactId());
-				if (peerRepository.findOne(pr.getPeerId()) != null)
+				if (peerRepository.findById(pr.getPeerId()).isPresent())
 					throw new Exception("Found a deleted peer: " + pr.getPeerId());
-				if (peerSubscriptionRepository.findOne(ps.getSubId()) != null)
+				if (peerSubscriptionRepository.findById(ps.getSubId()).isPresent())
 					throw new Exception("Found a deleted peer sub: " + ps.getSubId());
-				if (userRepository.findOne(cu.getUserId()) != null)
+				if (userRepository.findById(cu.getUserId()).isPresent())
 					throw new Exception("Found a deleted user: " + cu.getUserId());
 
 				SolutionRatingPK ratingPK = new SolutionRatingPK(ur.getSolutionId(), ur.getUserId());
-				if (solutionRatingRepository.findOne(ratingPK) != null)
+				if (solutionRatingRepository.findById(ratingPK).isPresent())
 					throw new Exception("Found a deleted rating: " + ratingPK.toString());
 
-				if (solutionDownloadRepository.findOne(sd.getDownloadId()) != null)
+				if (solutionDownloadRepository.findById(sd.getDownloadId()).isPresent())
 					throw new Exception("Found a deleted download: " + sd.toString());
 			}
 
@@ -1128,9 +1132,8 @@ public class CdsRepositoryServiceTest {
 
 	@Test
 	public void testValidationConstraints() throws Exception {
-		MLPUser cu = new MLPUser();
 		try {
-			userRepository.save(cu);
+			userRepository.save(new MLPUser());
 			throw new Exception("Validation failed to catch null field");
 		} catch (Exception ex) {
 			ConstraintViolationException cve = findConstraintViolationException(ex);
@@ -1140,8 +1143,10 @@ public class CdsRepositoryServiceTest {
 				logger.info("Caught expected exception: " + ex.getMessage());
 		}
 		try {
-			cu.setLoginName("illegal extremely long string value should trigger constraint validation annotation");
-			userRepository.save(cu);
+			MLPUser longUser = new MLPUser();
+			longUser.setLoginName(
+					"illegal extremely long string value should trigger constraint validation annotation");
+			userRepository.save(longUser);
 			throw new Exception("Validation failed to catch long field value");
 		} catch (TransactionSystemException ex) {
 			logger.info("Caught expected constraint violation exception: " + ex.getMessage());
@@ -1163,8 +1168,17 @@ public class CdsRepositoryServiceTest {
 			logger.info("Creating test role");
 			MLPRole cr = new MLPRole();
 			cr.setName("My test role");
+			cr.setActive(true);
 			cr = roleRepository.save(cr);
 			Assert.assertNotNull(cr.getRoleId());
+
+			logger.info("Searching for role");
+			Page<MLPRole> searchRoles = roleSearchService.findRoles(cr.getName(), Boolean.TRUE, false,
+					PageRequest.of(0, 5));
+			Assert.assertTrue(searchRoles.getNumberOfElements() == 1);
+
+			Page<MLPRole> emptyRoles = roleSearchService.findRoles("bogus", Boolean.TRUE, false, PageRequest.of(0, 5));
+			Assert.assertTrue(emptyRoles.isEmpty());
 
 			logger.info("Assigning role to user");
 			userRoleMapRepository.save(new MLPUserRoleMap(cu.getUserId(), cr.getRoleId()));
@@ -1180,8 +1194,8 @@ public class CdsRepositoryServiceTest {
 			Assert.assertNotNull(crf.getRoleFunctionId());
 
 			logger.info("Checking role content");
-			MLPRole res = roleRepository.findOne(cr.getRoleId());
-			Assert.assertNotNull(res.getRoleId());
+			Optional<MLPRole> res = roleRepository.findById(cr.getRoleId());
+			Assert.assertTrue(res.isPresent());
 
 			Iterable<MLPRoleFunction> resrf = roleFunctionRepository.findByRoleId(cr.getRoleId());
 			Assert.assertTrue(resrf.iterator().hasNext());
@@ -1189,18 +1203,18 @@ public class CdsRepositoryServiceTest {
 			Assert.assertEquals(roleFuncName, roleFuncOne.getName());
 
 			logger.info("Removing user from role");
-			userRoleMapRepository.delete(new MLPUserRoleMap.UserRoleMapPK(cu.getUserId(), cr.getRoleId()));
+			userRoleMapRepository.deleteById(new MLPUserRoleMap.UserRoleMapPK(cu.getUserId(), cr.getRoleId()));
 
 			logger.info("Deleting test user");
-			userRepository.delete(cu.getUserId());
+			userRepository.deleteById(cu.getUserId());
 
 			logger.info("Deleting test role function");
 			roleFunctionRepository.delete(roleFuncOne);
 
 			logger.info("Deleting test role");
-			roleRepository.delete(cr.getRoleId());
+			roleRepository.deleteById(cr.getRoleId());
 		} catch (Exception ex) {
-			logger.error("Failed", ex);
+			logger.error("testRoleAndFunctions failed", ex);
 			throw ex;
 		}
 
@@ -1237,7 +1251,7 @@ public class CdsRepositoryServiceTest {
 			long count = notificationRepository.countActiveUnreadByUser(cu.getUserId());
 			Assert.assertEquals(1, count);
 			Page<MLPUserNotification> notifs = notificationRepository.findActiveByUser(cu.getUserId(),
-					new PageRequest(0, 5));
+					PageRequest.of(0, 5));
 			Assert.assertFalse(notifs.getContent().isEmpty());
 
 			// This next step mimics what a controller will do
@@ -1280,8 +1294,10 @@ public class CdsRepositoryServiceTest {
 
 			usrNotifPref.setNotfDelvMechCode(String.valueOf(NotificationDeliveryMechanismCode.EM));
 			usrNotifPref = usrNotifPrefRepository.save(usrNotifPref);
-			Assert.assertTrue(usrNotifPrefRepository.findOne(usrNotifPref.getUserNotifPrefId()).getNotfDelvMechCode()
-					.equals("EM"));
+			Optional<MLPUserNotifPref> optNotifPref = usrNotifPrefRepository
+					.findById(usrNotifPref.getUserNotifPrefId());
+			Assert.assertTrue(optNotifPref.isPresent());
+			Assert.assertTrue(optNotifPref.get().getNotfDelvMechCode().equals("EM"));
 
 			usrNotifPrefRepository.delete(usrNotifPref);
 			userRepository.delete(cu);
@@ -1290,21 +1306,6 @@ public class CdsRepositoryServiceTest {
 			throw ex;
 		}
 
-		// invalid tests
-		try {
-			usrNotifPrefRepository.save(new MLPUserNotifPref());
-			throw new Exception("Unexpected success");
-		} catch (ConstraintViolationException ex) {
-			logger.info("create user notification preference failed as expected: " + ex.toString());
-		}
-		try {
-			MLPUserNotifPref usrNotifPrefFld = new MLPUserNotifPref();
-			usrNotifPrefFld.setUserNotifPrefId(999L);
-			usrNotifPrefRepository.save(usrNotifPrefFld);
-			throw new Exception("Unexpected success");
-		} catch (ConstraintViolationException ex) {
-			logger.info("update user notification preference failed as expected:" + ex.toString());
-		}
 	}
 
 	@Test
@@ -1322,23 +1323,28 @@ public class CdsRepositoryServiceTest {
 			long srCountTrans = stepResultRepository.count();
 			Assert.assertTrue(srCountTrans > 0);
 
-			MLPStepResult result = stepResultRepository.findOne(sr.getStepResultId());
-			Assert.assertNotNull(result);
-			logger.info("First step result {}", result);
+			Optional<MLPStepResult> optResult = stepResultRepository.findById(sr.getStepResultId());
+			Assert.assertTrue(optResult.isPresent());
+			logger.info("First step result {}", optResult.get());
 
-			HashMap<String, Object> queryParameters = new HashMap<>();
-			queryParameters.put("statusCode", StepStatusCode.FA.toString());
-			Page<MLPStepResult> page = stepResultSearchService.findStepResults(queryParameters, false,
-					new PageRequest(0, 5, null));
+			Page<MLPStepResult> page = stepResultSearchService.findStepResults(null, null, null, null, null, null, null,
+					StepStatusCode.FA.toString(), false, PageRequest.of(0, 5));
 			Assert.assertTrue(page.getNumberOfElements() > 0);
+
+			// Test search with empty result
+			Page<MLPStepResult> emptySteps = stepResultSearchService.findStepResults("bogus", "bogus", "bogus", "bogus",
+					"bogus", "bogus", "bogus", "bogus", false, PageRequest.of(0, 5));
+			Assert.assertTrue(emptySteps.isEmpty());
 
 			sr.setResult("New stack trace");
 			stepResultRepository.save(sr);
 
-			Assert.assertNotNull(stepResultRepository.findOne(sr.getStepResultId()).getResult());
-			stepResultRepository.delete(sr.getStepResultId());
+			Optional<MLPStepResult> optStepResult = stepResultRepository.findById(sr.getStepResultId());
+			Assert.assertTrue(optStepResult.isPresent());
+			Assert.assertNotNull(optStepResult.get().getResult());
+			stepResultRepository.deleteById(sr.getStepResultId());
 		} catch (Exception ex) {
-			logger.error("Failed", ex);
+			logger.error("testStepResults failed", ex);
 			throw ex;
 		}
 	}
@@ -1354,80 +1360,80 @@ public class CdsRepositoryServiceTest {
 		cu.setLoginName(loginName);
 		cu = userRepository.save(cu);
 		Assert.assertNotNull("User ID", cu.getUserId());
-		logger.info("Created user " + cu);
+		logger.info("Created user {}", cu);
 
 		MLPSolution cs1 = new MLPSolution("solutionName", cu.getUserId(), true);
 		cs1 = solutionRepository.save(cs1);
 		Assert.assertNotNull("Solution ID", cs1.getSolutionId());
-		logger.info("Created solution " + cs1);
+		logger.info("Created solution {}", cs1);
 
 		MLPSolution cs2 = new MLPSolution("solutionName2", cu.getUserId(), true);
 		cs2 = solutionRepository.save(cs2);
 		Assert.assertNotNull("Solution ID", cs2.getSolutionId());
-		logger.info("Created solution " + cs2);
+		logger.info("Created solution {}", cs2);
 
 		final String peerName = "Peer-" + Long.toString(new Date().getTime());
 		MLPPeer pr1 = new MLPPeer(peerName, "x." + Long.toString(new Date().getTime()), "http://peer-api", true, false,
 				"contact", PeerStatusCode.AC.name());
 		pr1 = peerRepository.save(pr1);
-		logger.info("Created peer " + pr1);
+		logger.info("Created peer {}", pr1);
 
 		final String peerName2 = "Peer-" + Long.toString(new Date().getTime());
 		MLPPeer pr2 = new MLPPeer(peerName2, "x." + Long.toString(new Date().getTime()), "http://peer-api", true, false,
 				"contact", PeerStatusCode.AC.name());
 		pr2 = peerRepository.save(pr2);
-		logger.info("Created second peer " + pr2);
+		logger.info("Created second peer {}", pr2);
 
 		MLPPeerGroup pg1 = new MLPPeerGroup("RepSvcTest peer group 1");
 		pg1 = peerGroupRepository.save(pg1);
 		Assert.assertNotNull(pg1.getGroupId());
-		logger.info("Created peer group " + pg1);
+		logger.info("Created peer group {}", pg1);
 
 		MLPPeerGroup pg2 = new MLPPeerGroup("RepSvcTest peer group 2");
 		pg2 = peerGroupRepository.save(pg2);
 		Assert.assertNotNull(pg2.getGroupId());
-		logger.info("Created peer group " + pg2);
+		logger.info("Created peer group {} ", pg2);
 
 		MLPSolutionGroup sg = new MLPSolutionGroup("RevSvcTest sol group 1");
 		sg = solutionGroupRepository.save(sg);
 		Assert.assertNotNull(sg.getGroupId());
-		logger.info("Created solution group " + sg);
+		logger.info("Created solution group {}", sg);
 
 		// Used heavily below
-		PageRequest pageable = new PageRequest(0, 3);
+		PageRequest pageable = PageRequest.of(0, 3);
 
 		MLPPeerGrpMemMap pgm1 = new MLPPeerGrpMemMap(pg1.getGroupId(), pr1.getPeerId());
 		pgm1 = peerGroupMemMapRepository.save(pgm1);
-		logger.info("Created peer group map " + pgm1);
+		logger.info("Created peer group map {}", pgm1);
 		Page<MLPPeer> peers1 = peerGroupMemMapRepository.findPeersByGroupId(pg1.getGroupId(), pageable);
 		Assert.assertTrue(peers1 != null && peers1.getNumberOfElements() > 0);
 
 		MLPPeerGrpMemMap pgm2 = new MLPPeerGrpMemMap(pg2.getGroupId(), pr2.getPeerId());
 		pgm2 = peerGroupMemMapRepository.save(pgm2);
-		logger.info("Created peer group map " + pgm2);
+		logger.info("Created peer group map {}", pgm2);
 		Page<MLPPeer> peers2 = peerGroupMemMapRepository.findPeersByGroupId(pg2.getGroupId(), pageable);
 		Assert.assertTrue(peers2 != null && peers2.getNumberOfElements() > 0);
 
 		MLPSolGrpMemMap gsm = new MLPSolGrpMemMap(sg.getGroupId(), cs1.getSolutionId());
 		gsm = solGroupMemMapRepository.save(gsm);
-		logger.info("Created solution group map " + gsm);
+		logger.info("Created solution group map {}", gsm);
 		Page<MLPSolution> sols = solGroupMemMapRepository.findSolutionsByGroupId(sg.getGroupId(), pageable);
 		Assert.assertTrue(sols != null && sols.getNumberOfElements() > 0);
 
 		MLPPeerSolAccMap gpsm = new MLPPeerSolAccMap(pg1.getGroupId(), sg.getGroupId(), true);
 		gpsm = peerSolAccMapRepository.save(gpsm);
-		logger.info("Created peer group - sol group map " + gpsm);
+		logger.info("Created peer group - sol group map {}", gpsm);
 		MLPPeerSolAccMap.PeerSolAccMapPK pk = new MLPPeerSolAccMap.PeerSolAccMapPK(pg1.getGroupId(), sg.getGroupId());
-		MLPPeerSolAccMap map = peerSolAccMapRepository.findOne(pk);
-		Assert.assertNotNull(map);
+		Optional<MLPPeerSolAccMap> map = peerSolAccMapRepository.findById(pk);
+		Assert.assertTrue(map.isPresent());
 
 		MLPPeerPeerAccMap gppm = new MLPPeerPeerAccMap(pg1.getGroupId(), pg2.getGroupId());
 		gppm = peerPeerAccMapRepository.save(gppm);
-		logger.info("Created peer group - peer group map " + gppm);
+		logger.info("Created peer group - peer group map {}", gppm);
 		MLPPeerPeerAccMap.PeerPeerAccMapPK ppKey = new MLPPeerPeerAccMap.PeerPeerAccMapPK(pg1.getGroupId(),
 				pg2.getGroupId());
-		MLPPeerPeerAccMap ppMap = peerPeerAccMapRepository.findOne(ppKey);
-		Assert.assertNotNull(ppMap);
+		Optional<MLPPeerPeerAccMap> ppMap = peerPeerAccMapRepository.findById(ppKey);
+		Assert.assertTrue(ppMap.isPresent());
 
 		List<MLPPeer> accessPeers = peerPeerAccMapRepository.findAccessPeers(pr1.getPeerId());
 		Assert.assertTrue(accessPeers != null && !accessPeers.isEmpty());
@@ -1437,10 +1443,10 @@ public class CdsRepositoryServiceTest {
 
 		long yesAccess = peerSolAccMapRepository.checkPeerSolutionAccess(pr1.getPeerId(), cs1.getSolutionId());
 		Assert.assertTrue(yesAccess > 0);
-		logger.info("Access count: " + yesAccess);
+		logger.info("Access count: {}", yesAccess);
 		long noAccess = peerSolAccMapRepository.checkPeerSolutionAccess(pr1.getPeerId(), cs2.getSolutionId());
 		Assert.assertTrue(noAccess == 0);
-		logger.info("No access count: " + noAccess);
+		logger.info("No access count: {}", noAccess);
 		Page<MLPSolution> restrSols = solutionRepository.findRestrictedSolutions(pr1.getPeerId(), pageable);
 		Assert.assertTrue(restrSols != null && restrSols.getNumberOfElements() > 0);
 
@@ -1465,6 +1471,62 @@ public class CdsRepositoryServiceTest {
 			List<MLPCodeNamePair> list = codeNameService.getCodeNamePairs(type);
 			logger.info("testCodeNameService: type {} -> values {}", type, list);
 			Assert.assertFalse(list.isEmpty());
+		}
+	}
+
+	@Test
+	public void testErrorConditions() throws Exception {
+		try {
+			artifactSearchService.findArtifacts(null, null, null, null, null, false, PageRequest.of(0, 5));
+			throw new Exception("Unexpected success");
+		} catch (IllegalArgumentException ex) {
+			logger.info("Search failed on missing query as expected: {}", ex.toString());
+		}
+		try {
+			peerSearchService.findPeers(null, null, null, null, null, null, false, PageRequest.of(0, 5));
+			throw new Exception("Unexpected success");
+		} catch (IllegalArgumentException ex) {
+			logger.info("Search failed on missing query as expected: {}", ex.toString());
+		}
+		try {
+			publishRequestSearchService.findPublishRequests(null, null, null, null, null, false, PageRequest.of(0, 5));
+			throw new Exception("Unexpected success");
+		} catch (IllegalArgumentException ex) {
+			logger.info("Search failed on missing query as expected: {}", ex.toString());
+		}
+		try {
+			roleSearchService.findRoles(null, null, false, PageRequest.of(0, 5));
+			throw new Exception("Unexpected success");
+		} catch (IllegalArgumentException ex) {
+			logger.info("Search failed on missing query as expected: {}", ex.toString());
+		}
+		try {
+			stepResultSearchService.findStepResults(null, null, null, null, null, null, null, null, false,
+					PageRequest.of(0, 5));
+			throw new Exception("Unexpected success");
+		} catch (IllegalArgumentException ex) {
+			logger.info("Search failed on missing query as expected: {}", ex.toString());
+		}
+		try {
+			userSearchService.findUsers(null, null, null, null, null, null, null, false, PageRequest.of(0, 5));
+			throw new Exception("Unexpected success");
+		} catch (IllegalArgumentException ex) {
+			logger.info("Search failed on missing query as expected: {}", ex.toString());
+		}
+		// invalid tests
+		try {
+			usrNotifPrefRepository.save(new MLPUserNotifPref());
+			throw new RuntimeException("Unexpected success");
+		} catch (Exception ex) {
+			logger.info("create user notification preference failed as expected: " + ex.toString());
+		}
+		try {
+			MLPUserNotifPref usrNotifPrefFld = new MLPUserNotifPref();
+			usrNotifPrefFld.setUserNotifPrefId(999L);
+			usrNotifPrefRepository.save(usrNotifPrefFld);
+			throw new RuntimeException("Unexpected success");
+		} catch (Exception ex) {
+			logger.info("update user notification preference failed as expected:" + ex.toString());
 		}
 	}
 

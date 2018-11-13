@@ -94,9 +94,9 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpStatusCodeException;
@@ -119,11 +119,11 @@ public class CdsControllerTest {
 	private final String s64 = "12345678901234567890123456789012345678901234567890123456789012345";
 
 	// From properties
-	@Value("${server.contextPath}")
+	@Value("${server.servlet.context-path}")
 	private String contextPath;
-	@Value("${security.user.name}")
+	@Value("${spring.security.user.name}")
 	private String userName;
-	@Value("${security.user.password}")
+	@Value("${spring.security.user.password}")
 	private String password;
 	// Created by Spring black magic
 	// https://spring.io/guides/gs/testing-web/
@@ -2038,18 +2038,6 @@ public class CdsControllerTest {
 		} catch (HttpStatusCodeException ex) {
 			logger.info("unmap peer peer groups failed as expected: {}", ex.getResponseBodyAsString());
 		}
-		try {
-			client.checkRestrictedAccessSolution("peerId", "solutionId");
-			throw new Exception("Unexpected success");
-		} catch (HttpStatusCodeException ex) {
-			logger.info("checkPeerSolutionAccess failed as expected: {}", ex.getResponseBodyAsString());
-		}
-		try {
-			client.checkRestrictedAccessSolution(pr.getPeerId(), "solutionId");
-			throw new Exception("Unexpected success");
-		} catch (HttpStatusCodeException ex) {
-			logger.info("checkPeerSolutionAccess failed as expected: {}", ex.getResponseBodyAsString());
-		}
 		Assert.assertTrue(client.getPeerAccess("bogus peer id").isEmpty());
 
 		client.deleteSolutionGroup(sg.getGroupId());
@@ -3275,12 +3263,6 @@ public class CdsControllerTest {
 		} catch (HttpStatusCodeException ex) {
 			logger.info("add composite solution member failed on bad sol id as expected: {}",
 					ex.getResponseBodyAsString());
-		}
-		try {
-			client.getSolutionPicture("bogus");
-			throw new Exception("Unexpected success");
-		} catch (HttpStatusCodeException ex) {
-			logger.info("get sol pic failed on bad ID as expected: {}", ex.getResponseBodyAsString());
 		}
 		try {
 			client.saveSolutionPicture("bogus", new byte[0]);

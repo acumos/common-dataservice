@@ -42,7 +42,7 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @Entity
 @Table(name = "C_SOLUTION_DOWNLOAD")
-public class MLPSolutionDownload implements MLPEntity, Serializable {
+public class MLPSolutionDownload implements MLPDomainModel, Serializable {
 
 	private static final long serialVersionUID = 8190007610178155564L;
 

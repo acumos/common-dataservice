@@ -77,7 +77,11 @@ public class FOMAnnotationTest {
 
 		MLPSolution cs = new MLPSolution("sol name", cu.getUserId(), true);
 		cs = solutionRepository.save(cs);
-		Assert.assertNotNull("Solution ID", cs.getSolutionId());
+		Assert.assertNotNull("Solution 1 ID", cs.getSolutionId());
+
+		MLPSolution cs2 = new MLPSolution("sol name", cu.getUserId(), true);
+		cs2 = solutionRepository.save(cs2);
+		Assert.assertNotNull("Solution 2 ID", cs2.getSolutionId());
 
 		MLPSolutionRevision cr = new MLPSolutionRevision(cs.getSolutionId(), "version", cu.getUserId(), "PR");
 		cr = revisionRepository.save(cr);
@@ -99,6 +103,7 @@ public class FOMAnnotationTest {
 		solRevArtMapRepository.delete(map);
 		artifactRepository.delete(ca);
 		revisionRepository.delete(cr);
+		solutionRepository.delete(cs2);
 		solutionRepository.delete(cs);
 		userRepository.delete(cu);
 

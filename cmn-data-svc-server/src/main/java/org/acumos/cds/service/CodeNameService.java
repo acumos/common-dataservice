@@ -25,10 +25,6 @@ import java.util.List;
 import org.acumos.cds.CodeNameType;
 import org.acumos.cds.domain.MLPCodeNamePair;
 
-/**
- * Defines a method to fetch a list of code-name pairs. These are read from
- * properties (not the database) so calling this a "service" is a stretch.
- */
 public interface CodeNameService {
 
 	/**
