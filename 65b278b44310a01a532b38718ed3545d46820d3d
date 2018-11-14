@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f1313823_659684d5",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/CommonDataServiceRestClientImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1621,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-11-14T16:23:13Z",
+      "side": 1,
+      "message": "Not clear from the uri path that this is for unread notifications. Maybe add another path constant?",
+      "revId": "65b278b44310a01a532b38718ed3545d46820d3d",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
