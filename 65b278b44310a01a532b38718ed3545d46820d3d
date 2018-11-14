@@ -16,6 +16,24 @@
       "revId": "65b278b44310a01a532b38718ed3545d46820d3d",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c7ddeca7_d0be7c1e",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/CommonDataServiceRestClientImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1621,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-11-14T18:24:51Z",
+      "side": 1,
+      "message": "That\u0027s a fair point. But the Javadoc in the client explains this behavior, and the Swagger API documentation states it also.",
+      "parentUuid": "f1313823_659684d5",
+      "revId": "65b278b44310a01a532b38718ed3545d46820d3d",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
