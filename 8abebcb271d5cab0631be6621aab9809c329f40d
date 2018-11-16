@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "485cfd04_8e23c55f",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/NotificationController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-11-16T19:30:18Z",
+      "side": 1,
+      "message": "May be add the notification path constant here",
+      "revId": "8abebcb271d5cab0631be6621aab9809c329f40d",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
