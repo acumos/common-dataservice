@@ -57,7 +57,7 @@ public class TagController extends AbstractController {
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
 	public Page<MLPTag> getTags(Pageable pageable) {
-		logger.info("getTags: {}", pageable);
+		logger.debug("getTags: {}", pageable);
 		return tagRepository.findAll(pageable);
 	}
 
@@ -66,8 +66,9 @@ public class TagController extends AbstractController {
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
 	public Object createTag(@RequestBody MLPTag tag, HttpServletResponse response) {
-		logger.info("createTag: tag {}", tag);
+		logger.debug("createTag: tag {}", tag);
 		if (tagRepository.findOne(tag.getTag()) != null) {
+			logger.warn("createTag failed on {}", tag);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "Tag exists: " + tag, null);
 		}
@@ -88,7 +89,7 @@ public class TagController extends AbstractController {
 	@RequestMapping(value = "/{tag}", method = RequestMethod.DELETE)
 	@ResponseBody
 	public MLPTransportModel deleteTag(@PathVariable("tag") String tag, HttpServletResponse response) {
-		logger.info("deleteTag: tag {}", tag);
+		logger.debug("deleteTag: tag {}", tag);
 		try {
 			tagRepository.delete(tag);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);

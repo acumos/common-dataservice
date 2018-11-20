@@ -84,7 +84,7 @@ public class NotificationController extends AbstractController {
 	@RequestMapping(value = "/" + CCDSConstants.COUNT_PATH, method = RequestMethod.GET)
 	@ResponseBody
 	public CountTransport getNotificationCount() {
-		logger.info("getNotificationCount");
+		logger.debug("getNotificationCount");
 		long count = notificationRepository.count();
 		return new CountTransport(count);
 	}
@@ -95,7 +95,7 @@ public class NotificationController extends AbstractController {
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
 	public Page<MLPNotification> getNotifications(Pageable pageable) {
-		logger.info("getNotifications: request {} ", pageable);
+		logger.debug("getNotifications: request {} ", pageable);
 		return notificationRepository.findAll(pageable);
 	}
 
@@ -105,12 +105,13 @@ public class NotificationController extends AbstractController {
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
 	public Object createNotification(@RequestBody MLPNotification notif, HttpServletResponse response) {
-		logger.info("createNotification: notification {} ", notif);
+		logger.debug("createNotification: notification {} ", notif);
 		try {
 			String id = notif.getNotificationId();
 			if (id != null) {
 				UUID.fromString(id);
 				if (notificationRepository.findOne(id) != null) {
+					logger.warn("createNotification: failed on ID {}", id);
 					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 					return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "ID exists: " + id);
 				}
@@ -137,10 +138,11 @@ public class NotificationController extends AbstractController {
 	@ResponseBody
 	public Object updateNotification(@PathVariable("notificationId") String notifId, @RequestBody MLPNotification notif,
 			HttpServletResponse response) {
-		logger.info("updateNotification: notifId {} ", notifId);
+		logger.debug("updateNotification: notifId {} ", notifId);
 		// Get the existing one
 		MLPNotification existing = notificationRepository.findOne(notifId);
 		if (existing == null) {
+			logger.warn("updateNotification: failed on ID {}", notifId);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + notifId, null);
 		}
@@ -165,7 +167,7 @@ public class NotificationController extends AbstractController {
 	@ResponseBody
 	public MLPTransportModel deleteNotification(@PathVariable("notificationId") String notifId,
 			HttpServletResponse response) {
-		logger.info("deleteNotification: notifId {} ", notifId);
+		logger.debug("deleteNotification: notifId {} ", notifId);
 		try {
 			notificationRepository.delete(notifId);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
@@ -182,7 +184,7 @@ public class NotificationController extends AbstractController {
 			+ CCDSConstants.COUNT_PATH, method = RequestMethod.GET)
 	@ResponseBody
 	public CountTransport getUserUnreadNotificationCount(@PathVariable("userId") String userId) {
-		logger.info("getUserNotificationCount user {}", userId);
+		logger.debug("getUserNotificationCount user {}", userId);
 		long count = notificationRepository.countActiveUnreadByUser(userId);
 		return new CountTransport(count);
 	}
@@ -194,7 +196,7 @@ public class NotificationController extends AbstractController {
 	@ResponseBody
 	public Iterable<MLPUserNotification> getUserNotifications(@PathVariable("userId") String userId,
 			Pageable pageable) {
-		logger.info("getUserNotifications: userId {}", userId);
+		logger.debug("getUserNotifications: userId {}", userId);
 		return notificationRepository.findActiveByUser(userId, pageable);
 	}
 
@@ -206,11 +208,13 @@ public class NotificationController extends AbstractController {
 	public Object addUserNotification(@PathVariable("userId") String userId,
 			@PathVariable("notificationId") String notificationId, @RequestBody MLPNotifUserMap notifUserMap,
 			HttpServletResponse response) {
-		logger.info("addUserNotification: user {}, notif {}", userId, notificationId);
+		logger.debug("addUserNotification: user {}, notif {}", userId, notificationId);
 		if (userRepository.findOne(userId) == null) {
+			logger.warn("addUserNotification: failed on user ID {}", userId);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + userId, null);
 		} else if (notificationRepository.findOne(notificationId) == null) {
+			logger.warn("addUserNotification: failed on notif ID {}", notificationId);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + notificationId, null);
 		}
@@ -229,12 +233,14 @@ public class NotificationController extends AbstractController {
 	public Object updateUserNotification(@PathVariable("userId") String userId,
 			@PathVariable("notificationId") String notificationId, @RequestBody MLPNotifUserMap notifUserMap,
 			HttpServletResponse response) {
-		logger.info("updateUserNotification: user {}, notif {}", userId, notificationId);
+		logger.debug("updateUserNotification: user {}, notif {}", userId, notificationId);
 		if (userRepository.findOne(userId) == null) {
+			logger.warn("updateUserNotification: failed on user ID {}", userId);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + userId, null);
 		}
 		if (notificationRepository.findOne(notificationId) == null) {
+			logger.warn("updateUserNotification: failed on notif ID {}", notificationId);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + notificationId, null);
 		}
@@ -259,7 +265,7 @@ public class NotificationController extends AbstractController {
 	@ResponseBody
 	public Object dropUserRecipient(@PathVariable("userId") String userId,
 			@PathVariable("notificationId") String notificationId, HttpServletResponse response) {
-		logger.info("dropUserRecipient: user {}, notif{}", userId, notificationId);
+		logger.debug("dropUserRecipient: user {}, notif{}", userId, notificationId);
 		try {
 			notifUserMapRepository.delete(new MLPNotifUserMap(notificationId, userId));
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
@@ -278,9 +284,10 @@ public class NotificationController extends AbstractController {
 	@ResponseBody
 	public Object getUserNotificationPreference(@PathVariable("userNotifPrefId") Long userNotifPrefId,
 			HttpServletResponse response) {
-		logger.info("getUserNotificationPreference: userNotifPrefId {}", userNotifPrefId);
+		logger.debug("getUserNotificationPreference: userNotifPrefId {}", userNotifPrefId);
 		MLPUserNotifPref usrnp = notificationPreferenceRepository.findOne(userNotifPrefId);
 		if (usrnp == null) {
+			logger.warn("getUserNotificationPreference: failed on ID {}", userNotifPrefId);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + userNotifPrefId, null);
 		}
@@ -293,7 +300,7 @@ public class NotificationController extends AbstractController {
 			+ "/{userId}", method = RequestMethod.GET)
 	@ResponseBody
 	public Iterable<MLPUserNotifPref> getNotificationPreferencesForUser(@PathVariable("userId") String userId) {
-		logger.info("getNotificationPreferencesForUser: userId {}", userId);
+		logger.debug("getNotificationPreferencesForUser: userId {}", userId);
 		Iterable<MLPUserNotifPref> result = notificationPreferenceRepository.findByUserId(userId);
 		return result;
 	}
@@ -305,7 +312,7 @@ public class NotificationController extends AbstractController {
 	@ResponseBody
 	public Object createUserNotificationPreference(@RequestBody MLPUserNotifPref usrNotifPref,
 			HttpServletResponse response) {
-		logger.info("createUserNotificationPreference: userNotifPrefId {}", usrNotifPref.getUserNotifPrefId());
+		logger.debug("createUserNotificationPreference: userNotifPrefId {}", usrNotifPref.getUserNotifPrefId());
 		try {
 			// Validate enum codes
 			super.validateCode(usrNotifPref.getMsgSeverityCode(), CodeNameType.MESSAGE_SEVERITY);
@@ -334,10 +341,11 @@ public class NotificationController extends AbstractController {
 	@ResponseBody
 	public Object updateUserNotificationPreference(@PathVariable("userNotifPrefId") Long userNotifPrefId,
 			@RequestBody MLPUserNotifPref usrNotifPref, HttpServletResponse response) {
-		logger.info("updateUserNotificationPreference: userNotifPrefId {} ", userNotifPrefId);
+		logger.debug("updateUserNotificationPreference: userNotifPrefId {} ", userNotifPrefId);
 		// Get the existing one
 		MLPUserNotifPref existing = notificationPreferenceRepository.findOne(userNotifPrefId);
 		if (existing == null) {
+			logger.warn("updateUserNotificationPreference: failed on ID {}", userNotifPrefId);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + userNotifPrefId, null);
 		}
@@ -367,7 +375,7 @@ public class NotificationController extends AbstractController {
 	@ResponseBody
 	public MLPTransportModel deleteUserNotificationPreference(@PathVariable("userNotifPrefId") Long userNotifPrefId,
 			HttpServletResponse response) {
-		logger.info("deleteUserNotificationPreference: userNotifPrefId {} ", userNotifPrefId);
+		logger.debug("deleteUserNotificationPreference: userNotifPrefId {} ", userNotifPrefId);
 		try {
 			notificationPreferenceRepository.delete(userNotifPrefId);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);

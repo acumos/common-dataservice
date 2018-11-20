@@ -58,7 +58,7 @@ public class DatasetController extends AbstractController {
 	@RequestMapping(value = "/{datasetId}", method = RequestMethod.GET)
 	@ResponseBody
 	public Object getDataset(@PathVariable("datasetId") String datasetId, HttpServletResponse response) {
-		logger.info("getDataset ID {}", datasetId);
+		logger.debug("getDataset ID {}", datasetId);
 		return new HashMap<>();
 	}
 

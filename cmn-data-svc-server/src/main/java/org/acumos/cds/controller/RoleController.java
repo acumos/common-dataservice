@@ -80,7 +80,7 @@ public class RoleController extends AbstractController {
 	@RequestMapping(value = CCDSConstants.COUNT_PATH, method = RequestMethod.GET)
 	@ResponseBody
 	public CountTransport getRoleCount() {
-		logger.info("getRoleCount");
+		logger.debug("getRoleCount");
 		Long count = roleRepository.count();
 		return new CountTransport(count);
 	}
@@ -91,7 +91,7 @@ public class RoleController extends AbstractController {
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
 	public Page<MLPRole> getRoles(Pageable pageable) {
-		logger.info("getRoles query {}", pageable);
+		logger.debug("getRoles query {}", pageable);
 		return roleRepository.findAll(pageable);
 	}
 
@@ -119,7 +119,7 @@ public class RoleController extends AbstractController {
 			@ApiParam(value = "Active") //
 			@RequestParam(name = activeField, required = false) Boolean active, //
 			Pageable pageRequest, HttpServletResponse response) {
-		logger.info("searchRoles enter");
+		logger.debug("searchRoles enter");
 		boolean isOr = junction != null && "o".equals(junction);
 		Map<String, Object> queryParameters = new HashMap<>();
 		if (name != null)
@@ -127,6 +127,7 @@ public class RoleController extends AbstractController {
 		if (active != null)
 			queryParameters.put(activeField, active);
 		if (queryParameters.size() == 0) {
+			logger.warn("searchRoles missing query");
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "Missing query", null);
 		}
@@ -146,9 +147,10 @@ public class RoleController extends AbstractController {
 	@RequestMapping(value = "/{roleId}", method = RequestMethod.GET)
 	@ResponseBody
 	public Object getRole(@PathVariable("roleId") String roleId, HttpServletResponse response) {
-		logger.info("getRole roleId {}", roleId);
+		logger.debug("getRole roleId {}", roleId);
 		MLPRole da = roleRepository.findOne(roleId);
 		if (da == null) {
+			logger.warn("getRole failed on ID {}", roleId);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + roleId, null);
 		}
@@ -161,12 +163,13 @@ public class RoleController extends AbstractController {
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
 	public Object createRole(@RequestBody MLPRole role, HttpServletResponse response) {
-		logger.info("createRole role {}", role);
+		logger.debug("createRole role {}", role);
 		try {
 			String id = role.getRoleId();
 			if (id != null) {
 				UUID.fromString(id);
 				if (roleRepository.findOne(id) != null) {
+					logger.warn("createRole failed on ID {}", id);
 					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 					return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "ID exists: " + id);
 				}
@@ -193,10 +196,11 @@ public class RoleController extends AbstractController {
 	@ResponseBody
 	public Object updateRole(@PathVariable("roleId") String roleId, @RequestBody MLPRole role,
 			HttpServletResponse response) {
-		logger.info("updateRole roleId {}", roleId);
+		logger.debug("updateRole roleId {}", roleId);
 		// Get the existing one
 		MLPRole existing = roleRepository.findOne(roleId);
 		if (existing == null) {
+			logger.warn("updateRole failed on ID {}", roleId);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + roleId, null);
 		}
@@ -221,7 +225,7 @@ public class RoleController extends AbstractController {
 	@RequestMapping(value = "/{roleId}", method = RequestMethod.DELETE)
 	@ResponseBody
 	public MLPTransportModel deleteRole(@PathVariable("roleId") String roleId, HttpServletResponse response) {
-		logger.info("deleteRole roleId {}", roleId);
+		logger.debug("deleteRole roleId {}", roleId);
 		try {
 			Iterable<MLPRoleFunction> fns = roleFunctionRepository.findByRoleId(roleId);
 			if (fns != null)
@@ -241,8 +245,9 @@ public class RoleController extends AbstractController {
 	@RequestMapping(value = "/{roleId}/" + CCDSConstants.FUNCTION_PATH, method = RequestMethod.GET)
 	@ResponseBody
 	public Object getListOfRoleFunc(@PathVariable("roleId") String roleId, HttpServletResponse response) {
-		logger.info("getListOfRoleFunc roleId {}", roleId);
+		logger.debug("getListOfRoleFunc roleId {}", roleId);
 		if (roleRepository.findOne(roleId) == null) {
+			logger.warn("getListOfRoleFunc failed on ID {}", roleId);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + roleId, null);
 		}
@@ -256,9 +261,10 @@ public class RoleController extends AbstractController {
 	@ResponseBody
 	public Object getRoleFunc(@PathVariable("roleId") String roleId, @PathVariable("functionId") String functionId,
 			HttpServletResponse response) {
-		logger.info("getRoleFunc roleId {} functionId {}", roleId, functionId);
+		logger.debug("getRoleFunc roleId {} functionId {}", roleId, functionId);
 		MLPRoleFunction rf = roleFunctionRepository.findOne(functionId);
 		if (rf == null) {
+			logger.warn("getRoleFunc failed on ID {}", functionId);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + functionId, null);
 		}
@@ -272,8 +278,9 @@ public class RoleController extends AbstractController {
 	@ResponseBody
 	public Object createRoleFunc(@PathVariable("roleId") String roleId, @RequestBody MLPRoleFunction roleFunction,
 			HttpServletResponse response) {
-		logger.info("createRoleFunc: function {}", roleFunction);
+		logger.debug("createRoleFunc: function {}", roleFunction);
 		if (roleRepository.findOne(roleId) == null) {
+			logger.warn("createRoleFunc failed on ID {}", roleId);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + roleId, null);
 		}
@@ -302,12 +309,14 @@ public class RoleController extends AbstractController {
 	@ResponseBody
 	public Object updateRoleFunc(@PathVariable("roleId") String roleId, @PathVariable("functionId") String functionId,
 			@RequestBody MLPRoleFunction roleFunction, HttpServletResponse response) {
-		logger.info("updateRoleFunc roleId {} functionId {}", roleId, functionId);
+		logger.debug("updateRoleFunc roleId {} functionId {}", roleId, functionId);
 		if (roleRepository.findOne(roleId) == null) {
+			logger.warn("updateRoleFunc failed on role ID {}", roleId);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + roleId, null);
 		}
 		if (roleFunctionRepository.findOne(functionId) == null) {
+			logger.warn("updateRoleFunc failed on fn ID {}", functionId);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + functionId, null);
 		}
@@ -334,7 +343,7 @@ public class RoleController extends AbstractController {
 	@ResponseBody
 	public MLPTransportModel deleteRoleFunc(@PathVariable("roleId") String roleId,
 			@PathVariable("functionId") String functionId, HttpServletResponse response) {
-		logger.info("deleteRoleFunc roleId {} funcId {}", roleId, functionId);
+		logger.debug("deleteRoleFunc roleId {} funcId {}", roleId, functionId);
 		try {
 			roleFunctionRepository.delete(functionId);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);

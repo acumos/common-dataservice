@@ -99,7 +99,7 @@ public class GroupPeerSolutionController extends AbstractController {
 	@RequestMapping(value = CCDSConstants.PEER_PATH, method = RequestMethod.GET)
 	@ResponseBody
 	public Page<MLPPeerGroup> getPeerGroups(Pageable pageRequest) {
-		logger.info("getPeerGroups {}", pageRequest);
+		logger.debug("getPeerGroups {}", pageRequest);
 		return peerGroupRepository.findAll(pageRequest);
 	}
 
@@ -109,7 +109,7 @@ public class GroupPeerSolutionController extends AbstractController {
 	@RequestMapping(value = CCDSConstants.PEER_PATH, method = RequestMethod.POST)
 	@ResponseBody
 	public Object createPeerGroup(@RequestBody MLPPeerGroup group, HttpServletResponse response) {
-		logger.info("createPeerGroup: group {}", group);
+		logger.debug("createPeerGroup: group {}", group);
 		try {
 			return peerGroupRepository.save(group);
 		} catch (Exception ex) {
@@ -128,10 +128,11 @@ public class GroupPeerSolutionController extends AbstractController {
 	@ResponseBody
 	public Object updatePeerGroup(@PathVariable("groupId") Long groupId, @RequestBody MLPPeerGroup group,
 			HttpServletResponse response) {
-		logger.info("updatePeerGroup groupId {}", groupId);
+		logger.debug("updatePeerGroup groupId {}", groupId);
 		// Get the existing one
 		MLPPeerGroup existing = peerGroupRepository.findOne(groupId);
 		if (existing == null) {
+			logger.warn("updatePeerGroup: failed on ID {}", groupId);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + groupId, null);
 		}
@@ -156,7 +157,7 @@ public class GroupPeerSolutionController extends AbstractController {
 	@RequestMapping(value = "/{groupId}/" + CCDSConstants.PEER_PATH, method = RequestMethod.DELETE)
 	@ResponseBody
 	public MLPTransportModel deletePeerGroup(@PathVariable("groupId") Long groupId, HttpServletResponse response) {
-		logger.info("deletePeerGroup groupId {}", groupId);
+		logger.debug("deletePeerGroup groupId {}", groupId);
 		try {
 			peerGroupRepository.delete(groupId);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
@@ -176,8 +177,9 @@ public class GroupPeerSolutionController extends AbstractController {
 	@ResponseBody
 	public Object getPeersInGroup(@PathVariable("groupId") Long groupId, Pageable pageRequest,
 			HttpServletResponse response) {
-		logger.info("getPeersInGroup groupId {}", groupId);
+		logger.debug("getPeersInGroup groupId {}", groupId);
 		if (peerGroupRepository.findOne(groupId) == null) {
+			logger.warn("getPeersInGroup: failed on ID {}", groupId);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + groupId, null);
 		}
@@ -190,12 +192,14 @@ public class GroupPeerSolutionController extends AbstractController {
 	@ResponseBody
 	public Object addPeerToGroup(@PathVariable("groupId") Long groupId, @PathVariable("peerId") String peerId,
 			@RequestBody MLPPeerGrpMemMap map, HttpServletResponse response) {
-		logger.info("addPeerToGroup groupId {} peerId {}", groupId, peerId);
+		logger.debug("addPeerToGroup groupId {} peerId {}", groupId, peerId);
 		if (peerRepository.findOne(peerId) == null) {
+			logger.warn("addPeerToGroup: failed on peer ID {}", peerId);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + peerId, null);
 		}
 		if (peerGroupRepository.findOne(groupId) == null) {
+			logger.warn("addPeerToGroup: failed on group ID {}", groupId);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + groupId, null);
 		}
@@ -213,9 +217,10 @@ public class GroupPeerSolutionController extends AbstractController {
 	@ResponseBody
 	public Object dropPeerFromGroup(@PathVariable("groupId") Long groupId, @PathVariable("peerId") String peerId,
 			HttpServletResponse response) {
-		logger.info("dropPeerFromGroup groupId {} peerId {}", groupId, peerId);
+		logger.debug("dropPeerFromGroup groupId {} peerId {}", groupId, peerId);
 		MLPPeerGrpMemMap.PeerGrpMemMapPK pk = new MLPPeerGrpMemMap.PeerGrpMemMapPK(groupId, peerId);
 		if (peerGroupMemMapRepository.findOne(pk) == null) {
+			logger.warn("dropPeerFromGroup: failed on ID {}", pk);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + groupId, null);
 		}
@@ -229,7 +234,7 @@ public class GroupPeerSolutionController extends AbstractController {
 	@RequestMapping(value = CCDSConstants.SOLUTION_PATH, method = RequestMethod.GET)
 	@ResponseBody
 	public Page<MLPSolutionGroup> getSolutionGroups(Pageable pageRequest) {
-		logger.info("getSolutionGroups {}", pageRequest);
+		logger.debug("getSolutionGroups {}", pageRequest);
 		return solutionGroupRepository.findAll(pageRequest);
 	}
 
@@ -238,7 +243,7 @@ public class GroupPeerSolutionController extends AbstractController {
 	@RequestMapping(value = CCDSConstants.SOLUTION_PATH, method = RequestMethod.POST)
 	@ResponseBody
 	public Object createSolutionGroup(@RequestBody MLPSolutionGroup group, HttpServletResponse response) {
-		logger.info("createSolutionGroup group {}", group);
+		logger.debug("createSolutionGroup group {}", group);
 		try {
 			group.setGroupId(null);
 			return solutionGroupRepository.save(group);
@@ -258,10 +263,11 @@ public class GroupPeerSolutionController extends AbstractController {
 	@ResponseBody
 	public Object updateSolutionGroup(@PathVariable("groupId") Long groupId, @RequestBody MLPSolutionGroup group,
 			HttpServletResponse response) {
-		logger.info("updateSolutionGroup groupId {}", groupId);
+		logger.debug("updateSolutionGroup groupId {}", groupId);
 		// Get the existing one
 		MLPSolutionGroup existing = solutionGroupRepository.findOne(groupId);
 		if (existing == null) {
+			logger.warn("updateSolutionGroup: failed on ID {}", groupId);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "NO_ENTRY_WITH_ID " + groupId, null);
 		}
@@ -286,7 +292,7 @@ public class GroupPeerSolutionController extends AbstractController {
 	@RequestMapping(value = "/{groupId}/" + CCDSConstants.SOLUTION_PATH, method = RequestMethod.DELETE)
 	@ResponseBody
 	public MLPTransportModel deleteSolutionGroup(@PathVariable("groupId") Long groupId, HttpServletResponse response) {
-		logger.info("deleteSolutionGroup groupId {}", groupId);
+		logger.debug("deleteSolutionGroup groupId {}", groupId);
 		try {
 			solutionGroupRepository.delete(groupId);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
@@ -306,8 +312,9 @@ public class GroupPeerSolutionController extends AbstractController {
 	@ResponseBody
 	public Object getSolutionsInGroup(@PathVariable("groupId") Long groupId, Pageable pageRequest,
 			HttpServletResponse response) {
-		logger.info("getSolutionsInGroup groupId {}", groupId);
+		logger.debug("getSolutionsInGroup groupId {}", groupId);
 		if (solutionGroupRepository.findOne(groupId) == null) {
+			logger.warn("getSolutionsInGroup: failed on ID {}", groupId);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + groupId, null);
 		}
@@ -321,12 +328,14 @@ public class GroupPeerSolutionController extends AbstractController {
 	public Object addSolutionToGroup(@PathVariable("groupId") Long groupId,
 			@PathVariable("solutionId") String solutionId, @RequestBody MLPSolGrpMemMap map,
 			HttpServletResponse response) {
-		logger.info("addSolutionToGroup groupId {} solutionId {}", groupId, solutionId);
+		logger.debug("addSolutionToGroup groupId {} solutionId {}", groupId, solutionId);
 		if (solutionRepository.findOne(solutionId) == null) {
+			logger.warn("addSolutionToGroup: failed on sol ID {}", solutionId);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + solutionId, null);
 		}
 		if (solutionGroupRepository.findOne(groupId) == null) {
+			logger.warn("addSolutionToGroup: failed on grp ID {}", groupId);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + groupId, null);
 		}
@@ -345,7 +354,7 @@ public class GroupPeerSolutionController extends AbstractController {
 	@ResponseBody
 	public Object dropSolutionFromGroup(@PathVariable("groupId") Long groupId,
 			@PathVariable("solutionId") String solutionId, HttpServletResponse response) {
-		logger.info("dropSolutionFromGroup groupId {} solutionId {}", groupId, solutionId);
+		logger.debug("dropSolutionFromGroup groupId {} solutionId {}", groupId, solutionId);
 		try {
 			MLPSolGrpMemMap.SolGrpMemMapPK pk = new MLPSolGrpMemMap.SolGrpMemMapPK(groupId, solutionId);
 			solGroupMemMapRepository.delete(pk);
@@ -364,7 +373,7 @@ public class GroupPeerSolutionController extends AbstractController {
 	@RequestMapping(value = CCDSConstants.PEER_PATH + "/" + CCDSConstants.SOLUTION_PATH, method = RequestMethod.GET)
 	@ResponseBody
 	public Page<MLPPeerSolAccMap> getPeerSolutionGroupMaps(Pageable pageRequest) {
-		logger.info("getPeerSolutionGroupMaps request {}", pageRequest);
+		logger.debug("getPeerSolutionGroupMaps request {}", pageRequest);
 		return peerSolAccMapRepository.findAll(pageRequest);
 	}
 
@@ -377,12 +386,14 @@ public class GroupPeerSolutionController extends AbstractController {
 	public Object mapPeerSolutionGroups(@PathVariable("peerGroupId") Long peerGroupId,
 			@PathVariable("solutionGroupId") Long solutionGroupId, @RequestBody MLPPeerSolAccMap map,
 			HttpServletResponse response) {
-		logger.info("mapPeerSolutionGroups: peerGroupId {} solutionGroupId {}", peerGroupId, solutionGroupId);
+		logger.debug("mapPeerSolutionGroups: peerGroupId {} solutionGroupId {}", peerGroupId, solutionGroupId);
 		if (peerGroupRepository.findOne(peerGroupId) == null) {
+			logger.warn("mapPeerSolutionGroups: failed on peer grp ID {}", peerGroupId);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + peerGroupId, null);
 		}
 		if (solutionGroupRepository.findOne(solutionGroupId) == null) {
+			logger.warn("mapPeerSolutionGroups: failed on sol grp ID {}", solutionGroupId);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + solutionGroupId, null);
 		}
@@ -409,7 +420,7 @@ public class GroupPeerSolutionController extends AbstractController {
 	@ResponseBody
 	public Object unmapPeerSolutionGroups(@PathVariable("peerGroupId") Long peerGroupId,
 			@PathVariable("solutionGroupId") Long solutionGroupId, HttpServletResponse response) {
-		logger.info("unmapPeerSolutionGroups: peerGroupId {} solutionGroupId {}", peerGroupId, solutionGroupId);
+		logger.debug("unmapPeerSolutionGroups: peerGroupId {} solutionGroupId {}", peerGroupId, solutionGroupId);
 		try {
 			MLPPeerSolAccMap.PeerSolAccMapPK pk = new MLPPeerSolAccMap.PeerSolAccMapPK(peerGroupId, solutionGroupId);
 			peerSolAccMapRepository.delete(pk);
@@ -431,16 +442,19 @@ public class GroupPeerSolutionController extends AbstractController {
 	public Object mapPeerPeerGroups(@PathVariable("principalGroupId") Long principalGroupId,
 			@PathVariable("resourceGroupId") Long resourceGroupId, @RequestBody MLPPeerPeerAccMap map,
 			HttpServletResponse response) {
-		logger.info("mapPeerPeerGroups: principal {} resource {}", principalGroupId, resourceGroupId);
+		logger.debug("mapPeerPeerGroups: principal {} resource {}", principalGroupId, resourceGroupId);
 		if (peerGroupRepository.findOne(principalGroupId) == null) {
+			logger.warn("mapPeerPeerGroups: failed on pg ID {}", principalGroupId);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + principalGroupId, null);
 		}
 		if (peerGroupRepository.findOne(resourceGroupId) == null) {
+			logger.warn("mapPeerPeerGroups: failed on rg ID {}", principalGroupId);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + resourceGroupId, null);
 		}
 		if (principalGroupId == resourceGroupId) {
+			logger.warn("mapPeerPeerGroups: failed on rg==pg ID {}", principalGroupId);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "IDs must be different", null);
 		}
@@ -467,7 +481,7 @@ public class GroupPeerSolutionController extends AbstractController {
 	@ResponseBody
 	public Object unmapPeerPeerGroups(@PathVariable("principalGroupId") Long principalGroupId,
 			@PathVariable("resourceGroupId") Long resourceGroupId, HttpServletResponse response) {
-		logger.info("unmapPeerSolutionGroups: principalGroupId {} resourceGroupId {}", principalGroupId,
+		logger.debug("unmapPeerSolutionGroups: principalGroupId {} resourceGroupId {}", principalGroupId,
 				resourceGroupId);
 		try {
 			MLPPeerPeerAccMap.PeerPeerAccMapPK pk = new MLPPeerPeerAccMap.PeerPeerAccMapPK(principalGroupId,
@@ -489,12 +503,14 @@ public class GroupPeerSolutionController extends AbstractController {
 	@ResponseBody
 	public Object checkPeerSolutionAccess(@PathVariable("peerId") String peerId,
 			@PathVariable("solutionId") String solutionId, HttpServletResponse response) {
-		logger.info("checkPeerSolutionAccess: peerId {} solutionId {}", peerId, solutionId);
+		logger.debug("checkPeerSolutionAccess: peerId {} solutionId {}", peerId, solutionId);
 		if (peerRepository.findOne(peerId) == null) {
+			logger.warn("checkPeerSolutionAccess: failed on peer ID {}", peerId);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + peerId, null);
 		}
 		if (solutionRepository.findOne(solutionId) == null) {
+			logger.warn("checkPeerSolutionAccess: failed on sol ID {}", solutionId);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + solutionId, null);
 		}
@@ -510,7 +526,7 @@ public class GroupPeerSolutionController extends AbstractController {
 	@ResponseBody
 	public Page<MLPSolution> getRestrictedSolutions(@PathVariable("peerId") String peerId, Pageable pageRequest,
 			HttpServletResponse response) {
-		logger.info("getRestrictedSolutions: peerId {} ", peerId);
+		logger.debug("getRestrictedSolutions: peerId {} ", peerId);
 		return solutionRepository.findRestrictedSolutions(peerId, pageRequest);
 	}
 
@@ -520,8 +536,9 @@ public class GroupPeerSolutionController extends AbstractController {
 			+ CCDSConstants.ACCESS_PATH, method = RequestMethod.GET)
 	@ResponseBody
 	public Object getPeerAccessList(@PathVariable("peerId") String peerId, HttpServletResponse response) {
-		logger.info("getPeerAccessList: peerId {}", peerId);
+		logger.debug("getPeerAccessList: peerId {}", peerId);
 		if (peerRepository.findOne(peerId) == null) {
+			logger.warn("getPeerAccessList: failed on peer ID {}", peerId);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + peerId, null);
 		}
