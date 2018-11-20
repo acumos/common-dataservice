@@ -71,7 +71,7 @@ public class PublishRequestController extends AbstractController {
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
 	public Page<MLPPublishRequest> getPublishRequests(Pageable pageRequest) {
-		logger.info("getPublishRequests {}", pageRequest);
+		logger.debug("getPublishRequests {}", pageRequest);
 		return publishRequestRepository.findAll(pageRequest);
 	}
 
@@ -81,9 +81,10 @@ public class PublishRequestController extends AbstractController {
 	@RequestMapping(value = "/{requestId}", method = RequestMethod.GET)
 	@ResponseBody
 	public Object getPublishRequest(@PathVariable("requestId") long requestId, HttpServletResponse response) {
-		logger.info("getPublishRequest: requestId {}", requestId);
+		logger.debug("getPublishRequest: requestId {}", requestId);
 		MLPPublishRequest sr = publishRequestRepository.findOne(requestId);
 		if (sr == null) {
+			logger.warn("getPublishRequest failed on ID {}", requestId);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + requestId, null);
 		}
@@ -122,7 +123,7 @@ public class PublishRequestController extends AbstractController {
 			@ApiParam(value = "Status code") //
 			@RequestParam(name = statusCodeField, required = false) String statusCode, //
 			Pageable pageRequest, HttpServletResponse response) {
-		logger.info("searchArtifacts enter");
+		logger.debug("searchArtifacts enter");
 		boolean isOr = junction != null && "o".equals(junction);
 		Map<String, Object> queryParameters = new HashMap<>();
 		if (solutionId != null)
@@ -136,6 +137,7 @@ public class PublishRequestController extends AbstractController {
 		if (statusCode != null)
 			queryParameters.put(statusCodeField, statusCode);
 		if (queryParameters.size() == 0) {
+			logger.warn("searchArtifacts missing query");
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "Missing query", null);
 		}
@@ -155,7 +157,7 @@ public class PublishRequestController extends AbstractController {
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
 	public Object createPublishRequest(@RequestBody MLPPublishRequest publishRequest, HttpServletResponse response) {
-		logger.info("createPublishRequest: enter");
+		logger.debug("createPublishRequest: enter");
 		try {
 			// Validate enum codes
 			super.validateCode(publishRequest.getStatusCode(), CodeNameType.PUBLISH_REQUEST_STATUS);
@@ -181,10 +183,11 @@ public class PublishRequestController extends AbstractController {
 	@ResponseBody
 	public Object updatePublishRequest(@PathVariable("requestId") long requestId,
 			@RequestBody MLPPublishRequest publishRequest, HttpServletResponse response) {
-		logger.info("updatePublishRequest: requestId {}", requestId);
+		logger.debug("updatePublishRequest: requestId {}", requestId);
 		// Get the existing one
 		MLPPublishRequest existing = publishRequestRepository.findOne(requestId);
 		if (existing == null) {
+			logger.warn("updatePublishRequest failed on ID {}", requestId);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + requestId, null);
 		}
@@ -211,7 +214,7 @@ public class PublishRequestController extends AbstractController {
 	@ResponseBody
 	public MLPTransportModel deletePublishRequest(@PathVariable("requestId") long requestId,
 			HttpServletResponse response) {
-		logger.info("deletePublishRequest: requestId {}", requestId);
+		logger.debug("deletePublishRequest: requestId {}", requestId);
 		try {
 			publishRequestRepository.delete(requestId);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);

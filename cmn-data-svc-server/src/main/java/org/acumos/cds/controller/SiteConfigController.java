@@ -65,9 +65,10 @@ public class SiteConfigController extends AbstractController {
 	@RequestMapping(value = "/{configKey}", method = RequestMethod.GET)
 	@ResponseBody
 	public Object getSiteConfig(@PathVariable("configKey") String configKey, HttpServletResponse response) {
-		logger.info("getSiteConfig key {}", configKey);
+		logger.debug("getSiteConfig key {}", configKey);
 		MLPSiteConfig da = siteConfigRepository.findOne(configKey);
 		if (da == null) {
+			logger.warn("getSiteConfig failed on key {}", configKey);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + configKey, null);
 		}
@@ -79,14 +80,16 @@ public class SiteConfigController extends AbstractController {
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
 	public Object createSiteConfig(@RequestBody MLPSiteConfig siteConfig, HttpServletResponse response) {
-		logger.info("createSiteConfig: config key {}", siteConfig.getConfigKey());
+		logger.debug("createSiteConfig: config key {}", siteConfig.getConfigKey());
 		if (siteConfigRepository.findOne(siteConfig.getConfigKey()) != null) {
+			logger.warn("createSiteConfig failed on key {}", siteConfig.getConfigKey());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "Key exists: " + siteConfig.getConfigKey(),
 					null);
 		}
 		// UserID is optional
 		if (siteConfig.getUserId() != null && userRepository.findOne(siteConfig.getUserId()) == null) {
+			logger.warn("createSiteConfig failed on user {}", siteConfig.getUserId());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + siteConfig.getUserId(),
 					null);
@@ -113,10 +116,11 @@ public class SiteConfigController extends AbstractController {
 	@ResponseBody
 	public Object updateSiteConfig(@PathVariable("configKey") String configKey, @RequestBody MLPSiteConfig siteConfig,
 			HttpServletResponse response) {
-		logger.info("updateSiteConfig key {}", configKey);
+		logger.debug("updateSiteConfig key {}", configKey);
 		// Get the existing one
 		MLPSiteConfig existing = siteConfigRepository.findOne(configKey);
 		if (existing == null) {
+			logger.warn("updateSiteConfig failed on key {}", configKey);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + configKey, null);
 		}
@@ -141,7 +145,7 @@ public class SiteConfigController extends AbstractController {
 	@ResponseBody
 	public MLPTransportModel deleteSiteConfig(@PathVariable("configKey") String configKey,
 			HttpServletResponse response) {
-		logger.info("deleteSiteConfig key {}", configKey);
+		logger.debug("deleteSiteConfig key {}", configKey);
 		try {
 			siteConfigRepository.delete(configKey);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
