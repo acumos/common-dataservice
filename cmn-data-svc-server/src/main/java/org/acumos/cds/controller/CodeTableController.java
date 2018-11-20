@@ -63,7 +63,7 @@ public class CodeTableController extends AbstractController {
 	@RequestMapping(value = "/" + CCDSConstants.PAIR_PATH, method = RequestMethod.GET)
 	@ResponseBody
 	public List<String> getValueSetNames() {
-		logger.info("getValueSetNames");
+		logger.debug("getValueSetNames");
 		List<String> list = new ArrayList<>();
 		for (CodeNameType cn : CodeNameType.values()) {
 			list.add(cn.name());
@@ -78,7 +78,7 @@ public class CodeTableController extends AbstractController {
 	@ResponseBody
 	public Object getCodeNamePairs(@PathVariable(CCDSConstants.NAME_PATH) String valueSetName,
 			HttpServletResponse response) {
-		logger.info("getCodeNamePairs {}", valueSetName);
+		logger.debug("getCodeNamePairs {}", valueSetName);
 		CodeNameType type;
 		try {
 			type = CodeNameType.valueOf(valueSetName);

@@ -63,9 +63,10 @@ public class DocumentController extends AbstractController {
 	@RequestMapping(value = "/{documentId}", method = RequestMethod.GET)
 	@ResponseBody
 	public Object getDocument(@PathVariable("documentId") String documentId, HttpServletResponse response) {
-		logger.info("getDocument ID {}", documentId);
+		logger.debug("getDocument ID {}", documentId);
 		MLPDocument da = documentRepository.findOne(documentId);
 		if (da == null) {
+			logger.warn("getDocument: failed on ID {}", documentId);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + documentId, null);
 		}
@@ -78,12 +79,13 @@ public class DocumentController extends AbstractController {
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
 	public Object createDocument(@RequestBody MLPDocument document, HttpServletResponse response) {
-		logger.info("createDocument entry");
+		logger.debug("createDocument {}", document);
 		try {
 			String id = document.getDocumentId();
 			if (id != null) {
 				UUID.fromString(id);
 				if (documentRepository.findOne(id) != null) {
+					logger.warn("createDocument: failed on ID {}", id);
 					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 					return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "ID exists: " + id);
 				}
@@ -113,10 +115,11 @@ public class DocumentController extends AbstractController {
 	@ResponseBody
 	public Object updateDocument(@PathVariable("documentId") String documentId, @RequestBody MLPDocument document,
 			HttpServletResponse response) {
-		logger.info("updateDocument ID {}", documentId);
+		logger.debug("updateDocument ID {}", documentId);
 		// Check for existing because the Hibernate save() method doesn't distinguish
 		MLPDocument existing = documentRepository.findOne(documentId);
 		if (existing == null) {
+			logger.warn("updateDocument: failed on ID {}", documentId);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + documentId, null);
 		}
@@ -145,7 +148,7 @@ public class DocumentController extends AbstractController {
 	@ResponseBody
 	public MLPTransportModel deleteDocument(@PathVariable("documentId") String documentId,
 			HttpServletResponse response) {
-		logger.info("deleteDocument ID {}", documentId);
+		logger.debug("deleteDocument ID {}", documentId);
 		try {
 			documentRepository.delete(documentId);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);

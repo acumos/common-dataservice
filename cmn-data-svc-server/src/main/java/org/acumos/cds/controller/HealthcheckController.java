@@ -54,7 +54,7 @@ public class HealthcheckController extends AbstractController {
 	@RequestMapping(value = CCDSConstants.HEALTHCHECK_PATH, method = RequestMethod.GET)
 	@ResponseBody
 	public MLPTransportModel getHealth() {
-		logger.info("getHealth enter");
+		logger.debug("getHealth enter");
 		long count = artifactRepository.count();
 		return new SuccessTransport(200, "database reports artifact count is " + count);
 	}
@@ -63,7 +63,7 @@ public class HealthcheckController extends AbstractController {
 	@RequestMapping(value = CCDSConstants.VERSION_PATH, method = RequestMethod.GET)
 	@ResponseBody
 	public MLPTransportModel getVersion() {
-		logger.info("getVersion enter");
+		logger.debug("getVersion enter");
 		String className = this.getClass().getSimpleName() + ".class";
 		String classPath = this.getClass().getResource(className).toString();
 		String version = classPath.startsWith("jar") ? CdsApplication.class.getPackage().getImplementationVersion()
