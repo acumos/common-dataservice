@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "18ce977a_69fe9b48",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/GroupPeerSolutionController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-11-21T21:25:54Z",
+      "side": 1,
+      "message": "yes you are correct I will fix",
+      "parentUuid": "6e9e3cf5_7fa67a56",
+      "revId": "99dfd49255e4b5d1aaaa272d8cdf72fc91f15651",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c3e477e1_d6aebe57",
         "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/GroupPeerSolutionController.java",
         "patchSetId": 3
