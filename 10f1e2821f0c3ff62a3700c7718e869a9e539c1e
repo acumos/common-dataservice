@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e9a614ff_53f4388c",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/NotificationController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-11-26T18:19:25Z",
+      "side": 1,
+      "message": "Don\u0027t you want to separately log warn about the user?",
+      "revId": "10f1e2821f0c3ff62a3700c7718e869a9e539c1e",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
