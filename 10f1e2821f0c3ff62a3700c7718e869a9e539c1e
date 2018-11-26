@@ -16,6 +16,24 @@
       "revId": "10f1e2821f0c3ff62a3700c7718e869a9e539c1e",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "54991cd7_4bc35a01",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/NotificationController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-11-26T20:36:43Z",
+      "side": 1,
+      "message": "No, all the drop-x-from-y methods are like this. Attempt to delete the row, and warn on failure.  This is different from the add-x-to-y methods, where the method checks for an X and for a Y before attempting to add a row to a mapping table.",
+      "parentUuid": "e9a614ff_53f4388c",
+      "revId": "10f1e2821f0c3ff62a3700c7718e869a9e539c1e",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
