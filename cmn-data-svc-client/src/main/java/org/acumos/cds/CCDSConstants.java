@@ -50,6 +50,7 @@ public interface CCDSConstants {
 	public static final String FAVORITE_PATH = "favorite";
 	public static final String FUNCTION_PATH = "function";
 	public static final String GROUP_PATH = "group";
+	public static final String IMAGE_PATH = "img";
 	public static final String KEYWORD_PATH = "kw";
 	public static final String KW_TAG_PATH = "kwtag";
 	public static final String NOTIFICATION_PATH = "notif";

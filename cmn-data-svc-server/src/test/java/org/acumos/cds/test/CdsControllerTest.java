@@ -630,6 +630,13 @@ public class CdsControllerTest {
 			Assert.assertTrue(cs.getTags().contains(newTag));
 			logger.info("Created public solution {}", cs);
 
+			byte [] saved = client.getSolutionImage(cs.getSolutionId());
+			Assert.assertNull(saved);
+			byte [] image = new byte[] { 0, 1, 2, 3, 4, 5 };
+			client.saveSolutionImage(cs.getSolutionId(), image);
+			saved = client.getSolutionImage(cs.getSolutionId());
+			Assert.assertArrayEquals(saved, image);
+			
 			// clean out the instant tag and ensure it was removed
 			client.dropSolutionTag(cs.getSolutionId(), newTag.getTag());
 			client.deleteTag(newTag);
