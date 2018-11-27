@@ -224,6 +224,7 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 	private MLPPublishRequest publishRequest;
 	private RestPageResponse<MLPSolution> restrictedSolutions;
 	private long userNotificationCount;
+	private byte[] solutionImage;
 
 	/**
 	 * No-argument constructor.
@@ -1895,6 +1896,16 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 	@Override
 	public void dropUserTag(String userId, String tag) {
 		// what to mock?
+	}
+
+	@Override
+	public byte[] getSolutionPicture(String solutionId) {
+		return this.solutionImage;
+	}
+
+	@Override
+	public void saveSolutionPicture(String solutionId, byte[] image) {
+		this.solutionImage = image;
 	}
 
 }
