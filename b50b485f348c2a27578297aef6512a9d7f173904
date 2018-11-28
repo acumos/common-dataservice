@@ -16,6 +16,40 @@
       "revId": "b50b485f348c2a27578297aef6512a9d7f173904",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7769c1a9_a7af82b9",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/PublishRequestController.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-11-28T15:35:18Z",
+      "side": 1,
+      "message": "Correct the debug message. This I assume is for requests for publishing a solution to public rather than just artifacts.",
+      "revId": "b50b485f348c2a27578297aef6512a9d7f173904",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d78b59f3_77ef396c",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/PublishRequestController.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-11-28T15:35:18Z",
+      "side": 1,
+      "message": "Correct the debug message for reasons same as before.",
+      "revId": "b50b485f348c2a27578297aef6512a9d7f173904",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
