@@ -49,7 +49,6 @@ import org.acumos.cds.domain.MLPSolutionGroup;
 import org.acumos.cds.domain.MLPSolutionRating;
 import org.acumos.cds.domain.MLPSolutionRevision;
 import org.acumos.cds.domain.MLPSolutionValidation;
-import org.acumos.cds.domain.MLPSolutionWeb;
 import org.acumos.cds.domain.MLPStepResult;
 import org.acumos.cds.domain.MLPTag;
 import org.acumos.cds.domain.MLPThread;
@@ -358,10 +357,6 @@ public class MockClientTest {
 		client.addUserToNotification("id", "id");
 		client.dropUserFromNotification("id", "id");
 		client.setUserViewedNotification("id", "id");
-
-		MLPSolutionWeb web = new MLPSolutionWeb();
-		client.setSolutionWebMetadata(web);
-		Assert.assertTrue(web == client.getSolutionWebMetadata("id"));
 
 		List<MLPUser> userList = new ArrayList<>();
 		client.setSolutionAccessUsers(userList);

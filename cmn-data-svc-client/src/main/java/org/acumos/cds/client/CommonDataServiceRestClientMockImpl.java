@@ -65,7 +65,6 @@ import org.acumos.cds.domain.MLPSolutionGroup;
 import org.acumos.cds.domain.MLPSolutionRating;
 import org.acumos.cds.domain.MLPSolutionRevision;
 import org.acumos.cds.domain.MLPSolutionValidation;
-import org.acumos.cds.domain.MLPSolutionWeb;
 import org.acumos.cds.domain.MLPStepResult;
 import org.acumos.cds.domain.MLPStepStatus;
 import org.acumos.cds.domain.MLPStepType;
@@ -168,7 +167,6 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 	private MLPUserNotifPref usrNotifPref;
 	private List<MLPUserNotifPref> userNotifPreferences;
 	private MLPStepResult stepResult;
-	private MLPSolutionWeb solutionWeb = new MLPSolutionWeb();
 	private List<MLPUser> solutionAccessUsers;
 	private RestPageResponse<MLPSolution> userAccessSolutions;
 	private List<MLPSolutionValidation> solutionValidations;
@@ -1200,15 +1198,6 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 	@Override
 	public void updateUserNotificationPreference(MLPUserNotifPref usrNotifpref) {
 		// How to mock?
-	}
-
-	public void setSolutionWebMetadata(MLPSolutionWeb web) {
-		this.solutionWeb = web;
-	}
-
-	@Override
-	public MLPSolutionWeb getSolutionWebMetadata(String solutionId) {
-		return solutionWeb;
 	}
 
 	public void setSolutionAccessUsers(List<MLPUser> users) {
