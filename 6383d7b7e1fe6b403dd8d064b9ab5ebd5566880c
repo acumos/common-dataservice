@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ff511e3_21e40862",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/ThreadController.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-11-28T21:04:07Z",
+      "side": 1,
+      "message": "Maybe log warn on missing IDs here?",
+      "revId": "6383d7b7e1fe6b403dd8d064b9ab5ebd5566880c",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
