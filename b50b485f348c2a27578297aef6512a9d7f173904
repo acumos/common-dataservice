@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "c0e68028_135fd38b",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/NotificationController.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-11-28T16:16:49Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "7d8c7c0b_41a5555b",
+      "revId": "b50b485f348c2a27578297aef6512a9d7f173904",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7769c1a9_a7af82b9",
         "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/PublishRequestController.java",
         "patchSetId": 7
@@ -30,6 +48,24 @@
       "writtenOn": "2018-11-28T15:35:18Z",
       "side": 1,
       "message": "Correct the debug message. This I assume is for requests for publishing a solution to public rather than just artifacts.",
+      "revId": "b50b485f348c2a27578297aef6512a9d7f173904",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2b5ae305_0fe82b5c",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/PublishRequestController.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-11-28T16:16:49Z",
+      "side": 1,
+      "message": "good catch",
+      "parentUuid": "7769c1a9_a7af82b9",
       "revId": "b50b485f348c2a27578297aef6512a9d7f173904",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "786f6dfc_c7b377c8",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/PublishRequestController.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-11-28T16:16:49Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "d78b59f3_77ef396c",
+      "revId": "b50b485f348c2a27578297aef6512a9d7f173904",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "609dfb05_b7e4c2a6",
         "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/RevisionController.java",
         "patchSetId": 7
@@ -64,6 +118,24 @@
       "writtenOn": "2018-11-28T15:42:03Z",
       "side": 1,
       "message": "Additions missing IDs scenario cases should have log warning messages as before here, rather than in catch block.",
+      "revId": "b50b485f348c2a27578297aef6512a9d7f173904",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b2e5c75b_b44cfee4",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/RevisionController.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-11-28T16:16:49Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "609dfb05_b7e4c2a6",
       "revId": "b50b485f348c2a27578297aef6512a9d7f173904",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
