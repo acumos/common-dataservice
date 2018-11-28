@@ -716,11 +716,6 @@ public class ClientMethodTest {
 			logger.info("Client failed as expected: {}", ex.toString());
 		}
 		try {
-			client.getSolutionWebMetadata("solutionId");
-		} catch (ResourceAccessException ex) {
-			logger.info("Client failed as expected: {}", ex.toString());
-		}
-		try {
 			client.getSolutionAccessUsers("solutionId");
 		} catch (ResourceAccessException ex) {
 			logger.info("Client failed as expected: {}", ex.toString());

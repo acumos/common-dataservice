@@ -20,6 +20,7 @@
 
 package org.acumos.cds.domain;
 
+import java.util.Date;
 import java.util.Objects;
 
 import javax.persistence.Column;
@@ -125,6 +126,31 @@ public abstract class MLPAbstractSolution extends MLPTimestampedEntity {
 	@ApiModelProperty(value = "Solution picture as byte array")
 	private byte[] picture;
 
+	@Column(name = "VIEW_COUNT", columnDefinition = "INT")
+	@ApiModelProperty(value = "View count", example = "1")
+	private Long viewCount = 0L;
+
+	@Column(name = "DOWNLOAD_COUNT", columnDefinition = "INT")
+	@ApiModelProperty(value = "Download count", example = "1")
+	private Long downloadCount = 0L;
+
+	@Column(name = "LAST_DOWNLOAD", columnDefinition = "TIMESTAMP" /* don't attempt "NULL DEFAULT 0" here */)
+	@ApiModelProperty(value = "Date of most recent download")
+	private Date lastDownload;
+
+	@Column(name = "RATING_COUNT", columnDefinition = "INT")
+	@ApiModelProperty(value = "Rating count", example = "1")
+	private Long ratingCount = 0L;
+
+	@Column(name = "RATING_AVG_TENTHS", columnDefinition = "INT")
+	@ApiModelProperty(value = "Rating average in tenths; e.g., value 35 means 3.5", example = "35")
+	private Long ratingAverageTenths = 0L;
+
+	@Column(name = "FEATURED_YN", columnDefinition = "CHAR(1)")
+	@Type(type = "yes_no")
+	@ApiModelProperty(value = "Featured indicator")
+	private boolean featured;
+
 	/**
 	 * No-arg constructor
 	 */
@@ -159,13 +185,19 @@ public abstract class MLPAbstractSolution extends MLPTimestampedEntity {
 		super(that);
 		this.active = that.active;
 		this.description = that.description;
+		this.downloadCount = that.downloadCount;
+		this.featured = that.featured;
+		this.lastDownload = that.lastDownload;
 		this.metadata = that.metadata;
 		this.modelTypeCode = that.modelTypeCode;
 		this.name = that.name;
 		this.origin = that.origin;
 		this.picture = that.picture;
+		this.ratingAverageTenths = that.ratingAverageTenths;
+		this.ratingCount = that.ratingCount;
 		this.solutionId = that.solutionId;
 		this.toolkitTypeCode = that.toolkitTypeCode;
+		this.viewCount = that.viewCount;
 	}
 
 	public String getSolutionId() {
@@ -261,6 +293,54 @@ public abstract class MLPAbstractSolution extends MLPTimestampedEntity {
 
 	public void setPicture(byte[] picture) {
 		this.picture = picture;
+	}
+
+	public Long getViewCount() {
+		return viewCount;
+	}
+
+	public void setViewCount(Long viewCount) {
+		this.viewCount = viewCount;
+	}
+
+	public Long getDownloadCount() {
+		return downloadCount;
+	}
+
+	public void setDownloadCount(Long downloadCount) {
+		this.downloadCount = downloadCount;
+	}
+
+	public Date getLastDownload() {
+		return lastDownload;
+	}
+
+	public void setLastDownload(Date lastDownload) {
+		this.lastDownload = lastDownload;
+	}
+
+	public Long getRatingCount() {
+		return ratingCount;
+	}
+
+	public void setRatingCount(Long ratingCount) {
+		this.ratingCount = ratingCount;
+	}
+
+	public Long getRatingAverageTenths() {
+		return ratingAverageTenths;
+	}
+
+	public void setRatingAverageTenths(Long ratingAverageTenths) {
+		this.ratingAverageTenths = ratingAverageTenths;
+	}
+
+	public boolean isFeatured() {
+		return featured;
+	}
+
+	public void setFeatured(boolean featured) {
+		this.featured = featured;
 	}
 
 	/**
