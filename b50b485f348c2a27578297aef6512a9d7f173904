@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7d8c7c0b_41a5555b",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/NotificationController.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-11-28T15:13:13Z",
+      "side": 1,
+      "message": "Maybe warn on non-existent user scenario here?",
+      "revId": "b50b485f348c2a27578297aef6512a9d7f173904",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
