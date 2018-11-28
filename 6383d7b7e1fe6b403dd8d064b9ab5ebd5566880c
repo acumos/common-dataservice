@@ -16,6 +16,24 @@
       "revId": "6383d7b7e1fe6b403dd8d064b9ab5ebd5566880c",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa199c7_89fd172d",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/ThreadController.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-11-28T21:17:52Z",
+      "side": 1,
+      "message": "Not a bad idea but let\u0027s skip this one for now.  Checking solution ID and revision ID means adding the solution and revision repository objects to this class, and adding test methods to cause failures.",
+      "parentUuid": "3ff511e3_21e40862",
+      "revId": "6383d7b7e1fe6b403dd8d064b9ab5ebd5566880c",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
