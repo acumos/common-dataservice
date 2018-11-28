@@ -45,8 +45,6 @@ import org.acumos.cds.domain.MLPSolutionDownload;
 import org.acumos.cds.domain.MLPSolutionRating;
 import org.acumos.cds.domain.MLPSolutionRating.SolutionRatingPK;
 import org.acumos.cds.domain.MLPSolutionRevision;
-import org.acumos.cds.domain.MLPSolutionValidation;
-import org.acumos.cds.domain.MLPSolutionValidation.SolutionValidationPK;
 import org.acumos.cds.domain.MLPSolutionWeb;
 import org.acumos.cds.domain.MLPTag;
 import org.acumos.cds.domain.MLPUser;
@@ -61,7 +59,6 @@ import org.acumos.cds.repository.SolutionFavoriteRepository;
 import org.acumos.cds.repository.SolutionRatingRepository;
 import org.acumos.cds.repository.SolutionRepository;
 import org.acumos.cds.repository.SolutionRevisionRepository;
-import org.acumos.cds.repository.SolutionValidationRepository;
 import org.acumos.cds.repository.SolutionWebRepository;
 import org.acumos.cds.repository.StepResultRepository;
 import org.acumos.cds.repository.UserRepository;
@@ -126,8 +123,6 @@ public class SolutionController extends AbstractController {
 	private SolutionRevisionRepository solutionRevisionRepository;
 	@Autowired
 	private SolutionSearchService solutionSearchService;
-	@Autowired
-	private SolutionValidationRepository solutionValidationRepository;
 	@Autowired
 	private SolutionWebRepository solutionWebRepository;
 	@Autowired
@@ -295,8 +290,6 @@ public class SolutionController extends AbstractController {
 			@RequestParam(name = CCDSConstants.SEARCH_ACCESS_TYPES, required = false) String[] accTypeCodes, //
 			@ApiParam(value = "Model type codes", allowMultiple = true) //
 			@RequestParam(name = CCDSConstants.SEARCH_MODEL_TYPES, required = false) String[] modelTypeCodes, //
-			@ApiParam(value = "Validation status codes (deprecated)", allowMultiple = true) //
-			@RequestParam(name = CCDSConstants.SEARCH_VAL_STATUSES, required = false) String[] valStatusCodes, //
 			@ApiParam(value = "User IDs", allowMultiple = true) //
 			@RequestParam(name = CCDSConstants.SEARCH_USERS, required = false) String[] userIds, //
 			@ApiParam(value = "Tags", allowMultiple = true) //
@@ -313,7 +306,7 @@ public class SolutionController extends AbstractController {
 		logger.info("findPortalSolutions: active {} nameKws {}", active, nameKws);
 		try {
 			return solutionSearchService.findPortalSolutions(nameKws, descKws, active, userIds, modelTypeCodes,
-					accTypeCodes, valStatusCodes, tags, authKws, pubKws, pageRequest);
+					accTypeCodes, tags, authKws, pubKws, pageRequest);
 		} catch (Exception ex) {
 			logger.error("findPortalSolutions failed", ex);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -406,8 +399,6 @@ public class SolutionController extends AbstractController {
 			@RequestParam(name = CCDSConstants.SEARCH_ACCESS_TYPES, required = false) String[] accTypeCodes, //
 			@ApiParam(value = "Model type codes", allowMultiple = true) //
 			@RequestParam(name = CCDSConstants.SEARCH_MODEL_TYPES, required = false) String[] modelTypeCodes, //
-			@ApiParam(value = "Validation status codes (deprecated)", allowMultiple = true) //
-			@RequestParam(name = CCDSConstants.SEARCH_VAL_STATUSES, required = false) String[] valStatusCodes, //
 			@ApiParam(value = "Name key words", allowMultiple = true) //
 			@RequestParam(name = CCDSConstants.SEARCH_NAME, required = false) String[] nameKws, //
 			@ApiParam(value = "Description key words", allowMultiple = true) //
@@ -418,7 +409,7 @@ public class SolutionController extends AbstractController {
 		logger.info("findUserSolutions: active {} userId {}", active, userId);
 		try {
 			return solutionSearchService.findUserSolutions(nameKws, descKws, active, userId, modelTypeCodes,
-					accTypeCodes, valStatusCodes, tags, pageRequest);
+					accTypeCodes, tags, pageRequest);
 		} catch (Exception ex) {
 			logger.error("findUserSolutions failed", ex);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -440,13 +431,11 @@ public class SolutionController extends AbstractController {
 			@RequestParam(name = CCDSConstants.SEARCH_ACTIVE, required = false) boolean active, //
 			@ApiParam(value = "Access type codes", allowMultiple = true) //
 			@RequestParam(name = CCDSConstants.SEARCH_ACCESS_TYPES, required = false) String[] accTypeCodes, //
-			@ApiParam(value = "Validation status codes (deprecated)", allowMultiple = true) //
-			@RequestParam(name = CCDSConstants.SEARCH_VAL_STATUSES, required = false) String[] valStatusCodes, //
 			Pageable pageRequest, HttpServletResponse response) {
 		logger.info("findSolutionsByDate: date {}", dateMillis);
 		Date date = new Date(dateMillis);
 		try {
-			return solutionSearchService.findSolutionsByModifiedDate(active, accTypeCodes, valStatusCodes, date,
+			return solutionSearchService.findSolutionsByModifiedDate(active, accTypeCodes, date,
 					pageRequest);
 		} catch (Exception ex) {
 			logger.error("findSolutionsByDate failed", ex);
@@ -595,7 +584,6 @@ public class SolutionController extends AbstractController {
 			solTagMapRepository.deleteBySolutionId(solutionId);
 			solutionDownloadRepository.deleteBySolutionId(solutionId);
 			solutionRatingRepository.deleteBySolutionId(solutionId);
-			solutionValidationRepository.deleteBySolutionId(solutionId);
 			solUserAccMapRepository.deleteBySolutionId(solutionId);
 			solutionFavoriteRepository.deleteBySolutionId(solutionId);
 			stepResultRepository.deleteBySolutionId(solutionId);
@@ -666,8 +654,6 @@ public class SolutionController extends AbstractController {
 			// Validate enum codes
 			if (revision.getAccessTypeCode() != null)
 				super.validateCode(revision.getAccessTypeCode(), CodeNameType.ACCESS_TYPE);
-			if (revision.getValidationStatusCode() != null)
-				super.validateCode(revision.getValidationStatusCode(), CodeNameType.VALIDATION_STATUS);
 			String id = revision.getRevisionId();
 			if (id != null) {
 				UUID.fromString(id);
@@ -710,8 +696,6 @@ public class SolutionController extends AbstractController {
 			// Validate enum codes
 			if (revision.getAccessTypeCode() != null)
 				super.validateCode(revision.getAccessTypeCode(), CodeNameType.ACCESS_TYPE);
-			if (revision.getValidationStatusCode() != null)
-				super.validateCode(revision.getValidationStatusCode(), CodeNameType.VALIDATION_STATUS);
 			// Use the validated values
 			revision.setRevisionId(revisionId);
 			revision.setSolutionId(solutionId);
@@ -1067,127 +1051,6 @@ public class SolutionController extends AbstractController {
 			HttpServletResponse response) {
 		logger.info("getAccessibleSolutions: user {}", userId);
 		return solUserAccMapRepository.getSolutionsForUser(userId, pageable);
-	}
-
-	@ApiOperation(value = "Gets validation results for the specified solution and revision. Returns bad request if an ID is not found", //
-			response = MLPSolutionValidation.class, responseContainer = "List")
-	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
-	@RequestMapping(value = "/{solutionId}/" + CCDSConstants.REVISION_PATH + "/{revisionId}/"
-			+ CCDSConstants.VALIDATION_PATH, method = RequestMethod.GET)
-	@ResponseBody
-	public Object getListOfSolutionValidations(@PathVariable("solutionId") String solutionId,
-			@PathVariable("revisionId") String revisionId, HttpServletResponse response) {
-		logger.info("getListOfSolutionValidations: solutionId {} revisionId {}", solutionId, revisionId);
-		Iterable<MLPSolutionValidation> items = solutionValidationRepository.findBySolutionIdAndRevisionId(solutionId,
-				revisionId);
-		if (items == null || !items.iterator().hasNext()) {
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST,
-					NO_ENTRY_WITH_ID + solutionId + ", " + revisionId, null);
-		}
-		return items;
-	}
-
-	@ApiOperation(value = "Creates a new solution validation record. Returns bad request if an ID is not found.", response = MLPSolutionValidation.class)
-	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
-	@RequestMapping(value = "/{solutionId}/" + CCDSConstants.REVISION_PATH + "/{revisionId}/"
-			+ CCDSConstants.VALIDATION_PATH + "/{taskId}", method = RequestMethod.POST)
-	@ResponseBody
-	public Object createSolutionValidation(@PathVariable("solutionId") String solutionId,
-			@PathVariable("revisionId") String revisionId, @PathVariable("taskId") String taskId,
-			@RequestBody MLPSolutionValidation sv, HttpServletResponse response) {
-		logger.info("createSolutionValidation: solutionId {} revisionId {} taskId {}", solutionId, revisionId, taskId);
-		if (solutionRepository.findOne(solutionId) == null) {
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + solutionId, null);
-		}
-		if (solutionRevisionRepository.findOne(revisionId) == null) {
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + revisionId, null);
-		}
-		try {
-			// Validate enum codes
-			if (sv.getValidationStatusCode() != null)
-				super.validateCode(sv.getValidationStatusCode(), CodeNameType.VALIDATION_STATUS);
-			// type is required
-			super.validateCode(sv.getValidationTypeCode(), CodeNameType.VALIDATION_TYPE);
-			// Use path IDs
-			sv.setSolutionId(solutionId);
-			sv.setRevisionId(revisionId);
-			sv.setTaskId(taskId);
-			Object result = solutionValidationRepository.save(sv);
-			response.setStatus(HttpServletResponse.SC_CREATED);
-			response.setHeader(HttpHeaders.LOCATION,
-					CCDSConstants.SOLUTION_PATH + "/" + solutionId + "/" + CCDSConstants.REVISION_PATH + "/"
-							+ revisionId + "/" + CCDSConstants.VALIDATION_PATH + "/" + taskId);
-			return result;
-		} catch (Exception ex) {
-			// e.g., EmptyResultDataAccessException is NOT an internal server error
-			Exception cve = findConstraintViolationException(ex);
-			logger.warn("createSolutionValidation failed: {}", cve.toString());
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "createSolutionValidation failed", cve);
-		}
-	}
-
-	@ApiOperation(value = "Updates an existing entity with the supplied data. Returns bad request on constraint violation etc.", //
-			response = SuccessTransport.class)
-	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
-	@RequestMapping(value = "/{solutionId}/" + CCDSConstants.REVISION_PATH + "/{revisionId}/"
-			+ CCDSConstants.VALIDATION_PATH + "/{taskId}", method = RequestMethod.PUT)
-	@ResponseBody
-	public Object updateSolutionValidation(@PathVariable("solutionId") String solutionId,
-			@PathVariable("revisionId") String revisionId, @PathVariable("taskId") String taskId,
-			@RequestBody MLPSolutionValidation sv, HttpServletResponse response) {
-		logger.info("updateSolutionValidation: solutionId {} revisionId {} taskId {}", solutionId, revisionId, taskId);
-		// Get the existing one
-		SolutionValidationPK pk = new SolutionValidationPK(solutionId, revisionId, taskId);
-		MLPSolutionValidation existing = solutionValidationRepository.findOne(pk);
-		if (existing == null) {
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + pk, null);
-		}
-		try {
-			// Validate enum codes
-			if (sv.getValidationStatusCode() != null)
-				super.validateCode(sv.getValidationStatusCode(), CodeNameType.VALIDATION_STATUS);
-			// type is required
-			super.validateCode(sv.getValidationTypeCode(), CodeNameType.VALIDATION_TYPE);
-			// Use path IDs
-			sv.setSolutionId(solutionId);
-			sv.setRevisionId(revisionId);
-			sv.setTaskId(taskId);
-			solutionValidationRepository.save(sv);
-			return new SuccessTransport(HttpServletResponse.SC_OK, null);
-		} catch (Exception ex) {
-			// e.g., EmptyResultDataAccessException is NOT an internal server error
-			Exception cve = findConstraintViolationException(ex);
-			logger.warn("updateSolutionValidation failed: {}", cve.toString());
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "updateSolutionValidation failed", cve);
-		}
-	}
-
-	@ApiOperation(value = "Deletes the entity with the specified ID. Returns bad request if the ID is not found.", //
-			response = SuccessTransport.class)
-	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
-	@RequestMapping(value = "/{solutionId}/" + CCDSConstants.REVISION_PATH + "/{revisionId}/"
-			+ CCDSConstants.VALIDATION_PATH + "/{taskId}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public MLPTransportModel deleteSolutionValidation(@PathVariable("solutionId") String solutionId,
-			@PathVariable("revisionId") String revisionId, @PathVariable("taskId") String taskId,
-			HttpServletResponse response) {
-		logger.info("deleteSolutionValidation: solutionId {} revisionId {} taskId {}", solutionId, revisionId, taskId);
-		try {
-			SolutionValidationPK pk = new SolutionValidationPK(solutionId, revisionId, taskId);
-			solutionValidationRepository.delete(pk);
-			return new SuccessTransport(HttpServletResponse.SC_OK, null);
-		} catch (Exception ex) {
-			// e.g., EmptyResultDataAccessException is NOT an internal server error
-			logger.warn("deleteSolutionValidation failed: {}", ex.toString());
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "deleteSolutionValidation failed", ex);
-		}
 	}
 
 	@ApiOperation(value = "Gets the deployments for the specified solution and revision IDs. Returns bad request if an ID is not found.", //
