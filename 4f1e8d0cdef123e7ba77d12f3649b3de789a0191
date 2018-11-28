@@ -16,6 +16,24 @@
       "revId": "4f1e8d0cdef123e7ba77d12f3649b3de789a0191",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4ed6aa3e_f39aec7d",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/ArtifactController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-11-28T14:56:49Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "b90a6c17_c9d06427",
+      "revId": "4f1e8d0cdef123e7ba77d12f3649b3de789a0191",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
