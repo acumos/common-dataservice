@@ -173,6 +173,24 @@
       "revId": "b50b485f348c2a27578297aef6512a9d7f173904",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a7cd6e88_2a8d55ca",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/SolutionController.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 999,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-11-28T16:22:12Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "837655c3_9eeae91c",
+      "revId": "b50b485f348c2a27578297aef6512a9d7f173904",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
