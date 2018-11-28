@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b90a6c17_c9d06427",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/ArtifactController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-11-28T14:52:31Z",
+      "side": 1,
+      "message": "\"say failed on id\" + artifactId just like you did in later messages",
+      "revId": "4f1e8d0cdef123e7ba77d12f3649b3de789a0191",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
