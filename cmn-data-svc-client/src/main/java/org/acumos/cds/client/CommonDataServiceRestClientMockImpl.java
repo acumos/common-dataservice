@@ -57,6 +57,7 @@ import org.acumos.cds.domain.MLPRevisionDescription;
 import org.acumos.cds.domain.MLPRole;
 import org.acumos.cds.domain.MLPRoleFunction;
 import org.acumos.cds.domain.MLPSiteConfig;
+import org.acumos.cds.domain.MLPSiteContent;
 import org.acumos.cds.domain.MLPSolution;
 import org.acumos.cds.domain.MLPSolutionDeployment;
 import org.acumos.cds.domain.MLPSolutionDownload;
@@ -181,6 +182,8 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 	private MLPSolutionDeployment solutionDeployment = new MLPSolutionDeployment();
 	private MLPSiteConfig siteConfig = new MLPSiteConfig();
 	private MLPSiteConfig siteConfigByKey = new MLPSiteConfig();
+	private MLPSiteContent siteContent = new MLPSiteContent();
+	private MLPSiteContent siteContentByKey = new MLPSiteContent();
 	private long threadCount = 0;
 	private MLPSolutionRating userSolutionRating = new MLPSolutionRating();
 	private RestPageResponse<MLPThread> threads;
@@ -1368,6 +1371,34 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 
 	@Override
 	public void deleteSiteConfig(String configKey) {
+		// How to mock?
+	}
+
+	public void setSiteContentByKey(MLPSiteContent content) {
+		this.siteContentByKey = content;
+	}
+
+	@Override
+	public MLPSiteContent getSiteContent(String contentKey) {
+		return siteContentByKey;
+	}
+
+	public void setSiteContent(MLPSiteContent content) {
+		this.siteContent = content;
+	}
+
+	@Override
+	public MLPSiteContent createSiteContent(MLPSiteContent content) {
+		return this.siteContent;
+	}
+
+	@Override
+	public void updateSiteContent(MLPSiteContent content) {
+		this.siteContent = content;
+	}
+
+	@Override
+	public void deleteSiteContent(String contentKey) {
 		// How to mock?
 	}
 
