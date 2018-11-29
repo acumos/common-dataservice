@@ -177,7 +177,7 @@ public class SolutionController extends AbstractController {
 	@RequestMapping(value = CCDSConstants.COUNT_PATH, method = RequestMethod.GET)
 	public CountTransport getSolutionCount() {
 		logger.debug("getSolutionCount");
-		Long count = solutionRepository.count();
+		long count = solutionRepository.count();
 		return new CountTransport(count);
 	}
 

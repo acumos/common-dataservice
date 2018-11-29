@@ -152,7 +152,7 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 	private RestPageResponse<MLPPeer> searchPeers;
 	private MLPPeer peerById = new MLPPeer();
 	private MLPPeer peer = new MLPPeer();
-	private List<MLPPeerSubscription> peerSubscriptions;
+	private List<MLPPeerSubscription> peerSubscriptions = new ArrayList<>();
 	private MLPPeerSubscription peerSubscriptionById = new MLPPeerSubscription();
 	private MLPPeerSubscription peerSubscription = new MLPPeerSubscription();
 	private RestPageResponse<MLPSolutionDownload> solutionDownloads;
@@ -973,6 +973,11 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 	@Override
 	public void deletePeer(String peerId) {
 		// How to mock?
+	}
+
+	@Override
+	public long getPeerSubscriptionCount(String peerId) {
+		return peerSubscriptions.size();
 	}
 
 	public void setPeerSubscriptions(List<MLPPeerSubscription> subs) {

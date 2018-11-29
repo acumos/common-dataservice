@@ -519,6 +519,8 @@ public class CdsControllerTest {
 			MLPPeer pr2 = client.getPeer(pr.getPeerId());
 			Assert.assertEquals(pr.getPeerId(), pr2.getPeerId());
 
+			Assert.assertEquals(0, client.getPeerSubscriptionCount(pr.getPeerId()));
+
 			MLPPeerSubscription ps = new MLPPeerSubscription(pr.getPeerId(), cu.getUserId(),
 					SubscriptionScopeCode.FL.name(), AccessTypeCode.PB.toString());
 			ps = client.createPeerSubscription(ps);
@@ -526,6 +528,9 @@ public class CdsControllerTest {
 
 			ps.setMaxArtifactSize(9999L);
 			client.updatePeerSubscription(ps);
+
+			long peerSubCount = client.getPeerSubscriptionCount(pr.getPeerId());
+			Assert.assertEquals(1, peerSubCount);
 
 			MLPPeerSubscription ps2 = client.getPeerSubscription(ps.getSubId());
 			Assert.assertNotNull(ps2);
@@ -3081,7 +3086,7 @@ public class CdsControllerTest {
 			logger.info("Update solution deployment failed on constraint as expected: {}",
 					ex.getResponseBodyAsString());
 		}
-		
+
 		try {
 			client.getSolutionAccessUsers("bogus sol ID");
 			throw new Exception("Unexpected success");
