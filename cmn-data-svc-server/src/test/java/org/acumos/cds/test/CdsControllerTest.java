@@ -1035,12 +1035,7 @@ public class CdsControllerTest {
 					new RestPageRequest(0, 5));
 			Assert.assertTrue(pubReqPage.getNumberOfElements() > 0);
 			client.deletePublishRequest(pubReq.getRequestId());
-			try {
-				client.getPublishRequest(pubReq.getRequestId());
-				throw new Exception("Unexpected find of deleted item");
-			} catch (HttpStatusCodeException ex) {
-				logger.info("Get of deleted pub req failed as expected");
-			}
+			Assert.assertNull(client.getPublishRequest(pubReq.getRequestId()));
 
 			if (cleanup) {
 				logger.info("Deleting newly created instances");
@@ -1068,13 +1063,7 @@ public class CdsControllerTest {
 				client.deleteUser(cu.getUserId());
 				client.deleteUser(inactiveUser.getUserId());
 
-				try {
-					MLPSolution deleted = client.getSolution(cs.getSolutionId());
-					throw new Exception("Found a deleted solution: " + deleted);
-				} catch (HttpClientErrorException ex) {
-					// this is expected, the item should not exist
-					logger.info("Caught expected exception: " + ex.getResponseBodyAsString());
-				}
+				Assert.assertNull(client.getSolution(cs.getSolutionId()));
 
 			} // cleanup
 
@@ -1317,18 +1306,8 @@ public class CdsControllerTest {
 		}
 
 		// invalid tests
-		try {
-			client.getUserNotificationPreferences("bogusUser");
-			throw new Exception("Unexpected success");
-		} catch (HttpStatusCodeException ex) {
-			logger.info("get user notification preferences failed as expected: {}", ex.getResponseBodyAsString());
-		}
-		try {
-			client.getUserNotificationPreference(99999L);
-			throw new Exception("Unexpected success");
-		} catch (HttpStatusCodeException ex) {
-			logger.info("get user notification preference failed as expected: {}", ex.getResponseBodyAsString());
-		}
+		Assert.assertTrue(client.getUserNotificationPreferences("bogusUser").isEmpty());
+		Assert.assertNull(client.getUserNotificationPreference(99999L));
 		try {
 			client.createUserNotificationPreference(new MLPUserNotifPref());
 			throw new Exception("Unexpected success");
@@ -1414,12 +1393,7 @@ public class CdsControllerTest {
 
 		// invalid tests
 
-		try {
-			client.getStepResult(99999L);
-			throw new Exception("Unexpected success");
-		} catch (HttpStatusCodeException ex) {
-			logger.info("get step result failed as expected: {}", ex.getResponseBodyAsString());
-		}
+		Assert.assertNull(client.getStepResult(99999L));
 		try {
 			HashMap<String, Object> restr = new HashMap<>();
 			client.searchStepResults(restr, true, new RestPageRequest(0, 1));
@@ -1473,12 +1447,7 @@ public class CdsControllerTest {
 	@Test
 	public void testSiteConfig() throws Exception {
 		final String s64 = "12345678901234567890123456789012345678901234567890123456789012345";
-		try {
-			client.getSiteConfig("bogus");
-			throw new Exception("Unexpected success on key=bogus");
-		} catch (HttpStatusCodeException ex) {
-			logger.info("Failed to get missing config as expected {}", ex.getResponseBodyAsString());
-		}
+		Assert.assertNull(client.getSiteConfig("bogus"));
 		try {
 			MLPSiteConfig sc = new MLPSiteConfig("bogus", "{ \"some\" : \"json\" }");
 			sc.setUserId("bogus");
@@ -1593,14 +1562,9 @@ public class CdsControllerTest {
 		} catch (HttpStatusCodeException ex) {
 			logger.info("Failed to create dupe as expected {}", ex.getResponseBodyAsString());
 		}
+		Assert.assertNull(client.getThread("bogus"));
 		MLPThread bogus = new MLPThread();
 		bogus.setThreadId("bogus");
-		try {
-			client.getThread("bogus");
-			throw new Exception("Unexpected success");
-		} catch (HttpStatusCodeException ex) {
-			logger.info("Failed to get missing as expected {}", ex.getResponseBodyAsString());
-		}
 		// Update of missing should fail
 		try {
 			client.updateThread(bogus);
@@ -1646,12 +1610,7 @@ public class CdsControllerTest {
 				cr.getRevisionId(), new RestPageRequest(0, 1));
 		Assert.assertTrue(commentsById != null && commentsById.getNumberOfElements() > 0);
 
-		try {
-			client.getComment("bogus", "bogus");
-			throw new Exception("Unexpected success");
-		} catch (HttpStatusCodeException ex) {
-			logger.info("Failed to get missing comment as expected {}", ex.getResponseBodyAsString());
-		}
+		Assert.assertNull(client.getComment("bogus", "bogus"));
 		try {
 			MLPComment c = new MLPComment("thread", "user", "text");
 			c.setParentId("bogus");
@@ -1850,18 +1809,8 @@ public class CdsControllerTest {
 		Assert.assertTrue(access == 0);
 
 		// Invalid cases
-		try {
-			client.getPeersInGroup(9999999L, new RestPageRequest());
-			throw new Exception("Unexpected success");
-		} catch (HttpStatusCodeException ex) {
-			logger.info("getPeersInGroup failed as expected: {}", ex.getResponseBodyAsString());
-		}
-		try {
-			client.getSolutionsInGroup(9999999L, new RestPageRequest());
-			throw new Exception("Unexpected success");
-		} catch (HttpStatusCodeException ex) {
-			logger.info("getSolutionsInGroup failed as expected: {}", ex.getResponseBodyAsString());
-		}
+		Assert.assertFalse(client.getPeersInGroup(9999999L, new RestPageRequest()).hasContent());
+		Assert.assertFalse(client.getSolutionsInGroup(9999999L, new RestPageRequest()).hasContent());
 		try {
 			MLPSolutionGroup sgx = new MLPSolutionGroup(solGrpName);
 			sgx.setGroupId(999L);
@@ -2033,12 +1982,7 @@ public class CdsControllerTest {
 		} catch (HttpStatusCodeException ex) {
 			logger.info("checkPeerSolutionAccess failed as expected: {}", ex.getResponseBodyAsString());
 		}
-		try {
-			client.getPeerAccess("bogus peer id");
-			throw new Exception("Unexpected success");
-		} catch (HttpStatusCodeException ex) {
-			logger.info("checkPeerSolutionAccess failed as expected: {}", ex.getResponseBodyAsString());
-		}
+		Assert.assertTrue(client.getPeerAccess("bogus peer id").isEmpty());
 
 		client.deleteSolutionGroup(sg.getGroupId());
 		client.deletePeerGroup(pg2.getGroupId());
@@ -2054,12 +1998,7 @@ public class CdsControllerTest {
 
 		MLPUser cu = new MLPUser();
 		cu.setUserId(UUID.randomUUID().toString());
-		try {
-			client.getUser(cu.getUserId());
-			throw new Exception("Unexpected success");
-		} catch (HttpStatusCodeException ex) {
-			logger.info("Get user failed as expected: {}", ex.getResponseBodyAsString());
-		}
+		Assert.assertNull(client.getUser(cu.getUserId()));
 		try {
 			client.deleteUser(cu.getUserId());
 			throw new Exception("Unexpected success");
@@ -2244,17 +2183,12 @@ public class CdsControllerTest {
 		}
 		MLPRole crCustomId = new MLPRole();
 		crCustomId.setRoleId(UUID.randomUUID().toString());
-		try {
-			client.getRole(crCustomId.getRoleId());
-			throw new Exception("Unexpected success");
-		} catch (HttpStatusCodeException ex) {
-			logger.info("Get missing role failed as expected: {}", ex.getResponseBodyAsString());
-		}
+		Assert.assertNull(client.getRole(crCustomId.getRoleId()));
 		try {
 			client.deleteRole(crCustomId.getRoleId());
 			throw new Exception("Unexpected success");
 		} catch (HttpStatusCodeException ex) {
-			logger.info("Delete  missing role failed as expected: {}", ex.getResponseBodyAsString());
+			logger.info("Delete missing role failed as expected: {}", ex.getResponseBodyAsString());
 		}
 		try {
 			client.createRole(crCustomId);
@@ -2352,24 +2286,7 @@ public class CdsControllerTest {
 			throw ex;
 		}
 
-		try {
-			client.getUserLoginProvider("bogusUser", "bogusCode", "bogusLogin");
-			throw new Exception("Unexpected success");
-		} catch (HttpStatusCodeException ex) {
-			logger.info("getUserLoginProvider failed on bad user as expected {}", ex.getResponseBodyAsString());
-		}
-		try {
-			client.getUserLoginProvider(cu.getUserId(), "bogusCode", "bogusLogin");
-			throw new Exception("Unexpected success");
-		} catch (HttpStatusCodeException ex) {
-			logger.info("getUserLoginProvider failed on bad code as expected {}", ex.getResponseBodyAsString());
-		}
-		try {
-			client.getUserLoginProvider(cu.getUserId(), LoginProviderCode.FB.name(), "bogusLogin");
-			throw new Exception("Unexpected success");
-		} catch (HttpStatusCodeException ex) {
-			logger.info("getUserLoginProvider failed on bad login as expected {}", ex.getResponseBodyAsString());
-		}
+		Assert.assertNull(client.getUserLoginProvider("bogusUser", "bogusCode", "bogusLogin"));
 		try {
 			client.createUserLoginProvider(new MLPUserLoginProvider("bogus", "bogus", "something", "access token", 1));
 			throw new Exception("Unexpected success");
@@ -2449,12 +2366,7 @@ public class CdsControllerTest {
 
 		MLPSolution cs = new MLPSolution();
 		cs.setSolutionId(UUID.randomUUID().toString());
-		try {
-			client.getSolution(cs.getSolutionId());
-			throw new Exception("Unexpected success");
-		} catch (HttpStatusCodeException ex) {
-			logger.info("Get solution failed as expected: {}", ex.getResponseBodyAsString());
-		}
+		Assert.assertNull(client.getSolution(cs.getSolutionId()));
 		try {
 			client.deleteSolution(cs.getSolutionId());
 			throw new Exception("Unexpected success");
@@ -2533,12 +2445,7 @@ public class CdsControllerTest {
 		MLPSolutionRevision csr = new MLPSolutionRevision();
 		csr.setRevisionId(UUID.randomUUID().toString());
 		csr.setSolutionId("bogus");
-		try {
-			client.getSolutionRevision(cs.getSolutionId(), csr.getRevisionId());
-			throw new Exception("Unexpected success");
-		} catch (HttpStatusCodeException ex) {
-			logger.info("Get solution revision failed as expected: {}", ex.getResponseBodyAsString());
-		}
+		Assert.assertNull(client.getSolutionRevision(cs.getSolutionId(), csr.getRevisionId()));
 		try {
 			client.deleteSolutionRevision("bogus", "bogus");
 			throw new Exception("Unexpected success");
@@ -2724,12 +2631,7 @@ public class CdsControllerTest {
 
 		MLPArtifact ca = new MLPArtifact();
 		ca.setArtifactId(UUID.randomUUID().toString());
-		try {
-			client.getArtifact(ca.getArtifactId());
-			throw new Exception("Unexpected success");
-		} catch (HttpStatusCodeException ex) {
-			logger.info("Get artifact failed as expected: {}", ex.getResponseBodyAsString());
-		}
+		Assert.assertNull(client.getArtifact(ca.getArtifactId()));
 		try {
 			client.deleteArtifact(ca.getArtifactId());
 			throw new Exception("Unexpected success");
@@ -2813,43 +2715,12 @@ public class CdsControllerTest {
 		} catch (HttpStatusCodeException ex) {
 			logger.info("Increment soln view count failed as expected: {}", ex.getResponseBodyAsString());
 		}
-		try {
-			client.getSolutionDownloads("bogus", new RestPageRequest(0, 1));
-			throw new Exception("Unexpected success");
-		} catch (HttpStatusCodeException ex) {
-			logger.info("Get solution downloads failed as expected: {}", ex.getResponseBodyAsString());
-		}
-		try {
-			client.getSolutionRatings("bogus", new RestPageRequest(0, 1));
-			throw new Exception("Unexpected success");
-		} catch (HttpStatusCodeException ex) {
-			logger.info("Get solution ratings failed as expected: {}", ex.getResponseBodyAsString());
-		}
-		try {
-			client.getSolutionRating("bogus", "bogus");
-			throw new Exception("Unexpected success");
-		} catch (HttpStatusCodeException ex) {
-			logger.info("Get solution rating failed as expected: {}", ex.getResponseBodyAsString());
-		}
-		try {
-			client.getSolutionRevisionsForArtifact("bogus");
-			throw new Exception("Unexpected success");
-		} catch (HttpStatusCodeException ex) {
-			logger.info("Get solution revisions failed as expected: {}", ex.getResponseBodyAsString());
-		}
-		try {
-			client.getSolutionValidations("bogus", "bogus");
-			throw new Exception("Unexpected success");
-		} catch (HttpStatusCodeException ex) {
-			logger.info("Get solution validations failed as expected: {}", ex.getResponseBodyAsString());
-		}
-		try {
-			client.getSolutionWebMetadata("bogus");
-			throw new Exception("Unexpected success");
-		} catch (HttpStatusCodeException ex) {
-			logger.info("Get solution web meta failed as expected: {}", ex.getResponseBodyAsString());
-		}
-
+		Assert.assertFalse(client.getSolutionDownloads("bogus", new RestPageRequest(0, 1)).hasContent());
+		Assert.assertFalse(client.getSolutionRatings("bogus", new RestPageRequest(0, 1)).hasContent());
+		Assert.assertNull(client.getSolutionRating("bogus", "bogus"));
+		Assert.assertTrue(client.getSolutionRevisionsForArtifact("bogus").isEmpty());
+		Assert.assertTrue(client.getSolutionValidations("bogus", "bogus").isEmpty());
+		Assert.assertNull(client.getSolutionWebMetadata("bogus"));
 		try {
 			MLPValidationSequence seq = new MLPValidationSequence(0, s64);
 			client.createValidationSequence(seq);
@@ -2932,7 +2803,7 @@ public class CdsControllerTest {
 			client.dropSolutionTag(cs.getSolutionId(), "bogus");
 			throw new Exception("Unexpected success");
 		} catch (HttpStatusCodeException ex) {
-			logger.info("Drop tag failedon invalid tag  as expected: {}", ex.getResponseBodyAsString());
+			logger.info("Drop tag failedon invalid tag as expected: {}", ex.getResponseBodyAsString());
 		}
 		client.deleteTag(ct);
 
@@ -2994,18 +2865,7 @@ public class CdsControllerTest {
 			logger.info("Update rating failed on constraint as expected: {}", ex.getResponseBodyAsString());
 		}
 
-		try {
-			client.getSolutionDeployments("bogus", "bogus", new RestPageRequest());
-			throw new Exception("Unexpected success");
-		} catch (HttpStatusCodeException ex) {
-			logger.info("Get solution deployments failed on bad sol ID as expected: {}", ex.getResponseBodyAsString());
-		}
-		try {
-			client.getSolutionDeployments(cs.getSolutionId(), "bogus", new RestPageRequest());
-			throw new Exception("Unexpected success");
-		} catch (HttpStatusCodeException ex) {
-			logger.info("Get solution deployments failed on bad rev ID as expected: {}", ex.getResponseBodyAsString());
-		}
+		Assert.assertFalse(client.getSolutionDeployments("bogus", "bogus", new RestPageRequest()).hasContent());
 		try {
 			client.createSolutionDeployment(new MLPSolutionDeployment("bogus", csr.getRevisionId(), cu.getUserId(),
 					DeploymentStatusCode.DP.name()));
@@ -3081,13 +2941,8 @@ public class CdsControllerTest {
 			logger.info("Update solution deployment failed on constraint as expected: {}",
 					ex.getResponseBodyAsString());
 		}
-		
-		try {
-			client.getSolutionAccessUsers("bogus sol ID");
-			throw new Exception("Unexpected success");
-		} catch (HttpStatusCodeException ex) {
-			logger.info("getSolutionAccessUsers failed as expected: {}", ex.getResponseBodyAsString());
-		}
+
+		Assert.assertTrue(client.getSolutionAccessUsers("bogus sol ID").isEmpty());
 		try {
 			client.addSolutionUserAccess(cs.getSolutionId(), "bogus");
 			throw new Exception("Unexpected success");
@@ -3162,12 +3017,7 @@ public class CdsControllerTest {
 
 		MLPPeer cp = new MLPPeer();
 		cp.setPeerId(UUID.randomUUID().toString());
-		try {
-			client.getPeer(cp.getPeerId());
-			throw new Exception("Unexpected success");
-		} catch (HttpStatusCodeException ex) {
-			logger.info("Get peer failed as expected: {}", ex.getResponseBodyAsString());
-		}
+		Assert.assertNull(client.getPeer(cp.getPeerId()));
 		try {
 			client.deletePeer(cp.getPeerId());
 			throw new Exception("Unexpected success");
@@ -3235,18 +3085,8 @@ public class CdsControllerTest {
 			logger.info("Update peer failed on constraint as expected: {}", ex.getResponseBodyAsString());
 		}
 
-		try {
-			client.getPeerSubscriptions("bogus");
-			throw new Exception("Unexpected success");
-		} catch (HttpStatusCodeException ex) {
-			logger.info("Get peer subs failed as expected: {}", ex.getResponseBodyAsString());
-		}
-		try {
-			client.getPeerSubscription(0L);
-			throw new Exception("Unexpected success");
-		} catch (HttpStatusCodeException ex) {
-			logger.info("Get peer sub failed as expected: {}", ex.getResponseBodyAsString());
-		}
+		Assert.assertTrue(client.getPeerSubscriptions("bogus").isEmpty());
+		Assert.assertNull(client.getPeerSubscription(0L));
 		try {
 			client.createPeerSubscription(new MLPPeerSubscription("peerId", "userId", "scope", "access"));
 			throw new Exception("Unexpected success");
@@ -3364,33 +3204,9 @@ public class CdsControllerTest {
 		} catch (HttpStatusCodeException ex) {
 			logger.info("Add user to notif failed as expected: {}", ex.getResponseBodyAsString());
 		}
+		Assert.assertFalse(client.getUserSolutionDeployments("solId", "revId", "userId", new RestPageRequest(0, 1)).hasContent());
 
-		try {
-			client.getUserSolutionDeployments("solId", "revId", "userId", new RestPageRequest(0, 1));
-			throw new Exception("Unexpected success");
-		} catch (HttpStatusCodeException ex) {
-			logger.info("Get user soln deps failed on bad sol id as expected: {}", ex.getResponseBodyAsString());
-		}
-		try {
-			client.getUserSolutionDeployments(cs.getSolutionId(), "revId", "userId", new RestPageRequest(0, 1));
-			throw new Exception("Unexpected success");
-		} catch (HttpStatusCodeException ex) {
-			logger.info("Get user soln deps failed on bad rev id as expected: {}", ex.getResponseBodyAsString());
-		}
-		try {
-			client.getUserSolutionDeployments(cs.getSolutionId(), csr.getRevisionId(), "userId",
-					new RestPageRequest(0, 1));
-			throw new Exception("Unexpected success");
-		} catch (HttpStatusCodeException ex) {
-			logger.info("Get user soln deps failed on bad user id as expected: {}", ex.getResponseBodyAsString());
-		}
-
-		try {
-			client.getPublishRequest(99999L);
-			throw new Exception("Unexpected success");
-		} catch (HttpStatusCodeException ex) {
-			logger.info("get publish request failed as expected: {}", ex.getResponseBodyAsString());
-		}
+		Assert.assertNull(client.getPublishRequest(99999L));
 		try {
 			HashMap<String, Object> restr = new HashMap<>();
 			client.searchPublishRequests(restr, true, new RestPageRequest(0, 1));
@@ -3433,12 +3249,7 @@ public class CdsControllerTest {
 		} catch (HttpStatusCodeException ex) {
 			logger.info("delete publish request failed as expected: {}", ex.getResponseBodyAsString());
 		}
-		try {
-			client.getDocument("bogus");
-			throw new Exception("Unexpected success");
-		} catch (HttpStatusCodeException ex) {
-			logger.info("get document failed as expected: {}", ex.getResponseBodyAsString());
-		}
+		Assert.assertNull(client.getDocument("bogus"));
 		try {
 			MLPDocument doc = new MLPDocument("name", "uri", 100, "bogusUserId");
 			client.updateDocument(doc);

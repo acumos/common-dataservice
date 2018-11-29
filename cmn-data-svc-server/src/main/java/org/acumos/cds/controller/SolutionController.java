@@ -94,6 +94,15 @@ import io.swagger.annotations.ApiResponses;
  * A solution is a collection of revisions. A revision points to a collection of
  * artifacts. A revision cannot exist without a solution, but a solution can
  * exist without a revision (altho it will not be found by searches).
+ * <P>
+ * Validation design decisions:
+ * <OL>
+ * <LI>Keep queries fast, so check nothing on read.</LI>
+ * <LI>Provide useful messages on failure, so check everything on write.</LI>
+ * <LI>Also see:
+ * https://stackoverflow.com/questions/942951/rest-api-error-return-good-practices
+ * </LI>
+ * </OL>
  */
 @RestController
 @RequestMapping(value = "/" + CCDSConstants.SOLUTION_PATH, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -181,28 +190,35 @@ public class SolutionController extends AbstractController {
 		return new CountTransport(count);
 	}
 
-	@ApiOperation(value = "Gets a page of solutions, optionally sorted.", response = MLPSolution.class, responseContainer = "Page")
+	@ApiOperation(value = "Gets the solution for the specified ID. Returns null if the ID is not found.", //
+			response = MLPSolution.class)
+	@RequestMapping(value = "/{solutionId}", method = RequestMethod.GET)
+	public MLPSolution getSolution(@PathVariable("solutionId") String solutionId) {
+		logger.debug("getSolution: ID {}", solutionId);
+		return solutionRepository.findOne(solutionId);
+	}
+
+	@ApiOperation(value = "Gets a page of solutions, optionally sorted. Answers empty if none are found.", response = MLPSolution.class, responseContainer = "Page")
 	@ApiPageable
 	@RequestMapping(method = RequestMethod.GET)
-	public Page<MLPSolution> getSolutions(Pageable pageable, HttpServletResponse response) {
+	public Page<MLPSolution> getSolutions(Pageable pageable) {
 		logger.debug("getSolutions {}", pageable);
 		return solutionRepository.findAll(pageable);
 	}
 
-	@ApiOperation(value = "Searches for entities with names or descriptions that contain the search term using the like operator.", //
+	@ApiOperation(value = "Searches for entities with names or descriptions that contain the search term using the like operator. Answers empty if none are found.", //
 			response = MLPSolution.class, responseContainer = "Page")
 	@RequestMapping(value = "/" + CCDSConstants.SEARCH_PATH + "/" + CCDSConstants.LIKE_PATH, method = RequestMethod.GET)
 	public Page<MLPSolution> findSolutionsByLikeKeyword(@RequestParam(CCDSConstants.TERM_PATH) String term,
-			Pageable pageRequest, HttpServletResponse response) {
+			Pageable pageRequest) {
 		logger.debug("findSolutionsByLikeKeyword {}", term);
 		return solutionRepository.findBySearchTerm(term, pageRequest);
 	}
 
-	@ApiOperation(value = "Gets a page of solutions matching the specified tag.", response = MLPSolution.class, responseContainer = "Page")
+	@ApiOperation(value = "Gets a page of solutions matching the specified tag. Answers empty if none are found.", response = MLPSolution.class, responseContainer = "Page")
 	@ApiPageable
 	@RequestMapping(value = "/" + CCDSConstants.SEARCH_PATH + "/" + CCDSConstants.TAG_PATH, method = RequestMethod.GET)
-	public Object findSolutionsByTag(@RequestParam("tag") String tag, Pageable pageRequest,
-			HttpServletResponse response) {
+	public Object findSolutionsByTag(@RequestParam("tag") String tag, Pageable pageRequest) {
 		logger.debug("findSolutionsByTag {}", tag);
 		return solutionRepository.findByTag(tag, pageRequest);
 	}
@@ -444,22 +460,6 @@ public class SolutionController extends AbstractController {
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST,
 					ex.getCause() != null ? ex.getCause().getMessage() : "findSolutionsByDate failed", ex);
 		}
-
-	}
-
-	@ApiOperation(value = "Gets the solution for the specified ID. Returns bad request if the ID is not found.", //
-			response = MLPSolution.class)
-	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
-	@RequestMapping(value = "/{solutionId}", method = RequestMethod.GET)
-	public Object getSolution(@PathVariable("solutionId") String solutionId, HttpServletResponse response) {
-		logger.debug("getSolution: ID {}", solutionId);
-		MLPSolution da = solutionRepository.findOne(solutionId);
-		if (da == null) {
-			logger.warn("getSolution failed on ID {}", solutionId);
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + solutionId, null);
-		}
-		return da;
 	}
 
 	@ApiOperation(value = "Creates a new entity and generates an ID if needed. Returns bad request on constraint violation etc.", //
@@ -613,7 +613,7 @@ public class SolutionController extends AbstractController {
 	 * Spring will split the list if the path variable is declared as String array
 	 * or List of String.
 	 */
-	@ApiOperation(value = "Gets a list of revisions for the specified solution IDs.", //
+	@ApiOperation(value = "Gets all revisions for the specified solution IDs. Answers empty if none are found.", //
 			response = MLPSolutionRevision.class, responseContainer = "List")
 	@RequestMapping(value = "/{solutionId}/" + CCDSConstants.REVISION_PATH, method = RequestMethod.GET)
 	public Iterable<MLPSolutionRevision> getListOfRevisions(@PathVariable("solutionId") String[] solutionIds) {
@@ -621,24 +621,17 @@ public class SolutionController extends AbstractController {
 		return solutionRevisionRepository.findBySolutionIdIn(solutionIds);
 	}
 
-	@ApiOperation(value = "Gets the revision for the specified ID. Returns bad request if the ID is not found.", //
+	@ApiOperation(value = "Gets the revision for the specified ID. Returns null if the ID is not found.", //
 			response = MLPSolution.class)
-	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{solutionId}/" + CCDSConstants.REVISION_PATH
 			+ "/{revisionId}", method = RequestMethod.GET)
-	public Object getSolutionRevision(@PathVariable("solutionId") String solutionId,
-			@PathVariable("revisionId") String revisionId, HttpServletResponse response) {
+	public MLPSolutionRevision getSolutionRevision(@PathVariable("solutionId") String solutionId,
+			@PathVariable("revisionId") String revisionId) {
 		logger.debug("getSolutionRevision: solutionId {} revisionId {}", solutionId, revisionId);
-		MLPSolutionRevision da = solutionRevisionRepository.findOne(revisionId);
-		if (da == null) {
-			logger.warn("getSolutionRevision failed on ID {}", revisionId);
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + revisionId, null);
-		}
-		return da;
+		return solutionRevisionRepository.findOne(revisionId);
 	}
 
-	@ApiOperation(value = "Creates a new solution revision and generates an ID if needed. Returns bad request on constraint violation etc.", //
+	@ApiOperation(value = "Creates a new revision and generates an ID if needed. Returns bad request on constraint violation etc.", //
 			response = MLPSolutionRevision.class)
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{solutionId}/" + CCDSConstants.REVISION_PATH, method = RequestMethod.POST)
@@ -677,7 +670,7 @@ public class SolutionController extends AbstractController {
 		}
 	}
 
-	@ApiOperation(value = "Updates an existing entity with the supplied data. Returns bad request on constraint violation etc.", //
+	@ApiOperation(value = "Updates an existing revision with the supplied data. Returns bad request on constraint violation etc.", //
 			response = SuccessTransport.class)
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{solutionId}/" + CCDSConstants.REVISION_PATH
@@ -715,7 +708,7 @@ public class SolutionController extends AbstractController {
 		}
 	}
 
-	@ApiOperation(value = "Deletes the entity with the specified ID. Returns bad request if the ID is not found.", //
+	@ApiOperation(value = "Deletes the revision with the specified ID. Returns bad request if the ID is not found.", //
 			response = SuccessTransport.class)
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{solutionId}/" + CCDSConstants.REVISION_PATH
@@ -734,14 +727,14 @@ public class SolutionController extends AbstractController {
 		}
 	}
 
-	@ApiOperation(value = "Gets a list of tags for the specified solution.", response = MLPTag.class, responseContainer = "List")
+	@ApiOperation(value = "Gets all tags for the specified solution. Answers empty if none are found.", response = MLPTag.class, responseContainer = "List")
 	@RequestMapping(value = "/{solutionId}/" + CCDSConstants.TAG_PATH, method = RequestMethod.GET)
 	public Iterable<MLPTag> getTagsForSolution(@PathVariable("solutionId") String solutionId) {
 		logger.debug("getTagsForSolution: solutionId {}", solutionId);
 		return tagRepository.findBySolution(solutionId);
 	}
 
-	@ApiOperation(value = "Adds a tag to the solution. Returns bad request if the ID is not found.", //
+	@ApiOperation(value = "Adds a tag to the solution. Creates the tag if necessary. Returns bad request if the solution ID is not found.", //
 			response = SuccessTransport.class)
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{solutionId}/" + CCDSConstants.TAG_PATH + "/{tag}", method = RequestMethod.POST)
@@ -766,7 +759,7 @@ public class SolutionController extends AbstractController {
 		return new SuccessTransport(HttpServletResponse.SC_OK, null);
 	}
 
-	@ApiOperation(value = "Drops a tag from the solution. Returns bad request if not found.", //
+	@ApiOperation(value = "Drops a tag from the solution. Returns bad request if either is not found.", //
 			response = SuccessTransport.class)
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{solutionId}/" + CCDSConstants.TAG_PATH + "/{tag}", method = RequestMethod.DELETE)
@@ -784,19 +777,13 @@ public class SolutionController extends AbstractController {
 		}
 	}
 
-	@ApiOperation(value = "Gets a page of download records for the specified solution ID. Returns bad request if the ID is not found.", //
+	@ApiOperation(value = "Gets a page of download records for the specified solution ID. Returns empty if none are found.", //
 			response = MLPSolutionDownload.class, responseContainer = "Page")
 	@ApiPageable
-	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{solutionId}/" + CCDSConstants.DOWNLOAD_PATH, method = RequestMethod.GET)
-	public Object getSolutionDownloads(@PathVariable("solutionId") String solutionId, Pageable pageRequest,
-			HttpServletResponse response) {
+	public Page<MLPSolutionDownload> getSolutionDownloads(@PathVariable("solutionId") String solutionId,
+			Pageable pageRequest, HttpServletResponse response) {
 		logger.debug("getSolutionDownloads: solutionId {}", solutionId);
-		if (solutionRepository.findOne(solutionId) == null) {
-			logger.warn("getSolutionDownloads failed on sol ID {}", solutionId);
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + solutionId, null);
-		}
 		return solutionDownloadRepository.findBySolutionId(solutionId, pageRequest);
 	}
 
@@ -830,7 +817,7 @@ public class SolutionController extends AbstractController {
 		}
 	}
 
-	@ApiOperation(value = "Deletes the entity with the specified ID. Returns bad request if the ID is not found.", //
+	@ApiOperation(value = "Deletes the download with the specified ID. Returns bad request if the ID is not found.", //
 			response = SuccessTransport.class)
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{solutionId}/" + CCDSConstants.DOWNLOAD_PATH
@@ -851,37 +838,23 @@ public class SolutionController extends AbstractController {
 		}
 	}
 
-	@ApiOperation(value = "Gets all user ratings for the specified solution. Returns bad request if the ID is not found.", //
+	@ApiOperation(value = "Gets a page of user ratings for the specified solution. Returns empty if none are found.", //
 			response = MLPSolutionRating.class, responseContainer = "List")
-	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{solutionId}/" + CCDSConstants.RATING_PATH, method = RequestMethod.GET)
-	public Object getListOfSolutionRating(@PathVariable("solutionId") String solutionId, Pageable pageRequest,
-			HttpServletResponse response) {
+	public Object getListOfSolutionRating(@PathVariable("solutionId") String solutionId, Pageable pageRequest) {
 		logger.debug("getListOfSolutionRating: solutionId {}", solutionId);
-		if (solutionRepository.findOne(solutionId) == null) {
-			logger.warn("getListOfSolutionRating failed on sol ID {}", solutionId);
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + solutionId, null);
-		}
 		return solutionRatingRepository.findBySolutionId(solutionId, pageRequest);
 	}
 
-	@ApiOperation(value = "Gets an existing solution rating. Returns bad request if the ID is not found", //
+	@ApiOperation(value = "Gets an existing solution rating. Returns null if not found", //
 			response = MLPSolutionRating.class)
-	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{solutionId}/" + CCDSConstants.RATING_PATH + "/" + CCDSConstants.USER_PATH
 			+ "/{userId}", method = RequestMethod.GET)
-	public Object getSolutionRating(@PathVariable("solutionId") String solutionId,
+	public MLPSolutionRating getSolutionRating(@PathVariable("solutionId") String solutionId,
 			@PathVariable("userId") String userId, HttpServletResponse response) {
 		logger.debug("getSolutionRating: solutionId {} userId {}", solutionId, userId);
 		SolutionRatingPK pk = new SolutionRatingPK(solutionId, userId);
-		MLPSolutionRating da = solutionRatingRepository.findOne(pk);
-		if (da == null) {
-			logger.warn("getSolutionRating failed on key {}", pk);
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + pk);
-		}
-		return da;
+		return solutionRatingRepository.findOne(pk);
 	}
 
 	@ApiOperation(value = "Creates a new solution rating. Returns bad request on constrain violation etc.", response = MLPSolutionRating.class)
@@ -912,7 +885,6 @@ public class SolutionController extends AbstractController {
 			updateSolutionRatingStats(solutionId);
 			return result;
 		} catch (Exception ex) {
-			// e.g., EmptyResultDataAccessException is NOT an internal server error
 			Exception cve = findConstraintViolationException(ex);
 			logger.warn("createSolutionRating failed: {}", cve.toString());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -945,7 +917,6 @@ public class SolutionController extends AbstractController {
 			updateSolutionRatingStats(solutionId);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
-			// e.g., EmptyResultDataAccessException is NOT an internal server error
 			Exception cve = findConstraintViolationException(ex);
 			logger.warn("updateSolutionRating failed: {}", cve.toString());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -953,7 +924,7 @@ public class SolutionController extends AbstractController {
 		}
 	}
 
-	@ApiOperation(value = "Deletes the entity with the specified ID. Returns bad request if the ID is not found.", //
+	@ApiOperation(value = "Deletes the rating with the specified ID. Returns bad request if the ID is not found.", //
 			response = SuccessTransport.class)
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{solutionId}/" + CCDSConstants.RATING_PATH + "/" + CCDSConstants.USER_PATH
@@ -976,32 +947,20 @@ public class SolutionController extends AbstractController {
 		}
 	}
 
-	@ApiOperation(value = "Gets web metadata for the specified solution including average rating and total download count. Returns bad request if the ID is not found.", //
+	@ApiOperation(value = "Gets web metadata for the specified solution including average rating and total download count. Returns null if the ID is not found.", //
 			response = MLPSolutionWeb.class)
-	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{solutionId}/" + CCDSConstants.WEB_PATH, method = RequestMethod.GET)
-	public Object getSolutionWebStats(@PathVariable("solutionId") String solutionId, HttpServletResponse response) {
+	public MLPSolutionWeb getSolutionWebStats(@PathVariable("solutionId") String solutionId) {
 		logger.debug("getSolutionWebStats: solutionId {}", solutionId);
-		MLPSolutionWeb stats = solutionWebRepository.findOne(solutionId);
-		if (stats == null) {
-			logger.warn("getSolutionWebStats failed on ID {}", solutionId);
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + solutionId, null);
-		}
-		return stats;
+		return solutionWebRepository.findOne(solutionId);
 	}
 
-	@ApiOperation(value = "Gets access-control list of users for the specified solution.", //
+	@ApiOperation(value = "Gets access-control list of users for the specified solution. Answers empty if none are found.", //
 			response = MLPUser.class, responseContainer = "List")
 	@RequestMapping(value = "/{solutionId}/" + CCDSConstants.USER_PATH + "/"
 			+ CCDSConstants.ACCESS_PATH, method = RequestMethod.GET)
-	public Object getSolutionACL(@PathVariable("solutionId") String solutionId, HttpServletResponse response) {
+	public Iterable<MLPUser> getSolutionACL(@PathVariable("solutionId") String solutionId) {
 		logger.debug("getSolutionACL: solutionId {}", solutionId);
-		if (solutionRepository.findOne(solutionId) == null) {
-			logger.warn("getSolutionACL failed on sol ID {}", solutionId);
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + solutionId, null);
-		}
 		return solUserAccMapRepository.getUsersForSolution(solutionId);
 	}
 
@@ -1047,8 +1006,8 @@ public class SolutionController extends AbstractController {
 
 	}
 
-	@ApiOperation(value = "Gets a page of solutions with the specified user in the ACL, optionally sorted on fields.", //
-			response = MLPSolution.class, responseContainer = "List")
+	@ApiOperation(value = "Gets a page of solutions with the specified user in the ACL, optionally sorted on fields. Answers empty if none are found.", //
+			response = MLPSolution.class, responseContainer = "Page")
 	@ApiPageable
 	@RequestMapping(value = CCDSConstants.USER_PATH + "/{userId}/"
 			+ CCDSConstants.ACCESS_PATH, method = RequestMethod.GET)
@@ -1058,22 +1017,14 @@ public class SolutionController extends AbstractController {
 		return solUserAccMapRepository.getSolutionsForUser(userId, pageable);
 	}
 
-	@ApiOperation(value = "Gets validation results for the specified solution and revision. Returns bad request if an ID is not found", //
+	@ApiOperation(value = "Gets validation results for the specified solution and revision. Returns empty if an ID is not found", //
 			response = MLPSolutionValidation.class, responseContainer = "List")
-	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{solutionId}/" + CCDSConstants.REVISION_PATH + "/{revisionId}/"
 			+ CCDSConstants.VALIDATION_PATH, method = RequestMethod.GET)
-	public Object getListOfSolutionValidations(@PathVariable("solutionId") String solutionId,
+	public Iterable<MLPSolutionValidation> getListOfSolutionValidations(@PathVariable("solutionId") String solutionId,
 			@PathVariable("revisionId") String revisionId, HttpServletResponse response) {
 		logger.debug("getListOfSolutionValidations: solutionId {} revisionId {}", solutionId, revisionId);
-		Iterable<MLPSolutionValidation> items = solutionValidationRepository.findBySolutionIdAndRevisionId(solutionId,
-				revisionId);
-		if (items == null || !items.iterator().hasNext()) {
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST,
-					NO_ENTRY_WITH_ID + solutionId + ", " + revisionId, null);
-		}
-		return items;
+		return solutionValidationRepository.findBySolutionIdAndRevisionId(solutionId, revisionId);
 	}
 
 	@ApiOperation(value = "Creates a new solution validation record. Returns bad request if an ID is not found.", response = MLPSolutionValidation.class)
@@ -1109,7 +1060,6 @@ public class SolutionController extends AbstractController {
 							+ revisionId + "/" + CCDSConstants.VALIDATION_PATH + "/" + taskId);
 			return result;
 		} catch (Exception ex) {
-			// e.g., EmptyResultDataAccessException is NOT an internal server error
 			Exception cve = findConstraintViolationException(ex);
 			logger.warn("createSolutionValidation failed: {}", cve.toString());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -1146,7 +1096,6 @@ public class SolutionController extends AbstractController {
 			solutionValidationRepository.save(sv);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
-			// e.g., EmptyResultDataAccessException is NOT an internal server error
 			Exception cve = findConstraintViolationException(ex);
 			logger.warn("updateSolutionValidation failed: {}", cve.toString());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -1175,54 +1124,28 @@ public class SolutionController extends AbstractController {
 		}
 	}
 
-	@ApiOperation(value = "Gets the deployments for the specified solution and revision IDs. Returns bad request if an ID is not found.", //
+	@ApiOperation(value = "Gets a page of deployments for the specified solution and revision IDs. Returns empty if none are found.", //
 			response = MLPSolutionDeployment.class, responseContainer = "Page")
 	@ApiPageable
-	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{solutionId}/" + CCDSConstants.REVISION_PATH + "/{revisionId}/"
 			+ CCDSConstants.DEPLOY_PATH, method = RequestMethod.GET)
-	public Object getSolutionDeployments(@PathVariable("solutionId") String solutionId,
-			@PathVariable("revisionId") String revisionId, Pageable pageRequest, HttpServletResponse response) {
+	public Page<MLPSolutionDeployment> getSolutionDeployments(@PathVariable("solutionId") String solutionId,
+			@PathVariable("revisionId") String revisionId, Pageable pageRequest) {
 		logger.debug("getSolutionDeployments: solutionId {} revisionId {}", solutionId, revisionId);
-		if (solutionRepository.findOne(solutionId) == null) {
-			logger.warn("getSolutionDeployments failed on sol ID {}", solutionId);
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + solutionId, null);
-		}
-		if (solutionRevisionRepository.findOne(revisionId) == null) {
-			logger.warn("getSolutionDeployments failed on rev ID {}", revisionId);
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + revisionId, null);
-		}
 		return solutionDeploymentRepository.findBySolutionIdAndRevisionId(solutionId, revisionId, pageRequest);
 	}
 
-	@ApiOperation(value = "Gets the deployments for the specified solution, revision and user IDs. Returns bad request if an ID is not found.", //
+	@ApiOperation(value = "Gets a page of deployments for the specified solution, revision and user IDs. Returns empty if none are found.", //
 			response = MLPSolutionDeployment.class, responseContainer = "Page")
 	@ApiPageable
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{solutionId}/" + CCDSConstants.REVISION_PATH + "/{revisionId}/" + CCDSConstants.USER_PATH
 			+ "/{userId}/" + CCDSConstants.DEPLOY_PATH, method = RequestMethod.GET)
 	public Object getUserSolutionRevisionDeployments(@PathVariable("solutionId") String solutionId,
-			@PathVariable("revisionId") String revisionId, @PathVariable("userId") String userId, Pageable pageRequest,
-			HttpServletResponse response) {
+			@PathVariable("revisionId") String revisionId, @PathVariable("userId") String userId,
+			Pageable pageRequest) {
 		logger.debug("getUserSolutionRevisionDeployments: solutionId {} revisionId {} userId {}", solutionId,
 				revisionId, userId);
-		if (solutionRepository.findOne(solutionId) == null) {
-			logger.warn("getUserSolutionRevisionDeployments failed on sol ID {}", solutionId);
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + solutionId, null);
-		}
-		if (solutionRevisionRepository.findOne(revisionId) == null) {
-			logger.warn("getUserSolutionRevisionDeployments failed on rev ID {}", revisionId);
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + revisionId, null);
-		}
-		if (userRepository.findOne(userId) == null) {
-			logger.warn("getUserSolutionRevisionDeployments failed on usr ID {}", userId);
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + userId, null);
-		}
 		return solutionDeploymentRepository.findBySolutionIdAndRevisionIdAndUserId(solutionId, revisionId, userId,
 				pageRequest);
 	}
@@ -1284,7 +1207,7 @@ public class SolutionController extends AbstractController {
 		}
 	}
 
-	@ApiOperation(value = "Updates an existing entity with the supplied data. Returns bad request on constraint violation etc.", //
+	@ApiOperation(value = "Updates an existing deployment record with the supplied data. Returns bad request on constraint violation etc.", //
 			response = SuccessTransport.class)
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{solutionId}/" + CCDSConstants.REVISION_PATH + "/{revisionId}/"
@@ -1316,7 +1239,7 @@ public class SolutionController extends AbstractController {
 		}
 	}
 
-	@ApiOperation(value = "Deletes the entity with the specified ID. Returns bad request if the ID is not found.", //
+	@ApiOperation(value = "Deletes the deployment record with the specified ID. Returns bad request if the ID is not found.", //
 			response = SuccessTransport.class)
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{solutionId}/" + CCDSConstants.REVISION_PATH + "/{revisionId}/"
@@ -1337,7 +1260,7 @@ public class SolutionController extends AbstractController {
 		}
 	}
 
-	@ApiOperation(value = "Gets a list of child solution IDs used in the specified composite solution.", //
+	@ApiOperation(value = "Gets all child solution IDs used in the specified composite solution. Answers empty if none are found.", //
 			response = String.class, responseContainer = "List")
 	@RequestMapping(value = "/{parentId}/" + CCDSConstants.COMPOSITE_PATH, method = RequestMethod.GET)
 	public Iterable<String> getCompositeSolutionMembers(@PathVariable("parentId") String parentId) {

@@ -48,6 +48,15 @@ import io.swagger.annotations.ApiResponses;
 
 /**
  * Answers REST requests to manage site configuration entries.
+ * <P>
+ * Validation design decisions:
+ * <OL>
+ * <LI>Keep queries fast, so check nothing on read.</LI>
+ * <LI>Provide useful messages on failure, so check everything on write.</LI>
+ * <LI>Also see:
+ * https://stackoverflow.com/questions/942951/rest-api-error-return-good-practices
+ * </LI>
+ * </OL>
  */
 @RestController
 @RequestMapping(value = "/" + CCDSConstants.CONFIG_PATH, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -60,17 +69,11 @@ public class SiteConfigController extends AbstractController {
 	@Autowired
 	private UserRepository userRepository;
 
-	@ApiOperation(value = "Gets the site configuration value for the specified key.", response = SuccessTransport.class)
+	@ApiOperation(value = "Gets the site configuration value for the specified key. Returns null if not found.", response = SuccessTransport.class)
 	@RequestMapping(value = "/{configKey}", method = RequestMethod.GET)
-	public Object getSiteConfig(@PathVariable("configKey") String configKey, HttpServletResponse response) {
+	public MLPSiteConfig getSiteConfig(@PathVariable("configKey") String configKey) {
 		logger.debug("getSiteConfig key {}", configKey);
-		MLPSiteConfig da = siteConfigRepository.findOne(configKey);
-		if (da == null) {
-			logger.warn("getSiteConfig failed on key {}", configKey);
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + configKey, null);
-		}
-		return da;
+		return siteConfigRepository.findOne(configKey);
 	}
 
 	@ApiOperation(value = "Creates a new site configuration record. Returns bad request on constraint violation etc.", response = MLPSiteConfig.class)
@@ -98,7 +101,6 @@ public class SiteConfigController extends AbstractController {
 			response.setHeader(HttpHeaders.LOCATION, CCDSConstants.CONFIG_PATH + "/" + siteConfig.getConfigKey());
 			return result;
 		} catch (Exception ex) {
-			// e.g., EmptyResultDataAccessException is NOT an internal server error
 			Exception cve = findConstraintViolationException(ex);
 			logger.warn("createSiteConfig failed: {}", cve.toString());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -126,7 +128,6 @@ public class SiteConfigController extends AbstractController {
 			siteConfigRepository.save(siteConfig);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
-			// e.g., EmptyResultDataAccessException is NOT an internal server error
 			Exception cve = findConstraintViolationException(ex);
 			logger.warn("updateSiteConfig failed: {}", cve.toString());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
