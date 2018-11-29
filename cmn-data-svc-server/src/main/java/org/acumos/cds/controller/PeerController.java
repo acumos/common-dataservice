@@ -59,8 +59,15 @@ import io.swagger.annotations.ApiResponses;
 
 /**
  * Answers REST requests to get, add, update and delete peers.
- * 
+ * <P>
+ * Validation design decisions:
+ * <OL>
+ * <LI>Keep queries fast, so check nothing on read.</LI>
+ * <LI>Provide useful messages on failure, so check everything on write.</LI>
+ * <LI>Also see:
  * https://stackoverflow.com/questions/942951/rest-api-error-return-good-practices
+ * </LI>
+ * </OL>
  */
 @RestController
 @RequestMapping(value = "/" + CCDSConstants.PEER_PATH, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -75,7 +82,7 @@ public class PeerController extends AbstractController {
 	@Autowired
 	private PeerSearchService peerSearchService;
 
-	@ApiOperation(value = "Gets a page of peers, optionally sorted.", //
+	@ApiOperation(value = "Gets a page of peers, optionally sorted; empty if none are found.", //
 			response = MLPPeer.class, responseContainer = "Page")
 	@ApiPageable
 	@RequestMapping(method = RequestMethod.GET)
@@ -158,22 +165,15 @@ public class PeerController extends AbstractController {
 		}
 	}
 
-	@ApiOperation(value = "Gets the entity for the specified ID. Returns bad request if the ID is not found.", //
+	@ApiOperation(value = "Gets the peer for the specified ID. Returns null if the ID is not found.", //
 			response = MLPPeer.class)
-	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) }) //
 	@RequestMapping(value = "/{peerId}", method = RequestMethod.GET)
-	public Object getPeer(@PathVariable("peerId") String peerId, HttpServletResponse response) {
+	public MLPPeer getPeer(@PathVariable("peerId") String peerId) {
 		logger.debug("getPeer peerId {}", peerId);
-		MLPPeer peer = peerRepository.findOne(peerId);
-		if (peer == null) {
-			logger.warn("getPeer failed on ID {}", peerId);
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + peerId, null);
-		}
-		return peer;
+		return peerRepository.findOne(peerId);
 	}
 
-	@ApiOperation(value = "Creates a new entity and generates an ID if needed. Returns bad request on constraint violation etc.", //
+	@ApiOperation(value = "Creates a new peer and generates an ID if needed. Returns bad request on constraint violation etc.", //
 			response = MLPPeer.class)
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(method = RequestMethod.POST)
@@ -198,7 +198,6 @@ public class PeerController extends AbstractController {
 			response.setHeader(HttpHeaders.LOCATION, CCDSConstants.PEER_PATH + "/" + peer.getPeerId());
 			return result;
 		} catch (Exception ex) {
-			// e.g., EmptyResultDataAccessException is NOT an internal server error
 			Exception cve = findConstraintViolationException(ex);
 			logger.warn("createPeer failed: {}", cve.toString());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -228,7 +227,6 @@ public class PeerController extends AbstractController {
 			peerRepository.save(peer);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
-			// e.g., EmptyResultDataAccessException is NOT an internal server error
 			Exception cve = findConstraintViolationException(ex);
 			logger.warn("updatePeer failed: {}", cve.toString());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -241,7 +239,7 @@ public class PeerController extends AbstractController {
 	 * used in SpringBoot, after invoking the method it would look for a ThymeLeaf
 	 * template, fail to find it, then throw internal server error.
 	 */
-	@ApiOperation(value = "Deletes the entity with the specified ID. Returns bad request if the ID is not found.", //
+	@ApiOperation(value = "Deletes the peer with the specified ID. Cascades delete to peer subscriptions. Returns bad request if the ID is not found.", //
 			response = SuccessTransport.class)
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{peerId}", method = RequestMethod.DELETE)
@@ -263,33 +261,19 @@ public class PeerController extends AbstractController {
 
 	/* Peer Subscriptions */
 
-	@ApiOperation(value = "Gets all subscriptions for the specified peer.", //
+	@ApiOperation(value = "Gets all subscriptions for the specified peer. Returns empty if none are found", //
 			response = MLPPeerSubscription.class, responseContainer = "List")
-	@ApiPageable
-	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/{peerId}/" + CCDSConstants.SUBSCRIPTION_PATH, method = RequestMethod.GET)
-	public Object getPeerSubs(@PathVariable("peerId") String peerId, Pageable pageable, HttpServletResponse response) {
+	public Iterable<MLPPeerSubscription> getPeerSubs(@PathVariable("peerId") String peerId) {
 		logger.debug("getPeerSubs peerId {}", peerId);
-		// Get the existing one
-		if (peerRepository.findOne(peerId) == null) {
-			logger.warn("getPeerSubs failed on ID {}", peerId);
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + peerId, null);
-		}
 		return peerSubRepository.findByPeerId(peerId);
 	}
 
-	@ApiOperation(value = "Gets the peer subscription for the specified ID.", response = MLPPeerSubscription.class)
+	@ApiOperation(value = "Gets the peer subscription for the specified ID. Returns null if not found.", response = MLPPeerSubscription.class)
 	@RequestMapping(value = "/" + CCDSConstants.SUBSCRIPTION_PATH + "/{subId}", method = RequestMethod.GET)
-	public Object getPeerSub(@PathVariable("subId") Long subId, HttpServletResponse response) {
+	public MLPPeerSubscription getPeerSub(@PathVariable("subId") Long subId) {
 		logger.debug("getPeerSub subId {}", subId);
-		MLPPeerSubscription peerSub = peerSubRepository.findOne(subId);
-		if (peerSub == null) {
-			logger.warn("getPeerSub failed on ID {}", subId);
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + subId, null);
-		}
-		return peerSub;
+		return peerSubRepository.findOne(subId);
 	}
 
 	@ApiOperation(value = "Creates a new entity with a generated ID. Returns bad request on constraint violation etc.", //
@@ -317,7 +301,6 @@ public class PeerController extends AbstractController {
 					CCDSConstants.PEER_PATH + "/" + CCDSConstants.SUBSCRIPTION_PATH + "/" + peerSub.getSubId());
 			return result;
 		} catch (Exception ex) {
-			// e.g., EmptyResultDataAccessException is NOT an internal server error
 			Exception cve = findConstraintViolationException(ex);
 			logger.warn("createPeerSub failed: {}", cve.toString());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -325,7 +308,7 @@ public class PeerController extends AbstractController {
 		}
 	}
 
-	@ApiOperation(value = "Updates an existing entity with the supplied data. Returns bad request on constraint violation etc.", //
+	@ApiOperation(value = "Updates an existing peer subscription with the supplied data. Returns bad request on constraint violation etc.", //
 			response = SuccessTransport.class)
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = "/" + CCDSConstants.SUBSCRIPTION_PATH + "/{subId}", method = RequestMethod.PUT)
@@ -349,7 +332,6 @@ public class PeerController extends AbstractController {
 			peerSubRepository.save(peerSub);
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
-			// e.g., EmptyResultDataAccessException is NOT an internal server error
 			Exception cve = findConstraintViolationException(ex);
 			logger.warn("updatePeerSub failed: {}", cve.toString());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
