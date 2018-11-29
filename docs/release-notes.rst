@@ -31,6 +31,7 @@ Version 2.0.0, 21 Nov 2018
 * Add method to get user unread notification count (`ACUMOS-1883 <https://jira.acumos.org/browse/ACUMOS-1883>`_)
 * Validate URI parameters in Artifact and Document (`ACUMOS-1927 <https://jira.acumos.org/browse/ACUMOS-1927>`_)
 * Drop unused validation entities and features (`ACUMOS-1931 <https://jira.acumos.org/browse/ACUMOS-1931>`_)
+* Support site content key-value pairs (`ACUMOS-1936 <https://jira.acumos.org/browse/ACUMOS-1936>`_)
 * Revise restricted-federation query method to use page parameter
 * Requires database schema version 2.0
 
