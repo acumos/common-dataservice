@@ -145,7 +145,7 @@ public class SolutionController extends AbstractController {
 	 *                       Solution ID
 	 */
 	private void updateSolutionDownloadStats(String solutionId) {
-		Long count = solutionDownloadRepository.getSolutionDownloadCount(solutionId);
+		Long count = solutionDownloadRepository.countSolutionDownloads(solutionId);
 		if (count != null) {
 			MLPSolutionWeb stats = solutionWebRepository.findOne(solutionId);
 			stats.setDownloadCount(count);
@@ -164,9 +164,9 @@ public class SolutionController extends AbstractController {
 	 *                       Solution ID
 	 */
 	private void updateSolutionRatingStats(String solutionId) {
-		Long count = solutionRatingRepository.getSolutionRatingCount(solutionId);
+		long count = solutionRatingRepository.countSolutionRatings(solutionId);
 		Double avg = solutionRatingRepository.getSolutionRatingAverage(solutionId);
-		if (count != null && avg != null) {
+		if (count > 0 && avg != null) {
 			MLPSolutionWeb stats = solutionWebRepository.findOne(solutionId);
 			stats.setRatingCount(count);
 			stats.setRatingAverageTenths(Math.round(10 * avg));
@@ -178,7 +178,7 @@ public class SolutionController extends AbstractController {
 	@RequestMapping(value = CCDSConstants.COUNT_PATH, method = RequestMethod.GET)
 	public CountTransport getSolutionCount() {
 		logger.debug("getSolutionCount");
-		Long count = solutionRepository.count();
+		long count = solutionRepository.count();
 		return new CountTransport(count);
 	}
 

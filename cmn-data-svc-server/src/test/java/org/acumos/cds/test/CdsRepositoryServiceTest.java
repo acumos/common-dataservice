@@ -388,7 +388,7 @@ public class CdsRepositoryServiceTest {
 			logger.info("User Info {}", cu);
 			userRoleMapRepository.save(new MLPUserRoleMap(cu.getUserId(), cr2.getRoleId()));
 
-			long usersInRole = userRoleMapRepository.getRoleUsersCount(cr2.getRoleId());
+			long usersInRole = userRoleMapRepository.countRoleUsers(cr2.getRoleId());
 			Assert.assertTrue(usersInRole > 0);
 			logger.info("Count of users in role: {}", usersInRole);
 
@@ -657,7 +657,7 @@ public class CdsRepositoryServiceTest {
 			logger.info("Created solution download: " + sd.toString());
 
 			// Fetch the download count
-			Long downloadCount = solutionDownloadRepository.getSolutionDownloadCount(cs.getSolutionId());
+			Long downloadCount = solutionDownloadRepository.countSolutionDownloads(cs.getSolutionId());
 			Assert.assertNotNull("Solution download count", downloadCount);
 			logger.info("Solution download count: " + downloadCount);
 
@@ -1030,7 +1030,7 @@ public class CdsRepositoryServiceTest {
 			logger.info("Created solution download: " + sd.toString());
 
 			// Fetch the download count
-			Long downloadCount = solutionDownloadRepository.getSolutionDownloadCount(cs.getSolutionId());
+			Long downloadCount = solutionDownloadRepository.countSolutionDownloads(cs.getSolutionId());
 			Assert.assertNotNull("Solution download count", downloadCount);
 			logger.info("Solution download count: " + downloadCount);
 
