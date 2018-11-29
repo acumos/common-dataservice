@@ -537,13 +537,13 @@ public class CdsRepositoryServiceTest {
 
 			logger.info("Check that one tag yields multiple matches");
 			Page<MLPSolution> oneTagSearchResult = solutionSearchService.findPortalSolutions(null, null, active, null,
-					null, null,  searchTags, null, null, new PageRequest(0, 5));
+					null, null, searchTags, null, null, new PageRequest(0, 5));
 			Assert.assertTrue(oneTagSearchResult != null && oneTagSearchResult.getNumberOfElements() == 2);
 
 			logger.info("Check that two tags yields single match");
 			searchTags = new String[] { solTag1.getTag(), solTag2.getTag() };
 			Page<MLPSolution> twoTagsSearchResult = solutionSearchService.findPortalSolutions(null, null, active, null,
-					null, null,  searchTags, null, null, new PageRequest(0, 5));
+					null, null, searchTags, null, null, new PageRequest(0, 5));
 			Assert.assertTrue(twoTagsSearchResult != null && twoTagsSearchResult.getNumberOfElements() == 1);
 
 			String[] ids = { cs.getSolutionId() };
@@ -624,7 +624,7 @@ public class CdsRepositoryServiceTest {
 			String[] accTypes = new String[] { AccessTypeCode.PR.name() };
 			Date modifiedDate = new Date();
 			modifiedDate.setTime(modifiedDate.getTime() - 60 * 1000);
-			Page<MLPSolution> solsByDate = solutionSearchService.findSolutionsByModifiedDate(true, accTypes, 
+			Page<MLPSolution> solsByDate = solutionSearchService.findSolutionsByModifiedDate(true, accTypes,
 					modifiedDate, new PageRequest(0, 5, null));
 			Assert.assertTrue(solsByDate != null && solsByDate.getNumberOfElements() > 0);
 			logger.info("Found sols by date {}", solsByDate);
