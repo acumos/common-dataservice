@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a2f744ab_e16e94ee",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/SolutionController.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 1288,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-11-30T22:03:24Z",
+      "side": 1,
+      "message": "Add a log warn message for missing solution ID scenario",
+      "revId": "536fe4325a459391e4bc23e8719e322b842e1b08",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
