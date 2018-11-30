@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "67b5cdec_0e783d9c",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/SolutionController.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 1284,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-11-30T22:09:13Z",
+      "side": 1,
+      "message": "So its ok to pass null image to a solution in request body?\nWho creates a default image in that case?",
+      "revId": "536fe4325a459391e4bc23e8719e322b842e1b08",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a2f744ab_e16e94ee",
         "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/SolutionController.java",
         "patchSetId": 7
