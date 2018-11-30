@@ -74,6 +74,10 @@ public class CodeNameServiceImpl implements CodeNameService {
 			return codeNameProps.getValidationStatus();
 		case VALIDATION_TYPE:
 			return codeNameProps.getValidationType();
+		case VERIFIED_LICENSE:
+			return codeNameProps.getVerifiedLicense();
+		case VERIFIED_VULNERABILITY:
+			return codeNameProps.getVerifiedVulnerability();
 		}
 		throw new IllegalArgumentException("unimplemented case for type " + type.name());
 	}

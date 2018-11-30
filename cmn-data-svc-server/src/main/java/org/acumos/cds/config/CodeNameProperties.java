@@ -63,6 +63,8 @@ public class CodeNameProperties {
 	private Map<String, String> toolkitType;
 	private Map<String, String> validationStatus;
 	private Map<String, String> validationType;
+	private Map<String, String> verifiedLicense;
+	private Map<String, String> verifiedVulnerability;
 
 	public Map<String, String> getAccessType() {
 		return accessType;
@@ -182,6 +184,22 @@ public class CodeNameProperties {
 
 	public void setValidationType(Map<String, String> validationType) {
 		this.validationType = validationType;
+	}
+
+	public Map<String, String> getVerifiedLicense() {
+		return verifiedLicense;
+	}
+
+	public void setVerifiedLicense(Map<String, String> verifiedLicense) {
+		this.verifiedLicense = verifiedLicense;
+	}
+
+	public Map<String, String> getVerifiedVulnerability() {
+		return verifiedVulnerability;
+	}
+
+	public void setVerifiedVulnerability(Map<String, String> verifiedVulnerability) {
+		this.verifiedVulnerability = verifiedVulnerability;
 	}
 
 }

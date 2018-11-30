@@ -1203,7 +1203,9 @@ public class DomainTest extends AbstractModelTest {
 		Assert.assertEquals(s8, m.getSourceId());
 		Assert.assertEquals(s9, m.getUserId());
 		Assert.assertEquals(s10, m.getValidationStatusCode());
-		Assert.assertEquals(s11, m.getVersion());
+		Assert.assertEquals(s11, m.getVerifiedLicense());
+		Assert.assertEquals(s12, m.getVerifiedVulnerability());
+		Assert.assertEquals(s13, m.getVersion());
 		Assert.assertEquals(author1, m.getAuthors()[1]);
 	}
 
@@ -1225,7 +1227,9 @@ public class DomainTest extends AbstractModelTest {
 		m.setSourceId(s8);
 		m.setUserId(s9);
 		m.setValidationStatusCode(s10);
-		m.setVersion(s11);
+		m.setVerifiedLicense(s11);
+		m.setVerifiedVulnerability(s12);
+		m.setVersion(s13);
 		checkMLPSolutionRevision(m);
 		m = new MLPSolutionRevision(m);
 		checkMLPSolutionRevision(m);

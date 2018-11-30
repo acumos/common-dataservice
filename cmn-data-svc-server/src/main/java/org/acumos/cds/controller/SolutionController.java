@@ -656,6 +656,10 @@ public class SolutionController extends AbstractController {
 				super.validateCode(revision.getAccessTypeCode(), CodeNameType.ACCESS_TYPE);
 			if (revision.getValidationStatusCode() != null)
 				super.validateCode(revision.getValidationStatusCode(), CodeNameType.VALIDATION_STATUS);
+			if (revision.getVerifiedLicense() != null)
+				super.validateCode(revision.getVerifiedLicense(), CodeNameType.VERIFIED_LICENSE);
+			if (revision.getVerifiedVulnerability() != null)
+				super.validateCode(revision.getVerifiedVulnerability(), CodeNameType.VERIFIED_VULNERABILITY);
 			String id = revision.getRevisionId();
 			if (id != null) {
 				UUID.fromString(id);
@@ -702,6 +706,10 @@ public class SolutionController extends AbstractController {
 				super.validateCode(revision.getAccessTypeCode(), CodeNameType.ACCESS_TYPE);
 			if (revision.getValidationStatusCode() != null)
 				super.validateCode(revision.getValidationStatusCode(), CodeNameType.VALIDATION_STATUS);
+			if (revision.getVerifiedLicense() != null)
+				super.validateCode(revision.getVerifiedLicense(), CodeNameType.VERIFIED_LICENSE);
+			if (revision.getVerifiedVulnerability() != null)
+				super.validateCode(revision.getVerifiedVulnerability(), CodeNameType.VERIFIED_VULNERABILITY);
 			// Use the validated values
 			revision.setRevisionId(revisionId);
 			revision.setSolutionId(solutionId);
