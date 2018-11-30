@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2e51e7b3_9b538c3b",
+        "filename": "cmn-data-svc-server/application-mariadb.properties",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-11-30T21:23:31Z",
+      "side": 1,
+      "message": "What is \u0027u\u0027 meant for? Maybe just say cds20",
+      "revId": "ac0c7f9ee67bdd55fda9bd9301186f690e6e9663",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
