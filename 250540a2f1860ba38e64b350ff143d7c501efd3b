@@ -16,6 +16,23 @@
       "revId": "250540a2f1860ba38e64b350ff143d7c501efd3b",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0ea08f37_b38728b9",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/SolutionController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-12-03T18:12:40Z",
+      "side": 1,
+      "message": "similar log warn message as above is missing",
+      "revId": "250540a2f1860ba38e64b350ff143d7c501efd3b",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
