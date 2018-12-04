@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1093a623_3c2a34e9",
+        "filename": "cmn-data-svc-server/db-scripts/cds-mysql-upgrade-1.18-to-2.0.sql",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2018-12-04T15:58:31Z",
+      "side": 1,
+      "message": "Below query fails likely on a wrong syntax when I try to run the script. Please fix.",
+      "revId": "08cb526699381d805bd2f07e88eac695301c1af1",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
