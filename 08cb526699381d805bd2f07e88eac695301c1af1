@@ -16,6 +16,24 @@
       "revId": "08cb526699381d805bd2f07e88eac695301c1af1",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3c59bcad_a0a9888e",
+        "filename": "cmn-data-svc-server/db-scripts/cds-mysql-upgrade-1.18-to-2.0.sql",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-12-04T16:03:52Z",
+      "side": 1,
+      "message": "I added the missing semicolon",
+      "parentUuid": "1093a623_3c2a34e9",
+      "revId": "08cb526699381d805bd2f07e88eac695301c1af1",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
