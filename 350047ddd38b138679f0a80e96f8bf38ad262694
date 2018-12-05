@@ -16,6 +16,24 @@
       "revId": "350047ddd38b138679f0a80e96f8bf38ad262694",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1735c98e_1695f390",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/SolutionController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-12-05T16:44:04Z",
+      "side": 1,
+      "message": "Because the previous check was a no-operation; if count finds no rows it returns zero, never null.",
+      "parentUuid": "d6314fb9_1c2f859e",
+      "revId": "350047ddd38b138679f0a80e96f8bf38ad262694",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
