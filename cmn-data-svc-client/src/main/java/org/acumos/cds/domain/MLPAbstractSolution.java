@@ -242,8 +242,7 @@ public abstract class MLPAbstractSolution extends MLPTimestampedEntity {
 
 	/**
 	 * @param modelTypeCode
-	 *                          A value obtained by calling
-	 *                          {@link org.acumos.cds.ModelTypeCode#toString()}.
+	 *                          A valid model-type code
 	 */
 	public void setModelTypeCode(String modelTypeCode) {
 		this.modelTypeCode = modelTypeCode;
@@ -255,8 +254,7 @@ public abstract class MLPAbstractSolution extends MLPTimestampedEntity {
 
 	/**
 	 * @param toolkitTypeCode
-	 *                            A value obtained by calling
-	 *                            {@link org.acumos.cds.ToolkitTypeCode#toString()}.
+	 *                            A valid toolkit-type code
 	 */
 	public void setToolkitTypeCode(String toolkitTypeCode) {
 		this.toolkitTypeCode = toolkitTypeCode;
