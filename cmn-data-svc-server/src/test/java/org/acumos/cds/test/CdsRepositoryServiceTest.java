@@ -30,17 +30,7 @@ import java.util.Map;
 import javax.validation.ConstraintViolationException;
 
 import org.acumos.cds.AccessTypeCode;
-import org.acumos.cds.ArtifactTypeCode;
 import org.acumos.cds.CodeNameType;
-import org.acumos.cds.LoginProviderCode;
-import org.acumos.cds.MessageSeverityCode;
-import org.acumos.cds.ModelTypeCode;
-import org.acumos.cds.NotificationDeliveryMechanismCode;
-import org.acumos.cds.PeerStatusCode;
-import org.acumos.cds.StepStatusCode;
-import org.acumos.cds.StepTypeCode;
-import org.acumos.cds.SubscriptionScopeCode;
-import org.acumos.cds.ToolkitTypeCode;
 import org.acumos.cds.domain.MLPArtifact;
 import org.acumos.cds.domain.MLPCodeNamePair;
 import org.acumos.cds.domain.MLPComment;
@@ -289,7 +279,7 @@ public class CdsRepositoryServiceTest {
 			notif.setMessage("Notification message");
 			notif.setUrl("http://www.yahoo.com");
 			notif.setStart(new Date());
-			notif.setMsgSeverityCode(String.valueOf(MessageSeverityCode.LO));
+			notif.setMsgSeverityCode("LO");
 			Calendar c = Calendar.getInstance();
 			c.setTime(new Date()); // Now use today date.
 			c.add(Calendar.DATE, 5); // Adding 5 days
@@ -330,7 +320,7 @@ public class CdsRepositoryServiceTest {
 			pr.setSubjectName("x." + Long.toString(new Date().getTime()));
 			pr.setApiUrl("http://peer-api");
 			pr.setContact1("Tyrion Lannister");
-			pr.setStatusCode(PeerStatusCode.AC.name());
+			pr.setStatusCode("AC");
 			pr = peerRepository.save(pr);
 			Assert.assertNotNull(pr.getPeerId());
 			Assert.assertNotNull(pr.getCreated());
@@ -342,7 +332,7 @@ public class CdsRepositoryServiceTest {
 			Assert.assertTrue(searchPeers.getNumberOfElements() == 1);
 
 			MLPPeerSubscription ps = new MLPPeerSubscription(pr.getPeerId(), cu.getUserId(),
-					SubscriptionScopeCode.FL.name(), AccessTypeCode.PB.name());
+					"FL", AccessTypeCode.PB.name());
 			ps = peerSubscriptionRepository.save(ps);
 			Assert.assertNotNull(ps.getSubId());
 			// Column was defined as timestamp with autoupdate :(
@@ -415,7 +405,7 @@ public class CdsRepositoryServiceTest {
 			ca.setVersion("1.0A");
 			ca.setName("test artifact name");
 			ca.setUri("http://nexus/artifact1");
-			ca.setArtifactTypeCode(ArtifactTypeCode.DI.name());
+			ca.setArtifactTypeCode("DI");
 			ca.setUserId(cu.getUserId());
 			ca.setSize(123);
 			ca = artifactRepository.save(ca);
@@ -423,7 +413,7 @@ public class CdsRepositoryServiceTest {
 			ca2.setVersion("2.0B");
 			ca2.setName("second artifact name");
 			ca2.setUri("http://nexus/artifact2");
-			ca2.setArtifactTypeCode(ArtifactTypeCode.CD.name());
+			ca2.setArtifactTypeCode("CD");
 			ca2.setUserId(cu.getUserId());
 			ca2.setSize(456);
 			ca2 = artifactRepository.save(ca2);
@@ -449,8 +439,8 @@ public class CdsRepositoryServiceTest {
 			cs.setDescription(solDesc);
 			cs.setActive(true);
 			cs.setUserId(cu.getUserId());
-			cs.setModelTypeCode(ModelTypeCode.CL.name());
-			cs.setToolkitTypeCode(ToolkitTypeCode.SK.name());
+			cs.setModelTypeCode("CL");
+			cs.setToolkitTypeCode("SK");
 			// tags must exist; they are not created here
 			cs.getTags().add(solTag1);
 			cs.getTags().add(solTag2);
@@ -465,8 +455,8 @@ public class CdsRepositoryServiceTest {
 			cs2.setActive(true);
 			cs2.setUserId(cu.getUserId());
 			cs2.setDescription("Another Data Org");
-			cs2.setModelTypeCode(ModelTypeCode.CL.toString());
-			cs2.setToolkitTypeCode(ToolkitTypeCode.SK.toString());
+			cs2.setModelTypeCode("CL");
+			cs2.setToolkitTypeCode("SK");
 			cs2.getTags().add(solTag1);
 			cs2 = solutionRepository.save(cs2);
 			Assert.assertNotNull("Solution 2 ID", cs2.getSolutionId());
@@ -525,7 +515,7 @@ public class CdsRepositoryServiceTest {
 			String[] descKw = { "bogus" }; // hey it's there
 			boolean active = true;
 			String[] userIds = { cu.getUserId() };
-			String[] modelTypeCodes = { ModelTypeCode.CL.name() };
+			String[] modelTypeCodes = { "CL" };
 			String[] accTypeCodes = { AccessTypeCode.PR.name(), AccessTypeCode.OR.name() };
 			String[] searchTags = { solTag1.getTag() };
 			String[] searchAuths = null;
@@ -897,7 +887,7 @@ public class CdsRepositoryServiceTest {
 
 			MLPUserLoginProvider ulp = new MLPUserLoginProvider();
 			ulp.setUserId(cu.getUserId());
-			ulp.setProviderCode(LoginProviderCode.GH.name());
+			ulp.setProviderCode("GH");
 			ulp.setProviderUserId("something");
 			ulp.setAccessToken("bogus");
 			ulp.setRank(0);
@@ -906,13 +896,13 @@ public class CdsRepositoryServiceTest {
 			// Create Peer
 			final String peerName = "Peer-" + Long.toString(new Date().getTime());
 			MLPPeer pr = new MLPPeer(peerName, "x." + Long.toString(new Date().getTime()), "http://peer-api", true,
-					true, "", PeerStatusCode.AC.name());
+					true, "", "AC");
 			pr = peerRepository.save(pr);
 			Assert.assertNotNull(pr.getPeerId());
 			Assert.assertNotNull(pr.getCreated());
 
 			MLPPeerSubscription ps = new MLPPeerSubscription(pr.getPeerId(), cu.getUserId(),
-					SubscriptionScopeCode.FL.toString(), AccessTypeCode.PB.toString());
+					"FL", AccessTypeCode.PB.toString());
 			ps = peerSubscriptionRepository.save(ps);
 			Assert.assertNotNull(ps.getSubId());
 
@@ -921,7 +911,7 @@ public class CdsRepositoryServiceTest {
 			ca.setVersion("1.0A");
 			ca.setName("test artifact name");
 			ca.setUri("http://nexus/artifact");
-			ca.setArtifactTypeCode(ArtifactTypeCode.DI.name());
+			ca.setArtifactTypeCode("DI");
 			ca.setUserId(cu.getUserId());
 			ca.setSize(123);
 			ca = artifactRepository.save(ca);
@@ -935,7 +925,7 @@ public class CdsRepositoryServiceTest {
 			ca2.setVersion("2.0A");
 			ca2.setName("replicated artifact ");
 			ca2.setUri("http://other.foo");
-			ca2.setArtifactTypeCode(ArtifactTypeCode.CD.toString());
+			ca2.setArtifactTypeCode("CD");
 			ca2.setUserId(cu.getUserId());
 			ca2.setSize(456);
 			ca2 = artifactRepository.save(ca2);
@@ -955,8 +945,8 @@ public class CdsRepositoryServiceTest {
 			cs.setName("solution name");
 			cs.setActive(true);
 			cs.setUserId(cu.getUserId());
-			cs.setModelTypeCode(ModelTypeCode.CL.name());
-			cs.setToolkitTypeCode(ToolkitTypeCode.SK.name());
+			cs.setModelTypeCode("CL");
+			cs.setToolkitTypeCode("SK");
 			cs = solutionRepository.save(cs);
 			Assert.assertNotNull("Solution ID", cs.getSolutionId());
 			Assert.assertNotNull("Solution create time", cs.getCreated());
@@ -999,8 +989,8 @@ public class CdsRepositoryServiceTest {
 			cs2.setActive(true);
 			cs2.setUserId(cu.getUserId());
 			cs2.setDescription("Big Data Org");
-			cs2.setModelTypeCode(ModelTypeCode.CL.toString());
-			cs2.setToolkitTypeCode(ToolkitTypeCode.SK.toString());
+			cs2.setModelTypeCode("CL");
+			cs2.setToolkitTypeCode("SK");
 			cs2 = solutionRepository.save(cs2);
 			Assert.assertNotNull("Solution 2 ID", cs2.getSolutionId());
 			logger.info("Created solution 2 " + cs2.getSolutionId());
@@ -1220,7 +1210,7 @@ public class CdsRepositoryServiceTest {
 			no.setTitle("notif title");
 			no.setMessage("notif msg");
 			no.setUrl("http://notify.me");
-			no.setMsgSeverityCode(String.valueOf(MessageSeverityCode.HI));
+			no.setMsgSeverityCode("HI");
 			Date now = new Date();
 			// Start an hour ago
 			no.setStart(new Date(now.getTime() - 60 * 60 * 1000));
@@ -1269,8 +1259,8 @@ public class CdsRepositoryServiceTest {
 
 			MLPUserNotifPref usrNotifPref = new MLPUserNotifPref();
 			usrNotifPref.setUserId(cu.getUserId());
-			usrNotifPref.setNotfDelvMechCode(String.valueOf(NotificationDeliveryMechanismCode.TX));
-			usrNotifPref.setMsgSeverityCode(String.valueOf(MessageSeverityCode.HI));
+			usrNotifPref.setNotfDelvMechCode("TX");
+			usrNotifPref.setMsgSeverityCode("HI");
 
 			usrNotifPref = usrNotifPrefRepository.save(usrNotifPref);
 			Assert.assertNotNull(usrNotifPref.getUserNotifPrefId());
@@ -1278,7 +1268,7 @@ public class CdsRepositoryServiceTest {
 			Iterable<MLPUserNotifPref> usrNotifPrefs = usrNotifPrefRepository.findByUserId(cu.getUserId());
 			Assert.assertTrue(usrNotifPrefs.iterator().hasNext());
 
-			usrNotifPref.setNotfDelvMechCode(String.valueOf(NotificationDeliveryMechanismCode.EM));
+			usrNotifPref.setNotfDelvMechCode("EM");
 			usrNotifPref = usrNotifPrefRepository.save(usrNotifPref);
 			Assert.assertTrue(usrNotifPrefRepository.findOne(usrNotifPref.getUserNotifPrefId()).getNotfDelvMechCode()
 					.equals("EM"));
@@ -1311,9 +1301,9 @@ public class CdsRepositoryServiceTest {
 	public void testStepResults() throws Exception {
 		try {
 			MLPStepResult sr = new MLPStepResult();
-			sr.setStepCode(String.valueOf(StepTypeCode.OB));
+			sr.setStepCode("OB");
 			sr.setName("Solution ID creation");
-			sr.setStatusCode(StepStatusCode.FA.name());
+			sr.setStatusCode("FA");
 			Date now = new Date();
 			sr.setStartDate(new Date(now.getTime() - 60 * 1000));
 			sr = stepResultRepository.save(sr);
@@ -1327,7 +1317,7 @@ public class CdsRepositoryServiceTest {
 			logger.info("First step result {}", result);
 
 			HashMap<String, Object> queryParameters = new HashMap<>();
-			queryParameters.put("statusCode", StepStatusCode.FA.toString());
+			queryParameters.put("statusCode", "FA");
 			Page<MLPStepResult> page = stepResultSearchService.findStepResults(queryParameters, false,
 					new PageRequest(0, 5, null));
 			Assert.assertTrue(page.getNumberOfElements() > 0);
@@ -1368,13 +1358,13 @@ public class CdsRepositoryServiceTest {
 
 		final String peerName = "Peer-" + Long.toString(new Date().getTime());
 		MLPPeer pr1 = new MLPPeer(peerName, "x." + Long.toString(new Date().getTime()), "http://peer-api", true, false,
-				"contact", PeerStatusCode.AC.name());
+				"contact", "AC");
 		pr1 = peerRepository.save(pr1);
 		logger.info("Created peer " + pr1);
 
 		final String peerName2 = "Peer-" + Long.toString(new Date().getTime());
 		MLPPeer pr2 = new MLPPeer(peerName2, "x." + Long.toString(new Date().getTime()), "http://peer-api", true, false,
-				"contact", PeerStatusCode.AC.name());
+				"contact", "AC");
 		pr2 = peerRepository.save(pr2);
 		logger.info("Created second peer " + pr2);
 
