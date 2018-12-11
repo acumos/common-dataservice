@@ -31,29 +31,13 @@ import java.util.Random;
 import java.util.UUID;
 
 import org.acumos.cds.AccessTypeCode;
-import org.acumos.cds.ArtifactTypeCode;
 import org.acumos.cds.CodeNameType;
-import org.acumos.cds.DeploymentStatusCode;
-import org.acumos.cds.LoginProviderCode;
-import org.acumos.cds.MessageSeverityCode;
-import org.acumos.cds.ModelTypeCode;
-import org.acumos.cds.NotificationDeliveryMechanismCode;
-import org.acumos.cds.PeerStatusCode;
-import org.acumos.cds.StepStatusCode;
-import org.acumos.cds.StepTypeCode;
-import org.acumos.cds.SubscriptionScopeCode;
-import org.acumos.cds.ToolkitTypeCode;
 import org.acumos.cds.client.CommonDataServiceRestClientImpl;
 import org.acumos.cds.client.ICommonDataServiceRestClient;
-import org.acumos.cds.domain.MLPAccessType;
 import org.acumos.cds.domain.MLPArtifact;
-import org.acumos.cds.domain.MLPArtifactType;
 import org.acumos.cds.domain.MLPCodeNamePair;
 import org.acumos.cds.domain.MLPComment;
-import org.acumos.cds.domain.MLPDeploymentStatus;
 import org.acumos.cds.domain.MLPDocument;
-import org.acumos.cds.domain.MLPLoginProvider;
-import org.acumos.cds.domain.MLPModelType;
 import org.acumos.cds.domain.MLPNotification;
 import org.acumos.cds.domain.MLPPasswordChangeRequest;
 import org.acumos.cds.domain.MLPPeer;
@@ -74,11 +58,8 @@ import org.acumos.cds.domain.MLPSolutionGroup;
 import org.acumos.cds.domain.MLPSolutionRating;
 import org.acumos.cds.domain.MLPSolutionRevision;
 import org.acumos.cds.domain.MLPStepResult;
-import org.acumos.cds.domain.MLPStepStatus;
-import org.acumos.cds.domain.MLPStepType;
 import org.acumos.cds.domain.MLPTag;
 import org.acumos.cds.domain.MLPThread;
-import org.acumos.cds.domain.MLPToolkitType;
 import org.acumos.cds.domain.MLPUser;
 import org.acumos.cds.domain.MLPUserLoginProvider;
 import org.acumos.cds.domain.MLPUserNotifPref;
@@ -199,8 +180,8 @@ public class CdsControllerTest {
 			Assert.assertEquals(rd, qrd);
 
 			final String version = "1.0A";
-			MLPArtifact ca = new MLPArtifact(version, ArtifactTypeCode.DI.toString(), "artifact name",
-					"http://nexus/artifact", cu.getUserId(), 1);
+			MLPArtifact ca = new MLPArtifact(version, "DI", "artifact name", "http://nexus/artifact", cu.getUserId(),
+					1);
 			ca = client.createArtifact(ca);
 			Assert.assertNotNull(ca.getArtifactId());
 			Assert.assertNotNull(ca.getCreated());
@@ -209,8 +190,7 @@ public class CdsControllerTest {
 			logger.info("Adding artifact to revision");
 			client.addSolutionRevisionArtifact(cs.getSolutionId(), cr.getRevisionId(), ca.getArtifactId());
 
-			MLPStepResult sr = new MLPStepResult(StepTypeCode.OB.toString(), "New Step Result1",
-					StepStatusCode.FA.toString(), new Date());
+			MLPStepResult sr = new MLPStepResult("OB", "New Step Result1", "FA", new Date());
 			sr.setSolutionId(cs.getSolutionId());
 			sr = client.createStepResult(sr);
 			Assert.assertNotNull(sr.getStepResultId());
@@ -255,30 +235,6 @@ public class CdsControllerTest {
 			// Cannot validate here - list of values is defined by server config
 		}
 
-		List<MLPAccessType> act = client.getAccessTypes();
-		Assert.assertFalse(act.isEmpty());
-
-		List<MLPArtifactType> art = client.getArtifactTypes();
-		Assert.assertFalse(art.isEmpty());
-
-		List<MLPDeploymentStatus> ds = client.getDeploymentStatuses();
-		Assert.assertFalse(ds.isEmpty());
-
-		List<MLPLoginProvider> lp = client.getLoginProviders();
-		Assert.assertFalse(lp.isEmpty());
-
-		List<MLPModelType> mt = client.getModelTypes();
-		Assert.assertFalse(mt.isEmpty());
-
-		List<MLPToolkitType> tt = client.getToolkitTypes();
-		Assert.assertFalse(tt.isEmpty());
-
-		List<MLPStepStatus> ss = client.getStepStatuses();
-		Assert.assertFalse(ss.isEmpty());
-
-		List<MLPStepType> st = client.getStepTypes();
-		Assert.assertFalse(st.isEmpty());
-
 	}
 
 	@Test
@@ -294,7 +250,7 @@ public class CdsControllerTest {
 
 			MLPUserLoginProvider prov = new MLPUserLoginProvider();
 			prov.setUserId(cu.getUserId());
-			final String providerCode = LoginProviderCode.FB.name();
+			final String providerCode = "FB";
 			prov.setProviderCode(providerCode);
 			final String userLogin = "foobar";
 			prov.setProviderUserId(userLogin);
@@ -471,8 +427,7 @@ public class CdsControllerTest {
 			long userCountTrans = client.getUserCount();
 			Assert.assertTrue(userCountTrans > 0);
 
-			MLPUserLoginProvider clp = new MLPUserLoginProvider(cu.getUserId(), LoginProviderCode.GH.name(),
-					"something", "access token", 0);
+			MLPUserLoginProvider clp = new MLPUserLoginProvider(cu.getUserId(), "GH", "something", "access token", 0);
 			clp = client.createUserLoginProvider(clp);
 			logger.info("Created user login provider {}", clp);
 
@@ -487,7 +442,7 @@ public class CdsControllerTest {
 			pr.setSubjectName("subject name");
 			pr.setApiUrl("http://peer-api");
 			pr.setContact1("Katherine Globe");
-			pr.setStatusCode(PeerStatusCode.AC.name());
+			pr.setStatusCode("AC");
 			pr = client.createPeer(pr);
 			logger.info("Created peer with ID {}", pr.getPeerId());
 
@@ -517,8 +472,8 @@ public class CdsControllerTest {
 
 			Assert.assertEquals(0, client.getPeerSubscriptionCount(pr.getPeerId()));
 
-			MLPPeerSubscription ps = new MLPPeerSubscription(pr.getPeerId(), cu.getUserId(),
-					SubscriptionScopeCode.FL.name(), AccessTypeCode.PB.toString());
+			MLPPeerSubscription ps = new MLPPeerSubscription(pr.getPeerId(), cu.getUserId(), "FL",
+					AccessTypeCode.PB.toString());
 			ps = client.createPeerSubscription(ps);
 			logger.info("Created peer subscription {}", ps);
 
@@ -545,7 +500,7 @@ public class CdsControllerTest {
 			ca.setName("artifact name");
 			ca.setUri("http://nexus/artifact");
 			ca.setUserId(cu.getUserId());
-			ca.setArtifactTypeCode(ArtifactTypeCode.DI.toString());
+			ca.setArtifactTypeCode("DI");
 			ca.setSize(1);
 			ca = client.createArtifact(ca);
 			logger.info("Created artifact with ID {}", ca.getArtifactId());
@@ -567,7 +522,7 @@ public class CdsControllerTest {
 			ca2.setVersion("2.0A");
 			ca2.setName("replicated artifact ");
 			ca2.setUri("http://other.foo");
-			ca2.setArtifactTypeCode(ArtifactTypeCode.CD.toString());
+			ca2.setArtifactTypeCode("CD");
 			ca2.setUserId(cu.getUserId());
 			ca2.setSize(456);
 			ca2 = client.createArtifact(ca2);
@@ -625,8 +580,8 @@ public class CdsControllerTest {
 
 			MLPSolution cs = new MLPSolution("solution name", cu.getUserId(), true);
 			cs.setDescription("Tagged solution");
-			cs.setModelTypeCode(ModelTypeCode.CL.name());
-			cs.setToolkitTypeCode(ToolkitTypeCode.CP.name());
+			cs.setModelTypeCode("CL");
+			cs.setToolkitTypeCode("CP");
 			// This tag should spring into existence here
 			MLPTag newTag = new MLPTag("new-solution-tag.3");
 			cs.getTags().add(newTag);
@@ -655,8 +610,8 @@ public class CdsControllerTest {
 			// no tags
 			MLPSolution csOrg = new MLPSolution("solution organization", cu.getUserId(), true);
 			csOrg.setDescription("Untagged solution org");
-			csOrg.setModelTypeCode(ModelTypeCode.DS.name());
-			csOrg.setToolkitTypeCode(ToolkitTypeCode.SK.name());
+			csOrg.setModelTypeCode("DS");
+			csOrg.setToolkitTypeCode("SK");
 			csOrg = client.createSolution(csOrg);
 			Assert.assertNotNull(csOrg.getSolutionId());
 			logger.info("Created org solution {}", cs);
@@ -665,8 +620,8 @@ public class CdsControllerTest {
 			inactive.setName("inactive solution name");
 			inactive.setUserId(cu.getUserId());
 			inactive.setDescription("Inactive Data Org");
-			inactive.setModelTypeCode(ModelTypeCode.DS.name());
-			inactive.setToolkitTypeCode(ToolkitTypeCode.SK.name());
+			inactive.setModelTypeCode("DS");
+			inactive.setToolkitTypeCode("SK");
 			inactive.setActive(false);
 			inactive = client.createSolution(inactive);
 			Assert.assertNotNull(inactive.getSolutionId());
@@ -985,7 +940,7 @@ public class CdsControllerTest {
 			dep.setSolutionId(cs.getSolutionId());
 			dep.setRevisionId(cr.getRevisionId());
 			dep.setUserId(cu.getUserId());
-			dep.setDeploymentStatusCode(DeploymentStatusCode.ST.name());
+			dep.setDeploymentStatusCode("ST");
 			dep = client.createSolutionDeployment(dep);
 			Assert.assertNotNull(dep.getDeploymentId());
 			logger.info("Created solution deployent {}", dep);
@@ -1231,7 +1186,7 @@ public class CdsControllerTest {
 			no.setStart(new Date(now.getTime() - 60 * 60 * 1000));
 			// An hour from now
 			no.setEnd(new Date(now.getTime() + 60 * 60 * 1000));
-			no.setMsgSeverityCode(String.valueOf(MessageSeverityCode.LO));
+			no.setMsgSeverityCode("LO");
 			no = client.createNotification(no);
 			Assert.assertNotNull(no.getNotificationId());
 
@@ -1244,7 +1199,7 @@ public class CdsControllerTest {
 			no2.setUrl("http://notify2.me");
 			no2.setStart(new Date(now.getTime() - 60 * 1000));
 			no2.setEnd(new Date(now.getTime() + 60 * 1000));
-			no2.setMsgSeverityCode(String.valueOf(MessageSeverityCode.HI));
+			no2.setMsgSeverityCode(String.valueOf("HI"));
 			no2 = client.createNotification(no2);
 
 			// A populated database may yield a large number
@@ -1293,13 +1248,13 @@ public class CdsControllerTest {
 			Assert.assertNotNull(cu.getUserId());
 
 			usrNotifPref.setUserId(cu.getUserId());
-			usrNotifPref.setNotfDelvMechCode(String.valueOf(NotificationDeliveryMechanismCode.TX));
-			usrNotifPref.setMsgSeverityCode(String.valueOf(MessageSeverityCode.HI));
+			usrNotifPref.setNotfDelvMechCode("TX");
+			usrNotifPref.setMsgSeverityCode("HI");
 
 			usrNotifPref = client.createUserNotificationPreference(usrNotifPref);
 			Assert.assertNotNull(usrNotifPref.getUserNotifPrefId());
 
-			usrNotifPref.setNotfDelvMechCode(String.valueOf(NotificationDeliveryMechanismCode.EM));
+			usrNotifPref.setNotfDelvMechCode("EM");
 			client.updateUserNotificationPreference(usrNotifPref);
 
 			MLPUserNotifPref prefById = client.getUserNotificationPreference(usrNotifPref.getUserNotifPrefId());
@@ -1324,16 +1279,14 @@ public class CdsControllerTest {
 			logger.info("create user notification preference failed as expected: {}", ex.getResponseBodyAsString());
 		}
 		try {
-			client.createUserNotificationPreference(
-					new MLPUserNotifPref(cu.getUserId(), "bogus", MessageSeverityCode.HI.name()));
+			client.createUserNotificationPreference(new MLPUserNotifPref(cu.getUserId(), "bogus", "HI"));
 			throw new Exception("Unexpected success");
 		} catch (HttpStatusCodeException ex) {
 			logger.info("create user notification preference failed on bad deliv code as expected: {}",
 					ex.getResponseBodyAsString());
 		}
 		try {
-			client.createUserNotificationPreference(
-					new MLPUserNotifPref(cu.getUserId(), NotificationDeliveryMechanismCode.EM.name(), "bogus"));
+			client.createUserNotificationPreference(new MLPUserNotifPref(cu.getUserId(), "EM", "bogus"));
 			throw new Exception("Unexpected success");
 		} catch (HttpStatusCodeException ex) {
 			logger.info("create user notification preference failed on severity code as expected: {}",
@@ -1364,9 +1317,9 @@ public class CdsControllerTest {
 		try {
 			final String name = "Solution ID creation";
 			MLPStepResult sr = new MLPStepResult();
-			sr.setStepCode(StepTypeCode.OB.name());
+			sr.setStepCode("OB");
 			sr.setName(name);
-			sr.setStatusCode(String.valueOf(StepStatusCode.SU));
+			sr.setStatusCode(String.valueOf("SU"));
 			Date now = new Date();
 			sr.setStartDate(new Date(now.getTime() - 60 * 1000));
 			sr = client.createStepResult(sr);
@@ -1432,13 +1385,13 @@ public class CdsControllerTest {
 			logger.info("create step result failed as expected: {}", ex.getResponseBodyAsString());
 		}
 		try {
-			client.createStepResult(new MLPStepResult("bogus", "name", StepStatusCode.FA.name(), new Date()));
+			client.createStepResult(new MLPStepResult("bogus", "name", "FA", new Date()));
 			throw new Exception("Unexpected success");
 		} catch (HttpStatusCodeException ex) {
 			logger.info("create step result failed on bad type code as expected: {}", ex.getResponseBodyAsString());
 		}
 		try {
-			client.createStepResult(new MLPStepResult(StepTypeCode.OB.name(), "name", "bogus", new Date()));
+			client.createStepResult(new MLPStepResult("OB", "name", "bogus", new Date()));
 			throw new Exception("Unexpected success");
 		} catch (HttpStatusCodeException ex) {
 			logger.info("create step result failed on bad status code as expected: {}", ex.getResponseBodyAsString());
@@ -1800,7 +1753,7 @@ public class CdsControllerTest {
 
 		final String peerName = "Peer-" + Long.toString(new Date().getTime());
 		MLPPeer pr = new MLPPeer(peerName, "x." + Long.toString(new Date().getTime()), "http://peer-api", true, true,
-				"contact", PeerStatusCode.AC.name());
+				"contact", "AC");
 		pr = client.createPeer(pr);
 		logger.info("Created peer " + pr.getPeerId());
 
@@ -2364,7 +2317,7 @@ public class CdsControllerTest {
 		} catch (HttpStatusCodeException ex) {
 			logger.info("createUserLoginProvider failed on bad code as expected {}", ex.getResponseBodyAsString());
 		}
-		MLPUserLoginProvider clp = new MLPUserLoginProvider(cu.getUserId(), LoginProviderCode.GH.name(), "something",
+		MLPUserLoginProvider clp = new MLPUserLoginProvider(cu.getUserId(), "GH", "something",
 				"access token", 1);
 		clp = client.createUserLoginProvider(clp);
 		Assert.assertNotNull(clp.getCreated());
@@ -2677,7 +2630,7 @@ public class CdsControllerTest {
 		}
 		// These should succeed
 		ca = client.createArtifact(
-				new MLPArtifact("version", ArtifactTypeCode.BP.name(), "name", "URI", cu.getUserId(), 1));
+				new MLPArtifact("version", "BP", "name", "URI", cu.getUserId(), 1));
 		try {
 			client.createArtifact(ca);
 			throw new Exception("Unexpected success");
@@ -2873,7 +2826,7 @@ public class CdsControllerTest {
 		Assert.assertFalse(client.getSolutionDeployments("bogus", "bogus", new RestPageRequest()).hasContent());
 		try {
 			client.createSolutionDeployment(new MLPSolutionDeployment("bogus", csr.getRevisionId(), cu.getUserId(),
-					DeploymentStatusCode.DP.name()));
+					"DP"));
 			throw new Exception("Unexpected success");
 		} catch (HttpStatusCodeException ex) {
 			logger.info("Create solution deployment failed on bad solution ID as expected: {}",
@@ -2881,7 +2834,7 @@ public class CdsControllerTest {
 		}
 		try {
 			client.createSolutionDeployment(new MLPSolutionDeployment(cs.getSolutionId(), "bogus", cu.getUserId(),
-					DeploymentStatusCode.DP.name()));
+					"DP"));
 			throw new Exception("Unexpected success");
 		} catch (HttpStatusCodeException ex) {
 			logger.info("Create solution deployment failed on bad revision ID as expected: {}",
@@ -2889,7 +2842,7 @@ public class CdsControllerTest {
 		}
 		try {
 			client.createSolutionDeployment(new MLPSolutionDeployment(cs.getSolutionId(), csr.getRevisionId(), "bogus",
-					DeploymentStatusCode.DP.name()));
+					"DP"));
 			throw new Exception("Unexpected success");
 		} catch (HttpStatusCodeException ex) {
 			logger.info("Create solution deployment failed on bad user ID as expected: {}",
@@ -2897,7 +2850,7 @@ public class CdsControllerTest {
 		}
 		try {
 			MLPSolutionDeployment solDep = new MLPSolutionDeployment(cs.getSolutionId(), csr.getRevisionId(),
-					cu.getUserId(), DeploymentStatusCode.DP.name());
+					cu.getUserId(), "DP");
 			// Field too large
 			solDep.setTarget(s64 + s64);
 			client.createSolutionDeployment(solDep);
@@ -2915,7 +2868,7 @@ public class CdsControllerTest {
 		}
 
 		MLPSolutionDeployment solDep = new MLPSolutionDeployment(cs.getSolutionId(), csr.getRevisionId(),
-				cu.getUserId(), DeploymentStatusCode.DP.name());
+				cu.getUserId(), "DP");
 		solDep.setDeploymentId("bogus");
 		try {
 			client.updateSolutionDeployment(solDep);
@@ -2931,7 +2884,7 @@ public class CdsControllerTest {
 		}
 		// Should succeed
 		solDep = client.createSolutionDeployment(new MLPSolutionDeployment(cs.getSolutionId(), csr.getRevisionId(),
-				cu.getUserId(), DeploymentStatusCode.DP.name()));
+				cu.getUserId(), "DP"));
 		try {
 			client.createSolutionDeployment(solDep);
 			throw new Exception("Unexpected success");
@@ -3004,7 +2957,7 @@ public class CdsControllerTest {
 		}
 		// This one should work
 		cn.setTitle("notif title");
-		cn.setMsgSeverityCode(String.valueOf(MessageSeverityCode.HI));
+		cn.setMsgSeverityCode("HI");
 		cn = client.createNotification(cn);
 		try {
 			client.createNotification(cn);
@@ -3058,7 +3011,7 @@ public class CdsControllerTest {
 		}
 		// This one is supposed to work
 		cp = client.createPeer(
-				new MLPPeer("peer name", "subj name", "api url", false, false, "contact 1", PeerStatusCode.AC.name()));
+				new MLPPeer("peer name", "subj name", "api url", false, false, "contact 1", "AC"));
 
 		try {
 			cp = client.createPeer(cp);
@@ -3069,7 +3022,7 @@ public class CdsControllerTest {
 
 		try {
 			cp = client.createPeer(new MLPPeer("another peer name", "subj name", "api url", false, false, "contact 2",
-					PeerStatusCode.DC.name()));
+					"DC"));
 			throw new Exception("Unexpected success");
 		} catch (HttpStatusCodeException ex) {
 			logger.info("Create peer failed on duplicate subject name as expected: {}", ex.getResponseBodyAsString());
@@ -3099,7 +3052,7 @@ public class CdsControllerTest {
 		}
 		try {
 			client.createPeerSubscription(
-					new MLPPeerSubscription(cp.getPeerId(), cu.getUserId(), SubscriptionScopeCode.FL.name(), "bogus"));
+					new MLPPeerSubscription(cp.getPeerId(), cu.getUserId(), "FL", "bogus"));
 			throw new Exception("Unexpected success");
 		} catch (HttpStatusCodeException ex) {
 			logger.info("Create peer sub failed on bad access code as expected: {}", ex.getResponseBodyAsString());
@@ -3115,7 +3068,7 @@ public class CdsControllerTest {
 		}
 		// Supposed to work
 		MLPPeerSubscription ps = new MLPPeerSubscription(cp.getPeerId(), cu.getUserId(),
-				SubscriptionScopeCode.FL.toString(), AccessTypeCode.PB.toString());
+				"FL", AccessTypeCode.PB.toString());
 		ps = client.createPeerSubscription(ps);
 		try {
 			ps.setSelector(
