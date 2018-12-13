@@ -22,6 +22,7 @@ package org.acumos.cds.test;
 
 import java.lang.invoke.MethodHandles;
 import java.net.URL;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -210,7 +211,7 @@ public class CdsControllerTest {
 			client.addSolutionRevisionArtifact(cs.getSolutionId(), cr.getRevisionId(), ca.getArtifactId());
 
 			MLPStepResult sr = new MLPStepResult(StepTypeCode.OB.toString(), "New Step Result1",
-					StepStatusCode.FA.toString(), new Date());
+					StepStatusCode.FA.toString(), new Timestamp(new Date().getTime()));
 			sr.setSolutionId(cs.getSolutionId());
 			sr = client.createStepResult(sr);
 			Assert.assertNotNull(sr.getStepResultId());
@@ -324,7 +325,7 @@ public class CdsControllerTest {
 			// Use this repeatedly :)
 			RestPageRequest rp = new RestPageRequest(0, 1);
 
-			Date lastLogin = new Date(new Date().getTime() - 60 * 1000);
+			Timestamp lastLogin = new Timestamp(new Date(new Date().getTime() - 60 * 1000).getTime());
 			MLPUser cu = new MLPUser();
 			String unique = Long.toString(new Date().getTime());
 			final String loginName = "user-" + unique;
@@ -342,7 +343,7 @@ public class CdsControllerTest {
 			cu.setLastName(lastName);
 			cu.setActive(true);
 			cu.setLastLogin(lastLogin);
-			cu.setLoginPassExpire(new Date());
+			cu.setLoginPassExpire(new Timestamp(new Date().getTime()));
 			final byte[] fakePicture = new byte[] { 1, 2, 3, 4, 5 };
 			cu.setPicture(fakePicture);
 			cu = client.createUser(cu);
@@ -926,7 +927,7 @@ public class CdsControllerTest {
 			ur.setUserId(cu.getUserId());
 			ur.setRating(4);
 			ur.setTextReview("Awesome");
-			ur.setCreated(new Date());
+			ur.setCreated(new Timestamp(new Date().getTime()));
 			ur = client.createSolutionRating(ur);
 			logger.info("Created solution rating {}", ur);
 			MLPSolutionRating rating = client.getSolutionRating(cs.getSolutionId(), cu.getUserId());
@@ -1091,7 +1092,7 @@ public class CdsControllerTest {
 			final String lastName = "test-role-fn";
 			cu.setLastName(lastName);
 			cu.setActive(true);
-			cu.setLoginPassExpire(new Date());
+			cu.setLoginPassExpire(new Timestamp(new Date().getTime()));
 			cu = client.createUser(cu);
 			Assert.assertNotNull(cu.getUserId());
 			logger.info("Created user with ID {}", cu.getUserId());
@@ -1224,9 +1225,9 @@ public class CdsControllerTest {
 			no.setUrl("http://notify.me");
 			Date now = new Date();
 			// An hour ago
-			no.setStart(new Date(now.getTime() - 60 * 60 * 1000));
+			no.setStart(new Timestamp(new Date(now.getTime() - 60 * 60 * 1000).getTime()));
 			// An hour from now
-			no.setEnd(new Date(now.getTime() + 60 * 60 * 1000));
+			no.setEnd(new Timestamp(new Date(now.getTime() + 60 * 60 * 1000).getTime()));
 			no.setMsgSeverityCode(String.valueOf(MessageSeverityCode.LO));
 			no = client.createNotification(no);
 			Assert.assertNotNull(no.getNotificationId());
@@ -1238,8 +1239,8 @@ public class CdsControllerTest {
 			no2.setTitle("notif2 title");
 			no2.setMessage("notif2 msg");
 			no2.setUrl("http://notify2.me");
-			no2.setStart(new Date(now.getTime() - 60 * 1000));
-			no2.setEnd(new Date(now.getTime() + 60 * 1000));
+			no2.setStart(new Timestamp(new Date(now.getTime() - 60 * 1000).getTime()));
+			no2.setEnd(new Timestamp(new Date(now.getTime() + 60 * 1000).getTime()));
 			no2.setMsgSeverityCode(String.valueOf(MessageSeverityCode.HI));
 			no2 = client.createNotification(no2);
 
@@ -1363,8 +1364,8 @@ public class CdsControllerTest {
 			sr.setStepCode(StepTypeCode.OB.name());
 			sr.setName(name);
 			sr.setStatusCode(String.valueOf(StepStatusCode.SU));
-			Date now = new Date();
-			sr.setStartDate(new Date(now.getTime() - 60 * 1000));
+			Timestamp now = new Timestamp(new Date().getTime());
+			sr.setStartDate(new Timestamp(now.getTime() - 60 * 1000));
 			sr = client.createStepResult(sr);
 			Assert.assertNotNull(sr.getStepResultId());
 			logger.info("Created step result " + sr);
@@ -1428,7 +1429,7 @@ public class CdsControllerTest {
 			logger.info("create step result failed as expected: {}", ex.getResponseBodyAsString());
 		}
 		try {
-			client.createStepResult(new MLPStepResult("bogus", "name", StepStatusCode.FA.name(), new Date()));
+			client.createStepResult(new MLPStepResult("bogus", "name", StepStatusCode.FA.name(), new Timestamp(new Date().getTime())));
 			throw new Exception("Unexpected success");
 		} catch (HttpStatusCodeException ex) {
 			logger.info("create step result failed on bad type code as expected: {}", ex.getResponseBodyAsString());
@@ -2991,8 +2992,8 @@ public class CdsControllerTest {
 		}
 		try {
 			cn.setTitle(s64 + s64);
-			cn.setStart(new Date());
-			cn.setEnd(new Date());
+			cn.setStart(new Timestamp(new Date().getTime()));
+			cn.setEnd(new Timestamp(new Date().getTime()));
 			client.createNotification(cn);
 			throw new Exception("Unexpected success");
 		} catch (HttpStatusCodeException ex) {

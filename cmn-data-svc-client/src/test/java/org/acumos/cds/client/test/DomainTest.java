@@ -89,7 +89,7 @@ public class DomainTest extends AbstractModelTest {
 	private void checkMLPArtifact(MLPArtifact m) {
 		Assert.assertEquals(s1, m.getArtifactId());
 		Assert.assertEquals(s2, m.getArtifactTypeCode());
-		Assert.assertEquals(d1, m.getCreated());
+		Assert.assertEquals(t1, m.getCreated());
 		Assert.assertEquals(s3, m.getDescription());
 		Assert.assertEquals(s4, m.getMetadata());
 		Assert.assertEquals(d2, m.getModified());
@@ -106,10 +106,10 @@ public class DomainTest extends AbstractModelTest {
 		m = new MLPArtifact();
 		m.setArtifactId(s1);
 		m.setArtifactTypeCode(s2);
-		m.setCreated(d1);
+		m.setCreated(t1);
 		m.setDescription(s3);
 		m.setMetadata(s4);
-		m.setModified(d2);
+		m.setModified(t2);
 		m.setName(s5);
 		m.setUserId(s6);
 		m.setSize(i1);
@@ -227,7 +227,7 @@ public class DomainTest extends AbstractModelTest {
 	}
 
 	private void checkMLPDocument(MLPDocument m) {
-		Assert.assertEquals(d1, m.getCreated());
+		Assert.assertEquals(t1, m.getCreated());
 		Assert.assertEquals(s1, m.getDocumentId());
 		Assert.assertEquals(d2, m.getModified());
 		Assert.assertEquals(s2, m.getName());
@@ -241,9 +241,9 @@ public class DomainTest extends AbstractModelTest {
 	public void testMLPDocument() throws URISyntaxException {
 		MLPDocument m = new MLPDocument(s1, s1, i1, s1);
 		m = new MLPDocument();
-		m.setCreated(d1);
+		m.setCreated(t1);
 		m.setDocumentId(s1);
-		m.setModified(d2);
+		m.setModified(t2);
 		m.setName(s2);
 		m.setSize(i1);
 		m.setUri(u1);
@@ -272,12 +272,12 @@ public class DomainTest extends AbstractModelTest {
 	}
 
 	private void checkMLPNotification(MLPNotification m) {
-		Assert.assertEquals(d1, m.getCreated());
-		Assert.assertEquals(d2, m.getEnd());
+		Assert.assertEquals(t1, m.getCreated());
+		Assert.assertEquals(t2, m.getEnd());
 		Assert.assertEquals(s1, m.getMessage());
 		Assert.assertEquals(d3, m.getModified());
 		Assert.assertEquals(s2, m.getNotificationId());
-		Assert.assertEquals(d4, m.getStart());
+		Assert.assertEquals(t4, m.getStart());
 		Assert.assertEquals(s3, m.getTitle());
 		Assert.assertEquals(s4, m.getUrl());
 		Assert.assertEquals(s6, m.getMsgSeverityCode());
@@ -285,14 +285,14 @@ public class DomainTest extends AbstractModelTest {
 
 	@Test
 	public void testMLPNotification() {
-		MLPNotification m = new MLPNotification(s1, s6, d1, d1);
+		MLPNotification m = new MLPNotification(s1, s6, t1, t2);
 		m = new MLPNotification();
-		m.setCreated(d1);
-		m.setEnd(d2);
+		m.setCreated(t1);
+		m.setEnd(t2);
 		m.setMessage(s1);
-		m.setModified(d3);
+		m.setModified(t3);
 		m.setNotificationId(s2);
-		m.setStart(d4);
+		m.setStart(t4);
 		m.setTitle(s3);
 		m.setUrl(s4);
 		m.setMsgSeverityCode(s6);
@@ -315,7 +315,7 @@ public class DomainTest extends AbstractModelTest {
 	private void checkMLPNotifUserMap(MLPNotifUserMap m) {
 		Assert.assertEquals(s1, m.getNotificationId());
 		Assert.assertEquals(s2, m.getUserId());
-		Assert.assertEquals(d1, m.getViewed());
+		Assert.assertEquals(t1, m.getViewed());
 	}
 
 	@Test
@@ -324,7 +324,7 @@ public class DomainTest extends AbstractModelTest {
 		m = new MLPNotifUserMap(s1, s2);
 		m.setNotificationId(s1);
 		m.setUserId(s2);
-		m.setViewed(d1);
+		m.setViewed(t1);
 		checkMLPNotifUserMap(m);
 		m = new MLPNotifUserMap(m);
 		checkMLPNotifUserMap(m);
@@ -378,10 +378,10 @@ public class DomainTest extends AbstractModelTest {
 	private void checkMLPPeer(MLPPeer m) {
 		Assert.assertEquals(s1, m.getApiUrl());
 		Assert.assertEquals(s2, m.getContact1());
-		Assert.assertEquals(d1, m.getCreated());
+		Assert.assertEquals(t1, m.getCreated());
 		Assert.assertEquals(s3, m.getDescription());
 		Assert.assertEquals(b1, m.isLocal());
-		Assert.assertEquals(d2, m.getModified());
+		Assert.assertEquals(t2, m.getModified());
 		Assert.assertEquals(s4, m.getName());
 		Assert.assertEquals(s5, m.getPeerId());
 		Assert.assertEquals(b2, m.isSelf());
@@ -396,11 +396,11 @@ public class DomainTest extends AbstractModelTest {
 		m = new MLPPeer();
 		m.setApiUrl(s1);
 		m.setContact1(s2);
-		m.setCreated(d1);
+		m.setCreated(t1);
 		m.setDescription(s3);
 		m.setLocal(b1);
-		m.setModified(d2);
 		m.setName(s4);
+		m.setModified(t2);
 		m.setPeerId(s5);
 		m.setSelf(b2);
 		m.setStatusCode(s6);
@@ -423,10 +423,10 @@ public class DomainTest extends AbstractModelTest {
 	}
 
 	private void checkMLPPeerGroup(MLPPeerGroup m) {
-		Assert.assertEquals(d1, m.getCreated());
+		Assert.assertEquals(t1, m.getCreated());
 		Assert.assertEquals(s1, m.getDescription());
 		Assert.assertEquals(l1, m.getGroupId());
-		Assert.assertEquals(d2, m.getModified());
+		Assert.assertEquals(t2, m.getModified());
 		Assert.assertEquals(s2, m.getName());
 	}
 
@@ -434,10 +434,10 @@ public class DomainTest extends AbstractModelTest {
 	public void testMLPPeerGroup() {
 		MLPPeerGroup m = new MLPPeerGroup(s1);
 		m = new MLPPeerGroup();
-		m.setCreated(d1);
+		m.setCreated(t1);
 		m.setDescription(s1);
 		m.setGroupId(l1);
-		m.setModified(d2);
+		m.setModified(t2);
 		m.setName(s2);
 		checkMLPPeerGroup(m);
 		m = new MLPPeerGroup(m);
@@ -455,13 +455,13 @@ public class DomainTest extends AbstractModelTest {
 
 	private void checkMLPPeerSubscription(MLPPeerSubscription m) {
 		Assert.assertEquals(s1, m.getAccessType());
-		Assert.assertEquals(d1, m.getCreated());
+		Assert.assertEquals(t1, m.getCreated());
 		Assert.assertEquals(l1, m.getMaxArtifactSize());
-		Assert.assertEquals(d2, m.getModified());
+		Assert.assertEquals(t2, m.getModified());
 		Assert.assertEquals(s2, m.getOptions());
 		Assert.assertEquals(s3, m.getUserId());
 		Assert.assertEquals(s4, m.getPeerId());
-		Assert.assertEquals(d3, m.getProcessed());
+		Assert.assertEquals(t3, m.getProcessed());
 		Assert.assertEquals(l2, m.getRefreshInterval());
 		Assert.assertEquals(s5, m.getScopeType());
 		Assert.assertEquals(s6, m.getSelector());
@@ -473,13 +473,13 @@ public class DomainTest extends AbstractModelTest {
 		MLPPeerSubscription m = new MLPPeerSubscription(s1, s2, s3, s4);
 		m = new MLPPeerSubscription();
 		m.setAccessType(s1);
-		m.setCreated(d1);
+		m.setCreated(t1);
 		m.setMaxArtifactSize(l1);
-		m.setModified(d2);
+		m.setModified(t2);
 		m.setOptions(s2);
 		m.setUserId(s3);
 		m.setPeerId(s4);
-		m.setProcessed(d3);
+		m.setProcessed(t3);
 		m.setRefreshInterval(l2);
 		m.setScopeType(s5);
 		m.setSelector(s6);
@@ -604,8 +604,8 @@ public class DomainTest extends AbstractModelTest {
 
 	private void checkMLPPublishRequest(MLPPublishRequest m) {
 		Assert.assertEquals(s1, m.getComment());
-		Assert.assertEquals(d1, m.getCreated());
-		Assert.assertEquals(d2, m.getModified());
+		Assert.assertEquals(t1, m.getCreated());
+		Assert.assertEquals(t2, m.getModified());
 		Assert.assertTrue(l1 == m.getRequestId());
 		Assert.assertEquals(s2, m.getRequestUserId());
 		Assert.assertEquals(s3, m.getReviewUserId());
@@ -619,8 +619,8 @@ public class DomainTest extends AbstractModelTest {
 		MLPPublishRequest m = new MLPPublishRequest(s1, s2, s3, s4);
 		m = new MLPPublishRequest();
 		m.setComment(s1);
-		m.setCreated(d1);
-		m.setModified(d2);
+		m.setCreated(t1);
+		m.setModified(t2);
 		m.setRequestId(l1);
 		m.setRequestUserId(s2);
 		m.setReviewUserId(s3);
@@ -645,9 +645,9 @@ public class DomainTest extends AbstractModelTest {
 
 	private void checkMLPRevisionDescription(MLPRevisionDescription m) {
 		Assert.assertEquals(s1, m.getAccessTypeCode());
-		Assert.assertEquals(d1, m.getCreated());
+		Assert.assertEquals(t1, m.getCreated());
 		Assert.assertEquals(s2, m.getDescription());
-		Assert.assertEquals(d2, m.getModified());
+		Assert.assertEquals(t2, m.getModified());
 		Assert.assertEquals(s3, m.getRevisionId());
 	}
 
@@ -656,9 +656,9 @@ public class DomainTest extends AbstractModelTest {
 		MLPRevisionDescription m = new MLPRevisionDescription(s1, s1, s1);
 		m = new MLPRevisionDescription();
 		m.setAccessTypeCode(s1);
-		m.setCreated(d1);
+		m.setCreated(t1);
 		m.setDescription(s2);
-		m.setModified(d2);
+		m.setModified(t2);
 		m.setRevisionId(s3);
 		checkMLPRevisionDescription(m);
 		m = new MLPRevisionDescription(m);
@@ -677,8 +677,8 @@ public class DomainTest extends AbstractModelTest {
 	}
 
 	private void checkMLPRole(MLPRole m) {
-		Assert.assertEquals(d1, m.getCreated());
-		Assert.assertEquals(d2, m.getModified());
+		Assert.assertEquals(t1, m.getCreated());
+		Assert.assertEquals(t2, m.getModified());
 		Assert.assertEquals(s1, m.getName());
 		Assert.assertEquals(s2, m.getRoleId());
 	}
@@ -687,8 +687,8 @@ public class DomainTest extends AbstractModelTest {
 	public void testMLPRole() {
 		MLPRole m = new MLPRole(s1, b1);
 		m = new MLPRole();
-		m.setCreated(d1);
-		m.setModified(d2);
+		m.setCreated(t1);
+		m.setModified(t2);
 		m.setName(s1);
 		m.setRoleId(s2);
 		checkMLPRole(m);
@@ -708,8 +708,8 @@ public class DomainTest extends AbstractModelTest {
 	}
 
 	private void checkMLPRoleFunction(MLPRoleFunction m) {
-		Assert.assertEquals(d1, m.getCreated());
-		Assert.assertEquals(d2, m.getModified());
+		Assert.assertEquals(t1, m.getCreated());
+		Assert.assertEquals(t2, m.getModified());
 		Assert.assertEquals(s1, m.getName());
 		Assert.assertEquals(s2, m.getRoleFunctionId());
 		Assert.assertEquals(s3, m.getRoleId());
@@ -719,8 +719,8 @@ public class DomainTest extends AbstractModelTest {
 	public void testMLPRoleFunction() {
 		MLPRoleFunction m = new MLPRoleFunction(s1, s1);
 		m = new MLPRoleFunction();
-		m.setCreated(d1);
-		m.setModified(d2);
+		m.setCreated(t1);
+		m.setModified(t2);
 		m.setName(s1);
 		m.setRoleFunctionId(s2);
 		m.setRoleId(s3);
@@ -743,8 +743,8 @@ public class DomainTest extends AbstractModelTest {
 	private void checkMLPSiteConfig(MLPSiteConfig m) {
 		Assert.assertEquals(s1, m.getConfigKey());
 		Assert.assertEquals(s2, m.getConfigValue());
-		Assert.assertEquals(d1, m.getCreated());
-		Assert.assertEquals(d2, m.getModified());
+		Assert.assertEquals(t1, m.getCreated());
+		Assert.assertEquals(t2, m.getModified());
 		Assert.assertEquals(s3, m.getUserId());
 	}
 
@@ -754,8 +754,8 @@ public class DomainTest extends AbstractModelTest {
 		m = new MLPSiteConfig();
 		m.setConfigKey(s1);
 		m.setConfigValue(s2);
-		m.setCreated(d1);
-		m.setModified(d2);
+		m.setCreated(t1);
+		m.setModified(t2);
 		m.setUserId(s3);
 		checkMLPSiteConfig(m);
 		m = new MLPSiteConfig(m);
@@ -776,9 +776,9 @@ public class DomainTest extends AbstractModelTest {
 	private void checkMLPSiteContent(MLPSiteContent m) {
 		Assert.assertEquals(s1, m.getContentKey());
 		Assert.assertEquals(by1, m.getContentValue());
-		Assert.assertEquals(d1, m.getCreated());
+		Assert.assertEquals(t1, m.getCreated());
 		Assert.assertEquals(s2, m.getMimeType());
-		Assert.assertEquals(d2, m.getModified());
+		Assert.assertEquals(t2, m.getModified());
 	}
 
 	@Test
@@ -787,9 +787,9 @@ public class DomainTest extends AbstractModelTest {
 		m = new MLPSiteContent();
 		m.setContentKey(s1);
 		m.setContentValue(by1);
-		m.setCreated(d1);
+		m.setCreated(t1);
 		m.setMimeType(s2);
-		m.setModified(d2);
+		m.setModified(t2);
 		checkMLPSiteContent(m);
 		m = new MLPSiteContent(m);
 		checkMLPSiteContent(m);
@@ -982,12 +982,13 @@ public class DomainTest extends AbstractModelTest {
 	private void checkMLPSolution(MLPSolution m) {
 		Assert.assertEquals(b1, m.isActive());
 		Assert.assertEquals(d1, m.getCreated());
+		Assert.assertEquals(t1, m.getCreated());
 		Assert.assertEquals(l1, m.getDownloadCount());
 		Assert.assertEquals(b2, m.isFeatured());
-		Assert.assertEquals(d2, m.getLastDownload());
+		Assert.assertEquals(t2, m.getLastDownload());
 		Assert.assertEquals(s2, m.getMetadata());
 		Assert.assertEquals(s3, m.getModelTypeCode());
-		Assert.assertEquals(d3, m.getModified());
+		Assert.assertEquals(t3, m.getModified());
 		Assert.assertEquals(s4, m.getName());
 		Assert.assertEquals(s5, m.getOrigin());
 		Assert.assertEquals(s6, m.getUserId());
@@ -1005,13 +1006,13 @@ public class DomainTest extends AbstractModelTest {
 		MLPSolution m = new MLPSolution(s1, s1, b1);
 		m = new MLPSolution();
 		m.setActive(b1);
-		m.setCreated(d1);
+		m.setCreated(t1);
 		m.setDownloadCount(l1);
 		m.setFeatured(b2);
-		m.setLastDownload(d2);
+		m.setLastDownload(t2);
 		m.setMetadata(s2);
 		m.setModelTypeCode(s3);
-		m.setModified(d3);
+		m.setModified(t3);
 		m.setName(s4);
 		m.setOrigin(s5);
 		m.setUserId(s6);
@@ -1040,7 +1041,7 @@ public class DomainTest extends AbstractModelTest {
 	}
 
 	private void checkMLPSolutionDeployment(MLPSolutionDeployment m) {
-		Assert.assertEquals(d1, m.getCreated());
+		Assert.assertEquals(t1, m.getCreated());
 		Assert.assertEquals(s1, m.getDeploymentId());
 		Assert.assertEquals(s2, m.getDeploymentStatusCode());
 		Assert.assertEquals(s3, m.getDetail());
@@ -1054,11 +1055,10 @@ public class DomainTest extends AbstractModelTest {
 	public void testMLPSolutionDeployment() {
 		MLPSolutionDeployment m = new MLPSolutionDeployment(s1, s1, s1, s1);
 		m = new MLPSolutionDeployment();
-		m.setCreated(d1);
+		m.setCreated(t1);
 		m.setDeploymentId(s1);
 		m.setDeploymentStatusCode(s2);
 		m.setDetail(s3);
-		m.setModified(d2);
 		m.setRevisionId(s4);
 		m.setSolutionId(s5);
 		m.setTarget(s6);
@@ -1084,7 +1084,7 @@ public class DomainTest extends AbstractModelTest {
 		Assert.assertEquals(l1, m.getDownloadId());
 		Assert.assertEquals(s2, m.getSolutionId());
 		Assert.assertEquals(s3, m.getUserId());
-		Assert.assertEquals(d1, m.getDownloadDate());
+		Assert.assertEquals(t1, m.getDownloadDate());
 	}
 
 	@Test
@@ -1096,7 +1096,7 @@ public class DomainTest extends AbstractModelTest {
 		m.setDownloadId(l1);
 		m.setSolutionId(s2);
 		m.setUserId(s3);
-		m.setDownloadDate(d1);
+		m.setDownloadDate(t1);
 		checkMLPSolutionDownload(m);
 		m = new MLPSolutionDownload(m);
 		checkMLPSolutionDownload(m);
@@ -1148,10 +1148,10 @@ public class DomainTest extends AbstractModelTest {
 	}
 
 	private void checkMLPSolutionGroup(MLPSolutionGroup m) {
-		Assert.assertEquals(d1, m.getCreated());
+		Assert.assertEquals(t1, m.getCreated());
 		Assert.assertEquals(s1, m.getDescription());
 		Assert.assertEquals(l1, m.getGroupId());
-		Assert.assertEquals(d2, m.getModified());
+		Assert.assertEquals(t2, m.getModified());
 		Assert.assertEquals(s2, m.getName());
 	}
 
@@ -1159,10 +1159,10 @@ public class DomainTest extends AbstractModelTest {
 	public void testMLPSolutionGroup() {
 		MLPSolutionGroup m = new MLPSolutionGroup(s1);
 		m = new MLPSolutionGroup();
-		m.setCreated(d1);
+		m.setCreated(t1);
 		m.setDescription(s1);
 		m.setGroupId(l1);
-		m.setModified(d2);
+		m.setModified(t2);
 		m.setName(s2);
 		checkMLPSolutionGroup(m);
 		m = new MLPSolutionGroup(m);
@@ -1182,7 +1182,7 @@ public class DomainTest extends AbstractModelTest {
 	}
 
 	private void checkMLPSolutionRating(MLPSolutionRating m) {
-		Assert.assertEquals(d1, m.getCreated());
+		Assert.assertEquals(t1, m.getCreated());
 		Assert.assertEquals(i1, m.getRating());
 		Assert.assertEquals(s1, m.getSolutionId());
 		Assert.assertEquals(s2, m.getTextReview());
@@ -1193,7 +1193,7 @@ public class DomainTest extends AbstractModelTest {
 	public void testMLPSolutionRating() {
 		MLPSolutionRating m = new MLPSolutionRating(s1, s1, i1);
 		m = new MLPSolutionRating();
-		m.setCreated(d1);
+		m.setCreated(t1);
 		m.setRating(i1);
 		m.setSolutionId(s1);
 		m.setTextReview(s2);
@@ -1226,9 +1226,9 @@ public class DomainTest extends AbstractModelTest {
 
 	private void checkMLPSolutionRevision(MLPSolutionRevision m) {
 		Assert.assertEquals(s1, m.getAccessTypeCode());
-		Assert.assertEquals(d1, m.getCreated());
+		Assert.assertEquals(t1, m.getCreated());
 		Assert.assertEquals(s3, m.getMetadata());
-		Assert.assertEquals(d2, m.getModified());
+		Assert.assertEquals(t2, m.getModified());
 		Assert.assertEquals(s4, m.getOrigin());
 		Assert.assertEquals(s5, m.getPublisher());
 		Assert.assertEquals(s6, m.getRevisionId());
@@ -1248,9 +1248,9 @@ public class DomainTest extends AbstractModelTest {
 		m.setAccessTypeCode(s1);
 		AuthorTransport[] authors = new AuthorTransport[] { author0, author1 };
 		m.setAuthors(authors);
-		m.setCreated(d1);
+		m.setCreated(t1);
 		m.setMetadata(s3);
-		m.setModified(d2);
+		m.setModified(t2);
 		m.setOrigin(s4);
 		m.setPublisher(s5);
 		m.setRevisionId(s6);
@@ -1284,7 +1284,7 @@ public class DomainTest extends AbstractModelTest {
 
 	private void checkMLPStepResult(MLPStepResult m) {
 		Assert.assertEquals(s1, m.getArtifactId());
-		Assert.assertEquals(d1, m.getEndDate());
+		Assert.assertEquals(t1, m.getEndDate());
 		Assert.assertEquals(s2, m.getName());
 		Assert.assertEquals(s3, m.getResult());
 		Assert.assertEquals(s4, m.getRevisionId());
@@ -1299,12 +1299,12 @@ public class DomainTest extends AbstractModelTest {
 		MLPStepResult m = new MLPStepResult(s1, s2, s3, d1);
 		m = new MLPStepResult();
 		m.setArtifactId(s1);
-		m.setEndDate(d1);
+		m.setEndDate(t1);
 		m.setName(s2);
 		m.setResult(s3);
 		m.setRevisionId(s4);
 		m.setSolutionId(s5);
-		m.setStartDate(d2);
+		m.setStartDate(t2);
 		m.setStatusCode(s6);
 		m.setStepCode(s7);
 		checkMLPStepResult(m);
@@ -1386,23 +1386,24 @@ public class DomainTest extends AbstractModelTest {
 		Assert.assertEquals(b1, m.isActive());
 		Assert.assertEquals(s1, m.getApiToken());
 		Assert.assertEquals(s2, m.getAuthToken());
-		Assert.assertEquals(d1, m.getCreated());
+		Assert.assertEquals(t1, m.getCreated());
 		Assert.assertEquals(s3, m.getEmail());
 		Assert.assertEquals(s4, m.getFirstName());
-		Assert.assertEquals(d2, m.getLastLogin());
+		Assert.assertEquals(t2, m.getLastLogin());
 		Assert.assertEquals(s5, m.getLastName());
 		Assert.assertEquals(new Short((short) 0), m.getLoginFailCount());
-		Assert.assertEquals(d3, m.getLoginFailDate());
+		Assert.assertEquals(t3, m.getLoginFailDate());
 		Assert.assertEquals(s6, m.getLoginHash());
 		Assert.assertEquals(s7, m.getLoginName());
-		Assert.assertEquals(d4, m.getLoginPassExpire());
+		Assert.assertEquals(t4, m.getLoginPassExpire());
 		Assert.assertEquals(s8, m.getMiddleName());
+		Assert.assertEquals(t5, m.getModified());
 		Assert.assertEquals(s9, m.getOrgName());
 		Assert.assertArrayEquals(by1, m.getPicture());
 		Assert.assertEquals(tags, m.getTags());
 		Assert.assertEquals(s10, m.getUserId());
 		Assert.assertEquals(s11, m.getVerifyTokenHash());
-		Assert.assertEquals(d5, m.getVerifyExpiration());
+		Assert.assertEquals(t6, m.getVerifyExpiration());
 	}
 
 	@Test
@@ -1412,24 +1413,24 @@ public class DomainTest extends AbstractModelTest {
 		m.setActive(b1);
 		m.setApiToken(s1);
 		m.setAuthToken(s2);
-		m.setCreated(d1);
+		m.setCreated(t1);
 		m.setEmail(s3);
 		m.setFirstName(s4);
-		m.setLastLogin(d2);
+		m.setLastLogin(t2);
 		m.setLastName(s5);
 		m.setLoginFailCount((short) 0);
-		m.setLoginFailDate(d3);
+		m.setLoginFailDate(t3);
 		m.setLoginHash(s6);
 		m.setLoginName(s7);
-		m.setLoginPassExpire(d4);
+		m.setLoginPassExpire(t4);
 		m.setMiddleName(s8);
-		m.setModified(d4);
+		m.setModified(t5);
 		m.setOrgName(s9);
 		m.setPicture(by1);
 		m.setTags(tags);
 		m.setUserId(s10);
 		m.setVerifyTokenHash(s11);
-		m.setVerifyExpiration(d5);
+		m.setVerifyExpiration(t6);
 		checkMLPUser(m);
 		m = new MLPUser(m);
 		checkMLPUser(m);
@@ -1454,7 +1455,7 @@ public class DomainTest extends AbstractModelTest {
 
 	private void checkMLPUserLoginProvider(MLPUserLoginProvider m) {
 		Assert.assertEquals(s1, m.getAccessToken());
-		Assert.assertEquals(d1, m.getCreated());
+		Assert.assertEquals(t1, m.getCreated());
 		Assert.assertEquals(s2, m.getDisplayName());
 		Assert.assertEquals(s3, m.getImageUrl());
 		Assert.assertEquals(s4, m.getProfileUrl());
@@ -1471,10 +1472,10 @@ public class DomainTest extends AbstractModelTest {
 		MLPUserLoginProvider m = new MLPUserLoginProvider(s1, s1, s1, s1, i1);
 		m = new MLPUserLoginProvider();
 		m.setAccessToken(s1);
-		m.setCreated(d1);
+		m.setCreated(t1);
 		m.setDisplayName(s2);
 		m.setImageUrl(s3);
-		m.setModified(d2);
+		m.setModified(t2);
 		m.setProfileUrl(s4);
 		m.setProviderCode(s5);
 		m.setProviderUserId(s6);
@@ -1507,30 +1508,30 @@ public class DomainTest extends AbstractModelTest {
 	}
 
 	private void checkMLPUserNotification(MLPUserNotification m) {
-		Assert.assertEquals(d1, m.getCreated());
-		Assert.assertEquals(d2, m.getEnd());
+		Assert.assertEquals(t1, m.getCreated());
+		Assert.assertEquals(t2, m.getEnd());
 		Assert.assertEquals(s1, m.getMessage());
-		Assert.assertEquals(d3, m.getModified());
+		Assert.assertEquals(t3, m.getModified());
 		Assert.assertEquals(s2, m.getNotificationId());
-		Assert.assertEquals(d4, m.getStart());
+		Assert.assertEquals(t4, m.getStart());
 		Assert.assertEquals(s3, m.getTitle());
 		Assert.assertEquals(s4, m.getUrl());
-		Assert.assertEquals(d5, m.getViewed());
+		Assert.assertEquals(t5, m.getViewed());
 	}
 
 	@Test
 	public void testMLPUserNotification() {
-		MLPUserNotification m = new MLPUserNotification(s1, s1, s1, s1, d1, d1, d1);
+		MLPUserNotification m = new MLPUserNotification(s1, s1, s1, s1, t1, t1, t1);
 		m = new MLPUserNotification();
-		m.setCreated(d1);
-		m.setEnd(d2);
+		m.setCreated(t1);
+		m.setEnd(t2);
 		m.setMessage(s1);
-		m.setModified(d3);
+		m.setModified(t3);
 		m.setNotificationId(s2);
-		m.setStart(d4);
+		m.setStart(t4);
 		m.setTitle(s3);
 		m.setUrl(s4);
-		m.setViewed(d5);
+		m.setViewed(t5);
 		checkMLPUserNotification(m);
 		m = new MLPUserNotification(m);
 		checkMLPUserNotification(m);

@@ -22,6 +22,7 @@ package org.acumos.cds.test;
 
 import java.lang.invoke.MethodHandles;
 import java.net.URISyntaxException;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -56,6 +57,11 @@ public class FOMDomainTest {
 	final Date d3 = new Date(time + 3 * 24 * 60 * 60 * 1000);
 	final Date d4 = new Date(time + 4 * 24 * 60 * 60 * 1000);
 	final Date d5 = new Date(time + 5 * 24 * 60 * 60 * 1000);
+	final Timestamp t1 = new Timestamp(time + 1 * 24 * 60 * 60 * 1000);
+	final Timestamp t2 = new Timestamp(time + 2 * 24 * 60 * 60 * 1000);
+	final Timestamp t3 = new Timestamp(time + 3 * 24 * 60 * 60 * 1000);
+	final Timestamp t4 = new Timestamp(time + 4 * 24 * 60 * 60 * 1000);
+	final Timestamp t5 = new Timestamp(time + 5 * 24 * 60 * 60 * 1000);	
 	final Integer i1 = 1;
 	final Integer i2 = 2;
 	final Integer i3 = 3;
@@ -95,10 +101,10 @@ public class FOMDomainTest {
 		MLPArtifactFOM m = new MLPArtifactFOM();
 		m.setArtifactId(s1);
 		m.setArtifactTypeCode(s2);
-		m.setCreated(d1);
+		m.setCreated(t1);
 		m.setDescription(s3);
 		m.setMetadata(s4);
-		m.setModified(d2);
+		m.setModified(t2);
 		m.setName(s5);
 		m.setOwner(user1);
 		m.setRevisions(revs);
@@ -130,10 +136,10 @@ public class FOMDomainTest {
 	public void testMLPSolutionFOM() {
 		MLPSolutionFOM m = new MLPSolutionFOM();
 		m.setActive(b1);
-		m.setCreated(d1);
+		m.setCreated(t1);
 		m.setMetadata(s2);
 		m.setModelTypeCode(s3);
-		m.setModified(d2);
+		m.setModified(t2);
 		m.setName(s4);
 		m.setOrigin(s5);
 		m.setOwner(user1);
@@ -167,10 +173,10 @@ public class FOMDomainTest {
 		MLPSolutionRevisionFOM m = new MLPSolutionRevisionFOM();
 		m.setAccessTypeCode(s1);
 		m.setArtifacts(arts);
-		m.setCreated(d1);
+		m.setCreated(t1);
 		m.setDescriptions(descs);
 		m.setMetadata(s3);
-		m.setModified(d2);
+		m.setModified(t2);
 		m.setOrigin(s4);
 		m.setPublisher(s5);
 		m.setRevisionId(s6);

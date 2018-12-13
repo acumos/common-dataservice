@@ -72,7 +72,10 @@ security.user.password = ccds-web-pass
 spring.database.driver.classname = org.mariadb.jdbc.Driver
 # Database coordinates
 # Mysql/Mariadb must set this parameter: useLegacyDatetimeCode=false
-spring.datasource.url = jdbc:mysql://localhost:3306/db-name?useSSL=false
+# Add the following parameter if the host machine has an unexpected timezone string:
+#    &serverTimezone=GMT-05:00
+# Example error: QueryException: The server time_zone 'Eastern Standard Time' cannot be parsed.
+spring.datasource.url = jdbc:mysql://localhost:3306/db-name?useLegacyDatetimeCode=false&useSSL=false
 spring.datasource.username = db-user-name
 spring.datasource.password = db-user-pass
 # Encrypted password - see README.md
