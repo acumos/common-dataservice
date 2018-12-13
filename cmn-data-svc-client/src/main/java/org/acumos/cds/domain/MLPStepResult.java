@@ -21,6 +21,7 @@
 package org.acumos.cds.domain;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Objects;
 
@@ -103,18 +104,18 @@ public class MLPStepResult implements MLPEntity, Serializable {
 
 	@Column(name = "START_DATE", nullable = false, updatable = false)
 	@ApiModelProperty(required = true, value = "Millisec since the Epoch", example = "1521202458867")
-	private Date startDate;
+	private Timestamp startDate;
 
 	@Column(name = "END_DATE")
 	@ApiModelProperty(value = "Millisec since the Epoch", example = "1521202458867")
-	private Date endDate;
+	private Timestamp endDate;
 
 	/**
 	 * No-arg constructor
 	 */
 	public MLPStepResult() {
 		// no-arg constructor
-		startDate = new Date();
+		startDate = new Timestamp(new Date().getTime());
 	}
 
 	/**
@@ -131,13 +132,32 @@ public class MLPStepResult implements MLPEntity, Serializable {
 	 * @param startDate
 	 *                         Start date
 	 */
-	public MLPStepResult(String stepTypeCode, String name, String statusCode, Date startDate) {
+	public MLPStepResult(String stepTypeCode, String name, String statusCode, Timestamp startDate) {
 		if (stepTypeCode == null || name == null || statusCode == null || startDate == null)
 			throw new IllegalArgumentException("Null not permitted");
 		this.stepCode = stepTypeCode;
 		this.name = name;
 		this.statusCode = statusCode;
 		this.startDate = startDate;
+	}
+
+	/**
+	 * Convenience constructor that accepts the required fields; i.e., the minimum
+	 * that the user must supply to create a valid instance. Omits step result ID,
+	 * which is generated on save.
+	 * 
+	 * @param stepTypeCode
+	 *                         Step type code
+	 * @param name
+	 *                         Step name
+	 * @param statusCode
+	 *                         Step status code
+	 * @param startDate
+	 *                         Start date
+	 * @deprecated use {@link #MLPStepResult(String, String, String, Timestamp)}
+	 */
+	public MLPStepResult(String stepTypeCode, String name, String statusCode, Date startDate) {
+		this(stepTypeCode, name, statusCode, new Timestamp(startDate.getTime()));
 	}
 
 	/**
@@ -241,19 +261,19 @@ public class MLPStepResult implements MLPEntity, Serializable {
 		this.result = result;
 	}
 
-	public Date getStartDate() {
+	public Timestamp getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(Date startDate) {
+	public void setStartDate(Timestamp startDate) {
 		this.startDate = startDate;
 	}
 
-	public Date getEndDate() {
+	public Timestamp getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(Date endDate) {
+	public void setEndDate(Timestamp endDate) {
 		this.endDate = endDate;
 	}
 

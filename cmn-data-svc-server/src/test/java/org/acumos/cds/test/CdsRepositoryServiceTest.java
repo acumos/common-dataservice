@@ -21,6 +21,7 @@
 package org.acumos.cds.test;
 
 import java.lang.invoke.MethodHandles;
+import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -235,7 +236,7 @@ public class CdsRepositoryServiceTest {
 		/** Delete data added in test? */
 		final boolean cleanup = true;
 		try {
-			Date lastLogin = new Date(new Date().getTime() - 60 * 1000);
+			Timestamp lastLogin = new Timestamp(new Date().getTime() - 60 * 1000);
 			MLPUser cu = null;
 			cu = new MLPUser();
 			cu.setActive(true);
@@ -250,7 +251,7 @@ public class CdsRepositoryServiceTest {
 			cu.setLoginFailCount((short) 0);
 			cu.setLoginFailDate(lastLogin);
 			cu.setLoginHash(loginPass);
-			cu.setLoginPassExpire(new Date());
+			cu.setLoginPassExpire(new Timestamp(new Date().getTime()));
 			cu = userRepository.save(cu);
 			Date originalCreated = cu.getCreated();
 			Assert.assertNotNull(cu.getUserId());
@@ -268,7 +269,7 @@ public class CdsRepositoryServiceTest {
 			Assert.assertNotEquals(cu.getCreated(), cu.getModified());
 			Assert.assertEquals(cu.getLastLogin(), lastLogin);
 			// The created-date field accepts updates, unfortunately
-			Date changedCreate = new Date(new Date().getTime() - 99);
+			Timestamp changedCreate = new Timestamp(new Date(new Date().getTime() - 99).getTime());
 			cu.setCreated(changedCreate);
 			cu = userRepository.save(cu);
 			Assert.assertEquals(cu.getCreated(), changedCreate);
@@ -288,12 +289,12 @@ public class CdsRepositoryServiceTest {
 			notif.setTitle("Notification title");
 			notif.setMessage("Notification message");
 			notif.setUrl("http://www.yahoo.com");
-			notif.setStart(new Date());
+			notif.setStart(new Timestamp(new Date().getTime()));
 			notif.setMsgSeverityCode(String.valueOf(MessageSeverityCode.LO));
 			Calendar c = Calendar.getInstance();
 			c.setTime(new Date()); // Now use today date.
 			c.add(Calendar.DATE, 5); // Adding 5 days
-			notif.setEnd(c.getTime());
+			notif.setEnd(new Timestamp(c.getTime().getTime()));
 			notif = notificationRepository.save(notif);
 			Assert.assertNotNull(notif.getNotificationId());
 			Assert.assertNotNull(notif.getCreated());
@@ -347,7 +348,7 @@ public class CdsRepositoryServiceTest {
 			Assert.assertNotNull(ps.getSubId());
 			// Column was defined as timestamp with autoupdate :(
 			Assert.assertNull(ps.getProcessed());
-			Date processed = new Date();
+			Timestamp processed = new Timestamp(new Date().getTime());
 			ps.setProcessed(processed);
 			ps = peerSubscriptionRepository.save(ps);
 			Assert.assertEquals(processed, ps.getProcessed());
@@ -665,7 +666,7 @@ public class CdsRepositoryServiceTest {
 
 			MLPSolutionRating solrate = new MLPSolutionRating(cs.getSolutionId(), cu.getUserId(), 2);
 			solrate.setTextReview("Review text");
-			solrate.setCreated(new Date());
+			solrate.setCreated(new Timestamp(new Date().getTime()));
 			solrate = solutionRatingRepository.save(solrate);
 			Assert.assertNotNull(solrate.getSolutionId());
 			logger.info("Created Solution Rating " + solrate.getSolutionId() + " Rating is " + solrate.getRating());
@@ -1221,11 +1222,11 @@ public class CdsRepositoryServiceTest {
 			no.setMessage("notif msg");
 			no.setUrl("http://notify.me");
 			no.setMsgSeverityCode(String.valueOf(MessageSeverityCode.HI));
-			Date now = new Date();
+			Timestamp now = new Timestamp(new Date().getTime());
 			// Start an hour ago
-			no.setStart(new Date(now.getTime() - 60 * 60 * 1000));
+			no.setStart(new Timestamp(now.getTime() - 60 * 60 * 1000));
 			// End an hour from now
-			no.setEnd(new Date(now.getTime() + 60 * 60 * 1000));
+			no.setEnd(new Timestamp(now.getTime() + 60 * 60 * 1000));
 			no = notificationRepository.save(no);
 			Assert.assertNotNull(no.getNotificationId());
 
@@ -1241,7 +1242,7 @@ public class CdsRepositoryServiceTest {
 			Assert.assertFalse(notifs.getContent().isEmpty());
 
 			// This next step mimics what a controller will do
-			nm.setViewed(new Date());
+			nm.setViewed(new Timestamp(new Date().getTime()));
 			notifUserMapRepository.save(nm);
 
 			// Notif has been viewed; item should have viewed-on date
@@ -1314,8 +1315,8 @@ public class CdsRepositoryServiceTest {
 			sr.setStepCode(String.valueOf(StepTypeCode.OB));
 			sr.setName("Solution ID creation");
 			sr.setStatusCode(StepStatusCode.FA.name());
-			Date now = new Date();
-			sr.setStartDate(new Date(now.getTime() - 60 * 1000));
+			Timestamp now = new Timestamp(new Date().getTime());
+			sr.setStartDate(new Timestamp(now.getTime() - 60 * 1000));
 			sr = stepResultRepository.save(sr);
 			Assert.assertNotNull(sr.getStepResultId());
 

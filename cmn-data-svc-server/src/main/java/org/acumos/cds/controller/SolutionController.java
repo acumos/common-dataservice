@@ -21,6 +21,7 @@
 package org.acumos.cds.controller;
 
 import java.lang.invoke.MethodHandles;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -153,7 +154,7 @@ public class SolutionController extends AbstractController {
 		long count = solutionDownloadRepository.countSolutionDownloads(solutionId);
 		MLPSolution stats = solutionRepository.findOne(solutionId);
 		stats.setDownloadCount(count);
-		stats.setLastDownload(new Date());
+		stats.setLastDownload(new Timestamp(new Date().getTime()));
 		solutionRepository.save(stats);
 	}
 
