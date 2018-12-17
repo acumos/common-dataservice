@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "70d7c483_aa7e4627",
+        "filename": "cmn-data-svc-server/pom.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 3
+      },
+      "writtenOn": "2018-12-17T17:20:23Z",
+      "side": 1,
+      "message": "General comment on the license text. In ONAP, we were told by LF legal to change the year to 2017 - 2018 on the file that is modified.",
+      "range": {
+        "startLine": 7,
+        "startChar": 16,
+        "endLine": 7,
+        "endChar": 20
+      },
+      "revId": "0affcb25076833c6014baba9582e930e9421d462",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
