@@ -35,6 +35,8 @@ import org.acumos.cds.CCDSConstants;
 import org.acumos.cds.CodeNameType;
 import org.acumos.cds.PublishRequestStatusCode;
 import org.acumos.cds.domain.MLPArtifact;
+import org.acumos.cds.domain.MLPCatSolMap;
+import org.acumos.cds.domain.MLPCatalog;
 import org.acumos.cds.domain.MLPCodeNamePair;
 import org.acumos.cds.domain.MLPComment;
 import org.acumos.cds.domain.MLPDocument;
@@ -1973,25 +1975,25 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 	}
 
 	@Override
-	public MLPSolutionGroup createSolutionGroup(MLPSolutionGroup solutionGroup) {
+	public MLPSolutionGroup createSolutionGroup(MLPSolutionGroup catalog) {
 		URI uri = buildUri(new String[] { CCDSConstants.GROUP_PATH, CCDSConstants.SOLUTION_PATH }, null, null);
 		logger.debug("createSolutionGroup: uri {}", uri);
-		return restTemplate.postForObject(uri, solutionGroup, MLPSolutionGroup.class);
+		return restTemplate.postForObject(uri, catalog, MLPSolutionGroup.class);
 	}
 
 	@Override
-	public void updateSolutionGroup(MLPSolutionGroup solutionGroup) {
-		URI uri = buildUri(new String[] { CCDSConstants.GROUP_PATH, Long.toString(solutionGroup.getGroupId()),
+	public void updateSolutionGroup(MLPSolutionGroup catalog) {
+		URI uri = buildUri(new String[] { CCDSConstants.GROUP_PATH, Long.toString(catalog.getGroupId()),
 				CCDSConstants.SOLUTION_PATH }, null, null);
 		logger.debug("updateSolutionGroup: url {}", uri);
-		restTemplate.put(uri, solutionGroup);
+		restTemplate.put(uri, catalog);
 	}
 
 	@Override
-	public void deleteSolutionGroup(Long solutionGroupId) {
+	public void deleteSolutionGroup(Long catalogId) {
 		URI uri = buildUri(
-				new String[] { CCDSConstants.GROUP_PATH, Long.toString(solutionGroupId), CCDSConstants.SOLUTION_PATH },
-				null, null);
+				new String[] { CCDSConstants.GROUP_PATH, Long.toString(catalogId), CCDSConstants.SOLUTION_PATH }, null,
+				null);
 		logger.debug("deleteSolutionGroup: url {}", uri);
 		restTemplate.delete(uri);
 	}
@@ -2028,10 +2030,10 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 	}
 
 	@Override
-	public RestPageResponse<MLPSolution> getSolutionsInGroup(Long solutionGroupId, RestPageRequest pageRequest) {
+	public RestPageResponse<MLPSolution> getSolutionsInGroup(Long catalogId, RestPageRequest pageRequest) {
 		URI uri = buildUri(
-				new String[] { CCDSConstants.GROUP_PATH, Long.toString(solutionGroupId), CCDSConstants.SOLUTION_PATH },
-				null, pageRequest);
+				new String[] { CCDSConstants.GROUP_PATH, Long.toString(catalogId), CCDSConstants.SOLUTION_PATH }, null,
+				pageRequest);
 		logger.debug("getSolutionsInGroup: uri {}", uri);
 		ResponseEntity<RestPageResponse<MLPSolution>> response = restTemplate.exchange(uri, HttpMethod.GET, null,
 				new ParameterizedTypeReference<RestPageResponse<MLPSolution>>() {
@@ -2040,17 +2042,17 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 	}
 
 	@Override
-	public void addSolutionToGroup(String solutionId, Long solutionGroupId) {
-		URI uri = buildUri(new String[] { CCDSConstants.GROUP_PATH, Long.toString(solutionGroupId),
+	public void addSolutionToGroup(String solutionId, Long catalogId) {
+		URI uri = buildUri(new String[] { CCDSConstants.GROUP_PATH, Long.toString(catalogId),
 				CCDSConstants.SOLUTION_PATH, solutionId }, null, null);
 		logger.debug("addSolutionToGroup: url {}", uri);
-		MLPPeerGrpMemMap map = new MLPPeerGrpMemMap(solutionGroupId, solutionId);
+		MLPPeerGrpMemMap map = new MLPPeerGrpMemMap(catalogId, solutionId);
 		restTemplate.postForObject(uri, map, SuccessTransport.class);
 	}
 
 	@Override
-	public void dropSolutionFromGroup(String solutionId, Long solutionGroupId) {
-		URI uri = buildUri(new String[] { CCDSConstants.GROUP_PATH, Long.toString(solutionGroupId),
+	public void dropSolutionFromGroup(String solutionId, Long catalogId) {
+		URI uri = buildUri(new String[] { CCDSConstants.GROUP_PATH, Long.toString(catalogId),
 				CCDSConstants.SOLUTION_PATH, solutionId }, null, null);
 		logger.debug("dropSolutionFromGroup: url {}", uri);
 		restTemplate.delete(uri);
@@ -2068,18 +2070,18 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 		return response.getBody();
 	}
 
-	public void mapPeerSolutionGroups(Long peerGroupId, Long solutionGroupId) {
+	public void mapPeerSolutionGroups(Long peerGroupId, Long catalogId) {
 		URI uri = buildUri(new String[] { CCDSConstants.GROUP_PATH, CCDSConstants.PEER_PATH, Long.toString(peerGroupId),
-				CCDSConstants.SOLUTION_PATH, Long.toString(solutionGroupId) }, null, null);
+				CCDSConstants.SOLUTION_PATH, Long.toString(catalogId) }, null, null);
 		logger.debug("mapPeerSolutionGroups: url {}", uri);
-		MLPPeerSolAccMap map = new MLPPeerSolAccMap(peerGroupId, solutionGroupId, true);
+		MLPPeerSolAccMap map = new MLPPeerSolAccMap(peerGroupId, catalogId, true);
 		restTemplate.postForObject(uri, map, SuccessTransport.class);
 	}
 
 	@Override
-	public void unmapPeerSolutionGroups(Long peerGroupId, Long solutionGroupId) {
+	public void unmapPeerSolutionGroups(Long peerGroupId, Long catalogId) {
 		URI uri = buildUri(new String[] { CCDSConstants.GROUP_PATH, CCDSConstants.PEER_PATH, Long.toString(peerGroupId),
-				CCDSConstants.SOLUTION_PATH, Long.toString(solutionGroupId) }, null, null);
+				CCDSConstants.SOLUTION_PATH, Long.toString(catalogId) }, null, null);
 		logger.debug("unmapPeerSolutionGroups: url {}", uri);
 		restTemplate.delete(uri);
 	}
@@ -2365,6 +2367,77 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 				null);
 		logger.debug("saveSolutionImage: uri {}", uri);
 		restTemplate.put(uri, image);
+	}
+
+	@Override
+	public RestPageResponse<MLPCatalog> getCatalogs(RestPageRequest pageRequest) {
+		URI uri = buildUri(new String[] { CCDSConstants.CATALOG_PATH }, null, pageRequest);
+		logger.debug("getCatalogs: uri {}", uri);
+		ResponseEntity<RestPageResponse<MLPCatalog>> response = restTemplate.exchange(uri, HttpMethod.GET, null,
+				new ParameterizedTypeReference<RestPageResponse<MLPCatalog>>() {
+				});
+		return response.getBody();
+	}
+
+	@Override
+	public MLPCatalog getCatalog(String catalogId) {
+		URI uri = buildUri(new String[] { CCDSConstants.CATALOG_PATH, catalogId }, null, null);
+		logger.debug("getCatalog: uri {}", uri);
+		ResponseEntity<MLPCatalog> response = restTemplate.exchange(uri, HttpMethod.GET, null,
+				new ParameterizedTypeReference<MLPCatalog>() {
+				});
+		return response.getBody();
+	}
+
+	@Override
+	public MLPCatalog createCatalog(MLPCatalog catalog) {
+		URI uri = buildUri(new String[] { CCDSConstants.CATALOG_PATH }, null, null);
+		logger.debug("createCatalog: uri {}", uri);
+		return restTemplate.postForObject(uri, catalog, MLPCatalog.class);
+	}
+
+	@Override
+	public void updateCatalog(MLPCatalog catalog) {
+		URI uri = buildUri(new String[] { CCDSConstants.CATALOG_PATH, catalog.getCatalogId() }, null, null);
+		logger.debug("updateCatalog: url {}", uri);
+		restTemplate.put(uri, catalog);
+	}
+
+	@Override
+	public void deleteCatalog(String catalogId) {
+		URI uri = buildUri(new String[] { CCDSConstants.CATALOG_PATH, catalogId }, null, null);
+		logger.debug("deleteCatalog: url {}", uri);
+		restTemplate.delete(uri);
+	}
+
+	@Override
+	public RestPageResponse<MLPSolution> getSolutionsInCatalog(String catalogId, RestPageRequest pageRequest) {
+		URI uri = buildUri(new String[] { CCDSConstants.CATALOG_PATH, catalogId, CCDSConstants.SOLUTION_PATH }, null,
+				pageRequest);
+		logger.debug("getSolutionsInCatalog: uri {}", uri);
+		ResponseEntity<RestPageResponse<MLPSolution>> response = restTemplate.exchange(uri, HttpMethod.GET, null,
+				new ParameterizedTypeReference<RestPageResponse<MLPSolution>>() {
+				});
+		return response.getBody();
+	}
+
+	@Override
+	public void addSolutionToCatalog(String solutionId, String catalogId) {
+		URI uri = buildUri(
+				new String[] { CCDSConstants.CATALOG_PATH, catalogId, CCDSConstants.SOLUTION_PATH, solutionId }, null,
+				null);
+		logger.debug("addSolutionToCatalog: url {}", uri);
+		MLPCatSolMap map = new MLPCatSolMap(catalogId, solutionId);
+		restTemplate.postForObject(uri, map, SuccessTransport.class);
+	}
+
+	@Override
+	public void dropSolutionFromCatalog(String solutionId, String catalogId) {
+		URI uri = buildUri(
+				new String[] { CCDSConstants.CATALOG_PATH, catalogId, CCDSConstants.SOLUTION_PATH, solutionId }, null,
+				null);
+		logger.debug("dropSolutionFromCatalog: url {}", uri);
+		restTemplate.delete(uri);
 	}
 
 }
