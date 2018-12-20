@@ -35,6 +35,7 @@ import org.acumos.cds.CodeNameType;
 import org.acumos.cds.client.CommonDataServiceRestClientImpl;
 import org.acumos.cds.client.ICommonDataServiceRestClient;
 import org.acumos.cds.domain.MLPArtifact;
+import org.acumos.cds.domain.MLPCatalog;
 import org.acumos.cds.domain.MLPCodeNamePair;
 import org.acumos.cds.domain.MLPComment;
 import org.acumos.cds.domain.MLPDocument;
@@ -1985,6 +1986,46 @@ public class CdsControllerTest {
 		client.deletePeer(pr.getPeerId());
 		client.deleteUser(cu.getUserId());
 
+	}
+
+	@Test
+	public void testCatalogs() {
+		try {
+			// Need a user to create a solution
+			MLPUser cu = null;
+			cu = new MLPUser();
+			cu.setEmail("testcatalog@abc.com");
+			cu.setActive(true);
+			cu.setLoginName("cataloguser");
+			cu = client.createUser(cu);
+			Assert.assertNotNull("User ID", cu.getUserId());
+			logger.info("Created user {}", cu);
+
+			MLPSolution cs1 = new MLPSolution("solutionName 1 for cat", cu.getUserId(), true);
+			cs1 = client.createSolution(cs1);
+			Assert.assertNotNull("Solution ID", cs1.getSolutionId());
+			logger.info("Created solution {}", cs1);
+
+			MLPCatalog ca1 = new MLPCatalog("PB", "name", "http://pub.org");
+			ca1 = client.createCatalog(ca1);
+			Assert.assertNotNull("Catalog ID", ca1.getCatalogId());
+			logger.info("Created catalog {}", ca1);
+
+			client.addSolutionToCatalog(cs1.getSolutionId(), ca1.getCatalogId());
+
+			RestPageResponse<MLPSolution> sols = client.getSolutionsInCatalog(ca1.getCatalogId(),
+					new RestPageRequest());
+			Assert.assertNotNull(sols);
+			Assert.assertEquals(1, sols.getNumberOfElements());
+
+			client.dropSolutionFromCatalog(cs1.getSolutionId(), ca1.getCatalogId());
+			client.deleteCatalog(ca1.getCatalogId());
+			client.deleteSolution(cs1.getSolutionId());
+			client.deleteUser(cu.getUserId());
+		} catch (HttpStatusCodeException ex) {
+			logger.error("testCatalogs failed {}", ex.getResponseBodyAsString());
+			throw ex;
+		}
 	}
 
 	@Test
