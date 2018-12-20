@@ -23,10 +23,17 @@ Common Data Service Release Notes
 The client and server are released together.  The client is deployed as a jar file to a
 Maven Nexus repository. The server is deployed as a Docker image to a Docker registry.
 
-Version 2.0.1, 21 Dec 2018
+Version 2.0.1, 20 Dec 2018
 --------------------------
 
 * Upgrade to Spring-Boot version 2.1 (`ACUMOS-1926 <https://jira.acumos.org/browse/ACUMOS-1926>`_)
+  which requires the following runtime configuration changes:
+  
+     * Add prefix 'spring' to properties 'security.user.name' and 'security.user.password'
+     * Change property key 'spring.datasource.url' to 'spring.datasource.jdbc-url'
+     * Change property 'spring.jpa.database-platform' to value 'org.hibernate.dialect.MariaDB102Dialect'
+     * Drop property 'spring.database.driver.classname'
+
 * Requires database schema version 2.0
 
 Version 2.0.0, 19 Dec 2018
