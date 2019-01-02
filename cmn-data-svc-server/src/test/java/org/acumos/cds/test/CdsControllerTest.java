@@ -577,6 +577,10 @@ public class CdsControllerTest {
 			Assert.assertTrue(taggedUser.getTags().contains(tag1));
 			client.dropUserTag(cu.getUserId(), tagName1);
 
+			MLPCatalog ca1 = client.createCatalog(new MLPCatalog("PB", "name", "http://pub.org"));
+			Assert.assertNotNull("Catalog ID", ca1.getCatalogId());
+			logger.info("Created catalog {}", ca1);
+
 			MLPSolution cs = new MLPSolution("solution name", cu.getUserId(), true);
 			cs.setModelTypeCode("CL");
 			cs.setToolkitTypeCode("CP");
@@ -589,6 +593,8 @@ public class CdsControllerTest {
 			Assert.assertTrue(cs.getTags().contains(newTag));
 			logger.info("Created public solution {}", cs);
 
+			client.addSolutionToCatalog(cs.getSolutionId(), ca1.getCatalogId());
+			
 			byte[] saved = client.getSolutionPicture(cs.getSolutionId());
 			Assert.assertNull(saved);
 			byte[] image = new byte[] { 0, 1, 2, 3, 4, 5 };
@@ -823,8 +829,9 @@ public class CdsControllerTest {
 			// Check fetch by ID to ensure both are found
 			logger.info("Querying for solutions by id");
 			String[] ids = { cs.getSolutionId(), csOrg.getSolutionId() };
+			String catalogId = null;
 			RestPageResponse<MLPSolution> idSearchResult = client.findPortalSolutionsByKwAndTags(ids, true, null, null,
-					null, null, null, new RestPageRequest(0, 2));
+					null, null, null, catalogId, new RestPageRequest(0, 2));
 			Assert.assertTrue(idSearchResult != null && idSearchResult.getNumberOfElements() == 2);
 			logger.info("Found models by id total " + idSearchResult.getTotalElements());
 
@@ -832,7 +839,7 @@ public class CdsControllerTest {
 			logger.info("Querying for solutions by keyword");
 			String[] kw = { "solution", "organization" };
 			RestPageResponse<MLPSolution> kwSearchResult = client.findPortalSolutionsByKwAndTags(kw, true, null, null,
-					null, null, null, new RestPageRequest(0, 2));
+					null, null, null, catalogId, new RestPageRequest(0, 2));
 			Assert.assertTrue(kwSearchResult != null && kwSearchResult.getNumberOfElements() > 0);
 			logger.info("Found models by kw total " + kwSearchResult.getTotalElements());
 
@@ -840,11 +847,16 @@ public class CdsControllerTest {
 			String[] allTags = new String[] { tagName1 };
 			String[] anyTags = null; // new String[] { tagName2 };
 			RestPageResponse<MLPSolution> allAnyTagsSearchResult = client.findPortalSolutionsByKwAndTags(null, true,
-					null, null, null, allTags, anyTags, new RestPageRequest(0, 2));
+					null, null, null, allTags, anyTags, catalogId, new RestPageRequest(0, 2));
 			logger.info("Found models by tag total " + allAnyTagsSearchResult.getTotalElements());
 			Assert.assertTrue(allAnyTagsSearchResult != null && allAnyTagsSearchResult.getNumberOfElements() > 0);
 			MLPSolution taggedSol = allAnyTagsSearchResult.getContent().get(0);
 			Assert.assertTrue(taggedSol.getTags().contains(new MLPTag(tagName1)));
+
+			logger.info("Querying for solutions by catalog");
+			RestPageResponse<MLPSolution> ctlgSearchResult = client.findPortalSolutionsByKwAndTags(null, true, null, null,
+					null, null, null, ca1.getCatalogId(), new RestPageRequest(0, 2));
+			Assert.assertTrue(ctlgSearchResult != null && ctlgSearchResult.getNumberOfElements() > 0);
 
 			// Check this finds solutions by shared-with-user ID
 			logger.info("Querying for user solutions via flexible i/f");
@@ -1003,6 +1015,7 @@ public class CdsControllerTest {
 				client.dropSolutionTag(cs.getSolutionId(), tagName1);
 				client.deleteTag(tag1);
 				client.deleteTag(tag2);
+				client.dropSolutionFromCatalog(cs.getSolutionId(), ca1.getCatalogId());
 				client.dropSolutionUserAccess(cs.getSolutionId(), inactiveUser.getUserId());
 				// Server SHOULD cascade deletes.
 				client.deleteSolutionRating(ur);
@@ -1012,6 +1025,7 @@ public class CdsControllerTest {
 				client.deleteSolution(cs.getSolutionId());
 				client.deleteSolution(csOrg.getSolutionId());
 				client.deleteSolution(inactive.getSolutionId());
+				client.deleteCatalog(ca1.getCatalogId());
 				client.deleteArtifact(ca.getArtifactId());
 				client.deletePeerSubscription(ps.getSubId());
 				client.deletePeer(pr.getPeerId());
