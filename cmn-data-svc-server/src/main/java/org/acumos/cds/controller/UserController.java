@@ -46,6 +46,7 @@ import org.acumos.cds.domain.MLPUserLoginProvider;
 import org.acumos.cds.domain.MLPUserLoginProvider.UserLoginProviderPK;
 import org.acumos.cds.domain.MLPUserRoleMap;
 import org.acumos.cds.domain.MLPUserTagMap;
+import org.acumos.cds.domain.MLPUser_;
 import org.acumos.cds.repository.NotifUserMapRepository;
 import org.acumos.cds.repository.RoleRepository;
 import org.acumos.cds.repository.SolutionDeploymentRepository;
@@ -381,17 +382,8 @@ public class UserController extends AbstractController {
 	/*
 	 * This method was an early attempt to provide a search feature. Originally
 	 * written with a generic map request parameter to avoid binding field names,
-	 * but that is not supported by Swagger web UI. Now allows use from that web UI
-	 * at the cost of hard-coding many class field names.
+	 * but that is not supported by Swagger web UI. Now allows use from that web UI.
 	 */
-	private static final String FIRST_NAME = "firstName";
-	private static final String MIDDLE_NAME = "middleName";
-	private static final String LAST_NAME = "lastName";
-	private static final String ORG_NAME = "orgName";
-	private static final String EMAIL = "email";
-	private static final String LOGIN_NAME = "loginName";
-	private static final String ACTIVE = "active";
-
 	@ApiOperation(value = "Searches for users with attributes matching the values specified as query parameters. " //
 			+ "Defaults to match all (conjunction); send junction query parameter '_j=o' to match any (disjunction).", //
 			response = MLPUser.class, responseContainer = "Page")
@@ -400,20 +392,13 @@ public class UserController extends AbstractController {
 	@RequestMapping(value = "/" + CCDSConstants.SEARCH_PATH, method = RequestMethod.GET)
 	public Object searchUsers(@ApiParam(value = "Junction", allowableValues = "a,o") //
 	@RequestParam(name = CCDSConstants.JUNCTION_QUERY_PARAM, required = false) String junction, //
-			@ApiParam(value = "First name") //
-			@RequestParam(name = FIRST_NAME, required = false) String firstName, //
-			@ApiParam(value = "Middle name") //
-			@RequestParam(name = MIDDLE_NAME, required = false) String middleName, //
-			@ApiParam(value = "Last name") //
-			@RequestParam(name = LAST_NAME, required = false) String lastName, //
-			@ApiParam(value = "Org name") //
-			@RequestParam(name = ORG_NAME, required = false) String orgName, //
-			@ApiParam(value = "Email") //
-			@RequestParam(name = EMAIL, required = false) String email, //
-			@ApiParam(value = "Login name") //
-			@RequestParam(name = LOGIN_NAME, required = false) String loginName, //
-			@ApiParam(value = "Active") //
-			@RequestParam(name = ACTIVE, required = false) Boolean active, //
+			@RequestParam(name = MLPUser_.FIRST_NAME, required = false) String firstName, //
+			@RequestParam(name = MLPUser_.MIDDLE_NAME, required = false) String middleName, //
+			@RequestParam(name = MLPUser_.LAST_NAME, required = false) String lastName, //
+			@RequestParam(name = MLPUser_.ORG_NAME, required = false) String orgName, //
+			@RequestParam(name = MLPUser_.EMAIL, required = false) String email, //
+			@RequestParam(name = MLPUser_.LOGIN_NAME, required = false) String loginName, //
+			@RequestParam(name = MLPUser_.ACTIVE, required = false) Boolean active, //
 			Pageable pageRequest, HttpServletResponse response) {
 		logger.debug("searchUsers enter");
 		boolean isOr = junction != null && "o".equals(junction);
