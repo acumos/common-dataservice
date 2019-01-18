@@ -28,6 +28,7 @@ import org.acumos.cds.CCDSConstants;
 import org.acumos.cds.CodeNameType;
 import org.acumos.cds.MLPResponse;
 import org.acumos.cds.domain.MLPPublishRequest;
+import org.acumos.cds.domain.MLPPublishRequest_;
 import org.acumos.cds.repository.PublishRequestRepository;
 import org.acumos.cds.service.PublishRequestSearchService;
 import org.acumos.cds.transport.ErrorTransport;
@@ -97,15 +98,8 @@ public class PublishRequestController extends AbstractController {
 	/*
 	 * This method was an early attempt to provide a search feature. Originally
 	 * written with a generic map request parameter to avoid binding field names,
-	 * but that is not supported by Swagger web UI. Now allows use from that web UI
-	 * at the cost of hard-coding many field names from the MLPArtifact class.
+	 * but that is not supported by Swagger web UI. Now allows use from that web UI.
 	 */
-	private static final String SOLUTION_ID = "solutionId";
-	private static final String REVISION_ID = "revisionId";
-	private static final String REQUEST_USER_ID = "requestUserId";
-	private static final String REVIEW_USER_ID = "reviewUserId";
-	private static final String STATUS_CODE = "statusCode";
-
 	@ApiOperation(value = "Searches for requests with attributes matching the values specified as query parameters. " //
 			+ "Defaults to match all (conjunction); send junction query parameter '_j=o' to match any (disjunction).", //
 			response = MLPPublishRequest.class, responseContainer = "Page")
@@ -114,16 +108,11 @@ public class PublishRequestController extends AbstractController {
 	@RequestMapping(value = "/" + CCDSConstants.SEARCH_PATH, method = RequestMethod.GET)
 	public Object searchPublishRequests(@ApiParam(value = "Junction", allowableValues = "a,o") //
 	@RequestParam(name = CCDSConstants.JUNCTION_QUERY_PARAM, required = false) String junction, //
-			@ApiParam(value = "Solution ID") //
-			@RequestParam(name = SOLUTION_ID, required = false) String solutionId, //
-			@ApiParam(value = "Revision ID") //
-			@RequestParam(name = REVISION_ID, required = false) String revisionId, //
-			@ApiParam(value = "Request user ID") //
-			@RequestParam(name = REQUEST_USER_ID, required = false) String requestUserId, //
-			@ApiParam(value = "Review user ID") //
-			@RequestParam(name = REVIEW_USER_ID, required = false) String reviewUserId, //
-			@ApiParam(value = "Status code") //
-			@RequestParam(name = STATUS_CODE, required = false) String statusCode, //
+			@RequestParam(name = MLPPublishRequest_.SOLUTION_ID, required = false) String solutionId, //
+			@RequestParam(name = MLPPublishRequest_.REVISION_ID, required = false) String revisionId, //
+			@RequestParam(name = MLPPublishRequest_.REQUEST_USER_ID, required = false) String requestUserId, //
+			@RequestParam(name = MLPPublishRequest_.REVIEW_USER_ID, required = false) String reviewUserId, //
+			@RequestParam(name = MLPPublishRequest_.STATUS_CODE, required = false) String statusCode, //
 			Pageable pageRequest, HttpServletResponse response) {
 		logger.debug("searchPublishRequests enter");
 		boolean isOr = junction != null && "o".equals(junction);
