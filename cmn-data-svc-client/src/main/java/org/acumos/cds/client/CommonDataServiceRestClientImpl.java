@@ -65,6 +65,7 @@ import org.acumos.cds.domain.MLPSolutionRating;
 import org.acumos.cds.domain.MLPSolutionRevision;
 import org.acumos.cds.domain.MLPStepResult;
 import org.acumos.cds.domain.MLPTag;
+import org.acumos.cds.domain.MLPTask;
 import org.acumos.cds.domain.MLPThread;
 import org.acumos.cds.domain.MLPUser;
 import org.acumos.cds.domain.MLPUserLoginProvider;
@@ -143,7 +144,8 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 		@Override
 		public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
 				throws IOException {
-			request.getHeaders().add(AcumosLogConstants.Headers.REQUEST_ID, requestId == null ? generateRequestId() : requestId);
+			request.getHeaders().add(AcumosLogConstants.Headers.REQUEST_ID,
+					requestId == null ? generateRequestId() : requestId);
 			return execution.execute(request, body);
 		}
 
@@ -1832,9 +1834,10 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 	}
 
 	@Override
-	public MLPStepResult getStepResult(long stepResultId) {
-		URI uri = buildUri(new String[] { CCDSConstants.STEP_RESULT_PATH, Long.toString(stepResultId) }, null, null);
-		logger.debug("getStepResult: uri {}", uri);
+	public MLPStepResult getTaskStepResult(long taskId, long stepResultId) {
+		URI uri = buildUri(new String[] { CCDSConstants.TASK_PATH, Long.toString(taskId),
+				CCDSConstants.STEP_RESULT_PATH, Long.toString(stepResultId) }, null, null);
+		logger.debug("getTaskStepResult: uri {}", uri);
 		ResponseEntity<MLPStepResult> response = restTemplate.exchange(uri, HttpMethod.GET, null,
 				new ParameterizedTypeReference<MLPStepResult>() {
 				});
@@ -1842,23 +1845,26 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 	}
 
 	@Override
-	public RestPageResponse<MLPStepResult> getStepResults(RestPageRequest pageRequest) {
-		URI uri = buildUri(new String[] { CCDSConstants.STEP_RESULT_PATH }, null, pageRequest);
-		logger.debug("getStepResults: uri {}", uri);
-		ResponseEntity<RestPageResponse<MLPStepResult>> response = restTemplate.exchange(uri, HttpMethod.GET, null,
-				new ParameterizedTypeReference<RestPageResponse<MLPStepResult>>() {
+	public List<MLPStepResult> getTaskStepResults(long taskId) {
+		URI uri = buildUri(
+				new String[] { CCDSConstants.TASK_PATH, Long.toString(taskId), CCDSConstants.STEP_RESULT_PATH }, null,
+				null);
+		logger.debug("getTaskStepResults: uri {}", uri);
+		ResponseEntity<List<MLPStepResult>> response = restTemplate.exchange(uri, HttpMethod.GET, null,
+				new ParameterizedTypeReference<List<MLPStepResult>>() {
 				});
 		return response.getBody();
 	}
 
 	@Override
-	public RestPageResponse<MLPStepResult> searchStepResults(Map<String, Object> queryParameters, boolean isOr,
+	public RestPageResponse<MLPStepResult> searchTaskStepResults(Map<String, Object> queryParameters, boolean isOr,
 			RestPageRequest pageRequest) {
 		Map<String, Object> copy = new HashMap<>(queryParameters);
 		copy.put(CCDSConstants.JUNCTION_QUERY_PARAM, isOr ? "o" : "a");
-		URI uri = buildUri(new String[] { CCDSConstants.STEP_RESULT_PATH, CCDSConstants.SEARCH_PATH }, copy,
-				pageRequest);
-		logger.debug("searchStepResults: uri {}", uri);
+		URI uri = buildUri(
+				new String[] { CCDSConstants.TASK_PATH, CCDSConstants.STEP_RESULT_PATH, CCDSConstants.SEARCH_PATH },
+				copy, pageRequest);
+		logger.debug("searchTaskStepResults: uri {}", uri);
 		ResponseEntity<RestPageResponse<MLPStepResult>> response = restTemplate.exchange(uri, HttpMethod.GET, null,
 				new ParameterizedTypeReference<RestPageResponse<MLPStepResult>>() {
 				});
@@ -1866,24 +1872,30 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 	}
 
 	@Override
-	public MLPStepResult createStepResult(MLPStepResult stepResult) {
-		URI uri = buildUri(new String[] { CCDSConstants.STEP_RESULT_PATH }, null, null);
-		logger.debug("createStepResult: uri {}", uri);
+	public MLPStepResult addTaskStepResult(MLPStepResult stepResult) {
+		if (stepResult.getTaskId() == null)
+			throw new IllegalArgumentException("Step result taskId must not be null");
+		URI uri = buildUri(new String[] { CCDSConstants.TASK_PATH, Long.toString(stepResult.getTaskId()),
+				CCDSConstants.STEP_RESULT_PATH }, null, null);
+		logger.debug("addTaskStepResult: uri {}", uri);
 		return restTemplate.postForObject(uri, stepResult, MLPStepResult.class);
 	}
 
 	@Override
-	public void updateStepResult(MLPStepResult stepResult) {
-		URI uri = buildUri(new String[] { CCDSConstants.STEP_RESULT_PATH, Long.toString(stepResult.getStepResultId()) },
-				null, null);
-		logger.debug("updateStepResult: url {}", uri);
+	public void updateTaskStepResult(MLPStepResult stepResult) {
+		if (stepResult.getTaskId() == null)
+			throw new IllegalArgumentException("Step result taskId must not be null");
+		URI uri = buildUri(new String[] { CCDSConstants.TASK_PATH, Long.toString(stepResult.getTaskId()),
+				CCDSConstants.STEP_RESULT_PATH, Long.toString(stepResult.getStepResultId()) }, null, null);
+		logger.debug("updateTaskStepResult: url {}", uri);
 		restTemplate.put(uri, stepResult);
 	}
 
 	@Override
-	public void deleteStepResult(Long stepResultId) {
-		URI uri = buildUri(new String[] { CCDSConstants.STEP_RESULT_PATH, Long.toString(stepResultId) }, null, null);
-		logger.debug("deleteStepResult: url {}", uri);
+	public void deleteTaskStepResult(long taskId, long stepResultId) {
+		URI uri = buildUri(new String[] { CCDSConstants.TASK_PATH, Long.toString(taskId),
+				CCDSConstants.STEP_RESULT_PATH, Long.toString(stepResultId) }, null, null);
+		logger.debug("deleteTaskStepResult: url {}", uri);
 		restTemplate.delete(uri);
 	}
 
@@ -2440,6 +2452,60 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 				new String[] { CCDSConstants.CATALOG_PATH, catalogId, CCDSConstants.SOLUTION_PATH, solutionId }, null,
 				null);
 		logger.debug("dropSolutionFromCatalog: url {}", uri);
+		restTemplate.delete(uri);
+	}
+
+	@Override
+	public MLPTask getTask(long taskId) {
+		URI uri = buildUri(new String[] { CCDSConstants.TASK_PATH, Long.toString(taskId) }, null, null);
+		logger.debug("getTask: uri {}", uri);
+		ResponseEntity<MLPTask> response = restTemplate.exchange(uri, HttpMethod.GET, null,
+				new ParameterizedTypeReference<MLPTask>() {
+				});
+		return response.getBody();
+	}
+
+	@Override
+	public RestPageResponse<MLPTask> getTasks(RestPageRequest pageRequest) {
+		URI uri = buildUri(new String[] { CCDSConstants.TASK_PATH }, null, pageRequest);
+		logger.debug("getTasks: uri {}", uri);
+		ResponseEntity<RestPageResponse<MLPTask>> response = restTemplate.exchange(uri, HttpMethod.GET, null,
+				new ParameterizedTypeReference<RestPageResponse<MLPTask>>() {
+				});
+		return response.getBody();
+	}
+
+	@Override
+	public RestPageResponse<MLPTask> searchTasks(Map<String, Object> queryParameters, boolean isOr,
+			RestPageRequest pageRequest) {
+		Map<String, Object> copy = new HashMap<>(queryParameters);
+		copy.put(CCDSConstants.JUNCTION_QUERY_PARAM, isOr ? "o" : "a");
+		URI uri = buildUri(new String[] { CCDSConstants.TASK_PATH, CCDSConstants.SEARCH_PATH }, copy, pageRequest);
+		logger.debug("searchTasks: uri {}", uri);
+		ResponseEntity<RestPageResponse<MLPTask>> response = restTemplate.exchange(uri, HttpMethod.GET, null,
+				new ParameterizedTypeReference<RestPageResponse<MLPTask>>() {
+				});
+		return response.getBody();
+	}
+
+	@Override
+	public MLPTask createTask(MLPTask task) {
+		URI uri = buildUri(new String[] { CCDSConstants.TASK_PATH }, null, null);
+		logger.debug("createTask: uri {}", uri);
+		return restTemplate.postForObject(uri, task, MLPTask.class);
+	}
+
+	@Override
+	public void updateTask(MLPTask task) {
+		URI uri = buildUri(new String[] { CCDSConstants.TASK_PATH, Long.toString(task.getTaskId()) }, null, null);
+		logger.debug("updateTask: url {}", uri);
+		restTemplate.put(uri, task);
+	}
+
+	@Override
+	public void deleteTask(long taskId) {
+		URI uri = buildUri(new String[] { CCDSConstants.TASK_PATH, Long.toString(taskId) }, null, null);
+		logger.debug("deleteTask: url {}", uri);
 		restTemplate.delete(uri);
 	}
 

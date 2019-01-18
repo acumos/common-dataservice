@@ -62,6 +62,7 @@ public class CCDSConstants {
 	public static final String SOLUTION_PATH = "solution";
 	public static final String SUBSCRIPTION_PATH = "sub";
 	public static final String TAG_PATH = "tag";
+	public static final String TASK_PATH = "task";
 	public static final String THREAD_PATH = "thread";
 	public static final String USER_PATH = "user";
 	public static final String VAL_SEQ_PATH = "valseq";

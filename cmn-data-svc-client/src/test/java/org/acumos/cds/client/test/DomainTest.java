@@ -60,6 +60,7 @@ import org.acumos.cds.domain.MLPSolutionRating;
 import org.acumos.cds.domain.MLPSolutionRevision;
 import org.acumos.cds.domain.MLPStepResult;
 import org.acumos.cds.domain.MLPTag;
+import org.acumos.cds.domain.MLPTask;
 import org.acumos.cds.domain.MLPThread;
 import org.acumos.cds.domain.MLPUser;
 import org.acumos.cds.domain.MLPUserLoginProvider;
@@ -1364,7 +1365,7 @@ public class DomainTest extends AbstractModelTest {
 
 	@Test
 	public void testMLPStepResult() {
-		MLPStepResult m = new MLPStepResult(s1, s2, s3, t1);
+		MLPStepResult m = new MLPStepResult(l1, s1, s2, s3, t1);
 		m = new MLPStepResult();
 		m.setArtifactId(s1);
 		m.setEndDate(t1);
@@ -1384,7 +1385,7 @@ public class DomainTest extends AbstractModelTest {
 		Assert.assertNotNull(m.hashCode());
 		logger.info(m.toString());
 		try {
-			new MLPStepResult(null, null, null, null);
+			new MLPStepResult(0L, null, null, null, null);
 			Assert.assertTrue("Unexpected success", false);
 		} catch (IllegalArgumentException iae) {
 			// null arg is rejected
@@ -1415,6 +1416,43 @@ public class DomainTest extends AbstractModelTest {
 			Assert.assertTrue("Unexpected success", false);
 		} catch (IllegalArgumentException iae) {
 			// null or empty arg is rejected
+		}
+	}
+
+	private void checkMLPTask(MLPTask m) {
+		Assert.assertEquals(t1, m.getCreated());
+		Assert.assertEquals(t2, m.getModified());
+		Assert.assertEquals(s1, m.getName());
+		Assert.assertEquals(s2, m.getStatusCode());
+		Assert.assertEquals(l1, m.getTaskId());
+		Assert.assertEquals(s3, m.getTrackingId());
+		Assert.assertEquals(s4, m.getUserId());
+	}
+
+	@Test
+	public void testMLPTask() {
+		MLPTask m = new MLPTask(s1, s2, s3);
+		m = new MLPTask();
+		m.setCreated(t1);
+		m.setModified(t2);
+		m.setName(s1);
+		m.setStatusCode(s2);
+		m.setTaskId(l1);
+		m.setTrackingId(s3);
+		m.setUserId(s4);
+		checkMLPTask(m);
+		m = new MLPTask(m);
+		checkMLPTask(m);
+		Assert.assertFalse(m.equals(null));
+		Assert.assertFalse(m.equals(new Object()));
+		Assert.assertTrue(m.equals(m));
+		Assert.assertNotNull(m.hashCode());
+		logger.info(m.toString());
+		try {
+			new MLPTask(null, null, null);
+			Assert.assertTrue("Unexpected success", false);
+		} catch (IllegalArgumentException iae) {
+			// null arg is rejected
 		}
 	}
 

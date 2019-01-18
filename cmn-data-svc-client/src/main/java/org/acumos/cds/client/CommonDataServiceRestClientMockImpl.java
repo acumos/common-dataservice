@@ -53,6 +53,7 @@ import org.acumos.cds.domain.MLPSolutionRating;
 import org.acumos.cds.domain.MLPSolutionRevision;
 import org.acumos.cds.domain.MLPStepResult;
 import org.acumos.cds.domain.MLPTag;
+import org.acumos.cds.domain.MLPTask;
 import org.acumos.cds.domain.MLPThread;
 import org.acumos.cds.domain.MLPUser;
 import org.acumos.cds.domain.MLPUserLoginProvider;
@@ -169,7 +170,7 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 	private RestPageResponse<MLPSolution> searchSolutions;
 	private RestPageResponse<MLPThread> solutionRevisionThreads;
 	private RestPageResponse<MLPComment> solutionRevisionComments;
-	private RestPageResponse<MLPStepResult> stepResults;
+	private List<MLPStepResult> stepResults;
 	private RestPageResponse<MLPStepResult> searchStepResults;
 	private MLPUserNotifPref usrNotifPrefById = null;
 	private RestPageResponse<MLPPeerGroup> peerGroups;
@@ -203,6 +204,10 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 	private MLPCatalog catalog;
 	private RestPageResponse<MLPCatalog> catalogs;
 	private RestPageResponse<MLPSolution> solutionsInCatalog;
+	private MLPTask taskById;
+	private RestPageResponse<MLPTask> tasks;
+	private RestPageResponse<MLPTask> searchTasks;
+	private MLPTask task;
 
 	/**
 	 * No-argument constructor.
@@ -1389,16 +1394,16 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 	}
 
 	@Override
-	public MLPStepResult getStepResult(long stepResultId) {
+	public MLPStepResult getTaskStepResult(long taskId, long stepResultId) {
 		return stepResultById;
 	}
 
-	public void setStepResults(RestPageResponse<MLPStepResult> results) {
+	public void setStepResults(List<MLPStepResult> results) {
 		this.stepResults = results;
 	}
 
 	@Override
-	public RestPageResponse<MLPStepResult> getStepResults(RestPageRequest pageRequest) {
+	public List<MLPStepResult> getTaskStepResults(long taskId) {
 		return stepResults;
 	}
 
@@ -1407,7 +1412,7 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 	}
 
 	@Override
-	public RestPageResponse<MLPStepResult> searchStepResults(Map<String, Object> queryParameters, boolean isOr,
+	public RestPageResponse<MLPStepResult> searchTaskStepResults(Map<String, Object> queryParameters, boolean isOr,
 			RestPageRequest pageRequest) {
 		return this.searchStepResults;
 	}
@@ -1417,17 +1422,17 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 	}
 
 	@Override
-	public MLPStepResult createStepResult(MLPStepResult stepResult) {
+	public MLPStepResult addTaskStepResult(MLPStepResult stepResult) {
 		return this.stepResult;
 	}
 
 	@Override
-	public void updateStepResult(MLPStepResult stepResult) {
+	public void updateTaskStepResult(MLPStepResult stepResult) {
 		this.stepResult = stepResult;
 	}
 
 	@Override
-	public void deleteStepResult(Long stepResultId) {
+	public void deleteTaskStepResult(long taskId, long stepResultId) {
 		// How to mock?
 	}
 
@@ -1798,6 +1803,53 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 
 	@Override
 	public void dropSolutionFromCatalog(String solutionId, String catalogId) {
+		// How to mock?
+	}
+
+	public void setTaskById(MLPTask task) {
+		this.taskById = task;
+	}
+
+	@Override
+	public MLPTask getTask(long taskId) {
+		return taskById;
+	}
+
+	public void setTasks(RestPageResponse<MLPTask> results) {
+		this.tasks = results;
+	}
+
+	@Override
+	public RestPageResponse<MLPTask> getTasks(RestPageRequest pageRequest) {
+		return tasks;
+	}
+
+	public void setSearchTasks(RestPageResponse<MLPTask> results) {
+		this.searchTasks = results;
+	}
+
+	@Override
+	public RestPageResponse<MLPTask> searchTasks(Map<String, Object> queryParameters, boolean isOr,
+			RestPageRequest pageRequest) {
+		return this.searchTasks;
+	}
+
+	public void setTask(MLPTask result) {
+		this.task = result;
+	}
+
+	@Override
+	public MLPTask createTask(MLPTask task) {
+		return this.task;
+	}
+
+	@Override
+	public void updateTask(MLPTask task) {
+		this.task = task;
+	}
+
+	@Override
+	public void deleteTask(long taskId) {
 		// How to mock?
 	}
 

@@ -51,6 +51,7 @@ import org.acumos.cds.domain.MLPSolutionRating;
 import org.acumos.cds.domain.MLPSolutionRevision;
 import org.acumos.cds.domain.MLPStepResult;
 import org.acumos.cds.domain.MLPTag;
+import org.acumos.cds.domain.MLPTask;
 import org.acumos.cds.domain.MLPThread;
 import org.acumos.cds.domain.MLPUser;
 import org.acumos.cds.domain.MLPUserLoginProvider;
@@ -1710,30 +1711,32 @@ public interface ICommonDataServiceRestClient {
 	void deleteComment(String threadId, String commentId);
 
 	/**
-	 * Gets a step result.
+	 * Gets a task step result.
 	 * 
+	 * @param taskId
+	 *                         Task ID
 	 * @param stepResultId
 	 *                         Step result ID
 	 * @return MLPStepResult
 	 */
-	MLPStepResult getStepResult(long stepResultId);
+	MLPStepResult getTaskStepResult(long taskId, long stepResultId);
 
 	/**
-	 * Gets a page of step results.
+	 * Gets all step results for the specified task ID
 	 * 
-	 * @param pageRequest
-	 *                        Page index, page size and sort information; defaults
-	 *                        to page 0 of size 20 if null.
-	 * @return Page of step result objects.
+	 * @param taskId
+	 *                   Task ID
+	 * @return List of step results, which may be empty
+	 * 
 	 */
-	RestPageResponse<MLPStepResult> getStepResults(RestPageRequest pageRequest);
+	List<MLPStepResult> getTaskStepResults(long taskId);
 
 	/**
-	 * Searches step results for exact matches.
+	 * Searches task step results for exact matches.
 	 * 
 	 * @param queryParameters
 	 *                            Map of field-name, field-value pairs to use as
-	 *                            query criteria. Accepts these field names:
+	 *                            query criteria. Accepts these field names: taskId,
 	 *                            trackingId, stepCode, solutionId, revisionId,
 	 *                            artifactId, userId, statusCode, name.
 	 * @param isOr
@@ -1746,17 +1749,17 @@ public interface ICommonDataServiceRestClient {
 	 *                            defaults to page 0 of size 20 if null.
 	 * @return Page of step result objects
 	 */
-	RestPageResponse<MLPStepResult> searchStepResults(Map<String, Object> queryParameters, boolean isOr,
+	RestPageResponse<MLPStepResult> searchTaskStepResults(Map<String, Object> queryParameters, boolean isOr,
 			RestPageRequest pageRequest);
 
 	/**
 	 * Creates a step result.
 	 * 
 	 * @param stepResult
-	 *                       result Step Result data.
+	 *                       Step Result data.
 	 * @return Complete object, with generated information such as ID
 	 */
-	MLPStepResult createStepResult(MLPStepResult stepResult);
+	MLPStepResult addTaskStepResult(MLPStepResult stepResult);
 
 	/**
 	 * Updates a step result.
@@ -1764,15 +1767,17 @@ public interface ICommonDataServiceRestClient {
 	 * @param stepResult
 	 *                       Step Result data
 	 */
-	void updateStepResult(MLPStepResult stepResult);
+	void updateTaskStepResult(MLPStepResult stepResult);
 
 	/**
 	 * Deletes a step result.
 	 * 
+	 * @param taskId
+	 *                         Task ID
 	 * @param stepResultId
 	 *                         stepResult ID
 	 */
-	void deleteStepResult(Long stepResultId);
+	void deleteTaskStepResult(long taskId, long stepResultId);
 
 	/**
 	 * Gets a page of peer groups.
@@ -2393,4 +2398,69 @@ public interface ICommonDataServiceRestClient {
 	 *                       Catalog ID
 	 */
 	void dropSolutionFromCatalog(String solutionId, String catalogId);
+
+	/**
+	 * Gets a task.
+	 * 
+	 * @param taskId
+	 *                   Task ID
+	 * @return MLPTask
+	 */
+	MLPTask getTask(long taskId);
+
+	/**
+	 * Gets a page of tasks.
+	 * 
+	 * @param pageRequest
+	 *                        Page index, page size and sort information; defaults
+	 *                        to page 0 of size 20 if null.
+	 * @return Page of task objects.
+	 */
+	RestPageResponse<MLPTask> getTasks(RestPageRequest pageRequest);
+
+	/**
+	 * Searches tasks for exact matches.
+	 * 
+	 * @param queryParameters
+	 *                            Map of field-name, field-value pairs to use as
+	 *                            query criteria. Accepts these field names: taskId,
+	 *                            trackingId, userId, statusCode, name.
+	 * @param isOr
+	 *                            If true, finds matches on any field-value pair
+	 *                            (conditions are OR-ed together); otherwise finds
+	 *                            matches on all field-value pairs (conditions are
+	 *                            AND-ed together).
+	 * @param pageRequest
+	 *                            Page index, page size and sort information;
+	 *                            defaults to page 0 of size 20 if null.
+	 * @return Page of step result objects
+	 */
+	RestPageResponse<MLPTask> searchTasks(Map<String, Object> queryParameters, boolean isOr,
+			RestPageRequest pageRequest);
+
+	/**
+	 * Creates a task.
+	 * 
+	 * @param task
+	 *                 Task data
+	 * @return Complete object, with generated information such as ID
+	 */
+	MLPTask createTask(MLPTask task);
+
+	/**
+	 * Updates a task.
+	 * 
+	 * @param task
+	 *                 Task data
+	 */
+	void updateTask(MLPTask task);
+
+	/**
+	 * Deletes a task.
+	 * 
+	 * @param taskId
+	 *                   task ID
+	 */
+	void deleteTask(long taskId);
+
 }

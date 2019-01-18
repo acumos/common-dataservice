@@ -63,6 +63,7 @@ import org.acumos.cds.domain.MLPSolutionRating.SolutionRatingPK;
 import org.acumos.cds.domain.MLPSolutionRevision;
 import org.acumos.cds.domain.MLPStepResult;
 import org.acumos.cds.domain.MLPTag;
+import org.acumos.cds.domain.MLPTask;
 import org.acumos.cds.domain.MLPThread;
 import org.acumos.cds.domain.MLPUser;
 import org.acumos.cds.domain.MLPUserLoginProvider;
@@ -100,6 +101,7 @@ import org.acumos.cds.repository.SolutionRepository;
 import org.acumos.cds.repository.SolutionRevisionRepository;
 import org.acumos.cds.repository.StepResultRepository;
 import org.acumos.cds.repository.TagRepository;
+import org.acumos.cds.repository.TaskRepository;
 import org.acumos.cds.repository.ThreadRepository;
 import org.acumos.cds.repository.UserLoginProviderRepository;
 import org.acumos.cds.repository.UserNotificationPreferenceRepository;
@@ -177,6 +179,8 @@ public class CdsRepositoryServiceTest {
 	private SolUserAccMapRepository solUserAccMapRepository;
 	@Autowired
 	private TagRepository tagRepository;
+	@Autowired
+	private TaskRepository taskRepository;
 	@Autowired
 	private ThreadRepository threadRepository;
 	@Autowired
@@ -1302,13 +1306,23 @@ public class CdsRepositoryServiceTest {
 	}
 
 	@Test
-	public void testStepResults() throws Exception {
+	public void testTaskStepResults() throws Exception {
 		try {
-			MLPStepResult sr = new MLPStepResult();
-			sr.setStepCode("OB");
-			sr.setName("Solution ID creation");
-			sr.setStatusCode("FA");
-			sr.setStartDate(Instant.now().minusSeconds(60));
+			MLPUser cu = new MLPUser();
+			cu.setLoginName("user_task_step");
+			cu.setEmail("test@user.task.step.com");
+			cu = userRepository.save(cu);
+			Assert.assertNotNull(cu.getUserId());
+
+			final String taskName = "DoWorkQuickly";
+			MLPTask st = new MLPTask(taskName, cu.getUserId(), "SU");
+			st = taskRepository.save(st);
+			Assert.assertNotNull(st.getTaskId());
+
+			final String statusCode = "FA";
+
+			MLPStepResult sr = new MLPStepResult(st.getTaskId(), "OB", "solution ID creation", statusCode,
+					Instant.now().minusSeconds(60));
 			sr = stepResultRepository.save(sr);
 			Assert.assertNotNull(sr.getStepResultId());
 
@@ -1319,13 +1333,16 @@ public class CdsRepositoryServiceTest {
 			Assert.assertTrue(optResult.isPresent());
 			logger.info("First step result {}", optResult.get());
 
-			Page<MLPStepResult> page = stepResultSearchService.findStepResults(null, null, null, null, null, null, null,
-					"FA", false, PageRequest.of(0, 5));
+			Iterable<MLPStepResult> steps = stepResultRepository.findByTaskId(st.getTaskId());
+			Assert.assertTrue(steps.iterator().hasNext());
+			
+			Page<MLPStepResult> page = stepResultSearchService.findStepResults(null, null, null, null, null, null,
+					statusCode, false, PageRequest.of(0, 5));
 			Assert.assertNotEquals(0, page.getNumberOfElements());
 
 			// Test search with empty result
-			Page<MLPStepResult> emptySteps = stepResultSearchService.findStepResults("bogus", "bogus", "bogus", "bogus",
-					"bogus", "bogus", "bogus", "bogus", false, PageRequest.of(0, 5));
+			Page<MLPStepResult> emptySteps = stepResultSearchService.findStepResults(0L, "bogus", "bogus", "bogus",
+					"bogus", "bogus", "bogus", false, PageRequest.of(0, 5));
 			Assert.assertTrue(emptySteps.isEmpty());
 
 			sr.setResult("New stack trace");
@@ -1335,6 +1352,9 @@ public class CdsRepositoryServiceTest {
 			Assert.assertTrue(optStepResult.isPresent());
 			Assert.assertNotNull(optStepResult.get().getResult());
 			stepResultRepository.deleteById(sr.getStepResultId());
+
+			taskRepository.delete(st);
+			userRepository.delete(cu);
 		} catch (Exception ex) {
 			logger.error("testStepResults failed", ex);
 			throw ex;
@@ -1527,7 +1547,7 @@ public class CdsRepositoryServiceTest {
 			logger.info("Search failed on missing query as expected: {}", ex.toString());
 		}
 		try {
-			stepResultSearchService.findStepResults(null, null, null, null, null, null, null, null, false,
+			stepResultSearchService.findStepResults(null, null, null, null, null, null, null, false,
 					PageRequest.of(0, 5));
 			throw new Exception("Unexpected success");
 		} catch (IllegalArgumentException ex) {
