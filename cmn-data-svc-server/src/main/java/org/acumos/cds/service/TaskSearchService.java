@@ -20,28 +20,28 @@
 
 package org.acumos.cds.service;
 
-import org.acumos.cds.domain.MLPTaskStepResult;
+import org.acumos.cds.domain.MLPTask;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-public interface StepResultSearchService {
+public interface TaskSearchService {
 
 	/**
 	 * Searches for instances matching all or one of the query parameters, depending
 	 * on the isOr parameter; case is ignored in all String matches.
 	 * 
 	 * @param taskId
-	 *                       Parent task ID; ignored if null
-	 * @param solutionId
-	 *                       Solution ID; ignored if null
-	 * @param revisionId
-	 *                       Revision ID; ignored if null
-	 * @param artifactId
-	 *                       Artifact ID; ignored if null
+	 *                       Task ID; ignored if null
+	 * @param taskCode
+	 *                       Task type code
 	 * @param name
-	 *                       Step name; ignored if null
+	 *                       Task name; ignored if null
 	 * @param statusCode
 	 *                       Status code; ignored if null
+	 * @param trackingId
+	 *                       Tracking ID; ignored if null
+	 * @param userId
+	 *                       User ID; ignored if null
 	 * @param isOr
 	 *                       If true, the query is a disjunction ("or"); otherwise
 	 *                       the query is a conjunction ("and").
@@ -49,7 +49,7 @@ public interface StepResultSearchService {
 	 *                       Page and sort criteria
 	 * @return Page of instances, which may be empty.
 	 */
-	Page<MLPTaskStepResult> findStepResults(Long taskId, String solutionId, String revisionId,
-			String artifactId, String name, String statusCode, boolean isOr, Pageable pageable);
+	Page<MLPTask> findTasks(Long taskId, String taskCode, String name, String statusCode, String trackingId,
+			String userId, boolean isOr, Pageable pageable);
 
 }

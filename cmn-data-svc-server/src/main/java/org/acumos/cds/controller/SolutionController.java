@@ -61,7 +61,7 @@ import org.acumos.cds.repository.SolutionPictureRepository;
 import org.acumos.cds.repository.SolutionRatingRepository;
 import org.acumos.cds.repository.SolutionRepository;
 import org.acumos.cds.repository.SolutionRevisionRepository;
-import org.acumos.cds.repository.StepResultRepository;
+import org.acumos.cds.repository.TaskStepResultRepository;
 import org.acumos.cds.repository.UserRepository;
 import org.acumos.cds.service.SolutionSearchService;
 import org.acumos.cds.transport.CountTransport;
@@ -139,7 +139,7 @@ public class SolutionController extends AbstractController {
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
-	private StepResultRepository stepResultRepository;
+	private TaskStepResultRepository stepResultRepository;
 
 	/**
 	 * Updates the cached value(s) for solution downloads.

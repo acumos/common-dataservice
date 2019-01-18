@@ -58,8 +58,9 @@ import org.acumos.cds.domain.MLPSolutionFavorite;
 import org.acumos.cds.domain.MLPSolutionGroup;
 import org.acumos.cds.domain.MLPSolutionRating;
 import org.acumos.cds.domain.MLPSolutionRevision;
-import org.acumos.cds.domain.MLPStepResult;
 import org.acumos.cds.domain.MLPTag;
+import org.acumos.cds.domain.MLPTask;
+import org.acumos.cds.domain.MLPTaskStepResult;
 import org.acumos.cds.domain.MLPThread;
 import org.acumos.cds.domain.MLPUser;
 import org.acumos.cds.domain.MLPUserLoginProvider;
@@ -1350,7 +1351,7 @@ public class DomainTest extends AbstractModelTest {
 		}
 	}
 
-	private void checkMLPStepResult(MLPStepResult m) {
+	private void checkMLPStepResult(MLPTaskStepResult m) {
 		Assert.assertEquals(s1, m.getArtifactId());
 		Assert.assertEquals(t1, m.getEndDate());
 		Assert.assertEquals(s2, m.getName());
@@ -1359,13 +1360,12 @@ public class DomainTest extends AbstractModelTest {
 		Assert.assertEquals(s5, m.getSolutionId());
 		Assert.assertEquals(t2, m.getStartDate());
 		Assert.assertEquals(s6, m.getStatusCode());
-		Assert.assertEquals(s7, m.getStepCode());
 	}
 
 	@Test
 	public void testMLPStepResult() {
-		MLPStepResult m = new MLPStepResult(s1, s2, s3, t1);
-		m = new MLPStepResult();
+		MLPTaskStepResult m = new MLPTaskStepResult(l1, s1, s2, t1);
+		m = new MLPTaskStepResult();
 		m.setArtifactId(s1);
 		m.setEndDate(t1);
 		m.setName(s2);
@@ -1374,9 +1374,8 @@ public class DomainTest extends AbstractModelTest {
 		m.setSolutionId(s5);
 		m.setStartDate(t2);
 		m.setStatusCode(s6);
-		m.setStepCode(s7);
 		checkMLPStepResult(m);
-		m = new MLPStepResult(m);
+		m = new MLPTaskStepResult(m);
 		checkMLPStepResult(m);
 		Assert.assertFalse(m.equals(null));
 		Assert.assertFalse(m.equals(new Object()));
@@ -1384,7 +1383,7 @@ public class DomainTest extends AbstractModelTest {
 		Assert.assertNotNull(m.hashCode());
 		logger.info(m.toString());
 		try {
-			new MLPStepResult(null, null, null, null);
+			new MLPTaskStepResult(0L, null, null, null);
 			Assert.assertTrue("Unexpected success", false);
 		} catch (IllegalArgumentException iae) {
 			// null arg is rejected
@@ -1415,6 +1414,45 @@ public class DomainTest extends AbstractModelTest {
 			Assert.assertTrue("Unexpected success", false);
 		} catch (IllegalArgumentException iae) {
 			// null or empty arg is rejected
+		}
+	}
+
+	private void checkMLPTask(MLPTask m) {
+		Assert.assertEquals(t1, m.getCreated());
+		Assert.assertEquals(t2, m.getModified());
+		Assert.assertEquals(s1, m.getName());
+		Assert.assertEquals(s2, m.getStatusCode());
+		Assert.assertEquals(s3, m.getTaskCode());
+		Assert.assertEquals(l1, m.getTaskId());
+		Assert.assertEquals(s4, m.getTrackingId());
+		Assert.assertEquals(s5, m.getUserId());
+	}
+
+	@Test
+	public void testMLPTask() {
+		MLPTask m = new MLPTask(s1, s2, s3, s4);
+		m = new MLPTask();
+		m.setCreated(t1);
+		m.setModified(t2);
+		m.setName(s1);
+		m.setStatusCode(s2);
+		m.setTaskCode(s3);
+		m.setTaskId(l1);
+		m.setTrackingId(s4);
+		m.setUserId(s5);
+		checkMLPTask(m);
+		m = new MLPTask(m);
+		checkMLPTask(m);
+		Assert.assertFalse(m.equals(null));
+		Assert.assertFalse(m.equals(new Object()));
+		Assert.assertTrue(m.equals(m));
+		Assert.assertNotNull(m.hashCode());
+		logger.info(m.toString());
+		try {
+			new MLPTask(null, null, null, null);
+			Assert.assertTrue("Unexpected success", false);
+		} catch (IllegalArgumentException iae) {
+			// null arg is rejected
 		}
 	}
 

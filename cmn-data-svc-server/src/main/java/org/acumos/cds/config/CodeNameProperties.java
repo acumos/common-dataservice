@@ -57,8 +57,8 @@ public class CodeNameProperties {
 	private Map<String, String> notificationDeliveryMechanism;
 	private Map<String, String> peerStatus;
 	private Map<String, String> publishRequestStatus;
-	private Map<String, String> stepStatus;
-	private Map<String, String> stepType;
+	private Map<String, String> taskStepStatus;
+	private Map<String, String> taskType;
 	private Map<String, String> subscriptionScope;
 	private Map<String, String> toolkitType;
 	private Map<String, String> verifiedLicense;
@@ -136,20 +136,20 @@ public class CodeNameProperties {
 		this.publishRequestStatus = publishRequestStatus;
 	}
 
-	public Map<String, String> getStepStatus() {
-		return stepStatus;
+	public Map<String, String> getTaskStepStatus() {
+		return taskStepStatus;
 	}
 
-	public void setStepStatus(Map<String, String> stepStatus) {
-		this.stepStatus = stepStatus;
+	public void setTaskStepStatus(Map<String, String> stepStatus) {
+		this.taskStepStatus = stepStatus;
 	}
 
-	public Map<String, String> getStepType() {
-		return stepType;
+	public Map<String, String> getTaskType() {
+		return taskType;
 	}
 
-	public void setStepType(Map<String, String> stepType) {
-		this.stepType = stepType;
+	public void setTaskType(Map<String, String> taskType) {
+		this.taskType = taskType;
 	}
 
 	public Map<String, String> getSubscriptionScope() {
