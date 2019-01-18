@@ -30,8 +30,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.acumos.cds.domain.MLPStepResult_;
-import org.acumos.cds.domain.MLPTaskStepResult;
+import org.acumos.cds.domain.MLPTask;
+import org.acumos.cds.domain.MLPTask_;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -40,9 +40,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service("stepResultSearchService")
+@Service("taskSearchService")
 @Transactional(readOnly = true)
-public class StepResultSearchServiceImpl extends AbstractSearchServiceImpl implements StepResultSearchService {
+public class TaskSearchServiceImpl extends AbstractSearchServiceImpl implements TaskSearchService {
 
 	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
@@ -52,24 +52,20 @@ public class StepResultSearchServiceImpl extends AbstractSearchServiceImpl imple
 	 * 
 	 * @return Predicate
 	 */
-	private Predicate createStepResultPredicate(Root<MLPTaskStepResult> from, Long taskId, String stepCode,
-			String solutionId, String revisionId, String artifactId, String name, String statusCode, boolean isOr) {
+	private Predicate createTaskPredicate(Root<MLPTask> from, Long taskId, String name, String statusCode,
+			String trackingId, String userId, boolean isOr) {
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		List<Predicate> predicates = new ArrayList<>();
 		if (taskId != null)
-			predicates.add(cb.equal(from.<Long>get(MLPStepResult_.taskId), taskId));
-		if (stepCode != null && !stepCode.isEmpty())
-			predicates.add(cb.equal(cb.lower(from.<String>get(MLPStepResult_.stepCode)), stepCode.toLowerCase()));
-		if (solutionId != null && !solutionId.isEmpty())
-			predicates.add(cb.equal(cb.lower(from.<String>get(MLPStepResult_.solutionId)), solutionId.toLowerCase()));
-		if (revisionId != null && !revisionId.isEmpty())
-			predicates.add(cb.equal(cb.lower(from.<String>get(MLPStepResult_.revisionId)), revisionId.toLowerCase()));
-		if (artifactId != null && !artifactId.isEmpty())
-			predicates.add(cb.equal(cb.lower(from.<String>get(MLPStepResult_.artifactId)), artifactId.toLowerCase()));
+			predicates.add(cb.equal(from.<Long>get(MLPTask_.taskId), taskId));
 		if (name != null && !name.isEmpty())
-			predicates.add(cb.equal(cb.lower(from.<String>get(MLPStepResult_.name)), name.toLowerCase()));
+			predicates.add(cb.equal(cb.lower(from.<String>get(MLPTask_.name)), name.toLowerCase()));
 		if (statusCode != null && !statusCode.isEmpty())
-			predicates.add(cb.equal(cb.lower(from.<String>get(MLPStepResult_.statusCode)), statusCode.toLowerCase()));
+			predicates.add(cb.equal(cb.lower(from.<String>get(MLPTask_.statusCode)), statusCode.toLowerCase()));
+		if (trackingId != null && !trackingId.isEmpty())
+			predicates.add(cb.equal(cb.lower(from.<String>get(MLPTask_.trackingId)), trackingId.toLowerCase()));
+		if (userId != null && !userId.isEmpty())
+			predicates.add(cb.equal(cb.lower(from.<String>get(MLPTask_.userId)), userId.toLowerCase()));
 		if (predicates.isEmpty())
 			throw new IllegalArgumentException("Missing query values, must have at least one non-null");
 		Predicate[] predArray = new Predicate[predicates.size()];
@@ -81,39 +77,37 @@ public class StepResultSearchServiceImpl extends AbstractSearchServiceImpl imple
 	 * Use JPA in Spring-Boot version 2.1
 	 */
 	@Override
-	public Page<MLPTaskStepResult> findStepResults(Long taskId, String stepCode, String solutionId, String revisionId,
-			String artifactId, String name, String statusCode, boolean isOr, Pageable pageable) {
+	public Page<MLPTask> findTasks(Long taskId, String name, String statusCode, String trackingId, String userId,
+			boolean isOr, Pageable pageable) {
 
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 
 		// Count rows available
 		CriteriaQuery<Long> countQueryDef = cb.createQuery(Long.class);
 		countQueryDef.distinct(true);
-		Root<MLPTaskStepResult> countFrom = countQueryDef.from(MLPTaskStepResult.class);
+		Root<MLPTask> countFrom = countQueryDef.from(MLPTask.class);
 		countQueryDef.select(cb.count(countFrom));
-		countQueryDef.where(createStepResultPredicate(countFrom, taskId, stepCode, solutionId, revisionId, artifactId,
-				name, statusCode, isOr));
+		countQueryDef.where(createTaskPredicate(countFrom, taskId, name, statusCode, trackingId, userId, isOr));
 		TypedQuery<Long> countQuery = entityManager.createQuery(countQueryDef);
 		Long count = countQuery.getSingleResult();
-		logger.debug("findStepResults: count {}", count);
+		logger.debug("findTasks: count {}", count);
 		if (count == 0)
 			return new PageImpl<>(new ArrayList<>(), pageable, count);
 
 		// Get one page of rows
-		CriteriaQuery<MLPTaskStepResult> rootQueryDef = cb.createQuery(MLPTaskStepResult.class);
+		CriteriaQuery<MLPTask> rootQueryDef = cb.createQuery(MLPTask.class);
 		// Coalesce any duplicates due to joins
 		rootQueryDef.distinct(true);
-		Root<MLPTaskStepResult> fromRoot = rootQueryDef.from(MLPTaskStepResult.class);
+		Root<MLPTask> fromRoot = rootQueryDef.from(MLPTask.class);
 		rootQueryDef.select(fromRoot);
-		rootQueryDef.where(createStepResultPredicate(countFrom, taskId, stepCode, solutionId, revisionId, artifactId,
-				name, statusCode, isOr));
+		rootQueryDef.where(createTaskPredicate(countFrom, taskId, name, statusCode, trackingId, userId, isOr));
 		if (pageable.getSort() != null && !pageable.getSort().isEmpty())
 			rootQueryDef.orderBy(buildOrderList(cb, fromRoot, pageable.getSort()));
-		TypedQuery<MLPTaskStepResult> itemQuery = entityManager.createQuery(rootQueryDef);
+		TypedQuery<MLPTask> itemQuery = entityManager.createQuery(rootQueryDef);
 		itemQuery.setFirstResult(pageable.getPageNumber() * pageable.getPageSize());
 		itemQuery.setMaxResults(pageable.getPageSize());
-		List<MLPTaskStepResult> queryResult = itemQuery.getResultList();
-		logger.debug("findStepResults: result size {}", queryResult.size());
+		List<MLPTask> queryResult = itemQuery.getResultList();
+		logger.debug("findTasks: result size {}", queryResult.size());
 
 		return new PageImpl<>(queryResult, pageable, count);
 	}

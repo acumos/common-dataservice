@@ -63,7 +63,7 @@ public class CodeNameServiceImpl implements CodeNameService {
 			return codeNameProps.getPeerStatus();
 		case PUBLISH_REQUEST_STATUS:
 			return codeNameProps.getPublishRequestStatus();
-		case STEP_STATUS:
+		case TASK_STEP_STATUS:
 			return codeNameProps.getStepStatus();
 		case STEP_TYPE:
 			return codeNameProps.getStepType();
