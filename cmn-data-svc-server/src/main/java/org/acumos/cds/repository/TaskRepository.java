@@ -17,17 +17,11 @@
  * limitations under the License.
  * ===============LICENSE_END=========================================================
  */
+package org.acumos.cds.repository;
 
-package org.acumos.cds;
+import org.acumos.cds.domain.MLPTask;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-/**
- * Provides a constant for every code-name value set.
- */
-public enum CodeNameType {
-
-	ACCESS_TYPE, ARTIFACT_TYPE, DEPLOYMENT_STATUS, LOGIN_PROVIDER, //
-	MESSAGE_SEVERITY, MODEL_TYPE, NOTIFICATION_DELIVERY_MECHANISM, //
-	PEER_STATUS, PUBLISH_REQUEST_STATUS, TASK_STEP_STATUS, STEP_TYPE, //
-	SUBSCRIPTION_SCOPE, TOOLKIT_TYPE, VERIFIED_LICENSE, VERIFIED_VULNERABILITY;
-
+public interface TaskRepository extends JpaRepository<MLPTask, Long>, JpaSpecificationExecutor<MLPTask> {
 }

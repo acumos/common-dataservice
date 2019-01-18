@@ -58,8 +58,9 @@ import org.acumos.cds.domain.MLPSolutionFavorite;
 import org.acumos.cds.domain.MLPSolutionGroup;
 import org.acumos.cds.domain.MLPSolutionRating;
 import org.acumos.cds.domain.MLPSolutionRevision;
-import org.acumos.cds.domain.MLPStepResult;
+import org.acumos.cds.domain.MLPTaskStepResult;
 import org.acumos.cds.domain.MLPTag;
+import org.acumos.cds.domain.MLPTask;
 import org.acumos.cds.domain.MLPThread;
 import org.acumos.cds.domain.MLPUser;
 import org.acumos.cds.domain.MLPUserLoginProvider;
@@ -190,12 +191,6 @@ public class CdsControllerTest {
 
 			logger.info("Adding artifact to revision");
 			client.addSolutionRevisionArtifact(cs.getSolutionId(), cr.getRevisionId(), ca.getArtifactId());
-
-			MLPStepResult sr = new MLPStepResult("OB", "New Step Result1", "FA", Instant.now());
-			sr.setSolutionId(cs.getSolutionId());
-			sr = client.createStepResult(sr);
-			Assert.assertNotNull(sr.getStepResultId());
-			logger.info("Created basicsequencedemo step result {}", sr);
 
 			logger.info("Deleting objects");
 			client.dropSolutionRevisionArtifact(cs.getSolutionId(), cr.getRevisionId(), ca.getArtifactId());
@@ -1373,25 +1368,31 @@ public class CdsControllerTest {
 	}
 
 	@Test
-	public void testStepResult() throws Exception {
+	public void testTaskStepResult() throws Exception {
+		MLPUser cu = new MLPUser("user_task_step", "test@user.task.step.com", true);
+		MLPTask ct = null;
 		try {
-			final String name = "Solution ID creation";
-			MLPStepResult sr = new MLPStepResult();
-			sr.setStepCode("OB");
-			sr.setName(name);
-			sr.setStatusCode(String.valueOf("SU"));
-			sr.setStartDate(Instant.now().minusSeconds(60));
-			sr = client.createStepResult(sr);
+			cu = client.createUser(cu);
+			Assert.assertNotNull(cu.getUserId());
+
+			final String taskName = "DoWorkQuickly";
+			ct = new MLPTask(taskName, cu.getUserId(), "SU");
+			ct = client.createTask(ct);
+			Assert.assertNotNull(ct.getTaskId());
+
+			final String stepName = "Solution ID creation";
+			MLPTaskStepResult sr = new MLPTaskStepResult(ct.getTaskId(), "OB", stepName, "SU", Instant.now().minusSeconds(60));
+			sr = client.addTaskStepResult(sr);
 			Assert.assertNotNull(sr.getStepResultId());
 			logger.info("Created step result " + sr);
 
 			sr.setResult("Some new stack trace result");
-			client.updateStepResult(sr);
+			client.updateTaskStepResult(sr);
 
-			MLPStepResult getById = client.getStepResult(sr.getStepResultId());
+			MLPTaskStepResult getById = client.getTaskStepResult(sr.getTaskId(), sr.getStepResultId());
 			Assert.assertNotNull(getById.getStepResultId());
 
-			RestPageResponse<MLPStepResult> stepResults = client.getStepResults(new RestPageRequest(0, 10));
+			List<MLPTaskStepResult> stepResults = client.getTaskStepResults(sr.getTaskId());
 			Assert.assertTrue(stepResults.iterator().hasNext());
 			logger.info("First step result {}", stepResults.iterator().next());
 
@@ -1404,16 +1405,16 @@ public class CdsControllerTest {
 			queryParameters.put("userId", "~bogus~never~match");
 			queryParameters.put("statusCode", "~bogus~never~match");
 			queryParameters.put("name", "~bogus~never~match");
-			RestPageResponse<MLPStepResult> emptySearchResults = client.searchStepResults(queryParameters, true,
+			RestPageResponse<MLPTaskStepResult> emptySearchResults = client.searchTaskStepResults(queryParameters, true,
 					new RestPageRequest(0, 10));
 			Assert.assertEquals(0, emptySearchResults.getNumberOfElements());
 
-			queryParameters.put("name", name);
-			RestPageResponse<MLPStepResult> searchResults = client.searchStepResults(queryParameters, true,
+			queryParameters.put("name", stepName);
+			RestPageResponse<MLPTaskStepResult> searchResults = client.searchTaskStepResults(queryParameters, true,
 					new RestPageRequest(0, 10));
 			Assert.assertEquals(1, searchResults.getNumberOfElements());
 
-			client.deleteStepResult(sr.getStepResultId());
+			client.deleteTaskStepResult(sr.getTaskId(), sr.getStepResultId());
 		} catch (HttpStatusCodeException ex) {
 			logger.error("testStepResults failed with response {}", ex.getResponseBodyAsString());
 			throw ex;
@@ -1421,10 +1422,10 @@ public class CdsControllerTest {
 
 		// invalid tests
 
-		Assert.assertNull(client.getStepResult(99999L));
+		Assert.assertNull(client.getTaskStepResult(0L, 99999L));
 		try {
 			HashMap<String, Object> restr = new HashMap<>();
-			client.searchStepResults(restr, true, new RestPageRequest(0, 1));
+			client.searchTaskStepResults(restr, true, new RestPageRequest(0, 1));
 			throw new Exception("Unexpected success");
 		} catch (HttpStatusCodeException ex) {
 			logger.info("search step result empty failed as expected: {}", ex.getResponseBodyAsString());
@@ -1432,38 +1433,40 @@ public class CdsControllerTest {
 		try {
 			HashMap<String, Object> restr = new HashMap<>();
 			restr.put("bogus", "value");
-			client.searchStepResults(restr, true, new RestPageRequest(0, 1));
+			client.searchTaskStepResults(restr, true, new RestPageRequest(0, 1));
 			throw new Exception("Unexpected success");
 		} catch (HttpStatusCodeException ex) {
 			logger.info("search step result bad field failed as expected: {}", ex.getResponseBodyAsString());
 		}
 		try {
-			client.createStepResult(new MLPStepResult());
+			client.addTaskStepResult(new MLPTaskStepResult(0L, "bo", "gu", "s", Instant.now()));
 			throw new Exception("Unexpected success");
 		} catch (HttpStatusCodeException ex) {
-			logger.info("create step result failed as expected: {}", ex.getResponseBodyAsString());
+			logger.info("create step result failed on missing task as expected: {}", ex.getResponseBodyAsString());
 		}
 		try {
-			client.createStepResult(new MLPStepResult("bogus", "name", "FA", Instant.now()));
+			client.addTaskStepResult(new MLPTaskStepResult(ct.getTaskId(), "bogus", "name", "FA", Instant.now()));
 			throw new Exception("Unexpected success");
 		} catch (HttpStatusCodeException ex) {
 			logger.info("create step result failed on bad type code as expected: {}", ex.getResponseBodyAsString());
 		}
 		try {
-			MLPStepResult stepResult = new MLPStepResult();
+			MLPTaskStepResult stepResult = new MLPTaskStepResult(0L, "bo", "gu", "s", Instant.now());
 			stepResult.setStepResultId(999L);
-			client.updateStepResult(stepResult);
+			client.updateTaskStepResult(stepResult);
 			throw new Exception("Unexpected success");
 		} catch (HttpStatusCodeException ex) {
 			logger.info("update step result failed as expected: {}", ex.getResponseBodyAsString());
 		}
 		try {
-			client.deleteStepResult(999L);
+			client.deleteTaskStepResult(0L, 999L);
 			throw new Exception("Unexpected success");
 		} catch (HttpStatusCodeException ex) {
 			logger.info("delete step result failed as expected: {}", ex.getResponseBodyAsString());
 		}
 
+		client.deleteTask(ct.getTaskId());
+		client.deleteUser(cu.getUserId());
 	}
 
 	@Test
