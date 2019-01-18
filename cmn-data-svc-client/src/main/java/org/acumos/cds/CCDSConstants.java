@@ -62,12 +62,10 @@ public class CCDSConstants {
 	public static final String SOLUTION_PATH = "solution";
 	public static final String SUBSCRIPTION_PATH = "sub";
 	public static final String TAG_PATH = "tag";
+	public static final String TASK_PATH = "task";
 	public static final String THREAD_PATH = "thread";
 	public static final String USER_PATH = "user";
-	public static final String VAL_SEQ_PATH = "valseq";
-	public static final String VAL_TYPE_PATH = "valtype";
 	public static final String VIEW_PATH = "view";
-	public static final String WEB_PATH = "web";
 	public static final String UNREAD_PATH = "unread";
 
 	// Code-name pairs
@@ -77,12 +75,6 @@ public class CCDSConstants {
 	// Other paths
 	public static final String ACCESS_PATH = "access";
 	public static final String LOGIN_PROVIDER_PATH = "logprov";
-	public static final String MODEL_PATH = "model";
-	public static final String STATUS_PATH = "status";
-	public static final String STEP_PATH = "step";
-	public static final String TOOLKIT_PATH = "toolkit";
-	public static final String TYPE_PATH = "type";
-	public static final String VAL_PATH = "val";
 	// Actions on entities
 	public static final String LIKE_PATH = "like";
 	public static final String SEARCH_PATH = "search";
@@ -92,9 +84,6 @@ public class CCDSConstants {
 	public static final String LOGIN_API_PATH = "loginapi";
 	public static final String VERIFY_PATH = "verify";
 	public static final String CHPASS_PATH = "chgpw";
-
-	// Actions on datasets
-	public static final String DATASET_PATH = "dataset";
 
 	// Portal search interface
 	public static final String SEARCH_ACCESS_TYPES = "atc";
@@ -109,7 +98,6 @@ public class CCDSConstants {
 	public static final String SEARCH_TAGS = "tag";
 	public static final String SEARCH_ALL_TAGS = "alltag";
 	public static final String SEARCH_ANY_TAGS = "anytag";
-	public static final String SEARCH_VAL_STATUSES = "vsc";
 	public static final String SEARCH_PUB = "pub";
 	public static final String SEARCH_USERS = "user";
 
