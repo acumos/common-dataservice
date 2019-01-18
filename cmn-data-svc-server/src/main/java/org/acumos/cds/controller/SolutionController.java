@@ -61,7 +61,7 @@ import org.acumos.cds.repository.SolutionPictureRepository;
 import org.acumos.cds.repository.SolutionRatingRepository;
 import org.acumos.cds.repository.SolutionRepository;
 import org.acumos.cds.repository.SolutionRevisionRepository;
-import org.acumos.cds.repository.StepResultRepository;
+import org.acumos.cds.repository.TaskStepResultRepository;
 import org.acumos.cds.repository.UserRepository;
 import org.acumos.cds.service.SolutionSearchService;
 import org.acumos.cds.transport.CountTransport;
@@ -137,9 +137,9 @@ public class SolutionController extends AbstractController {
 	@Autowired
 	private SolutionSearchService solutionSearchService;
 	@Autowired
-	private UserRepository userRepository;
+	private TaskStepResultRepository taskStepResultRepository;
 	@Autowired
-	private StepResultRepository stepResultRepository;
+	private UserRepository userRepository;
 
 	/**
 	 * Updates the cached value(s) for solution downloads.
@@ -537,7 +537,7 @@ public class SolutionController extends AbstractController {
 			catSolMapRepository.deleteBySolutionId(solutionId);
 			solUserAccMapRepository.deleteBySolutionId(solutionId);
 			solutionFavoriteRepository.deleteBySolutionId(solutionId);
-			stepResultRepository.deleteBySolutionId(solutionId);
+			taskStepResultRepository.deleteBySolutionId(solutionId);
 			for (MLPSolutionRevision r : solutionRevisionRepository.findBySolutionIdIn(new String[] { solutionId })) {
 				for (MLPArtifact a : artifactRepository.findByRevision(r.getRevisionId()))
 					solRevArtMapRepository

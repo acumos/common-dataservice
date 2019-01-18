@@ -17,22 +17,11 @@
  * limitations under the License.
  * ===============LICENSE_END=========================================================
  */
+package org.acumos.cds.repository;
 
-package org.acumos.cds.client.test;
+import org.acumos.cds.domain.MLPTask;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-import org.acumos.cds.AccessTypeCode;
-import org.acumos.cds.PublishRequestStatusCode;
-import org.junit.Assert;
-import org.junit.Test;
-
-/**
- * This increases coverage.
- */
-public class EnumTest {
-
-	@Test
-	public void testEnums() {
-		Assert.assertTrue(AccessTypeCode.values().length > 0);
-		Assert.assertTrue(PublishRequestStatusCode.values().length > 0);
-	}
+public interface TaskRepository extends JpaRepository<MLPTask, Long>, JpaSpecificationExecutor<MLPTask> {
 }
