@@ -46,6 +46,7 @@ import org.acumos.cds.domain.MLPSolutionPicture;
 import org.acumos.cds.domain.MLPSolutionRating;
 import org.acumos.cds.domain.MLPSolutionRating.SolutionRatingPK;
 import org.acumos.cds.domain.MLPSolutionRevision;
+import org.acumos.cds.domain.MLPSolution_;
 import org.acumos.cds.domain.MLPTag;
 import org.acumos.cds.domain.MLPUser;
 import org.acumos.cds.repository.ArtifactRepository;
@@ -61,7 +62,7 @@ import org.acumos.cds.repository.SolutionPictureRepository;
 import org.acumos.cds.repository.SolutionRatingRepository;
 import org.acumos.cds.repository.SolutionRepository;
 import org.acumos.cds.repository.SolutionRevisionRepository;
-import org.acumos.cds.repository.StepResultRepository;
+import org.acumos.cds.repository.TaskRepository;
 import org.acumos.cds.repository.UserRepository;
 import org.acumos.cds.service.SolutionSearchService;
 import org.acumos.cds.transport.CountTransport;
@@ -137,9 +138,9 @@ public class SolutionController extends AbstractController {
 	@Autowired
 	private SolutionSearchService solutionSearchService;
 	@Autowired
-	private UserRepository userRepository;
+	private TaskRepository taskRepository;
 	@Autowired
-	private StepResultRepository stepResultRepository;
+	private UserRepository userRepository;
 
 	/**
 	 * Updates the cached value(s) for solution downloads.
@@ -233,17 +234,8 @@ public class SolutionController extends AbstractController {
 	/*
 	 * This method was an early attempt to provide a search feature. Originally
 	 * written with a generic map request parameter to avoid binding field names,
-	 * but that is not supported by Swagger web UI. Now allows use from that web UI
-	 * at the cost of hard-coding many class field names.
+	 * but that is not supported by Swagger web UI. Now allows use from that web UI.
 	 */
-	private static final String NAME = "name";
-	private static final String ACTIVE = "active";
-	private static final String USER_ID = "userId";
-	private static final String SOURCE_ID = "sourceId";
-	private static final String MODEL_TYPE_CODE = "modelTypeCode";
-	private static final String TOOLKIT_TYPE_CODE = "toolkitTypeCode";
-	private static final String ORIGIN = "origin";
-
 	@ApiOperation(value = "Searches for solutions with attributes matching the values specified as query parameters. " //
 			+ "Defaults to match all (conjunction); send junction query parameter '_j=o' to match any (disjunction).", //
 			response = MLPSolution.class, responseContainer = "Page")
@@ -252,20 +244,13 @@ public class SolutionController extends AbstractController {
 	public Object searchSolutions( //
 			@ApiParam(value = "Junction", allowableValues = "a,o") //
 			@RequestParam(name = CCDSConstants.JUNCTION_QUERY_PARAM, required = false) String junction, //
-			@ApiParam(value = "Name") //
-			@RequestParam(name = NAME, required = false) String name, //
-			@ApiParam(value = "Active") //
-			@RequestParam(name = ACTIVE, required = false) Boolean active, //
-			@ApiParam(value = "User ID") //
-			@RequestParam(name = USER_ID, required = false) String userId, //
-			@ApiParam(value = "Source ID") //
-			@RequestParam(name = SOURCE_ID, required = false) String sourceId, //
-			@ApiParam(value = "Model type code") //
-			@RequestParam(name = MODEL_TYPE_CODE, required = false) String modelTypeCode, //
-			@ApiParam(value = "Toolkit type code") //
-			@RequestParam(name = TOOLKIT_TYPE_CODE, required = false) String toolkitTypeCode, //
-			@ApiParam(value = "Origin URI") //
-			@RequestParam(name = ORIGIN, required = false) String origin, //
+			@RequestParam(name = MLPSolution_.NAME, required = false) String name, //
+			@RequestParam(name = MLPSolution_.ACTIVE, required = false) Boolean active, //
+			@RequestParam(name = MLPSolution_.USER_ID, required = false) String userId, //
+			@RequestParam(name = MLPSolution_.SOURCE_ID, required = false) String sourceId, //
+			@RequestParam(name = MLPSolution_.MODEL_TYPE_CODE, required = false) String modelTypeCode, //
+			@RequestParam(name = MLPSolution_.TOOLKIT_TYPE_CODE, required = false) String toolkitTypeCode, //
+			@RequestParam(name = MLPSolution_.ORIGIN, required = false) String origin, //
 			Pageable pageRequest, HttpServletResponse response) {
 		logger.debug("searchSolutions enter");
 		boolean isOr = junction != null && "o".equals(junction);
@@ -451,7 +436,7 @@ public class SolutionController extends AbstractController {
 			return persisted;
 		} catch (Exception ex) {
 			Exception cve = findConstraintViolationException(ex);
-			logger.warn("createSolution failed: {}", cve.toString());
+			logger.warn("createSolution took exception {} on data {}", cve.toString(), solution.toString());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "createSolution failed", cve);
 		}
@@ -484,7 +469,7 @@ public class SolutionController extends AbstractController {
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
 			Exception cve = findConstraintViolationException(ex);
-			logger.warn("updateSolution failed: {}", cve.toString());
+			logger.warn("updateSolution took exception {} on data {}", cve.toString(), solution.toString());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "updateSolution failed", cve);
 		}
@@ -537,7 +522,7 @@ public class SolutionController extends AbstractController {
 			catSolMapRepository.deleteBySolutionId(solutionId);
 			solUserAccMapRepository.deleteBySolutionId(solutionId);
 			solutionFavoriteRepository.deleteBySolutionId(solutionId);
-			stepResultRepository.deleteBySolutionId(solutionId);
+			taskRepository.deleteBySolutionId(solutionId);
 			for (MLPSolutionRevision r : solutionRevisionRepository.findBySolutionIdIn(new String[] { solutionId })) {
 				for (MLPArtifact a : artifactRepository.findByRevision(r.getRevisionId()))
 					solRevArtMapRepository
@@ -613,7 +598,7 @@ public class SolutionController extends AbstractController {
 			return solutionRevisionRepository.save(revision);
 		} catch (Exception ex) {
 			Exception cve = findConstraintViolationException(ex);
-			logger.warn("createSolutionRevision failed: {}", cve.toString());
+			logger.warn("createSolutionRevision took exception {} on data {}", cve.toString(), revision.toString());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "createSolutionRevision failed", cve);
 		}
@@ -653,7 +638,7 @@ public class SolutionController extends AbstractController {
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
 			Exception cve = findConstraintViolationException(ex);
-			logger.warn("updateSolutionRevision failed: {}", cve.toString());
+			logger.warn("updateSolutionRevision took exception {} on data {}", cve.toString(), revision.toString());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "updateSolutionRevision failed", cve);
 		}
@@ -762,7 +747,7 @@ public class SolutionController extends AbstractController {
 			return result;
 		} catch (Exception ex) {
 			Exception cve = findConstraintViolationException(ex);
-			logger.error("createSolutionDownload failed: {}", cve.toString());
+			logger.warn("createSolutionDownload took exception {} on data {}", cve.toString(), sd.toString());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST,
 					ex.getCause() != null ? ex.getCause().getMessage() : "createSolutionDownload failed", cve);
@@ -839,7 +824,7 @@ public class SolutionController extends AbstractController {
 			return result;
 		} catch (Exception ex) {
 			Exception cve = findConstraintViolationException(ex);
-			logger.warn("createSolutionRating failed: {}", cve.toString());
+			logger.warn("createSolutionRating took exception {} on data {}", cve.toString(), sr.toString());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "createSolutionRating failed", cve);
 		}
@@ -870,7 +855,7 @@ public class SolutionController extends AbstractController {
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
 			Exception cve = findConstraintViolationException(ex);
-			logger.warn("updateSolutionRating failed: {}", cve.toString());
+			logger.warn("updateSolutionRating took exception {} on data {}", cve.toString(), sr.toString());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "updateSolutionRating failed", cve);
 		}
@@ -1036,7 +1021,7 @@ public class SolutionController extends AbstractController {
 			return result;
 		} catch (Exception ex) {
 			Exception cve = findConstraintViolationException(ex);
-			logger.error("createSolutionDeployment failed: {}", cve.toString());
+			logger.warn("createSolutionDeployment took exception {} on data {}", cve.toString(), sd.toString());
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			return new ErrorTransport(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
 					ex.getCause() != null ? ex.getCause().getMessage() : "createSolutionDeployment failed", cve);
@@ -1069,7 +1054,7 @@ public class SolutionController extends AbstractController {
 		} catch (Exception ex) {
 			// e.g., EmptyResultDataAccessException is NOT an internal server error
 			Exception cve = findConstraintViolationException(ex);
-			logger.warn("updateSolutionDeployment failed: {}", cve.toString());
+			logger.warn("updateSolutionDeployment took exception {} on data {}", cve.toString(), sd.toString());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "updateSolutionDeployment failed", cve);
 		}
