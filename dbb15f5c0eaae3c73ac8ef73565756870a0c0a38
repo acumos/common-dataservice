@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cd1e9722_a05b5b73",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/ICommonDataServiceRestClient.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 1717,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2019-01-23T22:37:33Z",
+      "side": 1,
+      "message": "return MLPTaskStepResult. \u0027Task\u0027 is missing in the comment",
+      "revId": "dbb15f5c0eaae3c73ac8ef73565756870a0c0a38",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "712792ad_3a0374f7",
+        "filename": "cmn-data-svc-client/src/test/java/org/acumos/cds/client/test/DomainTest.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 1354,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2019-01-23T22:37:33Z",
+      "side": 1,
+      "message": "Updtae method name to include \u0027Task\u0027",
+      "revId": "dbb15f5c0eaae3c73ac8ef73565756870a0c0a38",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b0ef956d_2f30b4e8",
+        "filename": "cmn-data-svc-client/src/test/java/org/acumos/cds/client/test/DomainTest.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 1363,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2019-01-23T22:37:33Z",
+      "side": 1,
+      "message": "Updtae method name to include \u0027Task\u0027",
+      "revId": "dbb15f5c0eaae3c73ac8ef73565756870a0c0a38",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
