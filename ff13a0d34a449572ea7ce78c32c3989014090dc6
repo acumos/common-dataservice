@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8ddb4b80_a7a3ee49",
+        "filename": "cmn-data-svc-server/db-scripts/cds-mysql-upgrade-2.0-to-2.1.sql",
+        "patchSetId": 10
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2019-01-23T19:08:32Z",
+      "side": 1,
+      "message": "Won\u0027t there be a fk referencing to artifact_id as well?",
+      "revId": "ff13a0d34a449572ea7ce78c32c3989014090dc6",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
