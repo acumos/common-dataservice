@@ -200,9 +200,9 @@ public class CdsControllerTest {
 			logger.info("Deleting objects");
 			client.dropSolutionRevisionArtifact(cs.getSolutionId(), cr.getRevisionId(), ca.getArtifactId());
 			client.deleteArtifact(ca.getArtifactId());
-			client.deleteRevisionDescription(cr.getRevisionId(), "PB");
-			client.deleteSolutionRevision(cs.getSolutionId(), cr.getRevisionId());
+			// This cascades
 			client.deleteSolution(cs.getSolutionId());
+			// This does not
 			client.deleteUser(cu.getUserId());
 		} catch (HttpStatusCodeException ex) {
 			logger.error("basicSequenceDemo failed: " + ex.getResponseBodyAsString(), ex);
@@ -1082,7 +1082,6 @@ public class CdsControllerTest {
 				client.deleteSolution(csOrg.getSolutionId());
 				client.deleteSolution(inactive.getSolutionId());
 				client.deleteCatalog(ca1.getCatalogId());
-				client.deleteArtifact(ca.getArtifactId());
 				client.deletePeerSubscription(ps.getSubId());
 				client.deletePeer(pr.getPeerId());
 				client.deleteUserLoginProvider(clp);
