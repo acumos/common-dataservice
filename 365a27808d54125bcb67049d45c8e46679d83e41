@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a4269783_7b73bed3",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/SolutionController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 712,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2019-01-29T15:44:06Z",
+      "side": 1,
+      "message": "Please check if a document can span across multiple revisions, if so an additional condition is needed to avoid delete of those docs belonging to this revision and other other revisions too.",
+      "revId": "365a27808d54125bcb67049d45c8e46679d83e41",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
