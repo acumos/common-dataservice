@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "77fccd4b_0aff3900",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/SolutionController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 692,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-01-29T16:36:48Z",
+      "side": 1,
+      "message": "good catch will fix",
+      "parentUuid": "5dc94e3c_e6273396",
+      "revId": "365a27808d54125bcb67049d45c8e46679d83e41",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a4269783_7b73bed3",
         "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/SolutionController.java",
         "patchSetId": 3
