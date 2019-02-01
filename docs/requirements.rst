@@ -300,6 +300,18 @@ Attributes:
 * Description (additional textual information about this group)
 
 
+Right to Use
+^^^^^^^^^^^^
+
+Grants permissions to a set of users for a solution.  Only seen locally, not federated.
+
+Attributes:
+
+* ID
+* Remote system ID (a GUID that is supplied by an external system)
+* Boolean indicator whether it applies to the site; i.e., to all users in the Acumos instance
+
+
 Role for Users
 ^^^^^^^^^^^^^^
 
@@ -675,6 +687,17 @@ Attributes:
 
 * Revision ID
 * Artifact ID
+
+
+Relationship Right To Use - User
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This represents a right-to-use grant on a solution for a specific user. For example, two users may be entitled to deploy a solution.
+
+Attributes:
+
+* Right to Use ID
+* User ID
 
 
 Relationship Solution - Solution for Composite Solutions
