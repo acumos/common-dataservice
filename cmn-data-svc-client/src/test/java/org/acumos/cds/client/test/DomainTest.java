@@ -42,8 +42,10 @@ import org.acumos.cds.domain.MLPPeerSolAccMap;
 import org.acumos.cds.domain.MLPPeerSubscription;
 import org.acumos.cds.domain.MLPPublishRequest;
 import org.acumos.cds.domain.MLPRevisionDescription;
+import org.acumos.cds.domain.MLPRightToUse;
 import org.acumos.cds.domain.MLPRole;
 import org.acumos.cds.domain.MLPRoleFunction;
+import org.acumos.cds.domain.MLPRtuReference;
 import org.acumos.cds.domain.MLPSiteConfig;
 import org.acumos.cds.domain.MLPSiteContent;
 import org.acumos.cds.domain.MLPSolGrpMemMap;
@@ -739,6 +741,41 @@ public class DomainTest extends AbstractModelTest {
 		logger.info(m.toString());
 		try {
 			new MLPRevisionDescription(null, null, null);
+			Assert.assertTrue("Unexpected success", false);
+		} catch (IllegalArgumentException iae) {
+			// null arg is rejected
+		}
+	}
+
+	private void checkMLPRightToUse(MLPRightToUse m) {
+		Assert.assertEquals(t1, m.getCreated());
+		Assert.assertEquals(t2, m.getModified());
+		Assert.assertEquals(l1, m.getRtuId());
+		Assert.assertEquals(s1, m.getSolutionId());
+		Assert.assertEquals(b1, m.isSite());
+		Assert.assertEquals(1, m.getRtuReferences().size());
+	}
+
+	@Test
+	public void testMLPRightToUse() {
+		MLPRightToUse m = new MLPRightToUse(s1, b1);
+		m = new MLPRightToUse();
+		m.setCreated(t1);
+		m.setModified(t2);
+		m.setRtuId(l1);
+		m.setSolutionId(s1);
+		m.setSite(b1);
+		m.getRtuReferences().add(new MLPRtuReference("ref"));
+		checkMLPRightToUse(m);
+		m = new MLPRightToUse(m);
+		checkMLPRightToUse(m);
+		Assert.assertFalse(m.equals(null));
+		Assert.assertFalse(m.equals(new Object()));
+		Assert.assertTrue(m.equals(m));
+		Assert.assertNotNull(m.hashCode());
+		logger.info(m.toString());
+		try {
+			new MLPRightToUse(null, true);
 			Assert.assertTrue("Unexpected success", false);
 		} catch (IllegalArgumentException iae) {
 			// null arg is rejected
