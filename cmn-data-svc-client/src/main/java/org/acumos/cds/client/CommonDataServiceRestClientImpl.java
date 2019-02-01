@@ -51,6 +51,7 @@ import org.acumos.cds.domain.MLPPeerSolAccMap;
 import org.acumos.cds.domain.MLPPeerSubscription;
 import org.acumos.cds.domain.MLPPublishRequest;
 import org.acumos.cds.domain.MLPRevisionDescription;
+import org.acumos.cds.domain.MLPRightToUse;
 import org.acumos.cds.domain.MLPRole;
 import org.acumos.cds.domain.MLPRoleFunction;
 import org.acumos.cds.domain.MLPSiteConfig;
@@ -71,6 +72,7 @@ import org.acumos.cds.domain.MLPUserLoginProvider;
 import org.acumos.cds.domain.MLPUserNotifPref;
 import org.acumos.cds.domain.MLPUserNotification;
 import org.acumos.cds.domain.MLPUserRoleMap;
+import org.acumos.cds.domain.MLPUserRtuMap;
 import org.acumos.cds.logging.AcumosLogConstants;
 import org.acumos.cds.transport.CountTransport;
 import org.acumos.cds.transport.LoginTransport;
@@ -2441,6 +2443,90 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 				new String[] { CCDSConstants.CATALOG_PATH, catalogId, CCDSConstants.SOLUTION_PATH, solutionId }, null,
 				null);
 		logger.debug("dropSolutionFromCatalog: url {}", uri);
+		restTemplate.delete(uri);
+	}
+
+	@Override
+	public MLPRightToUse getRightToUse(Long rtuId) {
+		URI uri = buildUri(new String[] { CCDSConstants.RTU_PATH, Long.toString(rtuId) }, null, null);
+		logger.debug("getRightToUse: uri {}", uri);
+		ResponseEntity<MLPRightToUse> response = restTemplate.exchange(uri, HttpMethod.GET, null,
+				new ParameterizedTypeReference<MLPRightToUse>() {
+				});
+		return response.getBody();
+	}
+
+	@Override
+	public RestPageResponse<MLPRightToUse> getRightToUses(RestPageRequest pageRequest) {
+		URI uri = buildUri(new String[] { CCDSConstants.RTU_PATH }, null, pageRequest);
+		logger.debug("getRightToUses: uri {}", uri);
+		ResponseEntity<RestPageResponse<MLPRightToUse>> response = restTemplate.exchange(uri, HttpMethod.GET, null,
+				new ParameterizedTypeReference<RestPageResponse<MLPRightToUse>>() {
+				});
+		return response.getBody();
+	}
+
+	@Override
+	public RestPageResponse<MLPRightToUse> searchRightToUses(Map<String, Object> queryParameters, boolean isOr,
+			RestPageRequest pageRequest) {
+		Map<String, Object> copy = new HashMap<>(queryParameters);
+		copy.put(CCDSConstants.JUNCTION_QUERY_PARAM, isOr ? "o" : "a");
+		URI uri = buildUri(new String[] { CCDSConstants.RTU_PATH, CCDSConstants.SEARCH_PATH }, copy, pageRequest);
+		logger.debug("searchRightToUses: uri {}", uri);
+		ResponseEntity<RestPageResponse<MLPRightToUse>> response = restTemplate.exchange(uri, HttpMethod.GET, null,
+				new ParameterizedTypeReference<RestPageResponse<MLPRightToUse>>() {
+				});
+		return response.getBody();
+	}
+
+	@Override
+	public List<MLPRightToUse> getRightToUses(String solutionId, String userId) {
+		URI uri = buildUri(new String[] { CCDSConstants.RTU_PATH, CCDSConstants.SOLUTION_PATH, solutionId,
+				CCDSConstants.USER_PATH, userId }, null, null);
+		logger.debug("getRightToUses: uri {}", uri);
+		ResponseEntity<List<MLPRightToUse>> response = restTemplate.exchange(uri, HttpMethod.GET, null,
+				new ParameterizedTypeReference<List<MLPRightToUse>>() {
+				});
+		return response.getBody();
+	}
+
+	@Override
+	public MLPRightToUse createRightToUse(MLPRightToUse rightToUse) {
+		URI uri = buildUri(new String[] { CCDSConstants.RTU_PATH }, null, null);
+		logger.debug("createRightToUse: uri {}", uri);
+		return restTemplate.postForObject(uri, rightToUse, MLPRightToUse.class);
+	}
+
+	@Override
+	public void updateRightToUse(MLPRightToUse rightToUse) {
+		URI uri = buildUri(new String[] { CCDSConstants.RTU_PATH, Long.toString(rightToUse.getRtuId()) }, null, null);
+		logger.debug("updateRightToUse: url {}", uri);
+		restTemplate.put(uri, rightToUse);
+	}
+
+	@Override
+	public void deleteRightToUse(Long rtuId) {
+		URI uri = buildUri(new String[] { CCDSConstants.RTU_PATH, Long.toString(rtuId) }, null, null);
+		logger.debug("deleteRightToUse: url {}", uri);
+		restTemplate.delete(uri);
+	}
+
+	@Override
+	public void addUserToRtu(String userId, Long rtuId) {
+		URI uri = buildUri(
+				new String[] { CCDSConstants.RTU_PATH, Long.toString(rtuId), CCDSConstants.USER_PATH, userId }, null,
+				null);
+		logger.debug("addUserToRtu: url {}", uri);
+		MLPUserRtuMap map = new MLPUserRtuMap(userId, rtuId);
+		restTemplate.postForObject(uri, map, SuccessTransport.class);
+	}
+
+	@Override
+	public void dropUserFromRtu(String userId, Long rtuId) {
+		URI uri = buildUri(
+				new String[] { CCDSConstants.RTU_PATH, Long.toString(rtuId), CCDSConstants.USER_PATH, userId }, null,
+				null);
+		logger.debug("dropUserFromRtu: url {}", uri);
 		restTemplate.delete(uri);
 	}
 

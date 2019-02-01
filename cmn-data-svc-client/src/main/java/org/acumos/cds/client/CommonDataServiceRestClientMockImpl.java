@@ -40,6 +40,7 @@ import org.acumos.cds.domain.MLPPeerSolAccMap;
 import org.acumos.cds.domain.MLPPeerSubscription;
 import org.acumos.cds.domain.MLPPublishRequest;
 import org.acumos.cds.domain.MLPRevisionDescription;
+import org.acumos.cds.domain.MLPRightToUse;
 import org.acumos.cds.domain.MLPRole;
 import org.acumos.cds.domain.MLPRoleFunction;
 import org.acumos.cds.domain.MLPSiteConfig;
@@ -203,6 +204,9 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 	private MLPCatalog catalog;
 	private RestPageResponse<MLPCatalog> catalogs;
 	private RestPageResponse<MLPSolution> solutionsInCatalog;
+	private MLPRightToUse rightToUse;
+	private RestPageResponse<MLPRightToUse> rightToUses;
+	private List<MLPRightToUse> rightToUseList;
 
 	/**
 	 * No-argument constructor.
@@ -1798,6 +1802,64 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 
 	@Override
 	public void dropSolutionFromCatalog(String solutionId, String catalogId) {
+		// How to mock?
+	}
+
+	public void setRightToUse(MLPRightToUse rtu) {
+		this.rightToUse = rtu;
+	}
+
+	@Override
+	public MLPRightToUse getRightToUse(Long rtuId) {
+		return this.rightToUse;
+	}
+
+	public void setRightToUses(RestPageResponse<MLPRightToUse> rtus) {
+		this.rightToUses = rtus;
+	}
+
+	@Override
+	public RestPageResponse<MLPRightToUse> getRightToUses(RestPageRequest pageRequest) {
+		return this.rightToUses;
+	}
+
+	@Override
+	public RestPageResponse<MLPRightToUse> searchRightToUses(Map<String, Object> queryParameters, boolean isOr,
+			RestPageRequest pageRequest) {
+		return this.rightToUses;
+	}
+
+	public void setRightToUseList(List<MLPRightToUse> rtus) {
+		this.rightToUseList = rtus;
+	}
+
+	@Override
+	public List<MLPRightToUse> getRightToUses(String solutionId, String userId) {
+		return this.rightToUseList;
+	}
+
+	@Override
+	public MLPRightToUse createRightToUse(MLPRightToUse rightToUse) {
+		return this.rightToUse;
+	}
+
+	@Override
+	public void updateRightToUse(MLPRightToUse rightToUse) {
+		this.rightToUse = rightToUse;
+	}
+
+	@Override
+	public void deleteRightToUse(Long rtuId) {
+		this.rightToUse = null;
+	}
+
+	@Override
+	public void addUserToRtu(String userId, Long rtuId) {
+		// How to mock?
+	}
+
+	@Override
+	public void dropUserFromRtu(String userId, Long rtuId) {
 		// How to mock?
 	}
 

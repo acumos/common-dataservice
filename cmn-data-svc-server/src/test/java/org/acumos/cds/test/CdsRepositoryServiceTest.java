@@ -47,6 +47,7 @@ import org.acumos.cds.domain.MLPPeerSolAccMap;
 import org.acumos.cds.domain.MLPPeerSubscription;
 import org.acumos.cds.domain.MLPPublishRequest;
 import org.acumos.cds.domain.MLPRevisionDescription;
+import org.acumos.cds.domain.MLPRightToUse;
 import org.acumos.cds.domain.MLPRole;
 import org.acumos.cds.domain.MLPRoleFunction;
 import org.acumos.cds.domain.MLPSiteConfig;
@@ -69,6 +70,7 @@ import org.acumos.cds.domain.MLPUserLoginProvider;
 import org.acumos.cds.domain.MLPUserNotifPref;
 import org.acumos.cds.domain.MLPUserNotification;
 import org.acumos.cds.domain.MLPUserRoleMap;
+import org.acumos.cds.domain.MLPUserRtuMap;
 import org.acumos.cds.repository.ArtifactRepository;
 import org.acumos.cds.repository.CatSolMapRepository;
 import org.acumos.cds.repository.CatalogRepository;
@@ -85,6 +87,7 @@ import org.acumos.cds.repository.PeerSolAccMapRepository;
 import org.acumos.cds.repository.PeerSubscriptionRepository;
 import org.acumos.cds.repository.PublishRequestRepository;
 import org.acumos.cds.repository.RevisionDescriptionRepository;
+import org.acumos.cds.repository.RightToUseRepository;
 import org.acumos.cds.repository.RoleFunctionRepository;
 import org.acumos.cds.repository.RoleRepository;
 import org.acumos.cds.repository.SiteConfigRepository;
@@ -105,6 +108,7 @@ import org.acumos.cds.repository.UserLoginProviderRepository;
 import org.acumos.cds.repository.UserNotificationPreferenceRepository;
 import org.acumos.cds.repository.UserRepository;
 import org.acumos.cds.repository.UserRoleMapRepository;
+import org.acumos.cds.repository.UserRtuMapRepository;
 import org.acumos.cds.service.ArtifactSearchService;
 import org.acumos.cds.service.CodeNameService;
 import org.acumos.cds.service.PeerSearchService;
@@ -160,6 +164,8 @@ public class CdsRepositoryServiceTest {
 	private RoleFunctionRepository roleFunctionRepository;
 	@Autowired
 	private RoleRepository roleRepository;
+	@Autowired
+	private RightToUseRepository rtuRepository;
 	@Autowired
 	private SiteConfigRepository siteConfigRepository;
 	@Autowired
@@ -226,6 +232,8 @@ public class CdsRepositoryServiceTest {
 	private PublishRequestRepository publishRequestRepository;
 	@Autowired
 	private PublishRequestSearchService publishRequestSearchService;
+	@Autowired
+	private UserRtuMapRepository rtuMapRepository;
 
 	@Test
 	public void testRepositories() throws Exception {
@@ -1488,6 +1496,41 @@ public class CdsRepositoryServiceTest {
 		catalogRepository.delete(ca1);
 		solutionRepository.delete(cs1);
 		userRepository.delete(cu);
+	}
+
+	@Test
+	public void testRightToUse() throws Exception {
+		try {
+			MLPUser cu = null;
+			cu = new MLPUser();
+			cu.setActive(true);
+			cu.setLoginName("rtu_user");
+			cu.setEmail("testRtuRepoUser@acumos.org");
+			cu = userRepository.save(cu);
+			Assert.assertNotNull(cu.getUserId());
+
+			MLPSolution cs = new MLPSolution("solName", cu.getUserId(), true);
+			cs = solutionRepository.save(cs);
+			Assert.assertNotNull(cs.getSolutionId());
+
+			MLPRightToUse cr = new MLPRightToUse("lumId", cs.getSolutionId(), true);
+			cr = rtuRepository.save(cr);
+			Assert.assertNotNull(cr.getRtuId());
+
+			MLPUserRtuMap map = new MLPUserRtuMap(cu.getUserId(), cr.getRtuId());
+			rtuMapRepository.save(map);
+
+			Iterable<MLPRightToUse> rtus = rtuRepository.findBySolutionIdUserId(cs.getSolutionId(), cu.getUserId());
+			Assert.assertTrue(rtus.iterator().hasNext());
+
+			rtuMapRepository.delete(map);
+			rtuRepository.delete(cr);
+			solutionRepository.delete(cs);
+			userRepository.delete(cu);
+		} catch (Exception ex) {
+			logger.error("testRtu failed", ex);
+			throw ex;
+		}
 	}
 
 	@Test

@@ -57,6 +57,7 @@ public class CCDSConstants {
 	public static final String RATING_PATH = "rating";
 	public static final String REVISION_PATH = "revision";
 	public static final String ROLE_PATH = "role";
+	public static final String RTU_PATH = "rtu";
 	public static final String SITE_PATH = "site";
 	public static final String STEP_RESULT_PATH = "stepresult";
 	public static final String SOLUTION_PATH = "solution";
