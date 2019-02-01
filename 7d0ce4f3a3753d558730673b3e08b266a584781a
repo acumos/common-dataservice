@@ -16,6 +16,24 @@
       "revId": "7d0ce4f3a3753d558730673b3e08b266a584781a",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a5c5f5d8_68d0945d",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPAbstractDocument.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-02-01T19:42:11Z",
+      "side": 1,
+      "message": "Hmm I like to allow null, for interim use it can help.",
+      "parentUuid": "8e8f8439_a12e976d",
+      "revId": "7d0ce4f3a3753d558730673b3e08b266a584781a",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
