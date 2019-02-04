@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "927f279f_767da89b",
+        "filename": "docs/requirements.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 93
+      },
+      "writtenOn": "2019-02-04T14:17:47Z",
+      "side": 1,
+      "message": "Should be named \"RTU reference\" (e.g. rtuReference), and support a list of RTU references (not just a single item).",
+      "range": {
+        "startLine": 311,
+        "startChar": 0,
+        "endLine": 311,
+        "endChar": 66
+      },
+      "revId": "f178ca5c119fd7bc3817a03c9aef88603607a63c",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7402dea2_c4e8c503",
+        "filename": "docs/requirements.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 93
+      },
+      "writtenOn": "2019-02-04T14:17:47Z",
+      "side": 1,
+      "message": "This record needs to include the solutionId as an attribute. This is needed per https://wiki.acumos.org/display/LM/Design+Notes, to associate the RTU(s) with a specific solutionId.",
+      "revId": "f178ca5c119fd7bc3817a03c9aef88603607a63c",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e54e40ef_b2cf2170",
+        "filename": "docs/requirements.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 692,
+      "author": {
+        "id": 93
+      },
+      "writtenOn": "2019-02-04T14:17:47Z",
+      "side": 1,
+      "message": "Where this is anchored as a child element needs to be specified. In this case it should be the user. Also we need for a user to have multiple RTUs associated with their account.",
+      "range": {
+        "startLine": 692,
+        "startChar": 0,
+        "endLine": 692,
+        "endChar": 32
+      },
+      "revId": "f178ca5c119fd7bc3817a03c9aef88603607a63c",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
