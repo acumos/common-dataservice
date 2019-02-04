@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8a464f5a_70207c60",
+        "filename": "docs/requirements.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-02-04T14:34:17Z",
+      "side": 1,
+      "message": "Will rename \u0026 extend",
+      "parentUuid": "927f279f_767da89b",
+      "range": {
+        "startLine": 311,
+        "startChar": 0,
+        "endLine": 311,
+        "endChar": 66
+      },
+      "revId": "f178ca5c119fd7bc3817a03c9aef88603607a63c",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7402dea2_c4e8c503",
         "filename": "docs/requirements.rst",
         "patchSetId": 2
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "331e6dfc_1499cf41",
+        "filename": "docs/requirements.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-02-04T14:34:17Z",
+      "side": 1,
+      "message": "Will add solutionId",
+      "parentUuid": "7402dea2_c4e8c503",
+      "revId": "f178ca5c119fd7bc3817a03c9aef88603607a63c",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e54e40ef_b2cf2170",
         "filename": "docs/requirements.rst",
         "patchSetId": 2
@@ -53,6 +95,30 @@
       "writtenOn": "2019-02-04T14:17:47Z",
       "side": 1,
       "message": "Where this is anchored as a child element needs to be specified. In this case it should be the user. Also we need for a user to have multiple RTUs associated with their account.",
+      "range": {
+        "startLine": 692,
+        "startChar": 0,
+        "endLine": 692,
+        "endChar": 32
+      },
+      "revId": "f178ca5c119fd7bc3817a03c9aef88603607a63c",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1d9f4b3a_126c1ab0",
+        "filename": "docs/requirements.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 692,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-02-04T14:34:17Z",
+      "side": 1,
+      "message": "Multiple records are allowed, that supports association multiple users to a single RTU, and similarly multiple RTUs to a single user.\n\nWhat do you mean, \"where this is anchored\"?  The client will provide query methods to fetch the data.",
+      "parentUuid": "e54e40ef_b2cf2170",
       "range": {
         "startLine": 692,
         "startChar": 0,
