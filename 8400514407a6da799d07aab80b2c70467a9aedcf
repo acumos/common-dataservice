@@ -16,6 +16,24 @@
       "revId": "8400514407a6da799d07aab80b2c70467a9aedcf",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "feeab923_279a0524",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPTaskStepResult.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-02-05T22:09:09Z",
+      "side": 1,
+      "message": "This is sufficient. Steps can be anything.",
+      "parentUuid": "3460b500_7903acb8",
+      "revId": "8400514407a6da799d07aab80b2c70467a9aedcf",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
