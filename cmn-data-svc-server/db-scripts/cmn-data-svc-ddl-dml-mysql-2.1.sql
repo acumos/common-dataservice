@@ -16,13 +16,9 @@
 -- limitations under the License.
 -- ===============LICENSE_END=========================================================
 
--- DDL and DML for tables managed by the Common Data Service version 2.1.*
+-- DDL and DML for tables managed by the Common Data Service version 2.0.*
 -- No database is created or specified to allow flexible deployment;
 -- also see script cmn-data-svc-base-mysql.sql.
-
--- Remember: DATETIME stores a date and a time (no zone), the exact behavior depends on
--- the server's timezone.  TIMESTAMP stores an unambiguous point in time up to 2038; and
--- also remember that MySql/Mariadb have automatic behaviors on TIMESTAMP columns.
 
 -- DDL --
 
@@ -177,6 +173,7 @@ CREATE TABLE C_SOLUTION_REV (
   SV_VULNER_CD CHAR(2),
   CREATED_DATE TIMESTAMP NOT NULL DEFAULT 0,
   MODIFIED_DATE TIMESTAMP NOT NULL,
+  ONBOARDED_DATE TIMESTAMP NOT NULL DEFAULT 0,
   CONSTRAINT C_SOLUTION_REV_C_SOLUTION FOREIGN KEY (SOLUTION_ID) REFERENCES C_SOLUTION (SOLUTION_ID),
   CONSTRAINT C_SOLUTION_REV_C_USER FOREIGN KEY (USER_ID) REFERENCES C_USER (USER_ID),
   CONSTRAINT C_SOLUTION_REV_C_PEER FOREIGN KEY (SOURCE_ID) REFERENCES C_PEER (PEER_ID)
