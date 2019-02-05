@@ -1299,6 +1299,7 @@ public class DomainTest extends AbstractModelTest {
 		Assert.assertEquals(t1, m.getCreated());
 		Assert.assertEquals(s3, m.getMetadata());
 		Assert.assertEquals(t2, m.getModified());
+		Assert.assertEquals(t3, m.getOnboarded());
 		Assert.assertEquals(s4, m.getOrigin());
 		Assert.assertEquals(s5, m.getPublisher());
 		Assert.assertEquals(s6, m.getRevisionId());
@@ -1321,6 +1322,7 @@ public class DomainTest extends AbstractModelTest {
 		m.setCreated(t1);
 		m.setMetadata(s3);
 		m.setModified(t2);
+		m.setOnboarded(t3);
 		m.setOrigin(s4);
 		m.setPublisher(s5);
 		m.setRevisionId(s6);
