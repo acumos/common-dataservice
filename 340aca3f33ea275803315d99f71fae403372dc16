@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f485880_db629c62",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/RightToUseController.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2019-02-11T23:45:31Z",
+      "side": 1,
+      "message": "Update of rtu reference method not needed?",
+      "revId": "340aca3f33ea275803315d99f71fae403372dc16",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
