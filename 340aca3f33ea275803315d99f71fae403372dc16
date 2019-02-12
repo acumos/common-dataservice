@@ -16,6 +16,24 @@
       "revId": "340aca3f33ea275803315d99f71fae403372dc16",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f7e15a97_b5f589af",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/RightToUseController.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-02-12T00:19:14Z",
+      "side": 1,
+      "message": "Correct",
+      "parentUuid": "3f485880_db629c62",
+      "revId": "340aca3f33ea275803315d99f71fae403372dc16",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
