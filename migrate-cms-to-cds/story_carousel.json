@@ -1,0 +1,10 @@
+{
+	"0": {
+		"name": "Test",
+		"authorName": "Test",
+		"supportingContent": "<p>Test</p>",
+		"slideEnabled": "true",
+		"number": 1
+	},
+	"enabled": false
+}

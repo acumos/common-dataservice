@@ -1,0 +1,21 @@
+{
+	"0": {
+		"name": "Events",
+		"headline": "Demo",
+		"supportingContent": "<p>This is a demo Event Carousel</p>",
+		"infoImageAling": "right",
+		"textAling": "right",
+		"slideEnabled": "true",
+		"number": 1
+	},
+	"1": {
+		"name": "Test",
+		"headline": "Test",
+		"supportingContent": "<p>Test</p>",
+		"infoImageAling": "right",
+		"textAling": "right",
+		"slideEnabled": "true",
+		"number": 2
+	},
+	"enabled": false
+}  

@@ -23,6 +23,7 @@ CDS Data Migrations and Upgrades
 This section explains data-migration and data-upgrade tools and
 scripts that apply to the Common Data Service (CDS).
 
+
 User and Author Data Upgrade for CDS 1.18.x
 -------------------------------------------
 
@@ -56,13 +57,14 @@ A database administrator should run this script in any affected
 database using any appropriate administration tool.
 
 
-CMS User Data Migration for CDS 1.17
-------------------------------------
+CMS Admin and User Data Migration
+---------------------------------
 
-This utility migrates all user-supplied data from the Hippo-CMS system
-to the Common Data Service (version 1.17 or later) and a Nexus
-repository.  An early feature of Acumos stored data in CMS, but later
-versions use CDS.  The following data items are affected:
+This utility migrates all data from the Hippo-CMS system
+to the Common Data Service (version 2.0.x or later) and a Nexus
+repository.  An early feature of Acumos stored admin and user
+data in CMS, but later versions use CDS.  The following data items
+are affected:
 
 #. Solution picture: a user can add a picture to a solution.
 #. Revision descriptions: a user can add a description appropriate for
@@ -74,6 +76,11 @@ versions use CDS.  The following data items are affected:
    level and another set of documents visible at the PUBLIC access
    level. In other words, every revision can have an arbitrary number
    of supporting documents, divided into two sets.
+#. Carousel images and infographics: the rotating pictures at the top
+   of the main landing page.
+#. Co-brand logo: a small image at the top left of the main landing page.
+#. Footer contact details: contact details shown at the bottom right.
+#. Footer terms and conditions: shown in the page footer.
 
 
 Prerequisites

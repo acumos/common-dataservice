@@ -1,0 +1,57 @@
+{
+	"0": {
+		"name": "Acumos Boreas",
+		"headline": "Welcome",
+		"textAling": "right",
+		"graphicImgEnabled": false,
+		"slideEnabled": "true",
+		"number": 1,
+		"links": {
+			"enableLink": true,
+			"primary": {
+				"label": "Portal Marketplace",
+				"address": "marketPlace"
+			},
+			"secondary": {
+				
+			}
+		}
+	},
+	"1": {
+		"name": "Welcome",
+		"headline": "Boreas",
+		"supportingContent": "<p>Welcome</p>",
+		"textAling": "right",
+		"graphicImgEnabled": false,
+		"slideEnabled": "true",
+		"number": 2,
+		"links": {
+			"enableLink": true,
+			"primary": {
+				
+			},
+			"secondary": {
+				
+			}
+		}
+	},
+	"2": {
+		"name": "test",
+		"headline": "test",
+		"supportingContent": "<p>test</p>",
+		"textAling": "left",
+		"bgColor": "#0366d6",
+		"slideEnabled": "true",
+		"number": 3,
+		"tagName": "1.0.0",
+		"links": {
+			"enableLink": true,
+			"primary": {
+				
+			},
+			"secondary": {
+				
+			}
+		}
+	}
+}
