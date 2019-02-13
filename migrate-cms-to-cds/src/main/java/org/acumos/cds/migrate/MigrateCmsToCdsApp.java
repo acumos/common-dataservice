@@ -28,10 +28,12 @@ import org.acumos.cds.client.CommonDataServiceRestClientImpl;
 import org.acumos.cds.client.ICommonDataServiceRestClient;
 import org.acumos.cds.domain.MLPDocument;
 import org.acumos.cds.domain.MLPRevisionDescription;
+import org.acumos.cds.domain.MLPSiteContent;
 import org.acumos.cds.domain.MLPSolution;
 import org.acumos.cds.domain.MLPSolutionRevision;
 import org.acumos.cds.migrate.client.CMSReaderClient;
 import org.acumos.cds.migrate.client.CMSWorkspace;
+import org.acumos.cds.migrate.domain.CMSDescription;
 import org.acumos.cds.migrate.domain.CMSNameList;
 import org.acumos.cds.migrate.domain.CMSRevisionDescription;
 import org.acumos.cds.transport.RestPageRequest;
@@ -62,11 +64,12 @@ public class MigrateCmsToCdsApp {
 
 	// I think this will grow
 	private static final String specialCharRegex = "[!@#$%^&*()<>{}|:?+=.\\s]+";
+
 	/**
 	 * Migrates data.
 	 * 
 	 * @param args
-	 *            Ignored
+	 *                 Ignored
 	 */
 	public static void main(String[] args) {
 
@@ -75,6 +78,7 @@ public class MigrateCmsToCdsApp {
 		int migrPicSucc = 0, migrPicFail = 0;
 		int migrDescSucc = 0, migrDescFail = 0;
 		int migrDocSucc = 0, migrDocFail = 0;
+		int globalContentSucc = 0, globalContentFail = 0;
 
 		MigrateProperties props = null;
 		try {
@@ -109,6 +113,8 @@ public class MigrateCmsToCdsApp {
 			return;
 		}
 
+		// PHASE 1: DOCUMENTS, PICTURES ETC.
+
 		final int pageSize = 100;
 		for (int page = 0;; ++page) {
 			RestPageRequest request = new RestPageRequest(page, pageSize);
@@ -124,13 +130,13 @@ public class MigrateCmsToCdsApp {
 					logger.info("Solution {} has no CMS image", s.getSolutionId());
 				} else {
 					String imgName = solNames.getResponse_body().get(0);
-					if (s.getPicture() != null) {
+					if (cdsClient.getSolutionPicture(s.getSolutionId()) != null) {
 						// CDS already has it
 						logger.info("Solution {} image {} already migrated", s.getSolutionId(), imgName);
 					} else {
 						logger.info("Migrating solution {} image: {}", s.getSolutionId(), imgName);
 						byte[] cmsImage = cmsClient.getSolutionImage(s.getSolutionId(), imgName);
-						s.setPicture(cmsImage);
+						cdsClient.saveSolutionPicture(s.getSolutionId(), cmsImage);
 						try {
 							cdsClient.updateSolution(s);
 							++migrPicSucc;
@@ -202,7 +208,7 @@ public class MigrateCmsToCdsApp {
 									++migrDocFail;
 								} else {
 									// Produce a clean basename for Nexus by replacing special characters
-									final String nexusDocBase = cmsDocParts[0].replaceAll(specialCharRegex, "-");	
+									final String nexusDocBase = cmsDocParts[0].replaceAll(specialCharRegex, "-");
 									final String nexusDocSuffix = cmsDocParts[1];
 									final String nexusDocName = nexusDocBase + "." + nexusDocSuffix;
 									if (findDocNameInCdsList(nexusDocName, cdsRevDocs)) {
@@ -235,7 +241,7 @@ public class MigrateCmsToCdsApp {
 											} catch (Exception ex) {
 												logger.error(
 														"Failed to upload revision {} doc base {} doc suffix as nexus artifact; exception follows",
-														r.getRevisionId(), nexusDocBase,  nexusDocSuffix);
+														r.getRevisionId(), nexusDocBase, nexusDocSuffix);
 												logger.error("Exception in upload", ex);
 												++migrDocFail;
 											}
@@ -280,21 +286,91 @@ public class MigrateCmsToCdsApp {
 
 		} // for page
 
+		// PHASE 2: GLOBAL SITE CONTENT
+		
+		final String keyCobrandLogo = "global.coBrandLogo";
+		final String keyContactInfo = "global.footer.contactInfo";
+		final String keyTermsCondition = "global.termsCondition";
+
+		String coBrandLogoName = cmsClient.getCoBrandLogoName();
+		if (coBrandLogoName == null) {
+			logger.info("Found no co-brand logo name, continuing.");
+		} else {
+			byte[] coBrandLogo = cmsClient.getCoBrandLogo(coBrandLogoName);
+			if (coBrandLogo == null || coBrandLogo.length == 0) {
+				logger.error("Failed to get co-brand logo content");
+				++globalContentFail;
+			} else {
+				MLPSiteContent cdsCoBrandLogo = cdsClient.getSiteContent(keyCobrandLogo);
+				if (cdsCoBrandLogo == null || cdsCoBrandLogo.getContentValue().length == 0) {
+					try {
+						logger.info("Creating co-brand logo");
+						cdsCoBrandLogo = new MLPSiteContent(keyCobrandLogo, coBrandLogo, "image/jpg");
+						cdsClient.createSiteContent(cdsCoBrandLogo);
+						++globalContentSucc;
+					} catch (HttpStatusCodeException ex) {
+						logger.error("Failed to create co-brand logo {}; server response {}", cdsCoBrandLogo,
+								ex.getResponseBodyAsString());
+						++globalContentFail;
+					}
+				}
+			}
+		}
+
+		CMSDescription cmsFootCi = cmsClient.getFooterContactInfo();
+		if (cmsFootCi == null || cmsFootCi.getDescription() == null || cmsFootCi.getDescription().isEmpty()) {
+			logger.info("Found no footer contact info, continuing");
+		} else {
+			MLPSiteContent cdsFootCi = cdsClient.getSiteContent(keyContactInfo);
+			if (cdsFootCi == null) {
+				try {
+					logger.info("Creating site content for footer contact");
+					cdsFootCi = new MLPSiteContent(keyContactInfo, cmsFootCi.getDescription().getBytes(), "text/html");
+					cdsClient.createSiteContent(cdsFootCi);
+					++globalContentSucc;
+				} catch (HttpStatusCodeException ex) {
+					logger.error("Failed to create footer contact {}; server response {}", cdsFootCi,
+							ex.getResponseBodyAsString());
+					++globalContentFail;
+				}
+			}
+		}
+		CMSDescription cmsFootTc = cmsClient.getFooterTermsConditions();
+		if (cmsFootTc == null || cmsFootTc.getDescription() == null || cmsFootTc.getDescription().isEmpty()) {
+			logger.info("Found no footer t&c, continuing");
+		} else {
+			MLPSiteContent cdsFootTc = cdsClient.getSiteContent(keyTermsCondition);
+			if (cdsFootTc == null) {
+				try {
+					logger.info("Creating site content for footer T&C");
+					cdsFootTc = new MLPSiteContent(keyContactInfo, cmsFootTc.getDescription().getBytes(), "text/html");
+					cdsClient.createSiteContent(cdsFootTc);
+					++globalContentSucc;
+				} catch (HttpStatusCodeException ex) {
+					logger.error("Failed to create footer T&C {}; server response {}", cdsFootTc,
+							ex.getResponseBodyAsString());
+					++globalContentFail;
+				}
+			}
+		}
+
 		logger.info("Migration statistics:");
 		logger.info("Solutions checked: {}", solCount);
 		logger.info("Revisions checked: {}", revCount);
 		logger.info("Pictures migrated: {} success, {} fail", migrPicSucc, migrPicFail);
 		logger.info("Descriptions migrated: {} success, {} fail", migrDescSucc, migrDescFail);
 		logger.info("Documents migrated: {} success, {} fail", migrDocSucc, migrDocFail);
+		logger.info("Global items migrated: {} success, {} fail", globalContentSucc, globalContentFail);
+
 	}
 
 	/**
 	 * Factors code of loop above
 	 * 
 	 * @param name
-	 *            Name of document
+	 *                 Name of document
 	 * @param docs
-	 *            List of documents
+	 *                 List of documents
 	 * @return True if doc with specified name occurs in list
 	 */
 	private static boolean findDocNameInCdsList(String name, List<MLPDocument> docs) {
@@ -308,11 +384,11 @@ public class MigrateCmsToCdsApp {
 	 * Forms Nexus group id as prefix.SolutionId.RevisionId
 	 * 
 	 * @param prefix
-	 *            Nexus prefix string
+	 *                       Nexus prefix string
 	 * @param solutionId
-	 *            Solution ID
+	 *                       Solution ID
 	 * @param revisionId
-	 *            Revision ID
+	 *                       Revision ID
 	 * @return Dotted string suitable for use as Nexus group id
 	 */
 	private static String createNexusGroupId(String prefix, String solutionId, String revisionId) {
@@ -325,7 +401,7 @@ public class MigrateCmsToCdsApp {
 	 * Splits name into basename and extension at the last period.
 	 * 
 	 * @param name
-	 *            containing a period
+	 *                 containing a period
 	 * @return Array of size 2; empty if the name has no period
 	 */
 	private static String[] splitFileBaseExt(String name) {
