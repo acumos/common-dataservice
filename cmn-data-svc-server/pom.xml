@@ -43,6 +43,7 @@
 		<!-- Client jar is in nexus repo -->
 		<client.version>${project.version}</client.version>
 		<springfox.version>2.9.2</springfox.version>
+		<docker.base>openjdk:8-jre-slim</docker.base>
 		<!-- Supplied by Jenkins -->
 		<build.number>${env.BUILD_NUMBER}</build.number>
 		<!-- Not supplied to all jobs; e.g., Javadoc -->
@@ -271,7 +272,6 @@
 							<!-- Specify a tag to avoid default tag "latest" -->
 							<name>common-dataservice:${project.version}</name>
 							<build>
-								<from>openjdk:8-jre-slim</from>
 								<tags>
 									<!-- Add tag with build number -->
 									<tag>${project.version}-b${build.number}</tag>
@@ -279,10 +279,8 @@
 								<assembly>
 									<descriptorRef>artifact</descriptorRef>
 								</assembly>
-								<cmd>
-									<!-- CDATA prevents Eclipse formatter from breaking line -->
-									<shell><![CDATA[cd /maven; java -Xms128m -Xmx1024m -Djava.security.egd=file:/dev/./urandom -jar ${project.artifactId}-${project.version}.${project.packaging}]]></shell>
-								</cmd>
+								<!-- External dockerfile has commands to create a new user -->
+								<dockerFileDir>${project.basedir}/src/main/docker</dockerFileDir>
 							</build>
 						</image>
 					</images>
