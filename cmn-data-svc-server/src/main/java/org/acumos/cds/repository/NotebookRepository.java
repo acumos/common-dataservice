@@ -2,7 +2,7 @@
  * ===============LICENSE_START=======================================================
  * Acumos
  * ===================================================================================
- * Copyright (C) 2017 AT&T Intellectual Property & Tech Mahindra. All rights reserved.
+ * Copyright (C) 2019 AT&T Intellectual Property & Tech Mahindra. All rights reserved.
  * ===================================================================================
  * This Acumos software file is distributed by AT&T and Tech Mahindra
  * under the Apache License, Version 2.0 (the "License");
@@ -18,18 +18,25 @@
  * ===============LICENSE_END=========================================================
  */
 
-package org.acumos.cds;
+package org.acumos.cds.repository;
 
-/**
- * Provides a constant for every code-name value set as configured by property
- * files.
- */
-public enum CodeNameType {
+import org.acumos.cds.domain.MLPNotebook;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
 
-	// Why does the Eclipse formatter want these all on a single line?
-	ACCESS_TYPE, ARTIFACT_TYPE, DEPLOYMENT_STATUS, KERNEL_TYPE, LOGIN_PROVIDER, //
-	MESSAGE_SEVERITY, MODEL_TYPE, NOTEBOOK_TYPE, NOTIFICATION_DELIVERY_MECHANISM, //
-	PEER_STATUS, PUBLISH_REQUEST_STATUS, SERVICE_STATUS, SUBSCRIPTION_SCOPE, //
-	TASK_STEP_STATUS, TASK_TYPE, TOOLKIT_TYPE, VERIFIED_LICENSE, VERIFIED_VULNERABILITY;
+public interface NotebookRepository extends PagingAndSortingRepository<MLPNotebook, String> {
+
+	/**
+	 * Gets all notebooks mapped to the specified project. Size is expected to be
+	 * modest, so this does not use page.
+	 * 
+	 * @param projectId
+	 *                      Project ID
+	 * @return Iterable of MLPNotebook
+	 */
+	@Query(value = "SELECT p FROM MLPNotebook p, MLPProjNotebookMap m " //
+			+ " WHERE p.notebookId =  m.notebookId AND m.projectId = :projectId")
+	Iterable<MLPNotebook> findProjectNotebooks(@Param("projectId") String projectId);
 
 }

@@ -2,7 +2,7 @@
  * ===============LICENSE_START=======================================================
  * Acumos
  * ===================================================================================
- * Copyright (C) 2017 AT&T Intellectual Property & Tech Mahindra. All rights reserved.
+ * Copyright (C) 2019 AT&T Intellectual Property & Tech Mahindra. All rights reserved.
  * ===================================================================================
  * This Acumos software file is distributed by AT&T and Tech Mahindra
  * under the Apache License, Version 2.0 (the "License");
@@ -22,10 +22,8 @@ package org.acumos.cds.service;
 
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -34,50 +32,23 @@ import javax.persistence.criteria.Root;
 
 import org.acumos.cds.domain.MLPAbstractWorkbenchArtifact;
 import org.acumos.cds.domain.MLPAbstractWorkbenchArtifact_;
-import org.acumos.cds.domain.MLPDomainModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Factors code out of search-service implementations
  */
-public abstract class AbstractSearchServiceImpl {
+@Service("workbenchArtifactSearchService")
+@Transactional(readOnly = true)
+public class WorkbenchArtifactSearchServiceImpl extends AbstractSearchServiceImpl
+		implements WorkbenchArtifactSearchService {
 
 	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-
-	@Autowired
-	protected EntityManager entityManager;
-
-	/**
-	 * Builds a list of sort orders suitable for supplying to the orderBy clause of
-	 * a query.
-	 * 
-	 * @param cb
-	 *                 Criteria Builder
-	 * @param from
-	 *                 Root item
-	 * @param sort
-	 *                 Spring sorting criteria
-	 * @return List of javax.persistence.criteria.Order
-	 */
-	protected List<javax.persistence.criteria.Order> buildOrderList(CriteriaBuilder cb,
-			Root<? extends MLPDomainModel> from, Sort sort) {
-		List<javax.persistence.criteria.Order> jpaOrderList = new ArrayList<>();
-		Iterator<org.springframework.data.domain.Sort.Order> sprOrderIter = sort.iterator();
-		while (sprOrderIter.hasNext()) {
-			org.springframework.data.domain.Sort.Order sprOrder = sprOrderIter.next();
-			if (sprOrder.isAscending())
-				jpaOrderList.add(cb.asc(from.get(sprOrder.getProperty())));
-			else
-				jpaOrderList.add(cb.desc(from.get(sprOrder.getProperty())));
-		}
-		return jpaOrderList;
-	}
 
 	/*
 	 * Uses type-safe JPA methods to create a predicate that compares field values
@@ -123,6 +94,7 @@ public abstract class AbstractSearchServiceImpl {
 	/*
 	 * Use JPA in Spring-Boot version 2.1
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Page<MLPAbstractWorkbenchArtifact> findWorkbenchArtifacts(
 			Class<? extends MLPAbstractWorkbenchArtifact> clazz, String name, Boolean active, String userId,
 			String version, String serviceStatus, String repositoryUrl, String serviceUrl, boolean isOr,
@@ -144,10 +116,10 @@ public abstract class AbstractSearchServiceImpl {
 			return new PageImpl<>(new ArrayList<>(), pageable, count);
 
 		// Get one page of rows
-		CriteriaQuery<MLPAbstractWorkbenchArtifact> rootQueryDef = cb.createQuery(MLPAbstractWorkbenchArtifact.class);
+		CriteriaQuery rootQueryDef = cb.createQuery(clazz);
 		// Coalesce any duplicates due to joins
 		rootQueryDef.distinct(true);
-		Root<MLPAbstractWorkbenchArtifact> fromRoot = rootQueryDef.from(MLPAbstractWorkbenchArtifact.class);
+		Root fromRoot = rootQueryDef.from(clazz);
 		rootQueryDef.select(fromRoot);
 		rootQueryDef.where(createArtifactPredicate(countFrom, name, active, userId, version, serviceStatus,
 				repositoryUrl, serviceUrl, isOr));
