@@ -40,6 +40,7 @@ import org.acumos.cds.domain.MLPCatalog;
 import org.acumos.cds.domain.MLPCodeNamePair;
 import org.acumos.cds.domain.MLPComment;
 import org.acumos.cds.domain.MLPDocument;
+import org.acumos.cds.domain.MLPNotebook;
 import org.acumos.cds.domain.MLPNotifUserMap;
 import org.acumos.cds.domain.MLPNotification;
 import org.acumos.cds.domain.MLPPasswordChangeRequest;
@@ -49,6 +50,8 @@ import org.acumos.cds.domain.MLPPeerGrpMemMap;
 import org.acumos.cds.domain.MLPPeerPeerAccMap;
 import org.acumos.cds.domain.MLPPeerSolAccMap;
 import org.acumos.cds.domain.MLPPeerSubscription;
+import org.acumos.cds.domain.MLPPipeline;
+import org.acumos.cds.domain.MLPProject;
 import org.acumos.cds.domain.MLPPublishRequest;
 import org.acumos.cds.domain.MLPRevisionDescription;
 import org.acumos.cds.domain.MLPRightToUse;
@@ -2652,6 +2655,192 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 				null);
 		logger.debug("dropUserFromRtu: url {}", uri);
 		restTemplate.delete(uri);
+	}
+
+	@Override
+	public RestPageResponse<MLPProject> getProjects(RestPageRequest pageRequest) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public RestPageResponse<MLPProject> searchProjects(Map<String, Object> queryParameters, boolean isOr,
+			RestPageRequest pageRequest) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public MLPProject getProject(String projectId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public MLPProject createProject(MLPProject project) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void updateProject(MLPProject project) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void deleteProject(String projectId) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void addProjectNotebook(String projectId, String notebookId) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void dropProjectNotebook(String projectId, String notebookId) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void addProjectPipeline(String projectId, String pipelineId) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void dropProjectPipeline(String projectId, String pipelineId) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void addProjectUserAccess(String projectId, String userId) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void dropProjectUserAccess(String projectId, String userId) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public List<MLPNotebook> getProjectNotebooks(String projectId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<MLPPipeline> getProjectPipelines(String projectId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<MLPUser> getProjectUsers(String projectId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public RestPageResponse<MLPNotebook> getNotebooks(RestPageRequest pageRequest) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public RestPageResponse<MLPNotebook> searchNotebooks(Map<String, Object> queryParameters, boolean isOr,
+			RestPageRequest pageRequest) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public RestPageResponse<MLPNotebook> getUserNotebooks(String userId, RestPageRequest pageRequest) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public MLPNotebook getNotebook(String notebookId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public MLPNotebook createNotebook(MLPNotebook notebook) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void updateNotebook(MLPNotebook notebook) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void deleteNotebook(String notebookId) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void addNotebookUserAccess(String notebookId, String userId) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void dropNotebookUserAccess(String notebookId, String userId) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public RestPageResponse<MLPPipeline> getPipelines(RestPageRequest pageRequest) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public RestPageResponse<MLPPipeline> searchPipelines(Map<String, Object> queryParameters, boolean isOr,
+			RestPageRequest pageRequest) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public RestPageResponse<MLPPipeline> getUserPipelines(String userId, RestPageRequest pageRequest) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public MLPPipeline getPipeline(String pipelineId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public MLPPipeline createPipeline(MLPPipeline pipeline) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void updatePipeline(MLPPipeline pipeline) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void deletePipeline(String pipelineId) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void addPipelineUserAccess(String pipelineId, String userId) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void dropPipelineUserAccess(String pipelineId, String userId) {
+		// TODO Auto-generated method stub
 	}
 
 }

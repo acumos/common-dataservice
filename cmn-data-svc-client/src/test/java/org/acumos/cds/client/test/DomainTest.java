@@ -31,6 +31,7 @@ import org.acumos.cds.domain.MLPCodeNamePair;
 import org.acumos.cds.domain.MLPComment;
 import org.acumos.cds.domain.MLPCompSolMap;
 import org.acumos.cds.domain.MLPDocument;
+import org.acumos.cds.domain.MLPNotebook;
 import org.acumos.cds.domain.MLPNotifUserMap;
 import org.acumos.cds.domain.MLPNotification;
 import org.acumos.cds.domain.MLPPasswordChangeRequest;
@@ -40,6 +41,10 @@ import org.acumos.cds.domain.MLPPeerGrpMemMap;
 import org.acumos.cds.domain.MLPPeerPeerAccMap;
 import org.acumos.cds.domain.MLPPeerSolAccMap;
 import org.acumos.cds.domain.MLPPeerSubscription;
+import org.acumos.cds.domain.MLPPipeline;
+import org.acumos.cds.domain.MLPProjNotebookMap;
+import org.acumos.cds.domain.MLPProjPipelineMap;
+import org.acumos.cds.domain.MLPProject;
 import org.acumos.cds.domain.MLPPublishRequest;
 import org.acumos.cds.domain.MLPRevisionDescription;
 import org.acumos.cds.domain.MLPRightToUse;
@@ -66,7 +71,10 @@ import org.acumos.cds.domain.MLPTaskStepResult;
 import org.acumos.cds.domain.MLPThread;
 import org.acumos.cds.domain.MLPUser;
 import org.acumos.cds.domain.MLPUserLoginProvider;
+import org.acumos.cds.domain.MLPNotebookUserAccMap;
 import org.acumos.cds.domain.MLPUserNotification;
+import org.acumos.cds.domain.MLPPipelineUserAccMap;
+import org.acumos.cds.domain.MLPProjUserAccMap;
 import org.acumos.cds.domain.MLPUserRoleMap;
 import org.acumos.cds.domain.MLPUserTagMap;
 import org.acumos.cds.transport.AuthorTransport;
@@ -338,6 +346,53 @@ public class DomainTest extends AbstractModelTest {
 			Assert.assertTrue("Unexpected success", false);
 		} catch (IllegalArgumentException ex) {
 			// bogus URI is rejected
+		}
+	}
+
+	private void checkMLPNotebook(MLPNotebook m) {
+		Assert.assertEquals(t1, m.getCreated());
+		Assert.assertEquals(s1, m.getDescription());
+		Assert.assertEquals(s2, m.getKernelTypeCode());
+		Assert.assertEquals(t2, m.getModified());
+		Assert.assertEquals(s3, m.getName());
+		Assert.assertEquals(s4, m.getNotebookId());
+		Assert.assertEquals(s5, m.getNotebookTypeCode());
+		Assert.assertEquals(u1, m.getRepositoryUrl());
+		Assert.assertEquals(s6, m.getServiceStatusCode());
+		Assert.assertEquals(u2, m.getServiceUrl());
+		Assert.assertEquals(s7, m.getUserId());
+		Assert.assertEquals(s8, m.getVersion());
+	}
+
+	@Test
+	public void testMLPNotebook() {
+		MLPNotebook m = new MLPNotebook(s1, true, s1);
+		m = new MLPNotebook();
+		m.setCreated(t1);
+		m.setDescription(s1);
+		m.setKernelTypeCode(s2);
+		m.setModified(t2);
+		m.setName(s3);
+		m.setNotebookId(s4);
+		m.setNotebookTypeCode(s5);
+		m.setRepositoryUrl(u1);
+		m.setServiceStatusCode(s6);
+		m.setServiceUrl(u2);
+		m.setUserId(s7);
+		m.setVersion(s8);
+		checkMLPNotebook(m);
+		m = new MLPNotebook(m);
+		checkMLPNotebook(m);
+		Assert.assertFalse(m.equals(null));
+		Assert.assertFalse(m.equals(new Object()));
+		Assert.assertTrue(m.equals(m));
+		Assert.assertNotNull(m.hashCode());
+		logger.info(m.toString());
+		try {
+			new MLPNotebook(null, false, null);
+			Assert.assertTrue("Unexpected success", false);
+		} catch (IllegalArgumentException iae) {
+			// null arg is rejected
 		}
 	}
 
@@ -667,6 +722,162 @@ public class DomainTest extends AbstractModelTest {
 		logger.info(m.toString());
 		MLPPeerSolAccMap.PeerSolAccMapPK pk = new MLPPeerSolAccMap.PeerSolAccMapPK();
 		pk = new MLPPeerSolAccMap.PeerSolAccMapPK(l1, l2);
+		Assert.assertFalse(pk.equals(null));
+		Assert.assertFalse(pk.equals(new Object()));
+		Assert.assertTrue(pk.equals(pk));
+		Assert.assertFalse(pk.hashCode() == 0);
+		logger.info(pk.toString());
+	}
+
+	private void checkMLPPipeline(MLPPipeline m) {
+		Assert.assertEquals(t1, m.getCreated());
+		Assert.assertEquals(s1, m.getDescription());
+		Assert.assertEquals(t2, m.getModified());
+		Assert.assertEquals(s2, m.getName());
+		Assert.assertEquals(s3, m.getPipelineId());
+		Assert.assertEquals(u1, m.getRepositoryUrl());
+		Assert.assertEquals(s4, m.getServiceStatusCode());
+		Assert.assertEquals(u2, m.getServiceUrl());
+		Assert.assertEquals(s5, m.getUserId());
+		Assert.assertEquals(s6, m.getVersion());
+	}
+
+	@Test
+	public void testMLPPipeline() {
+		MLPPipeline m = new MLPPipeline(s1, true, s1);
+		m = new MLPPipeline();
+		m.setCreated(t1);
+		m.setDescription(s1);
+		m.setModified(t2);
+		m.setName(s2);
+		m.setPipelineId(s3);
+		m.setRepositoryUrl(u1);
+		m.setServiceStatusCode(s4);
+		m.setServiceUrl(u2);
+		m.setUserId(s5);
+		m.setVersion(s6);
+		checkMLPPipeline(m);
+		m = new MLPPipeline(m);
+		checkMLPPipeline(m);
+		Assert.assertFalse(m.equals(null));
+		Assert.assertFalse(m.equals(new Object()));
+		Assert.assertTrue(m.equals(m));
+		Assert.assertNotNull(m.hashCode());
+		logger.info(m.toString());
+		try {
+			new MLPPipeline(null, false, null);
+			Assert.assertTrue("Unexpected success", false);
+		} catch (IllegalArgumentException iae) {
+			// null arg is rejected
+		}
+	}
+
+	private void checkMLPProject(MLPProject m) {
+		Assert.assertEquals(t1, m.getCreated());
+		Assert.assertEquals(s1, m.getDescription());
+		Assert.assertEquals(t2, m.getModified());
+		Assert.assertEquals(s2, m.getName());
+		Assert.assertEquals(s3, m.getProjectId());
+		Assert.assertEquals(u1, m.getRepositoryUrl());
+		Assert.assertEquals(s4, m.getServiceStatusCode());
+		Assert.assertEquals(u2, m.getServiceUrl());
+		Assert.assertEquals(s5, m.getUserId());
+		Assert.assertEquals(s6, m.getVersion());
+	}
+
+	@Test
+	public void testMLPProject() {
+		MLPProject m = new MLPProject(s1, true, s1);
+		m = new MLPProject();
+		m.setCreated(t1);
+		m.setDescription(s1);
+		m.setModified(t2);
+		m.setName(s2);
+		m.setProjectId(s3);
+		m.setRepositoryUrl(u1);
+		m.setServiceStatusCode(s4);
+		m.setServiceUrl(u2);
+		m.setUserId(s5);
+		m.setVersion(s6);
+		checkMLPProject(m);
+		m = new MLPProject(m);
+		checkMLPProject(m);
+		Assert.assertFalse(m.equals(null));
+		Assert.assertFalse(m.equals(new Object()));
+		Assert.assertTrue(m.equals(m));
+		Assert.assertNotNull(m.hashCode());
+		logger.info(m.toString());
+		try {
+			new MLPProject(null, false, null);
+			Assert.assertTrue("Unexpected success", false);
+		} catch (IllegalArgumentException iae) {
+			// null arg is rejected
+		}
+	}
+
+	private void checkMLPProjNbMap(MLPProjNotebookMap m) {
+		Assert.assertEquals(s1, m.getProjectId());
+		Assert.assertEquals(s2, m.getNotebookId());
+	}
+
+	@Test
+	public void testMLPProjNbMap() {
+		MLPProjNotebookMap m = new MLPProjNotebookMap(s1, s1);
+		m = new MLPProjNotebookMap(m);
+		m = new MLPProjNotebookMap();
+		m.setProjectId(s1);
+		m.setNotebookId(s2);
+		checkMLPProjNbMap(m);
+		m = new MLPProjNotebookMap(m);
+		checkMLPProjNbMap(m);
+		Assert.assertFalse(m.equals(null));
+		Assert.assertFalse(m.equals(new Object()));
+		Assert.assertTrue(m.equals(m));
+		Assert.assertNotNull(m.hashCode());
+		logger.info(m.toString());
+		try {
+			new MLPProjNotebookMap(null, null);
+			Assert.assertTrue("Unexpected success", false);
+		} catch (IllegalArgumentException iae) {
+			// null arg is rejected
+		}
+		MLPProjNotebookMap.ProjNbMapPK pk = new MLPProjNotebookMap.ProjNbMapPK();
+		pk = new MLPProjNotebookMap.ProjNbMapPK(s1, s2);
+		Assert.assertFalse(pk.equals(null));
+		Assert.assertFalse(pk.equals(new Object()));
+		Assert.assertTrue(pk.equals(pk));
+		Assert.assertFalse(pk.hashCode() == 0);
+		logger.info(pk.toString());
+	}
+
+	private void checkMLPProjPlMap(MLPProjPipelineMap m) {
+		Assert.assertEquals(s1, m.getProjectId());
+		Assert.assertEquals(s2, m.getPipelineId());
+	}
+
+	@Test
+	public void testMLPProjPlMap() {
+		MLPProjPipelineMap m = new MLPProjPipelineMap(s1, s1);
+		m = new MLPProjPipelineMap(m);
+		m = new MLPProjPipelineMap();
+		m.setProjectId(s1);
+		m.setPipelineId(s2);
+		checkMLPProjPlMap(m);
+		m = new MLPProjPipelineMap(m);
+		checkMLPProjPlMap(m);
+		Assert.assertFalse(m.equals(null));
+		Assert.assertFalse(m.equals(new Object()));
+		Assert.assertTrue(m.equals(m));
+		Assert.assertNotNull(m.hashCode());
+		logger.info(m.toString());
+		try {
+			new MLPProjPipelineMap(null, null);
+			Assert.assertTrue("Unexpected success", false);
+		} catch (IllegalArgumentException iae) {
+			// null arg is rejected
+		}
+		MLPProjNotebookMap.ProjNbMapPK pk = new MLPProjNotebookMap.ProjNbMapPK();
+		pk = new MLPProjNotebookMap.ProjNbMapPK(s1, s2);
 		Assert.assertFalse(pk.equals(null));
 		Assert.assertFalse(pk.equals(new Object()));
 		Assert.assertTrue(pk.equals(pk));
@@ -1775,6 +1986,111 @@ public class DomainTest extends AbstractModelTest {
 		logger.info(m.toString());
 		MLPUserTagMap.UserTagMapPK pk = new MLPUserTagMap.UserTagMapPK();
 		pk = new MLPUserTagMap.UserTagMapPK(s1, s2);
+		Assert.assertFalse(pk.equals(null));
+		Assert.assertFalse(pk.equals(new Object()));
+		Assert.assertTrue(pk.equals(pk));
+		Assert.assertFalse(pk.hashCode() == 0);
+		logger.info(pk.toString());
+	}
+
+	private void checkMLPUserNbMap(MLPNotebookUserAccMap m) {
+		Assert.assertEquals(s1, m.getUserId());
+		Assert.assertEquals(s2, m.getNotebookId());
+	}
+
+	@Test
+	public void testMLPUserNbMap() {
+		MLPNotebookUserAccMap m = new MLPNotebookUserAccMap(s1, s1);
+		m = new MLPNotebookUserAccMap(m);
+		m = new MLPNotebookUserAccMap();
+		m.setUserId(s1);
+		m.setNotebookId(s2);
+		checkMLPUserNbMap(m);
+		m = new MLPNotebookUserAccMap(m);
+		checkMLPUserNbMap(m);
+		Assert.assertFalse(m.equals(null));
+		Assert.assertFalse(m.equals(new Object()));
+		Assert.assertTrue(m.equals(m));
+		Assert.assertNotNull(m.hashCode());
+		logger.info(m.toString());
+		try {
+			new MLPNotebookUserAccMap(null, null);
+			Assert.assertTrue("Unexpected success", false);
+		} catch (IllegalArgumentException iae) {
+			// null arg is rejected
+		}
+		MLPNotebookUserAccMap.NbUserAccMapPK pk = new MLPNotebookUserAccMap.NbUserAccMapPK();
+		pk = new MLPNotebookUserAccMap.NbUserAccMapPK(s1, s2);
+		Assert.assertFalse(pk.equals(null));
+		Assert.assertFalse(pk.equals(new Object()));
+		Assert.assertTrue(pk.equals(pk));
+		Assert.assertFalse(pk.hashCode() == 0);
+		logger.info(pk.toString());
+	}
+
+	private void checkMLPUserPlMap(MLPPipelineUserAccMap m) {
+		Assert.assertEquals(s1, m.getUserId());
+		Assert.assertEquals(s2, m.getPipelineId());
+	}
+
+	@Test
+	public void testMLPUserPlMap() {
+		MLPPipelineUserAccMap m = new MLPPipelineUserAccMap(s1, s1);
+		m = new MLPPipelineUserAccMap(m);
+		m = new MLPPipelineUserAccMap();
+		m.setUserId(s1);
+		m.setPipelineId(s2);
+		checkMLPUserPlMap(m);
+		m = new MLPPipelineUserAccMap(m);
+		checkMLPUserPlMap(m);
+		Assert.assertFalse(m.equals(null));
+		Assert.assertFalse(m.equals(new Object()));
+		Assert.assertTrue(m.equals(m));
+		Assert.assertNotNull(m.hashCode());
+		logger.info(m.toString());
+		try {
+			new MLPPipelineUserAccMap(null, null);
+			Assert.assertTrue("Unexpected success", false);
+		} catch (IllegalArgumentException iae) {
+			// null arg is rejected
+		}
+		MLPPipelineUserAccMap.PlUserAccMap pk = new MLPPipelineUserAccMap.PlUserAccMap();
+		pk = new MLPPipelineUserAccMap.PlUserAccMap(s1, s2);
+		Assert.assertFalse(pk.equals(null));
+		Assert.assertFalse(pk.equals(new Object()));
+		Assert.assertTrue(pk.equals(pk));
+		Assert.assertFalse(pk.hashCode() == 0);
+		logger.info(pk.toString());
+	}
+
+	private void checkMLPProjUserAccMap(MLPProjUserAccMap m) {
+		Assert.assertEquals(s1, m.getUserId());
+		Assert.assertEquals(s2, m.getProjectId());
+	}
+
+	@Test
+	public void testMLPProjUserAccMap() {
+		MLPProjUserAccMap m = new MLPProjUserAccMap(s1, s1);
+		m = new MLPProjUserAccMap(m);
+		m = new MLPProjUserAccMap();
+		m.setUserId(s1);
+		m.setProjectId(s2);
+		checkMLPProjUserAccMap(m);
+		m = new MLPProjUserAccMap(m);
+		checkMLPProjUserAccMap(m);
+		Assert.assertFalse(m.equals(null));
+		Assert.assertFalse(m.equals(new Object()));
+		Assert.assertTrue(m.equals(m));
+		Assert.assertNotNull(m.hashCode());
+		logger.info(m.toString());
+		try {
+			new MLPProjUserAccMap(null, null);
+			Assert.assertTrue("Unexpected success", false);
+		} catch (IllegalArgumentException iae) {
+			// null arg is rejected
+		}
+		MLPProjUserAccMap.ProjUserAccMapPK pk = new MLPProjUserAccMap.ProjUserAccMapPK();
+		pk = new MLPProjUserAccMap.ProjUserAccMapPK(s1, s2);
 		Assert.assertFalse(pk.equals(null));
 		Assert.assertFalse(pk.equals(new Object()));
 		Assert.assertTrue(pk.equals(pk));

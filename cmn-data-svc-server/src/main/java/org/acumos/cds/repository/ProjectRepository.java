@@ -2,7 +2,7 @@
  * ===============LICENSE_START=======================================================
  * Acumos
  * ===================================================================================
- * Copyright (C) 2017 AT&T Intellectual Property & Tech Mahindra. All rights reserved.
+ * Copyright (C) 2019 AT&T Intellectual Property & Tech Mahindra. All rights reserved.
  * ===================================================================================
  * This Acumos software file is distributed by AT&T and Tech Mahindra
  * under the Apache License, Version 2.0 (the "License");
@@ -20,42 +20,28 @@
 
 package org.acumos.cds.repository;
 
-import org.acumos.cds.domain.MLPArtifact;
+import org.acumos.cds.domain.MLPProject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
-public interface ArtifactRepository extends PagingAndSortingRepository<MLPArtifact, String> {
+public interface ProjectRepository extends PagingAndSortingRepository<MLPProject, String> {
 
 	/**
-	 * Gets all artifacts associated with the specified solution revision.
+	 * Gets a page of projects accessible by the specified user; i.e., either the
+	 * user is the creator OR has been granted access via the mapping table.
 	 * 
-	 * This does not accept a pageable parameter because the number of artifacts for
-	 * a single revision is expected to be modest.
-	 *
-	 * @param revisionId
-	 *                       solution revision ID
-	 * @return Iterable of MLPArtifact
-	 */
-	@Query(value = "select a from MLPArtifact a, MLPSolRevArtMap m " //
-			+ " where a.artifactId =  m.artifactId " //
-			+ " and m.revisionId = :revisionId")
-	Iterable<MLPArtifact> findByRevision(@Param("revisionId") String revisionId);
-
-	/**
-	 * Finds artifacts using a LIKE query on the text columns NAME and DESCRIPTION.
-	 * 
-	 * @param searchTerm
-	 *                        fragment to find in text columns
+	 * @param userId
+	 *                        User ID
 	 * @param pageRequest
 	 *                        Start index, page size, sort criteria
-	 * @return Page of MLPArtifact
+	 * @return Page of MLPProject
 	 */
-	@Query("SELECT s FROM MLPArtifact s " //
-			+ " WHERE LOWER(s.name) LIKE LOWER(CONCAT('%', :searchTerm, '%'))" //
-			+ " OR LOWER(s.description) LIKE LOWER(CONCAT('%', :searchTerm, '%'))")
-	Page<MLPArtifact> findBySearchTerm(@Param("searchTerm") String searchTerm, Pageable pageRequest);
+	@Query(value = "SELECT DISTINCT p FROM MLPProject p, MLPProjUserAccMap m " //
+			+ " WHERE p.userId = :userId " //
+			+ " OR p.projectId =  m.projectId AND m.userId = :userId")
+	Page<MLPProject> findUserAccessibleProjects(@Param("userId") String userId, Pageable pageRequest);
 
 }

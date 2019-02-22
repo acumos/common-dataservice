@@ -2,7 +2,7 @@
  * ===============LICENSE_START=======================================================
  * Acumos
  * ===================================================================================
- * Copyright (C) 2017 AT&T Intellectual Property & Tech Mahindra. All rights reserved.
+ * Copyright (C) 2019 AT&T Intellectual Property & Tech Mahindra. All rights reserved.
  * ===================================================================================
  * This Acumos software file is distributed by AT&T and Tech Mahindra
  * under the Apache License, Version 2.0 (the "License");
@@ -20,42 +20,40 @@
 
 package org.acumos.cds.repository;
 
-import org.acumos.cds.domain.MLPArtifact;
+import org.acumos.cds.domain.MLPPipeline;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
-public interface ArtifactRepository extends PagingAndSortingRepository<MLPArtifact, String> {
+public interface PipelineRepository extends PagingAndSortingRepository<MLPPipeline, String> {
 
 	/**
-	 * Gets all artifacts associated with the specified solution revision.
+	 * Gets all pipelines mapped to the specified project. Size is expected to be
+	 * modest, so this does not use page.
 	 * 
-	 * This does not accept a pageable parameter because the number of artifacts for
-	 * a single revision is expected to be modest.
-	 *
-	 * @param revisionId
-	 *                       solution revision ID
-	 * @return Iterable of MLPArtifact
+	 * @param projectId
+	 *                      Project ID
+	 * @return Iterable of MLPPipeline
 	 */
-	@Query(value = "select a from MLPArtifact a, MLPSolRevArtMap m " //
-			+ " where a.artifactId =  m.artifactId " //
-			+ " and m.revisionId = :revisionId")
-	Iterable<MLPArtifact> findByRevision(@Param("revisionId") String revisionId);
+	@Query(value = "SELECT p FROM MLPPipeline p, MLPProjPipelineMap m " //
+			+ " WHERE p.pipelineId =  m.pipelineId AND m.projectId = :projectId")
+	Iterable<MLPPipeline> findProjectPipelines(@Param("projectId") String projectId);
 
 	/**
-	 * Finds artifacts using a LIKE query on the text columns NAME and DESCRIPTION.
+	 * Gets a page of pipelines accessible by the specified user; i.e., either the
+	 * user is the creator OR has been granted access via the mapping table.
 	 * 
-	 * @param searchTerm
-	 *                        fragment to find in text columns
+	 * @param userId
+	 *                        User ID
 	 * @param pageRequest
 	 *                        Start index, page size, sort criteria
-	 * @return Page of MLPArtifact
+	 * @return Page of MLPNotebook
 	 */
-	@Query("SELECT s FROM MLPArtifact s " //
-			+ " WHERE LOWER(s.name) LIKE LOWER(CONCAT('%', :searchTerm, '%'))" //
-			+ " OR LOWER(s.description) LIKE LOWER(CONCAT('%', :searchTerm, '%'))")
-	Page<MLPArtifact> findBySearchTerm(@Param("searchTerm") String searchTerm, Pageable pageRequest);
+	@Query(value = "SELECT DISTINCT p FROM MLPPipeline p, MLPPipelineUserAccMap m " //
+			+ " WHERE p.userId = :userId " //
+			+ " OR p.pipelineId =  m.pipelineId AND m.userId = :userId")
+	Page<MLPPipeline> findUserAccessiblePipelines(@Param("userId") String userId, Pageable pageRequest);
 
 }
