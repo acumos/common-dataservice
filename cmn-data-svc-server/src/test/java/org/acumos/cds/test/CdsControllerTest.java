@@ -218,7 +218,7 @@ public class CdsControllerTest {
 	}
 
 	@Test
-	public void getCodeValueConstants() throws Exception {
+	public void testCodeValueConstants() throws Exception {
 		List<String> valueSetNames = client.getValueSetNames();
 		Assert.assertEquals(valueSetNames.size(), CodeNameType.values().length);
 		for (String vsName : valueSetNames)
@@ -227,11 +227,11 @@ public class CdsControllerTest {
 		for (CodeNameType name : CodeNameType.values()) {
 			try {
 				List<MLPCodeNamePair> list = client.getCodeNamePairs(name);
-				logger.info("getCodeValueConstants: name {} -> values {}", name, list);
+				logger.info("testCodeValueConstants: name {} -> values {}", name, list);
 				Assert.assertFalse(name.toString(), list.isEmpty());
 				// Cannot validate here - list of values is defined by server config
 			} catch (HttpStatusCodeException ex) {
-				logger.error("getCodeValueConstants failed", ex.getResponseBodyAsString());
+				logger.error("testCodeValueConstants failed", ex.getResponseBodyAsString());
 				throw ex;
 			}
 		}
