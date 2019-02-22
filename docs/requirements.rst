@@ -36,7 +36,7 @@ with each other:
 * A public "root" instance will be used to publish some information
 * Users can publish their solutions for use by others.
 
-This has implications for identifiers used in the system, because they must be usable globally.
+This has implications for identifiers used in the system, because some must be usable globally.
 
 Entity and Relationship Overview
 --------------------------------
@@ -72,27 +72,35 @@ Access Type
 | PB "Public"
 | PR "Private"
 
+Artifact Status
+^^^^^^^^^^^^^^^
+
+Applies to projects, notebooks and pipelines in the workbench.
+
+| AC "Active"
+| AR "Archived"
+
 Artifact Type
 ^^^^^^^^^^^^^
 
-| BP "BLUEPRINT FILE"
-| CD "CDUMP FILE"
-| DI "DOCKER IMAGE"
-| DP "DOCKER IMAGE PREDOCKERIZED"
-| DS "DATA SOURCE"
-| LG "LOG FILE"
-| LI "LICENSE"
-| MD "METADATA"
-| MH "MODEL-H2O"
-| MI "MODEL IMAGE"
-| MR "MODEL-R"
-| MS "MODEL-SCIKIT"
-| MT "MODEL-TENSORFLOW"
-| TE "TOSCA TEMPLATE"
+| BP "Blueprint File"
+| CD "CDUMP File"
+| DI "Docker Image"
+| DP "Docker Image Pre-dockerized"
+| DS "Data Source"
+| LG "Log File"
+| LI "License"
+| MD "Metadata"
+| MH "Model H2O"
+| MI "Model Image"
+| MR "Model R"
+| MS "Model Scikit"
+| MT "Model Tensorflow"
+| PJ "Protobuf File"
+| TE "TOSCA Template"
 | TG "TOSCA Generator Input File"
-| TS "TOSCA SCHEMA"
-| TT "TOSCA TRANSLATE"
-| PJ "PROTOBUF FILE"
+| TS "TOSCA Schema"
+| TT "TOSCA Translate"
 
 Deployment Status
 ^^^^^^^^^^^^^^^^^
@@ -101,6 +109,16 @@ Deployment Status
 | FA "Failed"
 | IP "In Progress"
 | ST "Started"
+
+Kernel Type
+^^^^^^^^^^^
+
+Applies to workbench notebooks.
+
+| PY "Python"
+| RR "R"
+| JA "Java"
+| SC "Scala"
 
 Login Provider
 ^^^^^^^^^^^^^^
@@ -126,6 +144,20 @@ Model Type
 | PR "Prediction"
 | RG "Regression"
 
+Notebook Type
+^^^^^^^^^^^^^
+
+Applies to workbench notebooks.
+
+| JB "jupyter/base-notebook"
+| JM "jupyter/minimal-notebook"
+| JR "jupyter/r-notebook"
+| JS "jupyter/scipy-notebook"
+| JT "jupyter/tensorflow-notebook"
+| JD "jupyter/datascience-notebook"
+| JP "jupyter/pyspark-notebook"
+| JA "jupyter/all-spark-notebook"
+
 Peer Status
 ^^^^^^^^^^^
 
@@ -144,15 +176,28 @@ Publish Request Status
 | PE "Pending"
 | WD "Withdrawn"
 
-TaskStepStatus
+Service Status
 ^^^^^^^^^^^^^^
+
+Applies to projects, notebooks and pipelines in the workbench.
+
+| AC "Active"
+| CO "Completed"
+| ER "Error"
+| EX "Exception"
+| FA "Failed"
+| IN "Inactive"
+| IP "In progress"
+
+Task Step Status
+^^^^^^^^^^^^^^^^
 
 | ST "Started"
 | SU "Succeeded"
 | FA "Failed"
 
-TaskType
-^^^^^^^^
+Task Type
+^^^^^^^^^
 
 | OB "Onboarding"
 | SV "Security-Verification"
@@ -252,6 +297,27 @@ Attributes:
 * User ID
 
 
+Notebook
+^^^^^^^^
+
+A notebook, part of the workbench, is a virtual computing environment used for literate programming.
+
+Attributes:
+
+* Notebook ID (UUID)
+* Notebook type (value from restricted value set Notebook Type)
+* Kernel type (value from restricted value set Kernel Type)
+* Service status (value from restricted value set Service Status)
+* Active status (value from restricted value set Artifact Status)
+* Name (string)
+* Version (string)
+* Description (long string)
+* Repository (URL where stored)
+* Service (URL where running)
+* User (ID of creator)
+
+Notebooks are mapped to several other entities in many:many relationships, as documented below.
+
 Notification
 ^^^^^^^^^^^^
 
@@ -307,6 +373,46 @@ Attributes:
 * Group ID
 * Name (must be unique among all peer groups)
 * Description (additional textual information about this group)
+
+
+Pipeline
+^^^^^^^^
+
+A pipeline, part of the workbench, is an assembly of runnable components.
+
+Attributes:
+
+* Pipeline ID (UUID)
+* Active status (value from restricted value set Artifact Status)
+* Service status (value from restricted value set Service Status)
+* Name (string)
+* Version (string)
+* Description (long string)
+* Repository (URL where stored)
+* Service (URL where running)
+* User (ID of creator)
+
+Pipelines are mapped to several other entities in many:many relationships, as documented below.
+
+
+Project
+^^^^^^^
+
+A project, part of the workbench, groups notebooks and pipelines.
+
+Attributes:
+
+* Project ID (UUID)
+* Active status (value from restricted value set Artifact Status)
+* Service status (value from restricted value set Service Status)
+* Name (string)
+* Version (string)
+* Description (long string)
+* Repository (URL where stored)
+* Service (URL where running)
+* User (ID of creator)
+
+Projects are mapped to several other entities in many:many relationships, as documented below.
 
 
 Right to Use
@@ -400,7 +506,7 @@ Attributes:
 * List of authorized users (to facilitate review and collaborative work with a team)
 * Provider (name of organization that sponsored and/or supports the solution)
 * Peer (ID of Acumos peer where the solution was first on-boarded)
-* Toolkit aka implementation technology code (underlying ML technology; e.g., Scikit, RCloud, Composite solution, and more TBD)
+* Toolkit aka implementation technology code (underlying ML technology; e.g., Scikit, RCloud, Composite solution)
 * Model type code (underlying ML category; valid values include CLASSIFICATION and PREDICTION)
 * Proposed attribute: System ID where created (supports federation, exchange of solutions among peer systems)
 * Create time (time when the solution was created; i.e., upload time)
@@ -427,7 +533,7 @@ Attributes:
 
 *    Type
 
-     -   An artifact type can be either a statistical model, metadata, docker image or TOSCA file (and TBD).
+     -   An artifact type can be either a statistical model, metadata, docker image or TOSCA file.
 
 *    Descriptive name
 
@@ -948,6 +1054,61 @@ Attributes:
 * Principal peer group ID
 * Resource peer group ID
 * Create timestamp
+
+
+Relationship Project - Notebook
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The workbench Project entity is in a many-to-many relationship with notebooks.
+
+Attributes:
+
+* Project ID
+* Notebook ID
+
+
+Relationship Project - Pipeline
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The workbench Project entity is in a many-to-many relationship with pipelines.
+
+Attributes:
+
+* Project ID
+* Pipeline ID
+
+
+Relationship Project - User
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The workbench Project entity is in a many-to-many relationship with users.
+
+Attributes:
+
+* Project ID
+* User ID
+
+
+Relationship Notebook - User
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The workbench Notebook entity is in a many-to-many relationship with users.
+
+Attributes:
+
+* Notebook ID
+* User ID
+
+
+Relationship Pipeline - User
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The workbench Pipeline entity is in a many-to-many relationship with users.
+
+Attributes:
+
+* Pipeline ID
+* User ID
 
 
 Required Operations
