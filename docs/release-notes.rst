@@ -24,11 +24,12 @@ The client and server are released together.  The client is available
 as a jar file in the Acumos/LF Nexus repository. The server is
 available as a Docker image in the Acumos/LF Docker registry.
 
-Version 2.2.0, ?? Feb 2019
+Version 2.2.0, ?? Mar 2019
 --------------------------
 * Add project for workbench (`ACUMOS-2516 <https://jira.acumos.org/browse/ACUMOS-2516>`_)
 * Add pipeline for workbench (`ACUMOS-2534 <https://jira.acumos.org/browse/ACUMOS-2534>`_)
 * Add notebook for workbench (`ACUMOS-2535 <https://jira.acumos.org/browse/ACUMOS-2535>`_)
+* Extend data and APIs for catalog features (`ACUMOS-2569 <https://jira.acumos.org/browse/ACUMOS-2569>`_)
 * Requires database schema version 2.2
 
 Version 2.1.2, 4 Mar 2019
@@ -120,7 +121,8 @@ Version 2.0.0, 19 Dec 2018
 * Requires database schema version 2.0
 
 Versions 2.* require configuration data in an environment variable SPRING_APPLICATION_JSON 
-with the following structure.  All values in upper case must be replaced::
+with the following structure.  See the component guide for instructions on encrypting passwords.
+All values in upper case must be replaced::
 
     SPRING_APPLICATION_JSON: '{
         "server" : {
@@ -129,8 +131,8 @@ with the following structure.  All values in upper case must be replaced::
         "spring" : {
             "datasource" : {
                 "jdbc-url" : "jdbc:mariadb://HOST-NAME:3306/DB-NAME?useLegacyDatetimeCode=false&useSSL=false",
-                "username" : "DB-USERNAME",
-                "password" : "ENC(DB-PASSWORD)"
+                "username" : "DB_USERNAME",
+                "password" : "ENC(ENCRYPTED_DB_PASSWORD)"
             },
             "jpa" : {
                 "database-platform" : "org.hibernate.dialect.MariaDB102Dialect",
@@ -141,8 +143,8 @@ with the following structure.  All values in upper case must be replaced::
             },
             "security" : {
                 "user" : {
-                    "name"     : "CLIENT-USERNAME",
-                    "password" : "ENC(CLIENT-PASSWORD)"
+                    "name"     : "CLIENT_USERNAME",
+                    "password" : "ENC(ENCRYPTED_CLIENT_PASSWORD)"
                 }
             }
         }
@@ -607,7 +609,8 @@ Version 1.0.0, 15 June 2017
 * Supports solutions, artifacts and users.
 
 Versions 1.* require configuration data in an environment variable SPRING_APPLICATION_JSON 
-with the following structure.  All values in upper case must be replaced::
+with the following structure.  See the component guide for instructions on encrypting passwords.
+All values in upper case must be replaced::
 
     SPRING_APPLICATION_JSON: '{
         "server" : {
