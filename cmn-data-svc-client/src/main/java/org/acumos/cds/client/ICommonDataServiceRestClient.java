@@ -285,16 +285,16 @@ public interface ICommonDataServiceRestClient {
 	 * @param anyTags
 	 *                            Solutions must have ANY tag in the supplied set
 	 *                            (one or more); ignored if null or empty.
-	 * @param catalogId
-	 *                            Solutions must be mapped to the specified catalog;
-	 *                            ignored if null or empty
+	 * @param catalogIds
+	 *                            Solutions must be mapped to one of the specified
+	 *                            catalogs; ignored if null or empty
 	 * @param pageRequest
 	 *                            Page index, page size and sort information;
 	 *                            defaults to page 0 of size 20 if null.
 	 * @return Page of solutions, which may be empty
 	 */
 	RestPageResponse<MLPSolution> findPortalSolutionsByKwAndTags(String[] keywords, boolean active, String[] userIds,
-			String[] accessTypeCodes, String[] modelTypeCodes, String[] allTags, String[] anyTags, String catalogId,
+			String[] accessTypeCodes, String[] modelTypeCodes, String[] allTags, String[] anyTags, String[] catalogIds,
 			RestPageRequest pageRequest);
 
 	/**
@@ -2389,16 +2389,16 @@ public interface ICommonDataServiceRestClient {
 	void deleteCatalog(String catalogId);
 
 	/**
-	 * Gets a page of solutions in the specified catalog.
+	 * Gets a page of solutions in the specified catalog(s).
 	 * 
-	 * @param catalogId
-	 *                        Catalog ID
+	 * @param catalogIds
+	 *                        Catalog IDs, minimum 1.
 	 * @param pageRequest
 	 *                        Page index, page size and sort information; defaults
 	 *                        to page 0 of size 20 if null.
 	 * @return Page of objects; empty if none are found
 	 */
-	RestPageResponse<MLPSolution> getSolutionsInCatalog(String catalogId, RestPageRequest pageRequest);
+	RestPageResponse<MLPSolution> getSolutionsInCatalogs(String[] catalogIds, RestPageRequest pageRequest);
 
 	/**
 	 * Adds the specified solution as a member of the specified catalog.
