@@ -285,16 +285,16 @@ public interface ICommonDataServiceRestClient {
 	 * @param anyTags
 	 *                            Solutions must have ANY tag in the supplied set
 	 *                            (one or more); ignored if null or empty.
-	 * @param catalogId
-	 *                            Solutions must be mapped to the specified catalog;
-	 *                            ignored if null or empty
+	 * @param catalogIds
+	 *                            Solutions must be mapped to one of the specified
+	 *                            catalogs; ignored if null or empty
 	 * @param pageRequest
 	 *                            Page index, page size and sort information;
 	 *                            defaults to page 0 of size 20 if null.
 	 * @return Page of solutions, which may be empty
 	 */
 	RestPageResponse<MLPSolution> findPortalSolutionsByKwAndTags(String[] keywords, boolean active, String[] userIds,
-			String[] accessTypeCodes, String[] modelTypeCodes, String[] allTags, String[] anyTags, String catalogId,
+			String[] accessTypeCodes, String[] modelTypeCodes, String[] allTags, String[] anyTags, String[] catalogIds,
 			RestPageRequest pageRequest);
 
 	/**
@@ -2389,16 +2389,25 @@ public interface ICommonDataServiceRestClient {
 	void deleteCatalog(String catalogId);
 
 	/**
-	 * Gets a page of solutions in the specified catalog.
+	 * Gets the count of solutions in the specified catalog.
 	 * 
 	 * @param catalogId
-	 *                        Catalog ID
+	 *                      Catalog ID
+	 * @return Number of solutions for the specified catalog ID
+	 */
+	long getCatalogSolutionCount(String catalogId);
+
+	/**
+	 * Gets a page of solutions in the specified catalog(s).
+	 * 
+	 * @param catalogIds
+	 *                        Catalog IDs, minimum 1.
 	 * @param pageRequest
 	 *                        Page index, page size and sort information; defaults
 	 *                        to page 0 of size 20 if null.
 	 * @return Page of objects; empty if none are found
 	 */
-	RestPageResponse<MLPSolution> getSolutionsInCatalog(String catalogId, RestPageRequest pageRequest);
+	RestPageResponse<MLPSolution> getSolutionsInCatalogs(String[] catalogIds, RestPageRequest pageRequest);
 
 	/**
 	 * Adds the specified solution as a member of the specified catalog.
@@ -2628,5 +2637,65 @@ public interface ICommonDataServiceRestClient {
 	 *                   Right to Use ID
 	 */
 	void dropUserFromRtu(String userId, Long rtuId);
+
+	/**
+	 * Gets the IDs of ALL the peer's special-access catalogs.
+	 * 
+	 * @param peerId
+	 *                   Peer ID
+	 * @return List of String
+	 */
+	List<String> getPeerAccessCatalogIds(String peerId);
+
+	/**
+	 * Marks the specified catalog as accessible to the specified peer. The catalog
+	 * must be restricted.
+	 * 
+	 * @param peerId
+	 *                      peer ID
+	 * @param catalogId
+	 *                      catalog ID
+	 */
+	void addPeerAccessCatalog(String peerId, String catalogId);
+
+	/**
+	 * Removes the marking that the specified catalog is accessible to the specified
+	 * peer.
+	 * 
+	 * @param peerId
+	 *                      peer ID
+	 * @param catalogId
+	 *                      catalog ID
+	 */
+	void dropPeerAccessCatalog(String peerId, String catalogId);
+
+	/**
+	 * Gets the IDs of ALL the user's favorite catalogs.
+	 * 
+	 * @param userId
+	 *                   User ID
+	 * @return List of String
+	 */
+	List<String> getUserFavoriteCatalogIds(String userId);
+
+	/**
+	 * Marks the specified catalog as a favorite of the specified user.
+	 * 
+	 * @param userId
+	 *                      user ID
+	 * @param catalogId
+	 *                      catalog ID
+	 */
+	void addUserFavoriteCatalog(String userId, String catalogId);
+
+	/**
+	 * Removes the specified catalog as a favorite of the specified user.
+	 * 
+	 * @param userId
+	 *                      user ID
+	 * @param catalogId
+	 *                      catalog ID
+	 */
+	void dropUserFavoriteCatalog(String userId, String catalogId);
 
 }
