@@ -37,16 +37,16 @@ public interface CatSolMapRepository extends PagingAndSortingRepository<MLPCatSo
 	 * Gets a page of solutions in the specified catalog by joining on the
 	 * catalog-solution mapping table.
 	 * 
-	 * @param catalogId
-	 *                      Catalog ID
+	 * @param catalogIds
+	 *                       Catalog IDs
 	 * @param pageable
-	 *                      Page and sort criteria
+	 *                       Page and sort criteria
 	 * @return Page of MLPSolution
 	 */
 	@Query(value = "select s from MLPSolution s, MLPCatSolMap m " //
 			+ " where s.solutionId =  m.solutionId " //
-			+ " and m.catalogId = :catalogId")
-	Page<MLPSolution> findSolutionsByCatalogId(@Param("catalogId") String catalogId, Pageable pageable);
+			+ " and m.catalogId in (:catalogIds)")
+	Page<MLPSolution> findSolutionsByCatalogIds(@Param("catalogIds") String[] catalogIds, Pageable pageable);
 
 	/**
 	 * Deletes all entries for the specified solution ID.

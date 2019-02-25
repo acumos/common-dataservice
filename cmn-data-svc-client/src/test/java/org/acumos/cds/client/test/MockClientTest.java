@@ -573,7 +573,7 @@ public class MockClientTest {
 		client.updateCatalog(catalog);
 		client.deleteCatalog(catalog.getCatalogId());
 		RestPageResponse<MLPSolution> solsInCat = new RestPageResponse<>();
-		client.setSolutionsInCatalog(solsInCat);
+		client.setSolutionsInCatalogs(solsInCat);
 		Assert.assertEquals(solsInCat, client.getSolutionsInGroup(0L, new RestPageRequest()));
 		client.addSolutionToCatalog("solId", "catId");
 		client.dropSolutionFromCatalog("solId", "catId");
