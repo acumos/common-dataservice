@@ -24,6 +24,11 @@ The client and server are released together.  The client is available
 as a jar file in the Acumos/LF Nexus repository. The server is
 available as a Docker image in the Acumos/LF Docker registry.
 
+Version 2.2.0, ?? Feb 2019
+--------------------------
+* Extend data and APIs for catalog features (`ACUMOS-2569 <https://jira.acumos.org/browse/ACUMOS-2569>`_)
+* Requires database schema version 2.2
+
 Version 2.1.1, 20 Feb 2019
 --------------------------
 * Add controller methods to get pages of configs and contents (`ACUMOS-2423 <https://jira.acumos.org/browse/ACUMOS-2423>`_)
