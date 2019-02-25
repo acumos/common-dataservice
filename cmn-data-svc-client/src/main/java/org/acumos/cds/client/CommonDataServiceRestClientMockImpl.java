@@ -205,7 +205,7 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 	private byte[] solutionImage;
 	private MLPCatalog catalog;
 	private RestPageResponse<MLPCatalog> catalogs;
-	private RestPageResponse<MLPSolution> solutionsInCatalog;
+	private RestPageResponse<MLPSolution> solutionsInCatalogs;
 	private MLPTask taskById;
 	private RestPageResponse<MLPTask> tasks;
 	private RestPageResponse<MLPTask> searchTasks;
@@ -217,6 +217,7 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 	private MLPRtuReference ref;
 	private RestPageResponse<MLPSiteConfig> siteConfigs;
 	private RestPageResponse<MLPSiteContent> siteContents;
+	private long catalogSolutionCount;
 
 	/**
 	 * No-argument constructor.
@@ -1358,7 +1359,7 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 	@Override
 	public RestPageResponse<MLPSolution> findPortalSolutionsByKwAndTags(String[] keywords, boolean active,
 			String[] userIds, String[] accessTypeCodes, String[] modelTypeCodes, String[] allTags, String[] anyTags,
-			String catalogId, RestPageRequest pageRequest) {
+			String[] catalogIds, RestPageRequest pageRequest) {
 		return this.portalSolutions;
 	}
 
@@ -1814,13 +1815,22 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 		this.catalog = null;
 	}
 
-	public void setSolutionsInCatalog(RestPageResponse<MLPSolution> solutionsInCatalog) {
-		this.solutionsInCatalog = solutionsInCatalog;
+	public void setCatalogSolutionCount(long count) {
+		this.catalogSolutionCount = count;
 	}
 
 	@Override
-	public RestPageResponse<MLPSolution> getSolutionsInCatalog(String catalogId, RestPageRequest pageRequest) {
-		return solutionsInCatalog;
+	public long getCatalogSolutionCount(String catalogId) {
+		return this.catalogSolutionCount;
+	}
+
+	public void setSolutionsInCatalogs(RestPageResponse<MLPSolution> sols) {
+		this.solutionsInCatalogs = sols;
+	}
+
+	@Override
+	public RestPageResponse<MLPSolution> getSolutionsInCatalogs(String[] catalogIds, RestPageRequest pageRequest) {
+		return solutionsInCatalogs;
 	}
 
 	@Override

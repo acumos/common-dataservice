@@ -22,6 +22,7 @@ package org.acumos.cds.controller;
 
 import java.lang.invoke.MethodHandles;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -36,6 +37,7 @@ import org.acumos.cds.domain.MLPSolution;
 import org.acumos.cds.repository.CatSolMapRepository;
 import org.acumos.cds.repository.CatalogRepository;
 import org.acumos.cds.repository.SolutionRepository;
+import org.acumos.cds.transport.CountTransport;
 import org.acumos.cds.transport.ErrorTransport;
 import org.acumos.cds.transport.MLPTransportModel;
 import org.acumos.cds.transport.SuccessTransport;
@@ -51,9 +53,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
@@ -165,6 +169,14 @@ public class CatalogController extends AbstractController {
 		}
 	}
 
+	@ApiOperation(value = "Gets the count of solutions in the specified catalog.", response = CountTransport.class)
+	@RequestMapping(value = "/{catalogId}/" + CCDSConstants.SOLUTION_PATH + "/"
+			+ CCDSConstants.COUNT_PATH, method = RequestMethod.GET)
+	public CountTransport getCatalogSolutionCount(@PathVariable("catalogId") String catalogId) {
+		logger.debug("getCatalogSolutionCount");
+		return new CountTransport(catSolMapRepository.countCatalogSolutions(catalogId));
+	}
+
 	@ApiOperation(value = "Deletes the catalog with the specified ID. Returns bad request if the ID is not found.", //
 			response = SuccessTransport.class)
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
@@ -185,10 +197,18 @@ public class CatalogController extends AbstractController {
 	@ApiOperation(value = "Gets a page of solutions in the specified catalog, optionally sorted; empty if none are found.", //
 			response = MLPSolution.class, responseContainer = "Page")
 	@ApiPageable
-	@RequestMapping(value = "/{catalogId}/" + CCDSConstants.SOLUTION_PATH, method = RequestMethod.GET)
-	public Object getSolutionsInCatalog(@PathVariable("catalogId") String catalogId, Pageable pageRequest) {
-		logger.debug("getSolutionsInCatalog catalogId {}", catalogId);
-		return catSolMapRepository.findSolutionsByCatalogId(catalogId, pageRequest);
+	@RequestMapping(value = CCDSConstants.SOLUTION_PATH, method = RequestMethod.GET)
+	public Object getSolutionsInCatalogs(@ApiParam(value = "Catalog IDs", allowMultiple = true) //
+	@RequestParam(name = CCDSConstants.SEARCH_CATALOG, required = true) String[] catalogIds, //
+			Pageable pageRequest, HttpServletResponse response) {
+		logger.debug("getSolutionsInCatalogs catalogIds {}", Arrays.toString(catalogIds));
+		if (catalogIds == null || catalogIds.length == 0) {
+			logger.warn("getSolutionsInCatalogs missing catalogIds");
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "missing catalog ID(s)");
+
+		}
+		return catSolMapRepository.findSolutionsByCatalogIds(catalogIds, pageRequest);
 	}
 
 	@ApiOperation(value = "Adds the specified solution to the specified catalog. Answers bad request if an ID is invalid.", //

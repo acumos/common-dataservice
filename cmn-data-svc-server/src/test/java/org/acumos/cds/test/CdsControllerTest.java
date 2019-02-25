@@ -613,6 +613,7 @@ public class CdsControllerTest {
 			logger.info("Created public solution {}", cs);
 
 			client.addSolutionToCatalog(cs.getSolutionId(), ca1.getCatalogId());
+			Assert.assertEquals(1, client.getCatalogSolutionCount(ca1.getCatalogId()));
 
 			byte[] saved = client.getSolutionPicture(cs.getSolutionId());
 			Assert.assertNull(saved);
@@ -868,7 +869,7 @@ public class CdsControllerTest {
 			// Check fetch by ID to ensure both are found
 			logger.info("Querying for solutions by id");
 			String[] ids = { cs.getSolutionId(), csOrg.getSolutionId() };
-			String catalogId = null;
+			String[] catalogId = null;
 			RestPageResponse<MLPSolution> idSearchResult = client.findPortalSolutionsByKwAndTags(ids, true, null, null,
 					null, null, null, catalogId, new RestPageRequest(0, 2));
 			Assert.assertNotNull(idSearchResult);
@@ -897,13 +898,13 @@ public class CdsControllerTest {
 
 			logger.info("Querying for solutions by catalog");
 			RestPageResponse<MLPSolution> ctlgSearchResult = client.findPortalSolutionsByKwAndTags(null, true, null,
-					null, null, null, null, ca1.getCatalogId(), new RestPageRequest(0, 2));
+					null, null, null, null, new String[] { ca1.getCatalogId() }, new RestPageRequest(0, 2));
 			Assert.assertNotNull(ctlgSearchResult);
 			Assert.assertNotEquals(0, ctlgSearchResult.getNumberOfElements());
 
 			logger.info("Querying for solutions by bogus catalog");
 			RestPageResponse<MLPSolution> noCtlgSearchResult = client.findPortalSolutionsByKwAndTags(null, true, null,
-					null, null, null, null, "bogus", new RestPageRequest(0, 2));
+					null, null, null, null, new String[] { "bogus" }, new RestPageRequest(0, 2));
 			Assert.assertNotNull(noCtlgSearchResult);
 			Assert.assertEquals(0, noCtlgSearchResult.getNumberOfElements());
 
@@ -2229,7 +2230,8 @@ public class CdsControllerTest {
 
 			client.addSolutionToCatalog(cs.getSolutionId(), ca.getCatalogId());
 
-			RestPageResponse<MLPSolution> sols = client.getSolutionsInCatalog(ca.getCatalogId(), new RestPageRequest());
+			RestPageResponse<MLPSolution> sols = client.getSolutionsInCatalogs(new String[] { ca.getCatalogId() },
+					new RestPageRequest());
 			Assert.assertNotNull(sols);
 			Assert.assertEquals(1, sols.getNumberOfElements());
 

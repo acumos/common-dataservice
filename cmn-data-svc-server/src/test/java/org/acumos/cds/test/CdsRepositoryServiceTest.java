@@ -279,7 +279,7 @@ public class CdsRepositoryServiceTest {
 			cu.setAuthToken("JWT is Greek to me");
 			cu.setLastLogin(lastLogin);
 			// Occasionally the assertion fails, for whatever reason the modified date is
-			// not updated in MariaDB.  Add a tiny delay to increase chance of passing.
+			// not updated in MariaDB. Add a tiny delay to increase chance of passing.
 			Thread.sleep(10);
 			cu = userRepository.save(cu);
 			// Check hibernate behavior on timestamps
@@ -489,6 +489,7 @@ public class CdsRepositoryServiceTest {
 
 			MLPCatSolMap csm = new MLPCatSolMap(ca1.getCatalogId(), cs.getSolutionId());
 			catSolMapRepository.save(csm);
+			Assert.assertEquals(1, catSolMapRepository.countCatalogSolutions(ca1.getCatalogId()));
 
 			// This solution has one tag
 			MLPSolution cs2 = new MLPSolution();
@@ -561,8 +562,9 @@ public class CdsRepositoryServiceTest {
 			Assert.assertEquals(2, oneTagSearchResult.getNumberOfElements());
 
 			String[] ids = { cs.getSolutionId() };
+			String[] catIds = { ca1.getCatalogId() };
 			Page<MLPSolution> idSearchResult = solutionSearchService.findPortalSolutionsByKwAndTags(ids, active,
-					userIds, modelTypeCodes, accTypeCodes, searchTags, null, ca1.getCatalogId(),
+					userIds, modelTypeCodes, accTypeCodes, searchTags, null, catIds,
 					PageRequest.of(0, 2, Direction.ASC, "name"));
 			Assert.assertEquals(1, idSearchResult.getNumberOfElements());
 			logger.info("Found models by id total " + idSearchResult.getTotalElements());
@@ -1519,7 +1521,8 @@ public class CdsRepositoryServiceTest {
 		MLPCatSolMap csm = new MLPCatSolMap(ca1.getCatalogId(), cs1.getSolutionId());
 		catSolMapRepository.save(csm);
 
-		Page<MLPSolution> sols = catSolMapRepository.findSolutionsByCatalogId(ca1.getCatalogId(), PageRequest.of(0, 3));
+		Page<MLPSolution> sols = catSolMapRepository.findSolutionsByCatalogIds(new String[] { ca1.getCatalogId() },
+				PageRequest.of(0, 3));
 		Assert.assertNotNull(sols);
 		Assert.assertEquals(1, sols.getNumberOfElements());
 
