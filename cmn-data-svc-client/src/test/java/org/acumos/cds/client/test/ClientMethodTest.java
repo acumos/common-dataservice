@@ -159,7 +159,7 @@ public class ClientMethodTest {
 		}
 		try {
 			String[] array = new String[] { "I'm a string" };
-			client.findPortalSolutionsByKwAndTags(array, true, array, array, array, array, array, "",
+			client.findPortalSolutionsByKwAndTags(array, true, array, array, array, array, array, array,
 					new RestPageRequest(0, 1));
 		} catch (ResourceAccessException ex) {
 			logger.info("Client failed as expected: {}", ex.toString());
@@ -1103,7 +1103,7 @@ public class ClientMethodTest {
 			logger.info("Client failed as expected: {}", ex.toString());
 		}
 		try {
-			client.getSolutionsInCatalog("catId", new RestPageRequest());
+			client.getSolutionsInCatalogs(new String[1], new RestPageRequest());
 		} catch (ResourceAccessException ex) {
 			logger.info("Client failed as expected: {}", ex.toString());
 		}
@@ -1119,6 +1119,11 @@ public class ClientMethodTest {
 		}
 		try {
 			client.deleteCatalog("catId");
+		} catch (ResourceAccessException ex) {
+			logger.info("Client failed as expected: {}", ex.toString());
+		}
+		try {
+			client.getCatalogSolutionCount("cat1");
 		} catch (ResourceAccessException ex) {
 			logger.info("Client failed as expected: {}", ex.toString());
 		}
