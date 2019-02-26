@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "dd224290_8380f925",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPAbstractWorkbenchArtifact.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2019-02-26T15:56:54Z",
+      "side": 1,
+      "message": "Version to be non null?",
+      "revId": "545c5fd9783e90f08d3651976a48046a65abc662",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fee0c900_ed79292f",
         "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPNotebook.java",
         "patchSetId": 9
