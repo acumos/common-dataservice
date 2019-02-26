@@ -16,6 +16,23 @@
       "revId": "545c5fd9783e90f08d3651976a48046a65abc662",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6f71453f_e9c6be16",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPNotebook.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2019-02-26T15:36:42Z",
+      "side": 1,
+      "message": "Please make Kernel type code non null",
+      "revId": "545c5fd9783e90f08d3651976a48046a65abc662",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
