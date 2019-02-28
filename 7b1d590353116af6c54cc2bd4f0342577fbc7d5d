@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "555e9e42_6b2b6983",
+        "filename": "docs/requirements.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 93
+      },
+      "writtenOn": "2019-02-28T17:22:30Z",
+      "side": 1,
+      "message": "I don\u0027t think this makes sense here. Running service addresses of Acumos platform components are not currently discovered through CDS. Some other config/discovery mechanism (e.g. Spring env configuration, or some microservice discover method ala https://www.nginx.com/blog/service-discovery-in-a-microservices-architecture/) should be used rather than embedding the address in the CDS tables.",
+      "range": {
+        "startLine": 308,
+        "startChar": 2,
+        "endLine": 308,
+        "endChar": 29
+      },
+      "revId": "7b1d590353116af6c54cc2bd4f0342577fbc7d5d",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0bd0d339_0c841530",
+        "filename": "docs/requirements.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 93
+      },
+      "writtenOn": "2019-02-28T17:22:30Z",
+      "side": 1,
+      "message": "as above",
+      "range": {
+        "startLine": 384,
+        "startChar": 0,
+        "endLine": 384,
+        "endChar": 29
+      },
+      "revId": "7b1d590353116af6c54cc2bd4f0342577fbc7d5d",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dc30875a_f992a314",
+        "filename": "docs/requirements.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 93
+      },
+      "writtenOn": "2019-02-28T17:22:30Z",
+      "side": 1,
+      "message": "as above",
+      "range": {
+        "startLine": 404,
+        "startChar": 0,
+        "endLine": 404,
+        "endChar": 29
+      },
+      "revId": "7b1d590353116af6c54cc2bd4f0342577fbc7d5d",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
