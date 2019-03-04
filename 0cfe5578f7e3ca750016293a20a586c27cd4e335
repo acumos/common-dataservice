@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a6ace0d7_4533c7f5",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/ICommonDataServiceRestClient.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2019-03-04T20:42:09Z",
+      "side": 1,
+      "message": "Do you want to keep both methods, with and without exceptions in this file, or just keep only WITH exceptions to force the client to dig deeper/handle it.",
+      "revId": "0cfe5578f7e3ca750016293a20a586c27cd4e335",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
