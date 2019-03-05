@@ -34,6 +34,24 @@
       "revId": "82f02321f5693b5ba501082b89237edfd803fda0",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7fa7487a_8b85d4d2",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/service/SolutionSearchServiceImpl.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-05T15:51:03Z",
+      "side": 0,
+      "message": "The cast to Object[] silences a Java warning related to varargs.",
+      "parentUuid": "f6ed2163_4a5cd746",
+      "revId": "82f02321f5693b5ba501082b89237edfd803fda0",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
