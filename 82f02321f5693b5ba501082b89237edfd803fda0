@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0ff96b93_b087e64b",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/service/SolutionSearchServiceImpl.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2019-03-05T15:29:51Z",
+      "side": 0,
+      "message": "Why do you want to keep as generic object array rather than as string array for catalogIds parameter below?",
+      "revId": "82f02321f5693b5ba501082b89237edfd803fda0",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
