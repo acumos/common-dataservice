@@ -824,7 +824,7 @@ public class CdsRepositoryServiceTest {
 			compSolMapRepository.deleteById(compSolMapKey);
 
 			MLPPublishRequest pubReq = new MLPPublishRequest(cs.getSolutionId(), cr.getRevisionId(), cu.getUserId(),
-					"PE");
+					ca1.getCatalogId(), "PE");
 			pubReq = publishRequestRepository.save(pubReq);
 			Assert.assertNotNull(pubReq.getRequestId());
 			long reqCountTrans = publishRequestRepository.count();

@@ -1055,7 +1055,7 @@ public class CdsControllerTest {
 			Assert.assertEquals(0, kids.size());
 
 			MLPPublishRequest pubReq = new MLPPublishRequest(cs.getSolutionId(), cr.getRevisionId(), cu.getUserId(),
-					"PE");
+					ca1.getCatalogId(), "PE");
 			pubReq = client.createPublishRequest(pubReq);
 			Assert.assertNotNull(pubReq.getRequestId());
 			pubReq.setComment("foo bar");
@@ -3957,7 +3957,7 @@ public class CdsControllerTest {
 			logger.info("create publish request failed as expected: {}", ex.getResponseBodyAsString());
 		}
 		try {
-			client.createPublishRequest(new MLPPublishRequest("bogus", "name", "bogus", "bogus"));
+			client.createPublishRequest(new MLPPublishRequest("bogus", "name", "bogus", "bogus", "bogus"));
 			throw new Exception("Unexpected success");
 		} catch (HttpStatusCodeException ex) {
 			logger.info("create publish request failed on bad status code as expected: {}",
