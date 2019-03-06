@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2fea029d_f7bc51bc",
+        "filename": "cmn-data-svc-server/src/test/java/org/acumos/cds/test/CdsControllerTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 3271,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2019-03-06T22:24:59Z",
+      "side": 1,
+      "message": "Won\u0027t this be \"PR\" instead of \"PB\"?",
+      "revId": "2ccd26dcb75e499c1da84db128d09573434f1aae",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bfd65dec_b94e36f3",
+        "filename": "cmn-data-svc-server/src/test/java/org/acumos/cds/test/CdsControllerTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 3278,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2019-03-06T22:24:59Z",
+      "side": 1,
+      "message": "Won\u0027t this be \"PR\" instead of \"PB\"?",
+      "revId": "2ccd26dcb75e499c1da84db128d09573434f1aae",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a531b3ed_d6304c10",
+        "filename": "cmn-data-svc-server/src/test/java/org/acumos/cds/test/CdsControllerTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 3286,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2019-03-06T22:24:59Z",
+      "side": 1,
+      "message": "Won\u0027t this be \"PR\" instead of \"PB\"?",
+      "revId": "2ccd26dcb75e499c1da84db128d09573434f1aae",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "773b4217_be6252d2",
+        "filename": "cmn-data-svc-server/src/test/java/org/acumos/cds/test/CdsControllerTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 3295,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2019-03-06T22:24:59Z",
+      "side": 1,
+      "message": "Won\u0027t this be \"PR\" instead of \"PB\"?",
+      "revId": "2ccd26dcb75e499c1da84db128d09573434f1aae",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
