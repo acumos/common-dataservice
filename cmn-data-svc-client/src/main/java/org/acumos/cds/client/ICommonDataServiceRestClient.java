@@ -2654,6 +2654,16 @@ public interface ICommonDataServiceRestClient {
 	RestPageResponse<MLPSolution> getSolutionsInCatalogs(String[] catalogIds, RestPageRequest pageRequest);
 
 	/**
+	 * Gets the catalogs for the specified solution; i.e., all published
+	 * occurrences.
+	 * 
+	 * @param solutionId
+	 *                       Solution ID
+	 * @return List of objects; empty if none are found
+	 */
+	List<MLPCatalog> getSolutionCatalogs(String solutionId);
+
+	/**
 	 * Adds the specified solution as a member of the specified catalog.
 	 * 
 	 * @param solutionId
