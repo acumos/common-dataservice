@@ -32,7 +32,6 @@ public class EnumTest {
 
 	@Test
 	public void testEnums() {
-		Assert.assertTrue(AccessTypeCode.values().length > 0);
 		Assert.assertTrue(PublishRequestStatusCode.values().length > 0);
 	}
 }
