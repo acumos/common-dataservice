@@ -118,6 +118,11 @@
 			<artifactId>springfox-swagger-ui</artifactId>
 			<version>${springfox.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-bean-validators</artifactId>
+			<version>${springfox.version}</version>
+		</dependency>
 		<!-- Derby is always included, altho primarily used for testing -->
 		<dependency>
 			<groupId>org.apache.derby</groupId>
