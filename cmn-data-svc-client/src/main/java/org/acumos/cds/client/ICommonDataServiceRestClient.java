@@ -2560,11 +2560,12 @@ public interface ICommonDataServiceRestClient {
 	void dropUserTag(String userId, String tag) throws RestClientResponseException;
 
 	/**
-	 * Gets the image for the specified solution ID. solution ID is not known.
+	 * Gets the image for the specified solution ID.
 	 * 
 	 * @param solutionId
 	 *                       Solution ID
-	 * @return Solution image; null if none is available.
+	 * @return Solution image; null if the solution ID is not known or no picture is
+	 *         available.
 	 */
 	byte[] getSolutionPicture(String solutionId);
 
@@ -2652,6 +2653,16 @@ public interface ICommonDataServiceRestClient {
 	 * @return Page of objects; empty if none are found
 	 */
 	RestPageResponse<MLPSolution> getSolutionsInCatalogs(String[] catalogIds, RestPageRequest pageRequest);
+
+	/**
+	 * Gets the catalogs for the specified solution; i.e., all published
+	 * occurrences.
+	 * 
+	 * @param solutionId
+	 *                       Solution ID
+	 * @return List of objects; empty if none are found
+	 */
+	List<MLPCatalog> getSolutionCatalogs(String solutionId);
 
 	/**
 	 * Adds the specified solution as a member of the specified catalog.
