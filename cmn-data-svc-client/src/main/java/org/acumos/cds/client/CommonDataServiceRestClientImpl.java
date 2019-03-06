@@ -2477,6 +2477,17 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 	}
 
 	@Override
+	public List<MLPCatalog> getSolutionCatalogs(String solutionId) {
+		URI uri = buildUri(new String[] { CCDSConstants.CATALOG_PATH, CCDSConstants.SOLUTION_PATH, solutionId }, null,
+				null);
+		logger.debug("getSolutionCatalogs: uri {}", uri);
+		ResponseEntity<List<MLPCatalog>> response = restTemplate.exchange(uri, HttpMethod.GET, null,
+				new ParameterizedTypeReference<List<MLPCatalog>>() {
+				});
+		return response.getBody();
+	}
+
+	@Override
 	public void addSolutionToCatalog(String solutionId, String catalogId) {
 		URI uri = buildUri(
 				new String[] { CCDSConstants.CATALOG_PATH, catalogId, CCDSConstants.SOLUTION_PATH, solutionId }, null,
