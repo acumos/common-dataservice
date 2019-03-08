@@ -91,6 +91,7 @@ public class MLPCatalog extends MLPTimestampedEntity implements Serializable {
 	private String origin;
 
 	@Column(name = "URL", nullable = false, columnDefinition = "VARCHAR(512)")
+	@NotNull(message = "URL cannot be null")
 	@Size(max = 512)
 	@ApiModelProperty(value = "URL of publisher system", example = "http://peer.company.com/api")
 	private String url;

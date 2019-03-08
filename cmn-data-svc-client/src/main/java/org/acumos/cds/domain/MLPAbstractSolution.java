@@ -73,6 +73,7 @@ public abstract class MLPAbstractSolution extends MLPTimestampedEntity {
 	 * Inactive means deleted.
 	 */
 	@Column(name = "ACTIVE_YN", nullable = false, columnDefinition = "CHAR(1) DEFAULT 'Y'")
+	@NotNull(message = "Active flag cannot be null")
 	@Type(type = "yes_no")
 	@ApiModelProperty(required = true, value = "Boolean indicator")
 	private boolean active;
