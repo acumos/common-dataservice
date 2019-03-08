@@ -121,6 +121,7 @@ public abstract class MLPAbstractSolutionRevision extends MLPTimestampedEntity {
 	 * Defined by DDL as default 0 to disable Mysql/Mariadb auto-update behavior
 	 */
 	@Column(name = "ONBOARDED_DATE", nullable = false, columnDefinition = "TIMESTAMP DEFAULT '0000-00-00 00:00:00'")
+	@NotNull(message = "On-boarded timestamp may not be null")
 	@ApiModelProperty(value = "On-boarded timestamp", example = "2018-12-16T12:34:56.789Z")
 	private Instant onboarded;
 
