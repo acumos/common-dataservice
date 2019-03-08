@@ -30,6 +30,7 @@ Version 2.2.0, 7 Mar 2019
 * Add pipeline for workbench (`ACUMOS-2534 <https://jira.acumos.org/browse/ACUMOS-2534>`_)
 * Add notebook for workbench (`ACUMOS-2535 <https://jira.acumos.org/browse/ACUMOS-2535>`_)
 * Extend data and APIs for catalog features (`ACUMOS-2569 <https://jira.acumos.org/browse/ACUMOS-2569>`_)
+* Drop peer and solution groups (`ACUMOS-2590 <https://jira.acumos.org/browse/ACUMOS-2590>`_)
 * Revise access type codes (`ACUMOS-2610 <https://jira.acumos.org/browse/ACUMOS-2610>`_)
 * Requires database schema version 2.2
 
