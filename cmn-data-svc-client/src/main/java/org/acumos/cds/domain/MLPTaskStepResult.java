@@ -50,11 +50,6 @@ public class MLPTaskStepResult implements MLPDomainModel, Serializable {
 	// In case the parent needs to refer to this column by name
 	public static final String TASK_ID_COL_NAME = "TASK_ID";
 
-	@Column(name = TASK_ID_COL_NAME, nullable = false, columnDefinition = "INT")
-	@NotNull(message = "TaskId cannot be null")
-	@ApiModelProperty(value = "Task ID", required = true, example = "1")
-	private Long taskId;
-
 	// Hibernate is weak on the ID column generator, the method is specific to
 	// the backing database. For portability, specify AUTO and define the column
 	// appropriately in the database, which in MySQL requires "AUTO_INCREMENT".
@@ -65,6 +60,11 @@ public class MLPTaskStepResult implements MLPDomainModel, Serializable {
 	@Column(name = "ID", nullable = false, updatable = false, columnDefinition = "INT")
 	@ApiModelProperty(value = "Generated", accessMode = AccessMode.READ_ONLY)
 	private Long stepResultId;
+
+	@Column(name = TASK_ID_COL_NAME, nullable = false, columnDefinition = "INT")
+	@NotNull(message = "TaskId cannot be null")
+	@ApiModelProperty(value = "Task ID", required = true, example = "1")
+	private Long taskId;
 
 	@Column(name = "NAME", nullable = false, columnDefinition = "VARCHAR(100)")
 	@NotNull(message = "Step name cannot be null")
@@ -84,11 +84,12 @@ public class MLPTaskStepResult implements MLPDomainModel, Serializable {
 	private String result;
 
 	@Column(name = "START_DATE", nullable = false, updatable = false, columnDefinition = "TIMESTAMP")
-	@ApiModelProperty(value = "Start instant", required = true, example = "2018-12-16T12:34:56.789Z")
+	@NotNull(message = "Start timestamp cannot be null")
+	@ApiModelProperty(value = "Start timestamp", required = true, example = "2018-12-16T12:34:56.789Z")
 	private Instant startDate;
 
 	@Column(name = "END_DATE", columnDefinition = "TIMESTAMP")
-	@ApiModelProperty(value = "End instant", example = "2018-12-16T12:34:56.789Z")
+	@ApiModelProperty(value = "End timestamp", example = "2018-12-16T12:34:56.789Z")
 	private Instant endDate;
 
 	/**
