@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f80b4de2_6da2037c",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPAbstractSolutionRevision.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2019-03-12T14:47:00Z",
+      "side": 1,
+      "message": "Put required\u003dtrue below for APIModelProperty",
+      "revId": "5e35d11a4453e31e49cdecbbd6e638f3f9072dc9",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0af2b003_3a443a3a",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPCatalog.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2019-03-12T14:47:00Z",
+      "side": 1,
+      "message": "Put required\u003dtrue for below field",
+      "revId": "5e35d11a4453e31e49cdecbbd6e638f3f9072dc9",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
