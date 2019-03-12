@@ -361,4 +361,29 @@ public class CMSReaderClient {
 		return response.getBody();
 	}
 
+	/**
+	 * Gets onboarding instructions
+	 * 
+	 * GET
+	 * http://acumos.org:8085/site/api-manual/Solution/solDescription?path=global/onboarding-model-screen&name=overview
+	 * Sample:
+	 * 
+	 * <pre>
+	 * {"description":"<p>Contact Info</p>"}
+	 * </pre>
+	 * 
+	 * @return CMSDescription
+	 */
+	public CMSDescription getOnboardingOverview() {
+		Map<String, Object> queryParams = new HashMap<>();
+		queryParams.put("path", "global/onboarding-model-screen");
+		queryParams.put("name", "overview");
+		URI uri = buildUri(new String[] { API_MANUAL_PATH, SOLUTION_UC_PATH, SOL_DESCRIPTION_PATH }, queryParams);
+		logger.debug("getOnboardingOverview: uri {}", uri);
+		ResponseEntity<CMSDescription> response = restTemplate.exchange(uri, HttpMethod.GET, null,
+				new ParameterizedTypeReference<CMSDescription>() {
+				});
+		return response.getBody();
+	}
+
 }
