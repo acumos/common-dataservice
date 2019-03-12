@@ -301,6 +301,7 @@ public class MigrateCmsToCdsApp {
 		final String keyCobrandLogo = "global.coBrandLogo";
 		final String keyContactInfo = "global.footer.contactInfo";
 		final String keyTermsCondition = "global.termsCondition";
+		final String keyOnboardingOverview = "global.onboarding.overview";
 
 		byte[] coBrandLogo = cmsClient.getCoBrandLogo();
 		if (coBrandLogo == null || coBrandLogo.length == 0) {
@@ -360,6 +361,28 @@ public class MigrateCmsToCdsApp {
 					++globalContentSucc;
 				} catch (HttpStatusCodeException ex) {
 					logger.error("Failed to create footer T&C {}; server response {}", cdsFootTc,
+							ex.getResponseBodyAsString());
+					++globalContentFail;
+				}
+			}
+		}
+
+		CMSDescription cmsOnbrdOvw = cmsClient.getOnboardingOverview();
+		if (cmsOnbrdOvw == null || cmsOnbrdOvw.getDescription() == null || cmsOnbrdOvw.getDescription().isEmpty()) {
+			logger.info("Source CMS has no onboarding overview, continuing");
+		} else {
+			MLPSiteContent cdsOnbrdOvw = cdsClient.getSiteContent(keyOnboardingOverview);
+			if (cdsOnbrdOvw != null && cdsOnbrdOvw.getContentValue().length > 0) {
+				logger.info("Target CDS already has onboarding overview, continuing");
+			} else {
+				try {
+					logger.info("Creating onboarding overview site content in CDS");
+					cdsOnbrdOvw = new MLPSiteContent(keyOnboardingOverview, cmsOnbrdOvw.getDescription().getBytes(),
+							"text/html");
+					cdsClient.createSiteContent(cdsOnbrdOvw);
+					++globalContentSucc;
+				} catch (HttpStatusCodeException ex) {
+					logger.error("Failed to create onboarding overview {}; server response {}", cdsOnbrdOvw,
 							ex.getResponseBodyAsString());
 					++globalContentFail;
 				}
