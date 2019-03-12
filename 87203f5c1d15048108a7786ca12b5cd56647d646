@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0d16118e_e8f2351f",
+        "filename": "migrate-cms-to-cds/src/main/java/org/acumos/cds/migrate/MigrateCmsToCdsApp.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 101
+      },
+      "writtenOn": "2019-03-12T21:48:40Z",
+      "side": 1,
+      "message": "Unless you\u0027re stripping away the encapsulating JSON somewhere and I\u0027m overlooking that, shouldn\u0027t this be \"text/javascript\" instead? If true, you should make sure to correct this for the other imported JSON wrappers (e.g. footer contact info, terms and conditions, etc.)",
+      "range": {
+        "startLine": 381,
+        "startChar": 8,
+        "endLine": 381,
+        "endChar": 17
+      },
+      "revId": "87203f5c1d15048108a7786ca12b5cd56647d646",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
