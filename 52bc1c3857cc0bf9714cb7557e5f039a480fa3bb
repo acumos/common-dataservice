@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "20369396_93fd892d",
+        "filename": "migrate-cms-to-cds/src/main/java/org/acumos/cds/migrate/MigrateCmsToCdsApp.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 101
+      },
+      "writtenOn": "2019-03-13T15:36:47Z",
+      "side": 1,
+      "message": "Please change this to MediaType.APPLICATION_JSON_VALUE as well.",
+      "range": {
+        "startLine": 383,
+        "startChar": 7,
+        "endLine": 383,
+        "endChar": 18
+      },
+      "revId": "52bc1c3857cc0bf9714cb7557e5f039a480fa3bb",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
