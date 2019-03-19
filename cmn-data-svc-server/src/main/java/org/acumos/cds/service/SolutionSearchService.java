@@ -125,35 +125,34 @@ public interface SolutionSearchService {
 			Pageable pageable);
 
 	/**
-	 * Searches for solutions editable by one user.
+	 * Searches for solutions editable by one user to populate the My Models page.
+	 * The combination active = false && published = true is illegal and will cause
+	 * an exception.
 	 * 
-	 * @param nameKeywords
-	 *                                Name keywords
-	 * @param descriptionKeywords
-	 *                                Description keywords
 	 * @param active
 	 *                                Active status
+	 * @param published
+	 *                                Published (appears in catalog) status
 	 * @param userId
 	 *                                User ID
+	 * @param nameKeywords
+	 *                                Name keywords, optional
+	 * @param descriptionKeywords
+	 *                                Description keywords, optional
 	 * @param modelTypeCodes
-	 *                                Model type codes
-	 * @param accessTypeCodes
-	 *                                Access type codes
+	 *                                Model type codes, optional
 	 * @param tags
-	 *                                Tags that ANY must match
+	 *                                Tags that ANY must match, optional
 	 * @param pageable
 	 *                                Page and sort info
 	 * @return Page of solutions
-	 * @see org.acumos.cds.client.ICommonDataServiceRestClient#findUserSolutions(String[],
-	 *      String[], boolean, String, String[], String[], String[],
-	 *      org.acumos.cds.transport.RestPageRequest)
 	 */
-	public Page<MLPSolution> findUserSolutions(String[] nameKeywords, String[] descriptionKeywords, boolean active,
-			String userId, String[] modelTypeCodes, String[] accessTypeCodes, String[] tags, Pageable pageable);
+	Page<MLPSolution> findUserSolutions(boolean active, boolean published, String userId, String[] nameKeywords,
+			String[] descriptionKeywords, String[] modelTypeCodes, String[] tags, Pageable pageable);
 
 	/**
-	 * Searches for active solutions in the specified catalog modified after the
-	 * specified point in time. Primarily for federation.
+	 * Searches for active solutions in the specified catalog that were modified
+	 * after the specified point in time to support federation queries.
 	 * 
 	 * @param catalogId
 	 *                       Catalog ID *
@@ -161,7 +160,7 @@ public interface SolutionSearchService {
 	 *                       Point in time
 	 * @param pageable
 	 *                       Page and sort info
-	 * @return Page of matches
+	 * @return Page of solutions
 	 * @see org.acumos.cds.client.ICommonDataServiceRestClient#findSolutionsByDate(
 	 *      String, Instant, org.acumos.cds.transport.RestPageRequest)
 	 */

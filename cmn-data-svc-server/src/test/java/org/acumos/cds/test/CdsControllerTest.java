@@ -905,11 +905,17 @@ public class CdsControllerTest {
 			Assert.assertEquals(0, noCtlgSearchResult.getNumberOfElements());
 
 			// Check this finds solutions by shared-with-user ID
-			logger.info("Querying for user solutions via flexible i/f");
-			RestPageResponse<MLPSolution> userSols = client.findUserSolutions(null, null, true,
-					inactiveUser.getUserId(), null, null, null, new RestPageRequest(0, 5));
+			logger.info("Querying for published user solutions");
+			RestPageResponse<MLPSolution> userSols = client.findUserSolutions(true, true, inactiveUser.getUserId(),
+					null, null, null, null, new RestPageRequest(0, 5));
 			Assert.assertNotNull(userSols);
 			Assert.assertNotEquals(0, userSols.getNumberOfElements());
+
+			logger.info("Querying for unpub user solutions");
+			RestPageResponse<MLPSolution> unpubUserSols = client.findUserSolutions(true, false, inactiveUser.getUserId(),
+					null, null, null, null, new RestPageRequest(0, 5));
+			Assert.assertNotNull(unpubUserSols);
+			Assert.assertEquals(0, unpubUserSols.getNumberOfElements());
 
 			// find active solutions
 			String[] nameKw = null;
