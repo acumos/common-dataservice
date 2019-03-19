@@ -151,7 +151,7 @@ public class FOMRepositoryTest {
 			catSolMap = new MLPCatSolMap(cc.getCatalogId(), cs.getSolutionId());
 			catSolMap = catSolMapRepository.save(catSolMap);
 			logger.info("Created cat-sol map {}", catSolMap);
-			
+
 			revArtMap = new MLPSolRevArtMap(cr.getRevisionId(), ca.getArtifactId());
 			revArtMap = solRevArtMapRepository.save(revArtMap);
 			logger.info("Created sol-rev-art map {}", revArtMap);
@@ -176,9 +176,10 @@ public class FOMRepositoryTest {
 		}
 
 		// Find all via Spring repository
-		logger.info("Querying for FOM via repo findAll method");
+		logger.info("Querying for SolFOM via repo findAll method");
 		List<MLPSolutionFOM> foms = solutionFOMRepository.findAll();
-		Assert.assertTrue(foms != null && foms.size() > 0);
+		Assert.assertNotNull(foms);
+		Assert.assertNotEquals(0, foms.size());
 		logger.info("Found FOM row count {}", foms.size());
 
 		// Find by modified date
@@ -194,19 +195,22 @@ public class FOMRepositoryTest {
 		logger.info("Querying for FOM via findPortalSolutions method");
 		Page<MLPSolution> byName = solutionSearchService.findPortalSolutions(nameKw, empty, true, empty, empty,
 				accTypes, empty, empty, empty, pageable);
-		Assert.assertTrue(byName != null && byName.getNumberOfElements() > 0);
+		Assert.assertNotNull(byName);
+		Assert.assertNotEquals(0, byName.getNumberOfElements());
 		logger.info("Found sols by name via criteria: size {}", byName.getContent().size());
 
 		Page<MLPSolution> solsByDate = solutionSearchService.findCatalogSolutionsByModifiedDate(cc.getCatalogId(),
 				modifiedTs, pageable);
-		Assert.assertTrue(solsByDate != null && solsByDate.getNumberOfElements() > 0);
+		Assert.assertNotNull(solsByDate);
+		Assert.assertNotEquals(0, solsByDate.getNumberOfElements());
 		logger.info("Found sols by date via criteria: size {}", solsByDate.getContent().size());
 
 		// Find by user and Hibernate constraint - user2 owns no solutions but has
 		// access
-		Page<MLPSolution> byUser = solutionSearchService.findUserSolutions(nameKw, empty, true, cu2.getUserId(), empty,
+		Page<MLPSolution> byUser = solutionSearchService.findUserSolutions(true, true, cu2.getUserId(), nameKw, empty,
 				empty, empty, pageable);
-		Assert.assertTrue(byUser != null && byUser.getNumberOfElements() > 0);
+		Assert.assertNotNull(byUser);
+		Assert.assertNotEquals(0, byUser.getNumberOfElements());
 		logger.info("Found sols by user via criteria: size {}", byUser.getContent().size());
 
 		if (setupTeardown) {
