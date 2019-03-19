@@ -151,7 +151,7 @@ public class FOMRepositoryTest {
 			catSolMap = new MLPCatSolMap(cc.getCatalogId(), cs.getSolutionId());
 			catSolMap = catSolMapRepository.save(catSolMap);
 			logger.info("Created cat-sol map {}", catSolMap);
-			
+
 			revArtMap = new MLPSolRevArtMap(cr.getRevisionId(), ca.getArtifactId());
 			revArtMap = solRevArtMapRepository.save(revArtMap);
 			logger.info("Created sol-rev-art map {}", revArtMap);
@@ -175,10 +175,13 @@ public class FOMRepositoryTest {
 			logger.info("Created sol-user-acc map {}", accMap);
 		}
 
+		Pageable pageable = PageRequest.of(0, 6);
+
 		// Find all via Spring repository
-		logger.info("Querying for FOM via repo findAll method");
+		logger.info("Querying for SolFOM via repo findAll method");
 		List<MLPSolutionFOM> foms = solutionFOMRepository.findAll();
-		Assert.assertTrue(foms != null && foms.size() > 0);
+		Assert.assertNotNull(foms);
+		Assert.assertNotEquals(0, foms.size());
 		logger.info("Found FOM row count {}", foms.size());
 
 		// Find by modified date
@@ -189,7 +192,6 @@ public class FOMRepositoryTest {
 
 		// Via Hibernate constraint
 		logger.info("Querying for FOM via search services");
-		Pageable pageable = PageRequest.of(0, 6);
 
 		logger.info("Querying for FOM via findPortalSolutions method");
 		Page<MLPSolution> byName = solutionSearchService.findPortalSolutions(nameKw, empty, true, empty, empty,
@@ -204,7 +206,7 @@ public class FOMRepositoryTest {
 
 		// Find by user and Hibernate constraint - user2 owns no solutions but has
 		// access
-		Page<MLPSolution> byUser = solutionSearchService.findUserSolutions(nameKw, empty, true, cu2.getUserId(), empty,
+		Page<MLPSolution> byUser = solutionSearchService.findUserSolutions(true, true, cu2.getUserId(), nameKw, empty,
 				empty, empty, pageable);
 		Assert.assertTrue(byUser != null && byUser.getNumberOfElements() > 0);
 		logger.info("Found sols by user via criteria: size {}", byUser.getContent().size());
