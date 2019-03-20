@@ -24,11 +24,12 @@ The client and server are released together.  The client is available
 as a jar file in the Acumos/LF Nexus repository. The server is
 available as a Docker image in the Acumos/LF Docker registry.
 
-Version 2.2.0, 13 Mar 2019
+Version 2.2.0, 20 Mar 2019
 --------------------------
 * Add project for workbench (`ACUMOS-2516 <https://jira.acumos.org/browse/ACUMOS-2516>`_)
 * Add pipeline for workbench (`ACUMOS-2534 <https://jira.acumos.org/browse/ACUMOS-2534>`_)
 * Add notebook for workbench (`ACUMOS-2535 <https://jira.acumos.org/browse/ACUMOS-2535>`_)
+* Define notebook-type values (`ACUMOS-2560 <https://jira.acumos.org/browse/ACUMOS-2560>`_)
 * Extend data and APIs for catalog features (`ACUMOS-2569 <https://jira.acumos.org/browse/ACUMOS-2569>`_)
 * Drop peer and solution groups (`ACUMOS-2590 <https://jira.acumos.org/browse/ACUMOS-2590>`_)
 * Revise access type codes (`ACUMOS-2610 <https://jira.acumos.org/browse/ACUMOS-2610>`_)
