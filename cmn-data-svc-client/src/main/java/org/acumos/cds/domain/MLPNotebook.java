@@ -60,10 +60,9 @@ public class MLPNotebook extends MLPAbstractWorkbenchArtifact implements Seriali
 	@ApiModelProperty(required = true, value = "Two-character notebook type code", example = "AB")
 	private String notebookTypeCode;
 
-	@Column(name = "KERNEL_TYPE_CD", nullable = false, columnDefinition = "CHAR(2)")
-	@NotNull(message = "Kernel type cannot be null")
+	@Column(name = "KERNEL_TYPE_CD", columnDefinition = "CHAR(2)")
 	@Size(max = 2)
-	@ApiModelProperty(required = true, value = "Two-character kernel type code", example = "AB")
+	@ApiModelProperty(value = "Two-character kernel type code", example = "AB")
 	private String kernelTypeCode;
 
 	@Column(name = "SERVICE_URL", columnDefinition = "VARCHAR(512)")
