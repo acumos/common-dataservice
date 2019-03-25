@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "e9fada1e_f9dd7fbf",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/service/SolutionSearchServiceImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-25T21:28:05Z",
+      "side": 1,
+      "message": "Because some solutions (models) might not be published to any catalog.",
+      "parentUuid": "a6ffee77_3da6ebe4",
+      "revId": "5b9be57c026df626256c76c6b055ef55883f81f0",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "93e2efa4_e9ce0f0b",
         "filename": "cmn-data-svc-server/src/test/java/org/acumos/cds/test/CdsControllerTest.java",
         "patchSetId": 5
@@ -30,6 +48,24 @@
       "writtenOn": "2019-03-25T20:48:58Z",
       "side": 1,
       "message": "Shouldn\u0027t there be a check for AssertNotEquals 0 for unpublished solns below?",
+      "revId": "5b9be57c026df626256c76c6b055ef55883f81f0",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e93b9761_3c865855",
+        "filename": "cmn-data-svc-server/src/test/java/org/acumos/cds/test/CdsControllerTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 917,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-25T21:28:05Z",
+      "side": 1,
+      "message": "in this little test scenario there is 1+ published solution and 0 unpublished solutions.  I think the test is appropriate as written.",
+      "parentUuid": "93e2efa4_e9ce0f0b",
       "revId": "5b9be57c026df626256c76c6b055ef55883f81f0",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
