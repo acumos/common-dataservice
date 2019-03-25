@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a6ffee77_3da6ebe4",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/service/SolutionSearchServiceImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2019-03-25T20:38:45Z",
+      "side": 1,
+      "message": "Why are catalogs optional in this case?",
+      "revId": "5b9be57c026df626256c76c6b055ef55883f81f0",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
