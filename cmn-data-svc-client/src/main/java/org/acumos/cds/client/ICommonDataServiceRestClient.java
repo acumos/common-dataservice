@@ -217,12 +217,6 @@ public interface ICommonDataServiceRestClient {
 	 *                                specified values including null (which is
 	 *                                different from the special-case 4-character
 	 *                                sequence "null"); ignored if null or empty
-	 * @param accessTypeCodes
-	 *                                Limits match to solutions containing revisions
-	 *                                with ANY of the specified values including
-	 *                                null (which is different from the special-case
-	 *                                4-character sequence "null"); ignored if null
-	 *                                or empty
 	 * @param tags
 	 *                                Limits match to solutions with ANY of the
 	 *                                specified tags; ignored if null or empty
@@ -234,15 +228,14 @@ public interface ICommonDataServiceRestClient {
 	 *                                '%' characters; ignored if null or empty
 	 * @param publisherKeywords
 	 *                                Same as author, but on the publisher field.
-	 * 
 	 * @param pageRequest
 	 *                                Page index, page size and sort information;
 	 *                                defaults to page 0 of size 20 if null.
 	 * @return Page of solutions, which may be empty
 	 */
 	RestPageResponse<MLPSolution> findPortalSolutions(String[] nameKeywords, String[] descriptionKeywords,
-			boolean active, String[] userIds, String[] accessTypeCodes, String[] modelTypeCodes, String[] tags,
-			String[] authorKeywords, String[] publisherKeywords, RestPageRequest pageRequest);
+			boolean active, String[] userIds, String[] modelTypeCodes, String[] tags, String[] authorKeywords,
+			String[] publisherKeywords, RestPageRequest pageRequest);
 
 	/**
 	 * Gets a page of solutions that match every condition, with the caveat that any
@@ -251,37 +244,34 @@ public interface ICommonDataServiceRestClient {
 	 * slow because it requires table scans.
 	 * 
 	 * @param keywords
-	 *                            Keywords to find in the name, revision
-	 *                            description, author, publisher and other field;
-	 *                            ignored if null or empty
+	 *                           Keywords to find in the name, revision description,
+	 *                           author, publisher and other field; ignored if null
+	 *                           or empty
 	 * @param active
-	 *                            Solution active status; true for active, false for
-	 *                            inactive
+	 *                           Solution active status; true for active, false for
+	 *                           inactive
 	 * @param userIds
-	 *                            User IDs who created the solution; ignored if null
-	 *                            or empty
-	 * @param accessTypeCodes
-	 *                            Access type codes; use four-letter sequence "null"
-	 *                            to match a null value; ignored if null or empty
+	 *                           User IDs who created the solution; ignored if null
+	 *                           or empty
 	 * @param modelTypeCodes
-	 *                            Model type codes; use four-letter sequence "null"
-	 *                            to match a null value; ignored if null or empty
+	 *                           Model type codes; use four-letter sequence "null"
+	 *                           to match a null value; ignored if null or empty
 	 * @param allTags
-	 *                            Solutions must have ALL tags in the supplied set;
-	 *                            ignored if null or empty
+	 *                           Solutions must have ALL tags in the supplied set;
+	 *                           ignored if null or empty
 	 * @param anyTags
-	 *                            Solutions must have ANY tag in the supplied set
-	 *                            (one or more); ignored if null or empty.
+	 *                           Solutions must have ANY tag in the supplied set
+	 *                           (one or more); ignored if null or empty.
 	 * @param catalogIds
-	 *                            Solutions must be mapped to one of the specified
-	 *                            catalogs; ignored if null or empty
+	 *                           Solutions must be mapped to one of the specified
+	 *                           catalogs; ignored if null or empty
 	 * @param pageRequest
-	 *                            Page index, page size and sort information;
-	 *                            defaults to page 0 of size 20 if null.
+	 *                           Page index, page size and sort information;
+	 *                           defaults to page 0 of size 20 if null.
 	 * @return Page of solutions, which may be empty
 	 */
 	RestPageResponse<MLPSolution> findPortalSolutionsByKwAndTags(String[] keywords, boolean active, String[] userIds,
-			String[] accessTypeCodes, String[] modelTypeCodes, String[] allTags, String[] anyTags, String[] catalogIds,
+			String[] modelTypeCodes, String[] allTags, String[] anyTags, String[] catalogIds,
 			RestPageRequest pageRequest);
 
 	/**
