@@ -253,7 +253,8 @@ public class CatalogController extends AbstractController {
 	public Object getSolutionsInCatalogs(@ApiParam(value = "Catalog IDs", allowMultiple = true) //
 	@RequestParam(name = CCDSConstants.SEARCH_CATALOG, required = true) String[] catalogIds, //
 			Pageable pageRequest, HttpServletResponse response) {
-		logger.debug("getSolutionsInCatalogs catalogIds {}", Arrays.toString(catalogIds));
+		if (logger.isDebugEnabled()) // silence Sonar complaint
+			logger.debug("getSolutionsInCatalogs catalogIds {}", Arrays.toString(catalogIds));
 		if (catalogIds == null || catalogIds.length == 0) {
 			logger.warn("getSolutionsInCatalogs missing catalogIds");
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
