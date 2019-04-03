@@ -37,13 +37,13 @@ import org.acumos.cds.domain.MLPPeerSubscription;
 import org.acumos.cds.domain.MLPPipeline;
 import org.acumos.cds.domain.MLPProject;
 import org.acumos.cds.domain.MLPPublishRequest;
-import org.acumos.cds.domain.MLPRevisionDescription;
 import org.acumos.cds.domain.MLPRightToUse;
 import org.acumos.cds.domain.MLPRole;
 import org.acumos.cds.domain.MLPRoleFunction;
 import org.acumos.cds.domain.MLPRtuReference;
 import org.acumos.cds.domain.MLPSiteConfig;
 import org.acumos.cds.domain.MLPSiteContent;
+import org.acumos.cds.domain.MLPRevCatDescription;
 import org.acumos.cds.domain.MLPSolution;
 import org.acumos.cds.domain.MLPSolutionDeployment;
 import org.acumos.cds.domain.MLPSolutionDownload;
@@ -171,7 +171,7 @@ public interface ICommonDataServiceRestClient {
 	 * @param pageRequest
 	 *                            Page index, page size, sort information; defaults
 	 *                            to page 0 of size 20 if null.
-	 * @return Page of solution objects
+	 * @return Page of solution objects, which may be empty
 	 */
 	RestPageResponse<MLPSolution> searchSolutions(Map<String, Object> queryParameters, boolean isOr,
 			RestPageRequest pageRequest);
@@ -389,7 +389,8 @@ public interface ICommonDataServiceRestClient {
 	 * 
 	 * @param solutionId
 	 *                       solution ID.
-	 * @return List of Solution revision objects for the specified solution.
+	 * @return List of Solution revision objects for the specified solution, which
+	 *         may be empty
 	 */
 	List<MLPSolutionRevision> getSolutionRevisions(String solutionId);
 
@@ -400,7 +401,8 @@ public interface ICommonDataServiceRestClient {
 	 *                        solution IDs. Caveat: the number of possible entries
 	 *                        in this list is constrained by client/server
 	 *                        limitations on URL length.
-	 * @return List of Solution revision objects for any of the specified solutions.
+	 * @return List of Solution revision objects for any of the specified solutions,
+	 *         which may be empty
 	 */
 	List<MLPSolutionRevision> getSolutionRevisions(String[] solutionIds);
 
@@ -420,7 +422,8 @@ public interface ICommonDataServiceRestClient {
 	 * 
 	 * @param artifactId
 	 *                       artifact ID
-	 * @return List of Solution revision objects for the specified artifact.
+	 * @return List of Solution revision objects for the specified artifact, which
+	 *         may be empty
 	 */
 	List<MLPSolutionRevision> getSolutionRevisionsForArtifact(String artifactId);
 
@@ -461,18 +464,18 @@ public interface ICommonDataServiceRestClient {
 	void deleteSolutionRevision(String solutionId, String revisionId) throws RestClientResponseException;
 
 	/**
-	 * Gets the artifacts for a solution revision
+	 * Gets the artifacts for the specified solution revision.
 	 * 
 	 * @param solutionId
 	 *                       solution ID
 	 * @param revisionId
 	 *                       revision ID
-	 * @return List of MLPArtifact
+	 * @return List of artifacts, which may be empty
 	 */
 	List<MLPArtifact> getSolutionRevisionArtifacts(String solutionId, String revisionId);
 
 	/**
-	 * Adds an artifact to a solution revision
+	 * Adds the specified artifact to the specified solution revision.
 	 * 
 	 * @param solutionId
 	 *                       Solution ID
@@ -487,7 +490,7 @@ public interface ICommonDataServiceRestClient {
 			throws RestClientResponseException;
 
 	/**
-	 * Removes an artifact from a solution revision
+	 * Removes the specified artifact from the specified solution revision.
 	 * 
 	 * @param solutionId
 	 *                       Solution ID
@@ -507,7 +510,7 @@ public interface ICommonDataServiceRestClient {
 	 * @param pageRequest
 	 *                        Page index, page size and sort information; defaults
 	 *                        to page 0 of size 20 if null.
-	 * @return Page of solution tag objects
+	 * @return Page of solution tag objects, which may be empty
 	 */
 	RestPageResponse<MLPTag> getTags(RestPageRequest pageRequest);
 
@@ -538,7 +541,7 @@ public interface ICommonDataServiceRestClient {
 	 * 
 	 * @param solutionId
 	 *                       solution ID.
-	 * @return List of Solution tag objects for the specified solution.
+	 * @return List of tags, which may be empty
 	 */
 	List<MLPTag> getSolutionTags(String solutionId);
 
@@ -579,7 +582,7 @@ public interface ICommonDataServiceRestClient {
 	 * @param pageRequest
 	 *                        Page index, page size and sort information; defaults
 	 *                        to page 0 of size 20 if null.
-	 * @return Page of artifact objects.
+	 * @return Page of artifacts, which may be empty
 	 */
 	RestPageResponse<MLPArtifact> getArtifacts(RestPageRequest pageRequest);
 
@@ -592,7 +595,7 @@ public interface ICommonDataServiceRestClient {
 	 * @param pageRequest
 	 *                        Page index, page size and sort information; defaults
 	 *                        to page 0 of size 20 if null.
-	 * @return Page of artifact objects.
+	 * @return Page of artifacts, which may be empty
 	 */
 	RestPageResponse<MLPArtifact> findArtifactsBySearchTerm(String searchTerm, RestPageRequest pageRequest);
 
@@ -612,7 +615,7 @@ public interface ICommonDataServiceRestClient {
 	 * @param pageRequest
 	 *                            Page index, page size and sort information;
 	 *                            defaults to page 0 of size 20 if null.
-	 * @return Page of artifact objects.
+	 * @return Page of artifacts, which may be empty
 	 */
 	RestPageResponse<MLPArtifact> searchArtifacts(Map<String, Object> queryParameters, boolean isOr,
 			RestPageRequest pageRequest);
@@ -674,20 +677,20 @@ public interface ICommonDataServiceRestClient {
 	 * @param pageRequest
 	 *                        Page index, page size and sort information; defaults
 	 *                        to page 0 of size 20 if null.
-	 * @return Page of objects.
+	 * @return Page of users, which may be empty
 	 */
 	RestPageResponse<MLPUser> getUsers(RestPageRequest pageRequest);
 
 	/**
-	 * Returns users with a first, middle, last or login name that contains the
-	 * search term.
+	 * Returns a page of users with names that contain the search term matched using
+	 * a like operator on the first, middle, last and login-name fields.
 	 * 
 	 * @param searchTerm
 	 *                        String to find
 	 * @param pageRequest
 	 *                        Page index, page size and sort information; defaults
 	 *                        to page 0 of size 20 if null.
-	 * @return Page of user objects.
+	 * @return Page of users, which may be empty
 	 */
 	RestPageResponse<MLPUser> findUsersBySearchTerm(String searchTerm, RestPageRequest pageRequest);
 
@@ -707,13 +710,13 @@ public interface ICommonDataServiceRestClient {
 	 * @param pageRequest
 	 *                            Page index, page size and sort information;
 	 *                            defaults to page 0 of size 20 if null.
-	 * @return Page of user objects
+	 * @return Page of users, which may be empty
 	 */
 	RestPageResponse<MLPUser> searchUsers(Map<String, Object> queryParameters, boolean isOr,
 			RestPageRequest pageRequest);
 
 	/**
-	 * Checks credentials for the specified active user. Does NOT check the
+	 * Checks the specified credentials for full access. Does NOT check the
 	 * expiration date of the password, the client must do that as needed.
 	 * 
 	 * Side effects: updates last-login field on success, count on failure. Imposes
@@ -736,7 +739,7 @@ public interface ICommonDataServiceRestClient {
 	MLPUser loginUser(String name, String pass) throws RestClientResponseException;
 
 	/**
-	 * Checks API token for the specified active user.
+	 * Checks the specified credentials for API access.
 	 * 
 	 * Side effects: updates last-login field on success, count on failure. Imposes
 	 * a temporary block after repeated failures as configured at server.
@@ -758,8 +761,8 @@ public interface ICommonDataServiceRestClient {
 	MLPUser loginApiUser(String name, String apiToken) throws RestClientResponseException;
 
 	/**
-	 * Checks verification credentials for the specified active user. This does NOT
-	 * check the expiration date of the token, the client must do that as needed.
+	 * Checks the specified credentials for verification. This does NOT check the
+	 * expiration date of the token, the client must do that as needed.
 	 * 
 	 * Side effects: updates last-login field on success, count on failure. Imposes
 	 * a temporary block after repeated failures as configured at server.
@@ -791,7 +794,7 @@ public interface ICommonDataServiceRestClient {
 	MLPUser getUser(String userId);
 
 	/**
-	 * Creates a user.
+	 * Creates a new user and generates an ID if needed.
 	 * 
 	 * @param user
 	 *                 User data. If the ID field is null a new value is generated;
@@ -804,7 +807,7 @@ public interface ICommonDataServiceRestClient {
 	MLPUser createUser(MLPUser user) throws RestClientResponseException;
 
 	/**
-	 * Updates a user.
+	 * Updates an existing user with the supplied data.
 	 * 
 	 * @param user
 	 *                 User data
@@ -814,9 +817,9 @@ public interface ICommonDataServiceRestClient {
 	void updateUser(MLPUser user) throws RestClientResponseException;
 
 	/**
-	 * Deletes a user. Cascades the delete to login-provider, notification and role
-	 * associations. If associations remain with artifacts such as solutions the
-	 * delete will fail.
+	 * Deletes the user with the specified ID. Cascades the delete to
+	 * login-provider, notification and role associations. If associations remain
+	 * with artifacts such as solutions the delete will fail.
 	 * 
 	 * @param userId
 	 *                   user ID
@@ -826,16 +829,16 @@ public interface ICommonDataServiceRestClient {
 	void deleteUser(String userId) throws RestClientResponseException;
 
 	/**
-	 * Gets the roles for the specified user ID.
+	 * Gets all roles assigned to the specified user ID.
 	 * 
 	 * @param userId
 	 *                   user ID.
-	 * @return List of Role objects for the specified user.
+	 * @return List of roles, which may be empty
 	 */
 	List<MLPRole> getUserRoles(String userId);
 
 	/**
-	 * Adds the specified role to the specified user.
+	 * Adds the specified role to the specified user's roles.
 	 * 
 	 * @param userId
 	 *                   user ID
@@ -847,8 +850,8 @@ public interface ICommonDataServiceRestClient {
 	void addUserRole(String userId, String roleId) throws RestClientResponseException;
 
 	/**
-	 * Updates the user to have exactly the specified roles only; i.e., remove any
-	 * roles not in the list.
+	 * Assigns the specified roles to the specified user after dropping any existing
+	 * role assignments.
 	 * 
 	 * @param userId
 	 *                    user ID
@@ -860,7 +863,7 @@ public interface ICommonDataServiceRestClient {
 	void updateUserRoles(String userId, List<String> roleIds) throws RestClientResponseException;
 
 	/**
-	 * Removes the specified role from the specified user.
+	 * Removes the specified role from the specified user's roles.
 	 * 
 	 * @param userId
 	 *                   user ID
@@ -872,7 +875,7 @@ public interface ICommonDataServiceRestClient {
 	void dropUserRole(String userId, String roleId) throws RestClientResponseException;
 
 	/**
-	 * Assigns the specified role to each user in the specified list.
+	 * Adds the specified role to every specified user's roles.
 	 * 
 	 * @param userIds
 	 *                    List of user IDs
@@ -884,7 +887,7 @@ public interface ICommonDataServiceRestClient {
 	void addUsersInRole(List<String> userIds, String roleId) throws RestClientResponseException;
 
 	/**
-	 * Removes the specified role from each user in the specified list.
+	 * Removes the specified role from every specified user's roles.
 	 * 
 	 * @param userIds
 	 *                    List of user IDs
@@ -905,7 +908,8 @@ public interface ICommonDataServiceRestClient {
 	long getRoleUsersCount(String roleId);
 
 	/**
-	 * Gets the specified user login provider.
+	 * Gets the login provider for the specified user, provider code and provider
+	 * login.
 	 * 
 	 * @param userId
 	 *                          user ID
@@ -918,16 +922,16 @@ public interface ICommonDataServiceRestClient {
 	MLPUserLoginProvider getUserLoginProvider(String userId, String providerCode, String providerLogin);
 
 	/**
-	 * Gets the user's login providers.
+	 * Gets all login providers for the specified user.
 	 * 
 	 * @param userId
 	 *                   user ID
-	 * @return List of user login providers
+	 * @return List of user login providers, which may be empty
 	 */
 	List<MLPUserLoginProvider> getUserLoginProviders(String userId);
 
 	/**
-	 * Creates a user login provider.
+	 * Creates a new user login provider.
 	 * 
 	 * @param provider
 	 *                     data to populate new entry
@@ -938,7 +942,7 @@ public interface ICommonDataServiceRestClient {
 	MLPUserLoginProvider createUserLoginProvider(MLPUserLoginProvider provider) throws RestClientResponseException;
 
 	/**
-	 * Updates a user login provider
+	 * Updates an existing user login provider with the supplied data.
 	 * 
 	 * @param provider
 	 *                     data to update
@@ -948,7 +952,7 @@ public interface ICommonDataServiceRestClient {
 	void updateUserLoginProvider(MLPUserLoginProvider provider) throws RestClientResponseException;
 
 	/**
-	 * Deletes a user login provider.
+	 * Deletes the specified user login provider.
 	 * 
 	 * @param provider
 	 *                     data to delete
@@ -965,7 +969,8 @@ public interface ICommonDataServiceRestClient {
 	long getRoleCount();
 
 	/**
-	 * Searches roles for exact matches.
+	 * Searches for roles with attributes matching the values specified as query
+	 * parameters.
 	 * 
 	 * @param queryParameters
 	 *                            Map of field-name, field-value pairs to use as
@@ -979,23 +984,23 @@ public interface ICommonDataServiceRestClient {
 	 * @param pageRequest
 	 *                            Page index, page size and sort information;
 	 *                            defaults to page 0 of size 20 if null.
-	 * @return Page of role objects
+	 * @return Page of roles, which may be empty
 	 */
 	RestPageResponse<MLPRole> searchRoles(Map<String, Object> queryParameters, boolean isOr,
 			RestPageRequest pageRequest);
 
 	/**
-	 * Gets the roles.
+	 * Gets a page of roles.
 	 * 
 	 * @param pageRequest
 	 *                        Page index, page size and sort information; defaults
 	 *                        to page 0 of size 20 if null.
-	 * @return Page of MLPRoles
+	 * @return Page of roles, which may be empty
 	 */
 	RestPageResponse<MLPRole> getRoles(RestPageRequest pageRequest);
 
 	/**
-	 * Gets the object with the specified ID.
+	 * Gets the role with the specified ID.
 	 * 
 	 * @param roleId
 	 *                   role ID
@@ -1004,7 +1009,7 @@ public interface ICommonDataServiceRestClient {
 	MLPRole getRole(String roleId);
 
 	/**
-	 * Writes the specified role.
+	 * Creates a new role and generates an ID if needed.
 	 * 
 	 * @param role
 	 *                 Role data. If the ID field is null a new value is generated;
@@ -1017,7 +1022,7 @@ public interface ICommonDataServiceRestClient {
 	MLPRole createRole(MLPRole role) throws RestClientResponseException;
 
 	/**
-	 * Updates the specified role.
+	 * Updates an existing role with the supplied data.
 	 * 
 	 * @param role
 	 *                 instance to save
@@ -1027,8 +1032,8 @@ public interface ICommonDataServiceRestClient {
 	void updateRole(MLPRole role) throws RestClientResponseException;
 
 	/**
-	 * Deletes a role. A role can be deleted if is not associated with any users.
-	 * Cascades the delete to associated role functions.
+	 * Deletes the role with the specified ID. A role can be deleted if is not
+	 * associated with any users. Cascades the delete to associated role functions.
 	 * 
 	 * @param roleId
 	 *                   Role ID
@@ -1038,11 +1043,11 @@ public interface ICommonDataServiceRestClient {
 	void deleteRole(String roleId) throws RestClientResponseException;
 
 	/**
-	 * Gets the role functions for the specified role
+	 * Gets the functions for the specified role.
 	 * 
 	 * @param roleId
 	 *                   role ID
-	 * @return List of RoleFunctions;
+	 * @return List of role functions, which may be empty
 	 */
 	List<MLPRoleFunction> getRoleFunctions(String roleId);
 
@@ -1058,7 +1063,7 @@ public interface ICommonDataServiceRestClient {
 	MLPRoleFunction getRoleFunction(String roleId, String roleFunctionId);
 
 	/**
-	 * Creates the specified role function.
+	 * Creates a new role function and generates an ID.
 	 * 
 	 * @param roleFunction
 	 *                         instance to save
@@ -1069,7 +1074,7 @@ public interface ICommonDataServiceRestClient {
 	MLPRoleFunction createRoleFunction(MLPRoleFunction roleFunction) throws RestClientResponseException;
 
 	/**
-	 * Creates the specified role function.
+	 * Updates an existing role function with the supplied data.
 	 * 
 	 * @param roleFunction
 	 *                         instance to save
@@ -1079,7 +1084,7 @@ public interface ICommonDataServiceRestClient {
 	void updateRoleFunction(MLPRoleFunction roleFunction) throws RestClientResponseException;
 
 	/**
-	 * Deletes a role function.
+	 * Deletes the role function with the specified ID.
 	 * 
 	 * @param roleId
 	 *                           role ID
@@ -1096,12 +1101,13 @@ public interface ICommonDataServiceRestClient {
 	 * @param pageRequest
 	 *                        Page index, page size and sort information; defaults
 	 *                        to page 0 of size 20 if null.
-	 * @return Page of peer objects.
+	 * @return Page of peers, which may be empty
 	 */
 	RestPageResponse<MLPPeer> getPeers(RestPageRequest pageRequest);
 
 	/**
-	 * Searches peers for exact matches.
+	 * Searches for peers with attributes matching the values specified as query
+	 * parameters.
 	 * 
 	 * @param queryParameters
 	 *                            Map of field-name, field-value pairs to use as
@@ -1116,7 +1122,7 @@ public interface ICommonDataServiceRestClient {
 	 * @param pageRequest
 	 *                            Page index, page size and sort information;
 	 *                            defaults to page 0 of size 20 if null.
-	 * @return Page of peer objects
+	 * @return Page of peers, which may be empty
 	 */
 	RestPageResponse<MLPPeer> searchPeers(Map<String, Object> queryParameters, boolean isOr,
 			RestPageRequest pageRequest);
@@ -1131,7 +1137,7 @@ public interface ICommonDataServiceRestClient {
 	MLPPeer getPeer(String peerId);
 
 	/**
-	 * Creates a peer.
+	 * Creates a new peer and generates an ID if needed.
 	 * 
 	 * @param peer
 	 *                 Peer data. If the ID field is null a new value is generated;
@@ -1144,7 +1150,7 @@ public interface ICommonDataServiceRestClient {
 	MLPPeer createPeer(MLPPeer peer) throws RestClientResponseException;
 
 	/**
-	 * Updates a peer.
+	 * Updates an existing peer with the supplied data.
 	 * 
 	 * @param user
 	 *                 Peer data
@@ -1154,8 +1160,8 @@ public interface ICommonDataServiceRestClient {
 	void updatePeer(MLPPeer user) throws RestClientResponseException;
 
 	/**
-	 * Deletes a peer. Cascades the delete to peer subscriptions. If other
-	 * associations remain the delete will fail.
+	 * Deletes the peer with the specified ID. Cascades the delete to peer
+	 * subscriptions. If other associations remain the delete will fail.
 	 * 
 	 * @param peerId
 	 *                   Instance ID
@@ -1178,7 +1184,7 @@ public interface ICommonDataServiceRestClient {
 	 * 
 	 * @param peerId
 	 *                   Peer ID
-	 * @return List of peer objects
+	 * @return List of peer subscriptions, which may be empty
 	 */
 	List<MLPPeerSubscription> getPeerSubscriptions(String peerId);
 
@@ -1230,7 +1236,7 @@ public interface ICommonDataServiceRestClient {
 	 * @param pageRequest
 	 *                        Page index, page size and sort information; defaults
 	 *                        to page 0 of size 20 if null.
-	 * @return Page of solution downloads
+	 * @return Page of solution downloads, which may be empty
 	 */
 	RestPageResponse<MLPSolutionDownload> getSolutionDownloads(String solutionId, RestPageRequest pageRequest);
 
@@ -1265,32 +1271,32 @@ public interface ICommonDataServiceRestClient {
 	 * @param pageRequest
 	 *                        Page index, page size and sort information; defaults
 	 *                        to page 0 of size 20 if null.
-	 * @return Page of solutions that are favorites of the user; might be empty.
+	 * @return Page of solutions, which may be empty.
 	 */
 	RestPageResponse<MLPSolution> getFavoriteSolutions(String userId, RestPageRequest pageRequest);
 
 	/**
-	 * Creates a solution favorite record; i.e., marks a solution as a favorite of a
-	 * specified user
+	 * Marks the specified solution as a favorite of the specified user by creating
+	 * a solution-favorite record.
 	 * 
-	 * @param fs
-	 *               favorite solution model
+	 * @param sf
+	 *               solution favorite model
 	 * @return Complete object
 	 * @throws RestClientResponseException
 	 *                                         Error message is in the response body
 	 */
-	MLPSolutionFavorite createSolutionFavorite(MLPSolutionFavorite fs) throws RestClientResponseException;
+	MLPSolutionFavorite createSolutionFavorite(MLPSolutionFavorite sf) throws RestClientResponseException;
 
 	/**
-	 * Deletes a solution favorite record; i.e., unmarks a solution as a favorite of
-	 * a specified user
+	 * Un-marks the specified solution as a favorite of the specified user by
+	 * deleting a solution-favorite record.
 	 * 
-	 * @param fs
-	 *               favorite solution model
+	 * @param sf
+	 *               solution favorite model
 	 * @throws RestClientResponseException
 	 *                                         Error message is in the response body
 	 */
-	void deleteSolutionFavorite(MLPSolutionFavorite fs) throws RestClientResponseException;
+	void deleteSolutionFavorite(MLPSolutionFavorite sf) throws RestClientResponseException;
 
 	/**
 	 * Gets the user ratings for the specified solution.
@@ -1300,7 +1306,7 @@ public interface ICommonDataServiceRestClient {
 	 * @param pageRequest
 	 *                        Page index, page size and sort information; defaults
 	 *                        to page 0 of size 20 if null.
-	 * @return Page of solution ratings
+	 * @return Page of solution ratings, which may be empty
 	 */
 	RestPageResponse<MLPSolutionRating> getSolutionRatings(String solutionId, RestPageRequest pageRequest);
 
@@ -1359,12 +1365,12 @@ public interface ICommonDataServiceRestClient {
 	 * @param pageRequest
 	 *                        Page index, page size and sort information; defaults
 	 *                        to page 0 of size 20 if null.
-	 * @return Page of objects.
+	 * @return Page of notifications, which may be empty
 	 */
 	RestPageResponse<MLPNotification> getNotifications(RestPageRequest pageRequest);
 
 	/**
-	 * Creates a notification.
+	 * Creates a new notification and generates an ID if needed.
 	 * 
 	 * @param notification
 	 *                         Notification data. If the ID field is null a new
@@ -1377,7 +1383,7 @@ public interface ICommonDataServiceRestClient {
 	MLPNotification createNotification(MLPNotification notification) throws RestClientResponseException;
 
 	/**
-	 * Updates a notification.
+	 * Updates an existing notification with the supplied data.
 	 * 
 	 * @param notification
 	 *                         Instance to update
@@ -1387,8 +1393,9 @@ public interface ICommonDataServiceRestClient {
 	void updateNotification(MLPNotification notification) throws RestClientResponseException;
 
 	/**
-	 * Deletes a notification. A notification can be deleted if is not associated
-	 * with any user recipients; if associations remain the delete will fail.
+	 * Deletes the notification with the specified ID. A notification can be deleted
+	 * if is not associated with any user recipients; if associations remain the
+	 * delete will fail.
 	 * 
 	 * @param notificationId
 	 *                           ID of instance to delete
@@ -1398,7 +1405,9 @@ public interface ICommonDataServiceRestClient {
 	void deleteNotification(String notificationId) throws RestClientResponseException;
 
 	/**
-	 * Gets the count of user notifications not yet viewed.
+	 * Gets the count of unread active notifications for the specified user.
+	 * "Active" means the current date/time falls within the notification's begin
+	 * and end timestamps.
 	 * 
 	 * @param userId
 	 *                   User ID
@@ -1416,7 +1425,7 @@ public interface ICommonDataServiceRestClient {
 	 * @param pageRequest
 	 *                        Page index, page size and sort information; defaults
 	 *                        to page 0 of size 20 if null.
-	 * @return Page of objects.
+	 * @return Page of user notifications, which may be empty
 	 */
 	RestPageResponse<MLPUserNotification> getUserNotifications(String userId, RestPageRequest pageRequest);
 
@@ -1445,7 +1454,8 @@ public interface ICommonDataServiceRestClient {
 	void dropUserFromNotification(String notificationId, String userId) throws RestClientResponseException;
 
 	/**
-	 * Sets the indicator that the user has viewed the notification.
+	 * Records that the user viewed the notification by storing the current date and
+	 * time.
 	 * 
 	 * @param notificationId
 	 *                           notification ID
@@ -1457,11 +1467,12 @@ public interface ICommonDataServiceRestClient {
 	void setUserViewedNotification(String notificationId, String userId) throws RestClientResponseException;
 
 	/**
-	 * Gets the users with access to the specified solution.
+	 * Gets the users who were granted write access to the specified solution by
+	 * sharing; this does not include the creator of the solution.
 	 * 
 	 * @param solutionId
 	 *                       Solution ID
-	 * @return List of users
+	 * @return List of users, which may be empty
 	 */
 	List<MLPUser> getSolutionAccessUsers(String solutionId);
 
@@ -1474,7 +1485,7 @@ public interface ICommonDataServiceRestClient {
 	 * @param pageRequest
 	 *                        Page index, page size and sort information; defaults
 	 *                        to page 0 of size 20 if null.
-	 * @return Page of solutions
+	 * @return Page of solutions, which may be empty
 	 */
 	RestPageResponse<MLPSolution> getUserAccessSolutions(String userId, RestPageRequest pageRequest);
 
@@ -1503,13 +1514,13 @@ public interface ICommonDataServiceRestClient {
 	void dropSolutionUserAccess(String solutionId, String userId) throws RestClientResponseException;
 
 	/**
-	 * Updates the password for the specified active user.
+	 * Changes the user's password to the new value if the user exists, is active,
+	 * and the old password matches.
 	 * 
 	 * @param user
 	 *                          User object
 	 * @param changeRequest
-	 *                          Old and new passwords. Old password may be null, new
-	 *                          password must not be present.
+	 *                          Old and new passwords.
 	 * @throws RestClientResponseException
 	 *                                         If the old password does not match or
 	 *                                         the user is not active. Error message
@@ -1518,14 +1529,14 @@ public interface ICommonDataServiceRestClient {
 	void updatePassword(MLPUser user, MLPPasswordChangeRequest changeRequest) throws RestClientResponseException;
 
 	/**
-	 * Gets a page of deployments for the specified user.
+	 * Gets a page of solution deployments for the specified user.
 	 * 
 	 * @param userId
 	 *                        User ID
 	 * @param pageRequest
 	 *                        Page index, page size and sort information; defaults
 	 *                        to page 0 of size 20 if null.
-	 * @return Page of solution deployments
+	 * @return Page of solution deployments, which may be empty
 	 */
 	RestPageResponse<MLPSolutionDeployment> getUserDeployments(String userId, RestPageRequest pageRequest);
 
@@ -1539,7 +1550,7 @@ public interface ICommonDataServiceRestClient {
 	 * @param pageRequest
 	 *                        Page index, page size and sort information; defaults
 	 *                        to page 0 of size 20 if null.
-	 * @return Page of solution deployments
+	 * @return Page of solution deployments, which may be empty
 	 */
 	RestPageResponse<MLPSolutionDeployment> getSolutionDeployments(String solutionId, String revisionId,
 			RestPageRequest pageRequest);
@@ -1556,7 +1567,7 @@ public interface ICommonDataServiceRestClient {
 	 * @param pageRequest
 	 *                        Page index, page size and sort information; defaults
 	 *                        to page 0 of size 20 if null.
-	 * @return Page of solution deployments
+	 * @return Page of solution deployments, which may be empty
 	 */
 	RestPageResponse<MLPSolutionDeployment> getUserSolutionDeployments(String solutionId, String revisionId,
 			String userId, RestPageRequest pageRequest);
@@ -1593,16 +1604,16 @@ public interface ICommonDataServiceRestClient {
 	void deleteSolutionDeployment(MLPSolutionDeployment deployment) throws RestClientResponseException;
 
 	/**
-	 * Gets a page of site configuration entries.
+	 * Gets a page of site configuration objects.
 	 * 
 	 * @param pageRequest
 	 *                        Page request
-	 * @return Page of site configurations, possibly empty
+	 * @return Page of site configurations, which may be empty
 	 */
 	RestPageResponse<MLPSiteConfig> getSiteConfigs(RestPageRequest pageRequest);
 
 	/**
-	 * Gets one site configuration entry.
+	 * Gets the site configuration object for the specified key.
 	 * 
 	 * @param configKey
 	 *                      Config key
@@ -1611,7 +1622,7 @@ public interface ICommonDataServiceRestClient {
 	MLPSiteConfig getSiteConfig(String configKey);
 
 	/**
-	 * Creates a site configuration entry.
+	 * Creates a new site configuration object.
 	 * 
 	 * @param config
 	 *                   Instance to save
@@ -1622,7 +1633,7 @@ public interface ICommonDataServiceRestClient {
 	MLPSiteConfig createSiteConfig(MLPSiteConfig config) throws RestClientResponseException;
 
 	/**
-	 * Updates a site configuration entry.
+	 * Updates an existing site configuration object with the supplied data.
 	 * 
 	 * @param config
 	 *                   Instance to update
@@ -1632,7 +1643,7 @@ public interface ICommonDataServiceRestClient {
 	void updateSiteConfig(MLPSiteConfig config) throws RestClientResponseException;
 
 	/**
-	 * Deletes a site configuration entry.
+	 * Deletes a site configuration object.
 	 * 
 	 * @param configKey
 	 *                      key of instance to delete
@@ -1642,16 +1653,16 @@ public interface ICommonDataServiceRestClient {
 	void deleteSiteConfig(String configKey) throws RestClientResponseException;
 
 	/**
-	 * Gets a page of site content entries.
+	 * Gets a page of site content objects.
 	 * 
 	 * @param pageRequest
 	 *                        Page request
-	 * @return Page of site contents, possibly empty
+	 * @return Page of site contents, which may be empty
 	 */
 	RestPageResponse<MLPSiteContent> getSiteContents(RestPageRequest pageRequest);
 
 	/**
-	 * Gets one site content entry.
+	 * Gets the site content object for the specified key.
 	 * 
 	 * @param contentKey
 	 *                       Content key
@@ -1660,7 +1671,7 @@ public interface ICommonDataServiceRestClient {
 	MLPSiteContent getSiteContent(String contentKey);
 
 	/**
-	 * Creates a site content entry.
+	 * Creates a new site content object.
 	 * 
 	 * @param content
 	 *                    Instance to save
@@ -1681,7 +1692,7 @@ public interface ICommonDataServiceRestClient {
 	void updateSiteContent(MLPSiteContent content) throws RestClientResponseException;
 
 	/**
-	 * Deletes a site content entry.
+	 * Updates the site content object with the specified key.
 	 * 
 	 * @param contentKey
 	 *                       key of instance to delete
@@ -1703,7 +1714,7 @@ public interface ICommonDataServiceRestClient {
 	 * @param pageRequest
 	 *                        Page index, page size and sort information; defaults
 	 *                        to page 0 of size 20 if null.
-	 * @return Page of threads.
+	 * @return Page of threads, which may be empty
 	 */
 	RestPageResponse<MLPThread> getThreads(RestPageRequest pageRequest);
 
@@ -1728,7 +1739,7 @@ public interface ICommonDataServiceRestClient {
 	 * @param pageRequest
 	 *                        Page index, page size and sort information; defaults
 	 *                        to page 0 of size 20 if null.
-	 * @return Page of threads.
+	 * @return Page of threads, which may be empty
 	 */
 	RestPageResponse<MLPThread> getSolutionRevisionThreads(String solutionId, String revisionId,
 			RestPageRequest pageRequest);
@@ -1804,7 +1815,7 @@ public interface ICommonDataServiceRestClient {
 	 *                       Solution ID
 	 * @param revisionId
 	 *                       Revision ID
-	 * @return Number of comments for the specified IDs
+	 * @return Number of comments
 	 */
 	long getSolutionRevisionCommentCount(String solutionId, String revisionId);
 
@@ -1819,7 +1830,7 @@ public interface ICommonDataServiceRestClient {
 	 * @param pageRequest
 	 *                        Page index, page size and sort information; defaults
 	 *                        to page 0 of size 20 if null.
-	 * @return One page of comments for the specified IDs, sorted as specified.
+	 * @return A page of comments, which may be empty
 	 */
 	RestPageResponse<MLPComment> getSolutionRevisionComments(String solutionId, String revisionId,
 			RestPageRequest pageRequest);
@@ -1884,7 +1895,7 @@ public interface ICommonDataServiceRestClient {
 	 * 
 	 * @param taskId
 	 *                   Task ID
-	 * @return List of step results, which may be empty
+	 * @return List of task step results, which may be empty
 	 * 
 	 */
 	List<MLPTaskStepResult> getTaskStepResults(long taskId);
@@ -1905,7 +1916,7 @@ public interface ICommonDataServiceRestClient {
 	 * @param pageRequest
 	 *                            Page index, page size and sort information;
 	 *                            defaults to page 0 of size 20 if null.
-	 * @return Page of step result objects
+	 * @return Page of task step results, which may be empty
 	 */
 	RestPageResponse<MLPTaskStepResult> searchTaskStepResults(Map<String, Object> queryParameters, boolean isOr,
 			RestPageRequest pageRequest);
@@ -1979,7 +1990,7 @@ public interface ICommonDataServiceRestClient {
 	 * 
 	 * @param userId
 	 *                   User ID
-	 * @return List of user notification preferences for the specified user.
+	 * @return List of user notification preferences, which may be empty
 	 */
 	List<MLPUserNotifPref> getUserNotificationPreferences(String userId);
 
@@ -1997,7 +2008,7 @@ public interface ICommonDataServiceRestClient {
 	 * 
 	 * @param parentId
 	 *                     parent solution ID.
-	 * @return List of child solution IDs
+	 * @return List of child solution IDs, which may be empty
 	 */
 	List<String> getCompositeSolutionMembers(String parentId);
 
@@ -2026,49 +2037,48 @@ public interface ICommonDataServiceRestClient {
 	void dropCompositeSolutionMember(String parentId, String childId) throws RestClientResponseException;
 
 	/**
-	 * Gets the description for a revision and access type.
+	 * Gets the description for a revision and catalog.
 	 * 
 	 * @param revisionId
-	 *                           revision ID
-	 * @param accessTypeCode
-	 *                           access type code
+	 *                       revision ID
+	 * @param catalogId
+	 *                       catalog ID
 	 * @return MLPRevisionDescription
 	 */
-	MLPRevisionDescription getRevisionDescription(String revisionId, String accessTypeCode);
+	MLPRevCatDescription getRevCatDescription(String revisionId, String catalogId);
 
 	/**
-	 * Creates a description for a revision and access type.
+	 * Creates a description for a revision and catalog.
 	 * 
-	 * @param description
-	 *                        Revision description to create
-	 * @return MLPRevisionDescription
+	 * @param revCatDesc
+	 *                       Revision description to create
+	 * @return Description object for the specified revision and catalog
 	 * @throws RestClientResponseException
 	 *                                         Error message is in the response body
 	 */
-	MLPRevisionDescription createRevisionDescription(MLPRevisionDescription description)
-			throws RestClientResponseException;
+	MLPRevCatDescription createRevCatDescription(MLPRevCatDescription revCatDesc) throws RestClientResponseException;
 
 	/**
-	 * Updates an existing description for a revision and access type.
+	 * Updates an existing description for a revision and catalog.
 	 * 
-	 * @param description
-	 *                        Revision description to update
+	 * @param revCatDesc
+	 *                       Revision description to update
 	 * @throws RestClientResponseException
 	 *                                         Error message is in the response body
 	 */
-	void updateRevisionDescription(MLPRevisionDescription description) throws RestClientResponseException;
+	void updateRevCatDescription(MLPRevCatDescription revCatDesc) throws RestClientResponseException;
 
 	/**
-	 * Deletes a description for a revision and access type.
+	 * Deletes a description for a revision and catalog.
 	 * 
 	 * @param revisionId
-	 *                           revision ID
-	 * @param accessTypeCode
-	 *                           access type code
+	 *                       revision ID
+	 * @param catalogId
+	 *                       catalog ID
 	 * @throws RestClientResponseException
 	 *                                         Error message is in the response body
 	 */
-	void deleteRevisionDescription(String revisionId, String accessTypeCode) throws RestClientResponseException;
+	void deleteRevCatDescription(String revisionId, String catalogId) throws RestClientResponseException;
 
 	/**
 	 * Gets the document object with the specified ID.
@@ -2115,49 +2125,48 @@ public interface ICommonDataServiceRestClient {
 	void deleteDocument(String documentId) throws RestClientResponseException;
 
 	/**
-	 * Gets the documents for a solution revision at the specified access type.
+	 * Gets the documents for a solution revision in the specified catalog.
 	 * 
 	 * @param revisionId
-	 *                           revision ID
-	 * @param accessTypeCode
-	 *                           Access type code; e.g., "PB"
-	 * @return List of MLPDocument
+	 *                       revision ID
+	 * @param catalogId
+	 *                       Catalog ID
+	 * @return List of documents, which may be empty
 	 */
-	List<MLPDocument> getSolutionRevisionDocuments(String revisionId, String accessTypeCode);
+	List<MLPDocument> getRevisionCatalogDocuments(String revisionId, String catalogId);
 
 	/**
-	 * Adds a user document to a solution revision at the specified access type.
+	 * Adds a user document to a solution revision for the specified catalog.
 	 * 
 	 * @param revisionId
-	 *                           Revision ID
-	 * @param accessTypeCode
-	 *                           Access type code; e.g., "PB"
+	 *                       Revision ID
+	 * @param catalogId
+	 *                       Catalog ID
 	 * @param documentId
-	 *                           Document Id
+	 *                       Document Id
 	 * @throws RestClientResponseException
 	 *                                         Error message is in the response body
 	 */
-	void addSolutionRevisionDocument(String revisionId, String accessTypeCode, String documentId)
+	void addRevisionCatalogDocument(String revisionId, String catalogId, String documentId)
 			throws RestClientResponseException;
 
 	/**
-	 * Removes a user document from a solution revision at the specified access
-	 * type.
+	 * Removes a user document from a solution revision for the specified catalog.
 	 * 
 	 * @param revisionId
-	 *                           Revision ID
-	 * @param accessTypeCode
-	 *                           Access type code; e.g., "PB"
+	 *                       Revision ID
+	 * @param catalogId
+	 *                       Catalog ID
 	 * @param documentId
-	 *                           Document Id
+	 *                       Document Id
 	 * @throws RestClientResponseException
 	 *                                         Error message is in the response body
 	 */
-	void dropSolutionRevisionDocument(String revisionId, String accessTypeCode, String documentId)
+	void dropRevisionCatalogDocument(String revisionId, String catalogId, String documentId)
 			throws RestClientResponseException;
 
 	/**
-	 * Gets a publish request.
+	 * Gets the publish request with the specified ID.
 	 * 
 	 * @param requestId
 	 *                      Publish request ID
@@ -2171,12 +2180,13 @@ public interface ICommonDataServiceRestClient {
 	 * @param pageRequest
 	 *                        Page index, page size and sort information; defaults
 	 *                        to page 0 of size 20 if null.
-	 * @return Page of publish request objects.
+	 * @return Page of publish requests, which may be empty
 	 */
 	RestPageResponse<MLPPublishRequest> getPublishRequests(RestPageRequest pageRequest);
 
 	/**
-	 * Searches publish requests for exact matches.
+	 * Searches for publish requests with attributes matching the values specified
+	 * as query parameters.
 	 * 
 	 * @param queryParameters
 	 *                            Map of field-name, field-value pairs to use as
@@ -2191,7 +2201,7 @@ public interface ICommonDataServiceRestClient {
 	 * @param pageRequest
 	 *                            Page index, page size and sort information;
 	 *                            defaults to page 0 of size 20 if null.
-	 * @return Page of publish request objects
+	 * @return Page of publish requests, which may be empty
 	 */
 	RestPageResponse<MLPPublishRequest> searchPublishRequests(Map<String, Object> queryParameters, boolean isOr,
 			RestPageRequest pageRequest);
@@ -2209,7 +2219,7 @@ public interface ICommonDataServiceRestClient {
 	boolean isPublishRequestPending(String solutionId, String revisionId);
 
 	/**
-	 * Creates a publish request.
+	 * Creates a new publish request with a generated ID.
 	 * 
 	 * @param publishRequest
 	 *                           result Publish Request data.
@@ -2220,7 +2230,7 @@ public interface ICommonDataServiceRestClient {
 	MLPPublishRequest createPublishRequest(MLPPublishRequest publishRequest) throws RestClientResponseException;
 
 	/**
-	 * Updates a publish request.
+	 * Updates an existing publish request with the supplied data.
 	 * 
 	 * @param publishRequest
 	 *                           Publish Request data
@@ -2230,7 +2240,7 @@ public interface ICommonDataServiceRestClient {
 	void updatePublishRequest(MLPPublishRequest publishRequest) throws RestClientResponseException;
 
 	/**
-	 * Deletes a publish request.
+	 * Deletes the publish request with the specified ID.
 	 * 
 	 * @param publishRequestId
 	 *                             publishRequest ID
@@ -2248,7 +2258,11 @@ public interface ICommonDataServiceRestClient {
 	 *                   User ID
 	 * @throws RestClientResponseException
 	 *                                         Error message is in the response body
+	 * 
+	 * @deprecated User tags provided a simplistic way for users to indicate their
+	 *             interests, but will be removed in a future release.
 	 */
+	@Deprecated
 	void addUserTag(String userId, String tag) throws RestClientResponseException;
 
 	/**
@@ -2260,7 +2274,10 @@ public interface ICommonDataServiceRestClient {
 	 *                   User ID
 	 * @throws RestClientResponseException
 	 *                                         Error message is in the response body
+	 * @deprecated User tags provided a simplistic way for users to indicate their
+	 *             interests, but will be removed in a future release.
 	 */
+	@Deprecated
 	void dropUserTag(String userId, String tag) throws RestClientResponseException;
 
 	/**
@@ -2292,7 +2309,7 @@ public interface ICommonDataServiceRestClient {
 	 * @param pageRequest
 	 *                        Page index, page size and sort information; defaults
 	 *                        to page 0 of size 20 if null.
-	 * @return Page of catalogs, empty if none are found.
+	 * @return Page of catalogs, which may be empty
 	 */
 	RestPageResponse<MLPCatalog> getCatalogs(RestPageRequest pageRequest);
 
@@ -2313,13 +2330,13 @@ public interface ICommonDataServiceRestClient {
 	 * @param pageRequest
 	 *                            Page index, page size and sort information;
 	 *                            defaults to page 0 of size 20 if null.
-	 * @return Page of Catalog objects
+	 * @return Page of catalogs, which may be empty
 	 */
 	RestPageResponse<MLPCatalog> searchCatalogs(Map<String, Object> queryParameters, boolean isOr,
 			RestPageRequest pageRequest);
 
 	/**
-	 * Gets the catalog for the specified ID.
+	 * Gets the catalog with the specified ID.
 	 * 
 	 * @param catalogId
 	 *                      Catalog ID
@@ -2378,7 +2395,7 @@ public interface ICommonDataServiceRestClient {
 	 * @param pageRequest
 	 *                        Page index, page size and sort information; defaults
 	 *                        to page 0 of size 20 if null.
-	 * @return Page of solutions; empty if none are found
+	 * @return Page of solutions, which may be empty
 	 */
 	RestPageResponse<MLPSolution> getSolutionsInCatalogs(String[] catalogIds, RestPageRequest pageRequest);
 
@@ -2387,7 +2404,7 @@ public interface ICommonDataServiceRestClient {
 	 * 
 	 * @param solutionId
 	 *                       Solution ID
-	 * @return List of catalogs; empty if none are found
+	 * @return List of catalogs, which may be empty
 	 */
 	List<MLPCatalog> getSolutionCatalogs(String solutionId);
 
@@ -2430,7 +2447,7 @@ public interface ICommonDataServiceRestClient {
 	 * @param pageRequest
 	 *                        Page index, page size and sort information; defaults
 	 *                        to page 0 of size 20 if null.
-	 * @return Page of task objects.
+	 * @return Page of tasks, which may be empty
 	 */
 	RestPageResponse<MLPTask> getTasks(RestPageRequest pageRequest);
 
@@ -2449,7 +2466,7 @@ public interface ICommonDataServiceRestClient {
 	 * @param pageRequest
 	 *                            Page index, page size and sort information;
 	 *                            defaults to page 0 of size 20 if null.
-	 * @return Page of step result objects
+	 * @return Page of tasks, which may be empty
 	 */
 	RestPageResponse<MLPTask> searchTasks(Map<String, Object> queryParameters, boolean isOr,
 			RestPageRequest pageRequest);
@@ -2492,7 +2509,7 @@ public interface ICommonDataServiceRestClient {
 	 * @param pageRequest
 	 *                        Page index, page size and sort information; defaults
 	 *                        to page 0 of size 20 if null.
-	 * @return Page of RTU reference objects
+	 * @return Page of RTU references, which may be empty
 	 */
 	RestPageResponse<MLPRtuReference> getRtuReferences(RestPageRequest pageRequest);
 
@@ -2520,7 +2537,7 @@ public interface ICommonDataServiceRestClient {
 	void deleteRtuReference(MLPRtuReference rtuRef) throws RestClientResponseException;
 
 	/**
-	 * Gets the right to use record with the specified ID.
+	 * Gets the right to use object with the specified ID.
 	 * 
 	 * @param rtuId
 	 *                  Right to use ID
@@ -2529,17 +2546,18 @@ public interface ICommonDataServiceRestClient {
 	MLPRightToUse getRightToUse(Long rtuId);
 
 	/**
-	 * Gets a page of right-to-use records.
+	 * Gets a page of right-to-use objects.
 	 * 
 	 * @param pageRequest
 	 *                        Page index, page size and sort information; defaults
 	 *                        to page 0 of size 20 if null.
-	 * @return Page of objects.
+	 * @return Page of RTUs, which may be empty
 	 */
 	RestPageResponse<MLPRightToUse> getRightToUses(RestPageRequest pageRequest);
 
 	/**
-	 * Searches right-to-use records for exact matches.
+	 * Searches for right-to-use objects with attributes matching the values
+	 * specified as query parameters.
 	 * 
 	 * @param queryParameters
 	 *                            Map of field-name, field-value pairs to use as
@@ -2553,24 +2571,24 @@ public interface ICommonDataServiceRestClient {
 	 * @param pageRequest
 	 *                            Page index, page size and sort information;
 	 *                            defaults to page 0 of size 20 if null.
-	 * @return Page of RTU objects
+	 * @return Page of RTUs, which may be empty
 	 */
 	RestPageResponse<MLPRightToUse> searchRightToUses(Map<String, Object> queryParameters, boolean isOr,
 			RestPageRequest pageRequest);
 
 	/**
-	 * Gets a list of right-to-use records for the specified solution and user.
+	 * Gets a list of right-to-use objects for the specified solution and user.
 	 * 
 	 * @param solutionId
 	 *                       Solution ID
 	 * @param userId
 	 *                       User ID
-	 * @return List of objects
+	 * @return List of RTUs, which may be empty
 	 */
 	List<MLPRightToUse> getRightToUses(String solutionId, String userId);
 
 	/**
-	 * Creates a right-to-use record.
+	 * Creates a new RTU object and generates an ID.
 	 * 
 	 * @param rightToUse
 	 *                       Right to use data
@@ -2581,7 +2599,7 @@ public interface ICommonDataServiceRestClient {
 	MLPRightToUse createRightToUse(MLPRightToUse rightToUse) throws RestClientResponseException;
 
 	/**
-	 * Updates the specified right-to-use record.
+	 * Updates an existing RTU object with the supplied data.
 	 * 
 	 * @param rightToUse
 	 *                       Right to use data
@@ -2591,7 +2609,7 @@ public interface ICommonDataServiceRestClient {
 	void updateRightToUse(MLPRightToUse rightToUse) throws RestClientResponseException;
 
 	/**
-	 * Deletes the specified right-to-use record.
+	 * Deletes the RTU object with the specified ID.
 	 * 
 	 * @param rtuId
 	 *                  Right to use ID
@@ -2601,7 +2619,7 @@ public interface ICommonDataServiceRestClient {
 	void deleteRightToUse(Long rtuId) throws RestClientResponseException;
 
 	/**
-	 * Maps the specified reference to the specified right-to-use.
+	 * Adds the specified reference to the specified right-to-use object.
 	 * 
 	 * @param refId
 	 *                  Remote LUM system reference ID
@@ -2613,7 +2631,7 @@ public interface ICommonDataServiceRestClient {
 	void addRefToRtu(String refId, Long rtuId) throws RestClientResponseException;
 
 	/**
-	 * Unmaps the specified reference from the specified right-to-use.
+	 * Removes the specified reference from the specified right-to-use object.
 	 * 
 	 * @param refId
 	 *                  Remote LUM system reference ID
@@ -2625,16 +2643,16 @@ public interface ICommonDataServiceRestClient {
 	void dropRefFromRtu(String refId, Long rtuId) throws RestClientResponseException;
 
 	/**
-	 * Gets a list of users mapped to the specified right-to-use record.
+	 * Gets all users mapped to the specified right-to-use object.
 	 * 
 	 * @param rtuId
 	 *                  Right-to-Use ID
-	 * @return List of MLPUser objects, which may be empty
+	 * @return List of users, which may be empty
 	 */
 	List<MLPUser> getRtuUsers(long rtuId);
 
 	/**
-	 * Maps the specified user to the specified right-to-use.
+	 * Adds the specified user to the specified right-to-use object.
 	 * 
 	 * @param userId
 	 *                   User ID
@@ -2646,7 +2664,7 @@ public interface ICommonDataServiceRestClient {
 	void addUserToRtu(String userId, Long rtuId) throws RestClientResponseException;
 
 	/**
-	 * Unmaps the specified user from the specified right-to-use.
+	 * Removes the specified user from the specified right-to-use object.
 	 * 
 	 * @param userId
 	 *                   User ID
@@ -2663,7 +2681,7 @@ public interface ICommonDataServiceRestClient {
 	 * 
 	 * @param peerId
 	 *                   Peer ID
-	 * @return List of String
+	 * @return List of catalog IDs, which may be empty
 	 */
 	List<String> getPeerAccessCatalogIds(String peerId);
 
@@ -2698,7 +2716,7 @@ public interface ICommonDataServiceRestClient {
 	 * 
 	 * @param userId
 	 *                   User ID
-	 * @return List of String
+	 * @return List of catalog IDs, which may be empty
 	 */
 	List<String> getUserFavoriteCatalogIds(String userId);
 
@@ -2732,12 +2750,13 @@ public interface ICommonDataServiceRestClient {
 	 * @param pageRequest
 	 *                        Page index, page size and sort information; defaults
 	 *                        to page 0 of size 20 if null.
-	 * @return Page of workbench project objects.
+	 * @return Page of workbench projects, which may be empty
 	 */
 	RestPageResponse<MLPProject> getProjects(RestPageRequest pageRequest);
 
 	/**
-	 * Searches workbench project records for exact matches.
+	 * Searches for projects with attributes matching the values specified as query
+	 * parameters.
 	 * 
 	 * @param queryParameters
 	 *                            Map of field-name, field-value pairs to use as
@@ -2752,7 +2771,7 @@ public interface ICommonDataServiceRestClient {
 	 * @param pageRequest
 	 *                            Page index, page size and sort information;
 	 *                            defaults to page 0 of size 20 if null.
-	 * @return Page of Project objects
+	 * @return Page of workbench projects, which may be empty
 	 */
 	RestPageResponse<MLPProject> searchProjects(Map<String, Object> queryParameters, boolean isOr,
 			RestPageRequest pageRequest);
@@ -2767,7 +2786,7 @@ public interface ICommonDataServiceRestClient {
 	MLPProject getProject(String projectId);
 
 	/**
-	 * Creates a workbench project.
+	 * Creates a new project and generates an ID if needed.
 	 * 
 	 * @param project
 	 *                    Project data. If the ID field is null a new value is
@@ -2778,7 +2797,7 @@ public interface ICommonDataServiceRestClient {
 	MLPProject createProject(MLPProject project);
 
 	/**
-	 * Updates a workbench project.
+	 * Updates an existing project with the supplied data.
 	 * 
 	 * @param project
 	 *                    Project data
@@ -2786,9 +2805,9 @@ public interface ICommonDataServiceRestClient {
 	void updateProject(MLPProject project);
 
 	/**
-	 * Deletes a workbench project. Cascades the delete; e.g., removes the
-	 * association with any notebooks, pipelines, users, etc. Answers bad request if
-	 * the ID is not known.
+	 * Deletes the project with the specified ID. Cascades the delete; e.g., removes
+	 * the association with any notebooks, pipelines, users, etc. Answers bad
+	 * request if the ID is not known.
 	 * 
 	 * @param projectId
 	 *                      project ID
@@ -2840,7 +2859,7 @@ public interface ICommonDataServiceRestClient {
 	 * 
 	 * @param projectId
 	 *                      Project ID.
-	 * @return List of Notebook objects; empty if none are found
+	 * @return List of notebooks, which may be empty
 	 */
 	List<MLPNotebook> getProjectNotebooks(String projectId);
 
@@ -2849,7 +2868,7 @@ public interface ICommonDataServiceRestClient {
 	 * 
 	 * @param notebookId
 	 *                       Notebook ID.
-	 * @return List of Project objects; empty if none are found
+	 * @return List of projects, which may be empty
 	 */
 	List<MLPProject> getNotebookProjects(String notebookId);
 
@@ -2858,7 +2877,7 @@ public interface ICommonDataServiceRestClient {
 	 * 
 	 * @param projectId
 	 *                      Project ID.
-	 * @return List of Pipeline objects; empty if none are found
+	 * @return List of pipelines, which may be empty
 	 */
 	List<MLPPipeline> getProjectPipelines(String projectId);
 
@@ -2867,7 +2886,7 @@ public interface ICommonDataServiceRestClient {
 	 * 
 	 * @param pipelineId
 	 *                       Pipeline ID.
-	 * @return List of Project objects; empty if none are found
+	 * @return List of projects, which may be empty
 	 */
 	List<MLPProject> getPipelineProjects(String pipelineId);
 
@@ -2877,12 +2896,13 @@ public interface ICommonDataServiceRestClient {
 	 * @param pageRequest
 	 *                        Page index, page size and sort information; defaults
 	 *                        to page 0 of size 20 if null.
-	 * @return Page of workbench notebook objects.
+	 * @return Page of workbench notebooks, which may be empty
 	 */
 	RestPageResponse<MLPNotebook> getNotebooks(RestPageRequest pageRequest);
 
 	/**
-	 * Searches workbench notebook records for exact matches.
+	 * Searches for notebooks with attributes matching the values specified as query
+	 * parameters.
 	 * 
 	 * @param queryParameters
 	 *                            Map of field-name, field-value pairs to use as
@@ -2897,7 +2917,7 @@ public interface ICommonDataServiceRestClient {
 	 * @param pageRequest
 	 *                            Page index, page size and sort information;
 	 *                            defaults to page 0 of size 20 if null.
-	 * @return Page of Notebook objects
+	 * @return Page of workbench notebooks, which may be empty
 	 */
 	RestPageResponse<MLPNotebook> searchNotebooks(Map<String, Object> queryParameters, boolean isOr,
 			RestPageRequest pageRequest);
@@ -2912,7 +2932,7 @@ public interface ICommonDataServiceRestClient {
 	MLPNotebook getNotebook(String notebookId);
 
 	/**
-	 * Creates a workbench notebook.
+	 * Creates a new notebook and generates an ID if needed.
 	 * 
 	 * @param notebook
 	 *                     Notebook data. If the ID field is null a new value is
@@ -2923,7 +2943,7 @@ public interface ICommonDataServiceRestClient {
 	MLPNotebook createNotebook(MLPNotebook notebook);
 
 	/**
-	 * Updates a workbench notebook.
+	 * Updates an existing notebook with the supplied data.
 	 * 
 	 * @param notebook
 	 *                     Notebook data
@@ -2931,9 +2951,9 @@ public interface ICommonDataServiceRestClient {
 	void updateNotebook(MLPNotebook notebook);
 
 	/**
-	 * Deletes a workbench notebook. Cascades the delete; e.g., removes the
-	 * association with any projects, users, etc. Answers bad request if the ID is
-	 * not known.
+	 * Deletes the notebook with the specified ID. Cascades the delete; e.g.,
+	 * removes the association with any projects, users, etc. Answers bad request if
+	 * the ID is not known.
 	 * 
 	 * @param notebookId
 	 *                       notebook ID
@@ -2946,12 +2966,13 @@ public interface ICommonDataServiceRestClient {
 	 * @param pageRequest
 	 *                        Page index, page size and sort information; defaults
 	 *                        to page 0 of size 20 if null.
-	 * @return Page of workbench pipeline objects.
+	 * @return Page of workbench pipelines, which may be empty
 	 */
 	RestPageResponse<MLPPipeline> getPipelines(RestPageRequest pageRequest);
 
 	/**
-	 * Searches workbench pipeline records for exact matches.
+	 * Searches for pipelines with attributes matching the values specified as query
+	 * parameters.
 	 * 
 	 * @param queryParameters
 	 *                            Map of field-name, field-value pairs to use as
@@ -2966,7 +2987,7 @@ public interface ICommonDataServiceRestClient {
 	 * @param pageRequest
 	 *                            Page index, page size and sort information;
 	 *                            defaults to page 0 of size 20 if null.
-	 * @return Page of Pipeline objects
+	 * @return Page of workbench pipelines, which may be empty
 	 */
 	RestPageResponse<MLPPipeline> searchPipelines(Map<String, Object> queryParameters, boolean isOr,
 			RestPageRequest pageRequest);
@@ -2981,7 +3002,7 @@ public interface ICommonDataServiceRestClient {
 	MLPPipeline getPipeline(String pipelineId);
 
 	/**
-	 * Creates a workbench pipeline.
+	 * Creates a new pipeline and generates an ID if needed.
 	 * 
 	 * @param pipeline
 	 *                     Pipeline data. If the ID field is null a new value is
@@ -2992,7 +3013,7 @@ public interface ICommonDataServiceRestClient {
 	MLPPipeline createPipeline(MLPPipeline pipeline);
 
 	/**
-	 * Updates a workbench pipeline.
+	 * Updates an existing pipeline with the supplied data.
 	 * 
 	 * @param pipeline
 	 *                     Pipeline data
@@ -3000,9 +3021,9 @@ public interface ICommonDataServiceRestClient {
 	void updatePipeline(MLPPipeline pipeline);
 
 	/**
-	 * Deletes a workbench pipeline. Cascades the delete; e.g., removes the
-	 * association with any projects, users, etc. Answers bad request if the ID is
-	 * not known.
+	 * Deletes the pipeline with the specified ID. Cascades the delete; e.g.,
+	 * removes the association with any projects, users, etc. Answers bad request if
+	 * the ID is not known.
 	 * 
 	 * @param pipelineId
 	 *                       pipeline ID

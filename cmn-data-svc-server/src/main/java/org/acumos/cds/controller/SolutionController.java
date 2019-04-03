@@ -35,8 +35,8 @@ import org.acumos.cds.CCDSConstants;
 import org.acumos.cds.CodeNameType;
 import org.acumos.cds.MLPResponse;
 import org.acumos.cds.domain.MLPCompSolMap;
+import org.acumos.cds.domain.MLPRevCatDocMap;
 import org.acumos.cds.domain.MLPSolRevArtMap;
-import org.acumos.cds.domain.MLPSolRevDocMap;
 import org.acumos.cds.domain.MLPSolTagMap;
 import org.acumos.cds.domain.MLPSolUserAccMap;
 import org.acumos.cds.domain.MLPSolution;
@@ -52,9 +52,9 @@ import org.acumos.cds.domain.MLPUser;
 import org.acumos.cds.repository.CatSolMapRepository;
 import org.acumos.cds.repository.CompSolMapRepository;
 import org.acumos.cds.repository.DocumentRepository;
-import org.acumos.cds.repository.RevisionDescriptionRepository;
+import org.acumos.cds.repository.RevCatDescriptionRepository;
+import org.acumos.cds.repository.RevCatDocMapRepository;
 import org.acumos.cds.repository.SolRevArtMapRepository;
-import org.acumos.cds.repository.SolRevDocMapRepository;
 import org.acumos.cds.repository.SolTagMapRepository;
 import org.acumos.cds.repository.SolUserAccMapRepository;
 import org.acumos.cds.repository.SolutionDeploymentRepository;
@@ -122,11 +122,11 @@ public class SolutionController extends AbstractController {
 	@Autowired
 	private DocumentRepository documentRepository;
 	@Autowired
-	private RevisionDescriptionRepository revisionDescRepository;
+	private RevCatDescriptionRepository revisionDescRepository;
 	@Autowired
 	private SolRevArtMapRepository solRevArtMapRepository;
 	@Autowired
-	private SolRevDocMapRepository solRevDocMapRepository;
+	private RevCatDocMapRepository revCatDocMapRepository;
 	@Autowired
 	private SolTagMapRepository solTagMapRepository;
 	@Autowired
@@ -601,10 +601,10 @@ public class SolutionController extends AbstractController {
 		// Get the list of artifacts associated with this revision
 		Iterable<MLPSolRevArtMap> arts = solRevArtMapRepository.findByRevisionId(revisionId);
 		// Get the list of documents associated with this revision
-		Iterable<MLPSolRevDocMap> docs = solRevDocMapRepository.findByRevisionId(revisionId);
+		Iterable<MLPRevCatDocMap> docs = revCatDocMapRepository.findByRevisionId(revisionId);
 		solRevArtMapRepository.deleteByRevisionId(revisionId);
 		revisionDescRepository.deleteByRevisionId(revisionId);
-		solRevDocMapRepository.deleteByRevisionId(revisionId);
+		revCatDocMapRepository.deleteByRevisionId(revisionId);
 		solutionRevisionRepository.deleteById(revisionId);
 		// If an artifact is not associated with any other revisions, delete it.
 		for (MLPSolRevArtMap artMap : arts) {
@@ -613,8 +613,8 @@ public class SolutionController extends AbstractController {
 				artifactService.deleteArtifact(artMap.getArtifactId());
 		}
 		// If a document is not associated with any other revisions, delete it.
-		for (MLPSolRevDocMap docMap : docs) {
-			Iterable<MLPSolRevDocMap> revs = solRevDocMapRepository.findByDocumentId(docMap.getDocumentId());
+		for (MLPRevCatDocMap docMap : docs) {
+			Iterable<MLPRevCatDocMap> revs = revCatDocMapRepository.findByDocumentId(docMap.getDocumentId());
 			if (!revs.iterator().hasNext())
 				documentRepository.deleteById(docMap.getDocumentId());
 		}
