@@ -37,13 +37,13 @@ import org.acumos.cds.domain.MLPPeerSubscription;
 import org.acumos.cds.domain.MLPPipeline;
 import org.acumos.cds.domain.MLPProject;
 import org.acumos.cds.domain.MLPPublishRequest;
-import org.acumos.cds.domain.MLPRevisionDescription;
 import org.acumos.cds.domain.MLPRightToUse;
 import org.acumos.cds.domain.MLPRole;
 import org.acumos.cds.domain.MLPRoleFunction;
 import org.acumos.cds.domain.MLPRtuReference;
 import org.acumos.cds.domain.MLPSiteConfig;
 import org.acumos.cds.domain.MLPSiteContent;
+import org.acumos.cds.domain.MLPRevCatDescription;
 import org.acumos.cds.domain.MLPSolution;
 import org.acumos.cds.domain.MLPSolutionDeployment;
 import org.acumos.cds.domain.MLPSolutionDownload;
@@ -2031,49 +2031,48 @@ public interface ICommonDataServiceRestClient {
 	void dropCompositeSolutionMember(String parentId, String childId) throws RestClientResponseException;
 
 	/**
-	 * Gets the description for a revision and access type.
+	 * Gets the description for a revision and catalog.
 	 * 
 	 * @param revisionId
-	 *                           revision ID
-	 * @param accessTypeCode
-	 *                           access type code
+	 *                       revision ID
+	 * @param catalogId
+	 *                       catalog ID
 	 * @return MLPRevisionDescription
 	 */
-	MLPRevisionDescription getRevisionDescription(String revisionId, String accessTypeCode);
+	MLPRevCatDescription getRevCatDescription(String revisionId, String catalogId);
 
 	/**
-	 * Creates a description for a revision and access type.
+	 * Creates a description for a revision and catalog.
 	 * 
-	 * @param description
-	 *                        Revision description to create
-	 * @return MLPRevisionDescription
+	 * @param revCatDesc
+	 *                       Revision description to create
+	 * @return Description object for the specified revision and catalog
 	 * @throws RestClientResponseException
 	 *                                         Error message is in the response body
 	 */
-	MLPRevisionDescription createRevisionDescription(MLPRevisionDescription description)
-			throws RestClientResponseException;
+	MLPRevCatDescription createRevCatDescription(MLPRevCatDescription revCatDesc) throws RestClientResponseException;
 
 	/**
-	 * Updates an existing description for a revision and access type.
+	 * Updates an existing description for a revision and catalog.
 	 * 
-	 * @param description
-	 *                        Revision description to update
+	 * @param revCatDesc
+	 *                       Revision description to update
 	 * @throws RestClientResponseException
 	 *                                         Error message is in the response body
 	 */
-	void updateRevisionDescription(MLPRevisionDescription description) throws RestClientResponseException;
+	void updateRevCatDescription(MLPRevCatDescription revCatDesc) throws RestClientResponseException;
 
 	/**
-	 * Deletes a description for a revision and access type.
+	 * Deletes a description for a revision and catalog.
 	 * 
 	 * @param revisionId
-	 *                           revision ID
-	 * @param accessTypeCode
-	 *                           access type code
+	 *                       revision ID
+	 * @param catalogId
+	 *                       catalog ID
 	 * @throws RestClientResponseException
 	 *                                         Error message is in the response body
 	 */
-	void deleteRevisionDescription(String revisionId, String accessTypeCode) throws RestClientResponseException;
+	void deleteRevCatDescription(String revisionId, String catalogId) throws RestClientResponseException;
 
 	/**
 	 * Gets the document with the specified ID. This is usually metadata about a
@@ -2123,45 +2122,44 @@ public interface ICommonDataServiceRestClient {
 	void deleteDocument(String documentId) throws RestClientResponseException;
 
 	/**
-	 * Gets the documents for a solution revision at the specified access type.
+	 * Gets the documents for a solution revision in the specified catalog.
 	 * 
 	 * @param revisionId
-	 *                           revision ID
-	 * @param accessTypeCode
-	 *                           Access type code; e.g., "PB"
+	 *                       revision ID
+	 * @param catalogId
+	 *                       Catalog ID
 	 * @return List of MLPDocument
 	 */
-	List<MLPDocument> getSolutionRevisionDocuments(String revisionId, String accessTypeCode);
+	List<MLPDocument> getRevisionCatalogDocuments(String revisionId, String catalogId);
 
 	/**
-	 * Adds a user document to a solution revision at the specified access type.
+	 * Adds a user document to a solution revision for the specified catalog.
 	 * 
 	 * @param revisionId
-	 *                           Revision ID
-	 * @param accessTypeCode
-	 *                           Access type code; e.g., "PB"
+	 *                       Revision ID
+	 * @param catalogId
+	 *                       Catalog ID
 	 * @param documentId
-	 *                           Document Id
+	 *                       Document Id
 	 * @throws RestClientResponseException
 	 *                                         Error message is in the response body
 	 */
-	void addSolutionRevisionDocument(String revisionId, String accessTypeCode, String documentId)
+	void addRevisionCatalogDocument(String revisionId, String catalogId, String documentId)
 			throws RestClientResponseException;
 
 	/**
-	 * Removes a user document from a solution revision at the specified access
-	 * type.
+	 * Removes a user document from a solution revision for the specified catalog.
 	 * 
 	 * @param revisionId
-	 *                           Revision ID
-	 * @param accessTypeCode
-	 *                           Access type code; e.g., "PB"
+	 *                       Revision ID
+	 * @param catalogId
+	 *                       Catalog ID
 	 * @param documentId
-	 *                           Document Id
+	 *                       Document Id
 	 * @throws RestClientResponseException
 	 *                                         Error message is in the response body
 	 */
-	void dropSolutionRevisionDocument(String revisionId, String accessTypeCode, String documentId)
+	void dropRevisionCatalogDocument(String revisionId, String catalogId, String documentId)
 			throws RestClientResponseException;
 
 	/**
