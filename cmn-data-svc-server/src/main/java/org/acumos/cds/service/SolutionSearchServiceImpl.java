@@ -35,8 +35,8 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.acumos.cds.domain.MLPCatalog_;
-import org.acumos.cds.domain.MLPRevisionDescription;
-import org.acumos.cds.domain.MLPRevisionDescription_;
+import org.acumos.cds.domain.MLPRevCatDescription;
+import org.acumos.cds.domain.MLPRevCatDescription_;
 import org.acumos.cds.domain.MLPSolution;
 import org.acumos.cds.domain.MLPSolutionFOM;
 import org.acumos.cds.domain.MLPSolutionFOM_;
@@ -380,12 +380,12 @@ public class SolutionSearchServiceImpl extends AbstractSearchServiceImpl impleme
 			}
 			if (descKeywords != null && descKeywords.length > 0) {
 				// Descriptions are optional so use outer join
-				Join<MLPSolutionRevisionFOM, MLPRevisionDescription> revDesc = revisionFom
+				Join<MLPSolutionRevisionFOM, MLPRevCatDescription> revDesc = revisionFom
 						.join(MLPSolutionRevisionFOM_.descriptions, JoinType.LEFT);
 				Predicate or = cb.disjunction();
 				for (String s : descKeywords)
 					or.getExpressions()
-							.add(cb.like(revDesc.<String>get(MLPRevisionDescription_.description), '%' + s + '%'));
+							.add(cb.like(revDesc.<String>get(MLPRevCatDescription_.description), '%' + s + '%'));
 				predicates.add(or);
 			}
 		}
@@ -471,12 +471,11 @@ public class SolutionSearchServiceImpl extends AbstractSearchServiceImpl impleme
 			// revisions are not really optional, a solution without them is useless
 			Join<MLPSolutionFOM, MLPSolutionRevisionFOM> revisionFom = solutionFom.join(MLPSolutionFOM_.revisions);
 			// but descriptions are optional so use left join
-			Join<MLPSolutionRevisionFOM, MLPRevisionDescription> revDesc = revisionFom
+			Join<MLPSolutionRevisionFOM, MLPRevCatDescription> revDesc = revisionFom
 					.join(MLPSolutionRevisionFOM_.descriptions, JoinType.LEFT);
 			Predicate or = cb.disjunction();
 			for (String s : descKeywords)
-				or.getExpressions()
-						.add(cb.like(revDesc.<String>get(MLPRevisionDescription_.description), '%' + s + '%'));
+				or.getExpressions().add(cb.like(revDesc.<String>get(MLPRevCatDescription_.description), '%' + s + '%'));
 			predicates.add(or);
 		}
 
