@@ -16,6 +16,24 @@
       "revId": "270a88390c9b9f2cf00f59dc3bf30bc40713e3f1",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a86fc0a0_12eed67e",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPRevCatDescription.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-04T20:20:45Z",
+      "side": 1,
+      "message": "Yes the whole point of this table entry is to carry the description.  If there\u0027s no description, then no need for an entry here!",
+      "parentUuid": "b960f0e1_8e20790a",
+      "revId": "270a88390c9b9f2cf00f59dc3bf30bc40713e3f1",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
