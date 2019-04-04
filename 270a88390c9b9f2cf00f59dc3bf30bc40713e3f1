@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b960f0e1_8e20790a",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPRevCatDescription.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2019-04-04T20:17:55Z",
+      "side": 1,
+      "message": "Is description needed to be a required field?",
+      "revId": "270a88390c9b9f2cf00f59dc3bf30bc40713e3f1",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
