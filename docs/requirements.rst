@@ -68,9 +68,8 @@ These may be configured differently in a specific installation. The value sets c
 Access Type
 ^^^^^^^^^^^
 
-| OR "Organization"
 | PB "Public"
-| PR "Private"
+| RS "Restricted"
 
 Artifact Type
 ^^^^^^^^^^^^^
@@ -243,7 +242,7 @@ A catalog is a collection of solutions to assist with federation.
 Attributes:
 
 * Catalog ID
-* Access type code
+* Access type code (see list above)
 * Self publish flag
 * Name (intended to be globally unique)
 * Description
@@ -354,18 +353,6 @@ Attributes:
 * Contacts (a pair, one as primary and another as backup)
 * Created timestamp
 * Modified timestamp
-
-
-Peer Group
-^^^^^^^^^^^
-
-Defines a group that may be assigned to peers to facilitate access control. Only seen locally, not federated.
-
-Attributes:
-
-* Group ID
-* Name (must be unique among all peer groups)
-* Description (additional textual information about this group)
 
 
 Pipeline
@@ -584,18 +571,6 @@ Attributes:
 * Deployment status. This uses the Deployment Status Code defined above.
 
 
-Solution Group
-^^^^^^^^^^^^^^
-
-Defines a group that gathers solutions to facilitate access control. Only seen locally, not federated.
-
-Attributes:
-
-* Group ID
-* Name (unique among all solution groups)
-* Description (additional textual information about this group)
-
-
 Solution Revision
 ^^^^^^^^^^^^^^^^^
 
@@ -614,10 +589,6 @@ Attributes:
 * Solution ID
 
      -   Represents the solution, allows multiple revisions per solution
-
-* Access type code
-
-     - This refers to the visibility of the revision. It uses values defined by Access Type Code (above).
 
 * Validation status code
 
@@ -1018,55 +989,6 @@ Attributes:
 * Notification ID
 * User ID
 * Viewed date and time
-
-
-Relationship Peer - Peer Group for Membership
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Represents the membership of peers in a peer access group.
-
-Attributes:
-
-* Peer Group ID
-* Peer ID
-* Create timestamp
-
-
-Relationship Solution - Solution Group for Membership
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Represents the membership of solutions in a solution access group.
-
-Attributes:
-
-* Solution Group ID
-* Solution ID
-* Create timestamp
-
-
-Relationship Solution Group - Peer Group for Access
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Represents granting of access to all solutions in the solution group by peers in the peer group.
-
-Attributes:
-
-* Solution Group ID
-* Peer Group ID
-* Active flag (yes/no)
-* Create timestamp
-
-
-Relationship Peer Group - Peer Group for Access
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Represents granting of access to resource peers for principal peers.
-
-Attributes:
-
-* Principal peer group ID
-* Resource peer group ID
-* Create timestamp
 
 
 Relationship Project - Notebook
