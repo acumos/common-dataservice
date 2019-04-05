@@ -190,9 +190,7 @@ These value sets can be changed by modifying the properties file.  Each entry ha
 an associated name.  Continuing with the same example, the complete access type value set
 is defined by the following configuration entries::
 
-    codeName.accessType.OR=Organization
     codeName.accessType.PB=Public
-    codeName.accessType.PR=Private
     codeName.accessType.RS=Restricted
 
 Perform these steps to define a new value set:
