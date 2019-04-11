@@ -34,6 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.acumos.cds.CCDSConstants;
 import org.acumos.cds.CodeNameType;
 import org.acumos.cds.MLPResponse;
+import org.acumos.cds.domain.MLPCatSolMap;
 import org.acumos.cds.domain.MLPCompSolMap;
 import org.acumos.cds.domain.MLPRevCatDocMap;
 import org.acumos.cds.domain.MLPSolRevArtMap;
@@ -52,6 +53,7 @@ import org.acumos.cds.domain.MLPUser;
 import org.acumos.cds.repository.CatSolMapRepository;
 import org.acumos.cds.repository.CompSolMapRepository;
 import org.acumos.cds.repository.DocumentRepository;
+import org.acumos.cds.repository.PeerCatAccMapRepository;
 import org.acumos.cds.repository.RevCatDescriptionRepository;
 import org.acumos.cds.repository.RevCatDocMapRepository;
 import org.acumos.cds.repository.SolRevArtMapRepository;
@@ -121,6 +123,8 @@ public class SolutionController extends AbstractController {
 	private CompSolMapRepository compSolMapRepository;
 	@Autowired
 	private DocumentRepository documentRepository;
+	@Autowired
+	private PeerCatAccMapRepository peerCatAccMapRepository;
 	@Autowired
 	private RevCatDescriptionRepository revisionDescRepository;
 	@Autowired
@@ -287,8 +291,8 @@ public class SolutionController extends AbstractController {
 		}
 	}
 
-	@ApiOperation(value = "Finds solutions matching the specified attribute values and/or child attribute values " //
-			+ " with flexible handling of tags to allow all/any matches. "
+	@ApiOperation(value = "Finds published solutions matching the specified attribute values and/or  " //
+			+ " child attribute values with flexible handling of tags to allow all/any matches. "
 			+ " Checks multiple fields for the supplied keywords, including ID, name, description etc.", //
 			response = MLPSolution.class, responseContainer = "Page")
 	@ApiPageable
@@ -310,15 +314,15 @@ public class SolutionController extends AbstractController {
 			@ApiParam(value = "Catalog IDs", allowMultiple = true) //
 			@RequestParam(name = CCDSConstants.SEARCH_CATALOG, required = false) String[] catalogIds, //
 			Pageable pageRequest, HttpServletResponse response) {
-		logger.debug("findPortalSolutionsByKwAndTags: active {} kw {}", active, kws);
+		logger.debug("findPublishedSolutionsByKwAndTags: active {} kw {}", active, kws);
 		try {
 			return solutionSearchService.findPortalSolutionsByKwAndTags(kws, active, userIds, modelTypeCodes, allTags,
 					anyTags, catalogIds, pageRequest);
 		} catch (Exception ex) {
-			logger.error("findPortalSolutionsByKwAndTags failed", ex);
+			logger.error("findPublishedSolutionsByKwAndTags failed", ex);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST,
-					ex.getCause() != null ? ex.getCause().getMessage() : "findPortalSolutionsByKwAndTags failed", ex);
+					ex.getCause() != null ? ex.getCause().getMessage() : "findPublishedSolutionsByKwAndTags failed", ex);
 		}
 	}
 
@@ -860,6 +864,42 @@ public class SolutionController extends AbstractController {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "deleteSolutionRating failed", ex);
 		}
+	}
+
+	@ApiOperation(value = "Checks if the specified peer can read the specified solution. Returns non-zero if yes, zero if no.", //
+			response = CountTransport.class)
+	@RequestMapping(value = "/{solutionId}/" + CCDSConstants.PEER_PATH + "/{peerId}/"
+			+ CCDSConstants.ACCESS_PATH, method = RequestMethod.GET)
+	public CountTransport checkPeerAccessToSolution(@PathVariable("peerId") String peerId,
+			@PathVariable("solutionId") String solutionId) {
+		logger.debug("checkPeerAccessToSolution peerId {} solutionId {}", peerId, solutionId);
+		// The common case is that the solution is in a public catalog
+		long pubCount = catSolMapRepository.countCatalogsByAccessAndSolution("PB", solutionId);
+		if (pubCount > 0)
+			return new CountTransport(pubCount);
+		long resCount = peerCatAccMapRepository.countCatalogsByPeerAccessAndSolution(peerId, solutionId);
+		return new CountTransport(resCount);
+	}
+
+
+	@ApiOperation(value = "Checks if the specified user can read the specified solution. Returns non-zero if yes, zero if no.", //
+			response = CountTransport.class)
+	@RequestMapping(value = "/{solutionId}/" + CCDSConstants.USER_PATH + "/{userId}/"
+			+ CCDSConstants.ACCESS_PATH, method = RequestMethod.GET)
+	public CountTransport checkUserAccessToSolution(@PathVariable("solutionId") String solutionId,
+			@PathVariable("userId") String userId) {
+		logger.debug("checkUserAccessToSolution userId {} solutionId {}", userId, solutionId);
+		Iterable<MLPCatSolMap> maps = catSolMapRepository.findBySolutionId(solutionId);
+		if (maps.iterator().hasNext())
+			return new CountTransport(1L);
+		Optional<MLPSolution> sol = solutionRepository.findById(solutionId);
+		if (sol.isPresent() && sol.get().getUserId().equals(userId))
+			return new CountTransport(1L);
+		Optional<MLPSolUserAccMap> map = solUserAccMapRepository
+				.findById(new MLPSolUserAccMap.SolUserAccessMapPK(solutionId, userId));
+		if (map.isPresent())
+			return new CountTransport(1L);
+		return new CountTransport(0L);
 	}
 
 	@ApiOperation(value = "Gets the list of users who were granted write access to the specified solution.", response = MLPUser.class, responseContainer = "List")

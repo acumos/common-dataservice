@@ -1493,6 +1493,25 @@ public interface ICommonDataServiceRestClient {
 	RestPageResponse<MLPSolution> getUserAccessSolutions(String userId, RestPageRequest pageRequest);
 
 	/**
+	 * Checks if the specified user can read the specified solution. Any of the
+	 * following conditions grant read permission:
+	 * <OL>
+	 * <LI>Solution is in a catalog</LI>
+	 * <LI>User is the creator</LI>
+	 * <LI>User has been granted access</LI>
+	 * </OL>
+	 * 
+	 * @param userId
+	 *                       User ID
+	 * @param solutionId
+	 *                       Solution ID
+	 * @return true if the user can read the solution, otherwise false
+	 * @throws RestClientResponseException
+	 *                                         Error message is in the response body
+	 */
+	boolean isUserAccessToSolution(String userId, String solutionId) throws RestClientResponseException;
+
+	/**
 	 * Grants write permission to the specified solution for the specified user.
 	 * 
 	 * @param solutionId
@@ -2729,6 +2748,24 @@ public interface ICommonDataServiceRestClient {
 	 *                                         Error message is in the response body
 	 */
 	void dropPeerAccessCatalog(String peerId, String catalogId) throws RestClientResponseException;
+
+	/**
+	 * Checks if the specified peer can read the specified solution. Any of the
+	 * following conditions grant read permission:
+	 * <OL>
+	 * <LI>Solution is in a public catalog</LI>
+	 * <LI>Solution is in a catalog to which the peer has been granted access</LI>
+	 * </OL>
+	 * 
+	 * @param peerId
+	 *                       peer ID
+	 * @param solutionId
+	 *                       solution ID
+	 * @return true if the peer can read the solution, otherwise false
+	 * @throws RestClientResponseException
+	 *                                         Error message is in the response body
+	 */
+	boolean isPeerAccessToSolution(String peerId, String solutionId) throws RestClientResponseException;
 
 	/**
 	 * Gets the list of catalog IDs that are favorites of the specified user.
