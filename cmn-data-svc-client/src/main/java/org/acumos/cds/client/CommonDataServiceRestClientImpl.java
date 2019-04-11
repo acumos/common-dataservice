@@ -1513,6 +1513,17 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 	}
 
 	@Override
+	public boolean isUserAccessToSolution(String userId, String solutionId) {
+		URI uri = buildUri(new String[] { CCDSConstants.SOLUTION_PATH, solutionId, CCDSConstants.USER_PATH, userId,
+				CCDSConstants.ACCESS_PATH }, null, null);
+		logger.debug("isUserAccessToSolution: uri {}", uri);
+		ResponseEntity<CountTransport> response = restTemplate.exchange(uri, HttpMethod.GET, null,
+				new ParameterizedTypeReference<CountTransport>() {
+				});
+		return response.getBody().getCount() != 0;
+	}
+
+	@Override
 	public RestPageResponse<MLPSolution> getUserAccessSolutions(String userId, RestPageRequest pageRequest) {
 		URI uri = buildUri(new String[] { CCDSConstants.SOLUTION_PATH, CCDSConstants.USER_PATH, userId,
 				CCDSConstants.ACCESS_PATH }, null, pageRequest);
@@ -2779,6 +2790,17 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 				null, null);
 		logger.debug("dropPeerAccessCatalog: url {}", uri);
 		restTemplate.delete(uri);
+	}
+
+	@Override
+	public boolean isPeerAccessToSolution(String peerId, String solutionId) {
+		URI uri = buildUri(new String[] { CCDSConstants.SOLUTION_PATH, solutionId, CCDSConstants.PEER_PATH, peerId,
+				CCDSConstants.ACCESS_PATH }, null, null);
+		logger.debug("isPeerAccessToSolution: uri {}", uri);
+		ResponseEntity<CountTransport> response = restTemplate.exchange(uri, HttpMethod.GET, null,
+				new ParameterizedTypeReference<CountTransport>() {
+				});
+		return response.getBody().getCount() != 0;
 	}
 
 	@Override
