@@ -33,9 +33,11 @@ import javax.servlet.http.HttpServletResponse;
 import org.acumos.cds.CCDSConstants;
 import org.acumos.cds.CodeNameType;
 import org.acumos.cds.MLPResponse;
+import org.acumos.cds.domain.MLPCatSolMap;
 import org.acumos.cds.domain.MLPNotifUserMap;
 import org.acumos.cds.domain.MLPPasswordChangeRequest;
 import org.acumos.cds.domain.MLPRole;
+import org.acumos.cds.domain.MLPSolUserAccMap;
 import org.acumos.cds.domain.MLPSolution;
 import org.acumos.cds.domain.MLPSolutionDeployment;
 import org.acumos.cds.domain.MLPSolutionFavorite;
@@ -47,8 +49,10 @@ import org.acumos.cds.domain.MLPUserLoginProvider.UserLoginProviderPK;
 import org.acumos.cds.domain.MLPUserRoleMap;
 import org.acumos.cds.domain.MLPUserTagMap;
 import org.acumos.cds.domain.MLPUser_;
+import org.acumos.cds.repository.CatSolMapRepository;
 import org.acumos.cds.repository.NotifUserMapRepository;
 import org.acumos.cds.repository.RoleRepository;
+import org.acumos.cds.repository.SolUserAccMapRepository;
 import org.acumos.cds.repository.SolutionDeploymentRepository;
 import org.acumos.cds.repository.SolutionFavoriteRepository;
 import org.acumos.cds.repository.SolutionRepository;
@@ -128,6 +132,8 @@ public class UserController extends AbstractController {
 	private String jasyptEncryptorPassword;
 
 	@Autowired
+	private CatSolMapRepository catSolMapRepository;
+	@Autowired
 	private EntityManager entityManager;
 	@Autowired
 	private UserRepository userRepository;
@@ -147,6 +153,8 @@ public class UserController extends AbstractController {
 	private SolutionRepository solutionRepository;
 	@Autowired
 	private SolutionDeploymentRepository solutionDeploymentRepository;
+	@Autowired
+	private SolUserAccMapRepository solUserAccMapRepository;
 	@Autowired
 	private UserTagMapRepository userTagMapRepository;
 
@@ -966,6 +974,30 @@ public class UserController extends AbstractController {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "dropTag failed", ex);
 		}
+	}
+
+	@ApiOperation(value = "Checks if the specified user can read the specified solution. Returns non-zero if yes, zero if no.", //
+			response = CountTransport.class)
+	@RequestMapping(value = "/{userId}/" + CCDSConstants.SOLUTION_PATH + "/{solutionId}/"
+			+ CCDSConstants.ACCESS_PATH, method = RequestMethod.GET)
+	public CountTransport checkUserAccessToSolution(@PathVariable("userId") String userId,
+			@PathVariable("solutionId") String solutionId) {
+		logger.debug("checkUserAccessToSolution userId {} solutionId {}", userId, solutionId);
+		// Any of the following conditions grant read permission:
+		// 1) solution is in a catalog
+		// 2) user is the owner
+		// 3) user has been granted access
+		Iterable<MLPCatSolMap> maps = catSolMapRepository.findBySolutionId(solutionId);
+		if (maps.iterator().hasNext())
+			return new CountTransport(1L);
+		Optional<MLPSolution> sol = solutionRepository.findById(solutionId);
+		if (sol.isPresent() && sol.get().getUserId().equals(userId))
+			return new CountTransport(1L);
+		Optional<MLPSolUserAccMap> map = solUserAccMapRepository
+				.findById(new MLPSolUserAccMap.SolUserAccessMapPK(solutionId, userId));
+		if (map.isPresent())
+			return new CountTransport(1L);
+		return new CountTransport(0L);
 	}
 
 }

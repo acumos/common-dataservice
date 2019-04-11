@@ -70,4 +70,22 @@ public interface SolUserAccMapRepository
 	@Transactional // throws exception without this
 	void deleteBySolutionId(@Param("solutionId") String solutionId);
 
+	/**
+	 * Gets the count of access grants to the specified user for the specified with
+	 * the specified access-code type and containing the specified solution.
+	 * 
+	 * @param accessType
+	 *                       Access-type Code; e.g., "PB"
+	 * 
+	 * @param solutionId
+	 *                       Solution ID
+	 * @return Count of catalogs with access-type code PB
+	 */
+	@Query(value = " SELECT COUNT(c.catalogId) FROM MLPCatalog c, MLPCatSolMap m " //
+			+ " WHERE c.catalogId = m.catalogId " //
+			+ " AND c.accessTypeCode = :accessType " //
+			+ " AND m.solutionId = :solutionId ")
+	long countCatalogsByAccessAndSolution(@Param("accessType") String accessType,
+			@Param("solutionId") String solutionId);
+
 }

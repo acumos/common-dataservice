@@ -32,6 +32,8 @@ import org.acumos.cds.MLPResponse;
 import org.acumos.cds.domain.MLPPeer;
 import org.acumos.cds.domain.MLPPeerSubscription;
 import org.acumos.cds.domain.MLPPeer_;
+import org.acumos.cds.repository.CatSolMapRepository;
+import org.acumos.cds.repository.PeerCatAccMapRepository;
 import org.acumos.cds.repository.PeerRepository;
 import org.acumos.cds.repository.PeerSubscriptionRepository;
 import org.acumos.cds.service.PeerSearchService;
@@ -83,6 +85,10 @@ public class PeerController extends AbstractController {
 	private PeerSubscriptionRepository peerSubRepository;
 	@Autowired
 	private PeerSearchService peerSearchService;
+	@Autowired
+	private PeerCatAccMapRepository peerCatAccMapRepository;
+	@Autowired
+	private CatSolMapRepository catSolMapRepository;
 
 	@ApiOperation(value = "Gets a page of peers, optionally sorted; empty if none are found.", //
 			response = MLPPeer.class, responseContainer = "Page")
@@ -327,6 +333,21 @@ public class PeerController extends AbstractController {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "deletePeerSub failed", ex);
 		}
+	}
+
+	@ApiOperation(value = "Checks if the specified peer can read the specified solution. Returns non-zero if yes, zero if no.", //
+			response = CountTransport.class)
+	@RequestMapping(value = "/{peerId}/" + CCDSConstants.SOLUTION_PATH + "/{solutionId}/"
+			+ CCDSConstants.ACCESS_PATH, method = RequestMethod.GET)
+	public CountTransport checkPeerAccessToSolution(@PathVariable("peerId") String peerId,
+			@PathVariable("solutionId") String solutionId) {
+		logger.debug("checkPeerAccessToSolution peerId {} solutionId {}", peerId, solutionId);
+		// The common case is that the solution is in a public catalog
+		long pubCount = catSolMapRepository.countCatalogsByAccessAndSolution("PB", solutionId);
+		if (pubCount > 0)
+			return new CountTransport(pubCount);
+		long resCount = peerCatAccMapRepository.countCatalogsByPeerAccessAndSolution(peerId, solutionId);
+		return new CountTransport(resCount);
 	}
 
 }
