@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "98b62ebe_37da0224",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/repository/SolUserAccMapRepository.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 288
+      },
+      "writtenOn": "2019-04-11T17:52:47Z",
+      "side": 1,
+      "message": "Is this something leftover?  Work in progress?",
+      "revId": "98bf33bf935ec43987f8665f7fed049f466d8824",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
