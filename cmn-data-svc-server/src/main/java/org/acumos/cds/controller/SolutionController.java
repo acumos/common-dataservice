@@ -38,7 +38,6 @@ import org.acumos.cds.domain.MLPCompSolMap;
 import org.acumos.cds.domain.MLPRevCatDocMap;
 import org.acumos.cds.domain.MLPSolRevArtMap;
 import org.acumos.cds.domain.MLPSolTagMap;
-import org.acumos.cds.domain.MLPSolUserAccMap;
 import org.acumos.cds.domain.MLPSolution;
 import org.acumos.cds.domain.MLPSolutionDeployment;
 import org.acumos.cds.domain.MLPSolutionDownload;
@@ -48,7 +47,6 @@ import org.acumos.cds.domain.MLPSolutionRating.SolutionRatingPK;
 import org.acumos.cds.domain.MLPSolutionRevision;
 import org.acumos.cds.domain.MLPSolution_;
 import org.acumos.cds.domain.MLPTag;
-import org.acumos.cds.domain.MLPUser;
 import org.acumos.cds.repository.CatSolMapRepository;
 import org.acumos.cds.repository.CompSolMapRepository;
 import org.acumos.cds.repository.DocumentRepository;
@@ -287,8 +285,8 @@ public class SolutionController extends AbstractController {
 		}
 	}
 
-	@ApiOperation(value = "Finds solutions matching the specified attribute values and/or child attribute values " //
-			+ " with flexible handling of tags to allow all/any matches. "
+	@ApiOperation(value = "Finds published solutions matching the specified attribute values and/or  " //
+			+ " child attribute values with flexible handling of tags to allow all/any matches. "
 			+ " Checks multiple fields for the supplied keywords, including ID, name, description etc.", //
 			response = MLPSolution.class, responseContainer = "Page")
 	@ApiPageable
@@ -310,15 +308,16 @@ public class SolutionController extends AbstractController {
 			@ApiParam(value = "Catalog IDs", allowMultiple = true) //
 			@RequestParam(name = CCDSConstants.SEARCH_CATALOG, required = false) String[] catalogIds, //
 			Pageable pageRequest, HttpServletResponse response) {
-		logger.debug("findPortalSolutionsByKwAndTags: active {} kw {}", active, kws);
+		logger.debug("findPublishedSolutionsByKwAndTags: active {} kw {}", active, kws);
 		try {
 			return solutionSearchService.findPortalSolutionsByKwAndTags(kws, active, userIds, modelTypeCodes, allTags,
 					anyTags, catalogIds, pageRequest);
 		} catch (Exception ex) {
-			logger.error("findPortalSolutionsByKwAndTags failed", ex);
+			logger.error("findPublishedSolutionsByKwAndTags failed", ex);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST,
-					ex.getCause() != null ? ex.getCause().getMessage() : "findPortalSolutionsByKwAndTags failed", ex);
+					ex.getCause() != null ? ex.getCause().getMessage() : "findPublishedSolutionsByKwAndTags failed",
+					ex);
 		}
 	}
 
@@ -860,65 +859,6 @@ public class SolutionController extends AbstractController {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "deleteSolutionRating failed", ex);
 		}
-	}
-
-	@ApiOperation(value = "Gets the list of users who were granted write access to the specified solution.", response = MLPUser.class, responseContainer = "List")
-	@RequestMapping(value = "/{solutionId}/" + CCDSConstants.USER_PATH + "/"
-			+ CCDSConstants.ACCESS_PATH, method = RequestMethod.GET)
-	public Iterable<MLPUser> getSolutionAccessUsers(@PathVariable("solutionId") String solutionId) {
-		logger.debug("getSolutionAccessUsers: solutionId {}", solutionId);
-		return solUserAccMapRepository.getUsersForSolution(solutionId);
-	}
-
-	@ApiOperation(value = "Grants write permission to the specified solution for the specified user. Returns bad request if an ID is not found", //
-			response = SuccessTransport.class)
-	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
-	@RequestMapping(value = "/{solutionId}/" + CCDSConstants.USER_PATH + "/{userId}/"
-			+ CCDSConstants.ACCESS_PATH, method = RequestMethod.POST)
-	public Object addUserToSolutionACL(@PathVariable("solutionId") String solutionId,
-			@PathVariable("userId") String userId, HttpServletResponse response) {
-		logger.debug("addUserToSolutionACL: solution {}, user {}", solutionId, userId);
-		if (!solutionRepository.findById(solutionId).isPresent()) {
-			logger.warn("addUserToSolutionACL failed on sol ID {}", solutionId);
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + solutionId, null);
-		}
-		if (!userRepository.findById(userId).isPresent()) {
-			logger.warn("addUserToSolutionACL failed on user ID {}", userId);
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + userId, null);
-		}
-		solUserAccMapRepository.save(new MLPSolUserAccMap(solutionId, userId));
-		return new SuccessTransport(HttpServletResponse.SC_OK, null);
-	}
-
-	@ApiOperation(value = "Removes write permission from the specified solution for the specified user. Returns bad request if an ID is not found", //
-			response = SuccessTransport.class)
-	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
-	@RequestMapping(value = "/{solutionId}/" + CCDSConstants.USER_PATH + "/{userId}/"
-			+ CCDSConstants.ACCESS_PATH, method = RequestMethod.DELETE)
-	public Object dropUserFromSolutionACL(@PathVariable("solutionId") String solutionId,
-			@PathVariable("userId") String userId, HttpServletResponse response) {
-		logger.debug("dropUserFromSolutionACL: solution {}, user {}", solutionId, userId);
-		try {
-			solUserAccMapRepository.deleteById(new MLPSolUserAccMap.SolUserAccessMapPK(solutionId, userId));
-			return new SuccessTransport(HttpServletResponse.SC_OK, null);
-		} catch (Exception ex) {
-			// e.g., EmptyResultDataAccessException is NOT an internal server error
-			logger.warn("dropUserFromSolutionACL failed: {}", ex.toString());
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "dropUserFromSolutionACL failed", ex);
-		}
-	}
-
-	@ApiOperation(value = "Gets a page of solutions for which the user has write permission but is not the owner, optionally sorted on fields. Answers empty if none are found.", //
-			response = MLPSolution.class, responseContainer = "Page")
-	@ApiPageable
-	@RequestMapping(value = CCDSConstants.USER_PATH + "/{userId}/"
-			+ CCDSConstants.ACCESS_PATH, method = RequestMethod.GET)
-	public Page<MLPSolution> getUserAccessSolutions(@PathVariable("userId") String userId, Pageable pageable) {
-		logger.debug("getUserAccessSolutions: user {}", userId);
-		return solUserAccMapRepository.getSolutionsForUser(userId, pageable);
 	}
 
 	@ApiOperation(value = "Gets a page of deployments for the specified solution and revision IDs. Returns empty if none are found.", //
