@@ -609,6 +609,7 @@ public class MockClientTest {
 		client.setPeerAccessCatalogIds(catalogIds);
 		Assert.assertEquals(catalogIds, client.getPeerAccessCatalogIds("peerId"));
 		client.addPeerAccessCatalog("peer", "catalog");
+		client.isPeerAccessToSolution("peerId", "solutionId");
 		client.dropPeerAccessCatalog("peer", "catalog");
 
 		client.setUserFavoriteCatalogIds(catalogIds);

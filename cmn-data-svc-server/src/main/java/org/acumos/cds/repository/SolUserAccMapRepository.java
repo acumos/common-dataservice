@@ -70,4 +70,23 @@ public interface SolUserAccMapRepository
 	@Transactional // throws exception without this
 	void deleteBySolutionId(@Param("solutionId") String solutionId);
 
+	/**
+	 * Checks if the specified user can read the specified solution. Any of the
+	 * following conditions grant read permission: 1) user is the owner; 2) user has
+	 * been granted access; 3) solution is in a catalog.
+	 * 
+	 * @param userId
+	 * @param solutionId
+	 * @return Zero if no access, one if access
+	 */
+	/*
+	 * @Query(value =
+	 * "SELECT count(csm.solutionId) FROM MLPCatSolMap csm, MLPPeerCatAccMap pcm, MLPCatalog c "
+	 * + " WHERE csm.solutionId = :solutionId " +
+	 * "   AND csm.catalogId = c.catalogId " + "   AND (" +
+	 * "         (c.accessTypeCode = 'PB') "// + "         OR " // +
+	 * "         (c.accessTypeCode = 'RS' AND pcm.catalogId = c.catalogId AND pcm.peerId = :peerId) "
+	 * // + "       )") Long checkUserAccessToSolution(@Param("userId") String
+	 * userId, @Param("solutionId") String solutionId);
+	 */
 }

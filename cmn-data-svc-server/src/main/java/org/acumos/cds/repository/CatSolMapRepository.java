@@ -67,10 +67,28 @@ public interface CatSolMapRepository extends PagingAndSortingRepository<MLPCatSo
 	 *                       Solution ID
 	 * @return Iterable of MLPCatalog
 	 */
-	@Query(value = "select c from MLPCatalog c, MLPCatSolMap m " //
-			+ " where c.catalogId =  m.catalogId " //
+	@Query(value = "SELECT c from MLPCatalog c, MLPCatSolMap m " //
+			+ " WHERE c.catalogId = m.catalogId " //
 			+ " and m.solutionId = :solutionId")
 	Iterable<MLPCatalog> findCatalogsBySolutionId(@Param("solutionId") String solutionId);
+
+	/**
+	 * Gets the count of catalogs with the specified access-code type and containing
+	 * the specified solution.
+	 * 
+	 * @param accessType
+	 *                       Access-type Code; e.g., "PB"
+	 * 
+	 * @param solutionId
+	 *                       Solution ID
+	 * @return Count of catalogs with access-type code PB
+	 */
+	@Query(value = " SELECT COUNT(c.catalogId) FROM MLPCatalog c, MLPCatSolMap m " //
+			+ " WHERE c.catalogId = m.catalogId " //
+			+ " AND c.accessTypeCode = :accessType " //
+			+ " AND m.solutionId = :solutionId ")
+	long countCatalogsByAccessAndSolution(@Param("accessType") String accessType,
+			@Param("solutionId") String solutionId);
 
 	/**
 	 * Deletes all entries for the specified solution ID.

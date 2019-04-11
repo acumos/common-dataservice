@@ -605,6 +605,21 @@ public class ClientMethodTest {
 			logger.info("Client failed as expected: {}", ex.toString());
 		}
 		try {
+			client.getUserFavoriteCatalogIds("userId");
+		} catch (Exception ex) {
+			logger.info("Client failed as expected: {}", ex.toString());
+		}
+		try {
+			client.addUserFavoriteCatalog("user", "catalog");
+		} catch (Exception ex) {
+			logger.info("Client failed as expected: {}", ex.toString());
+		}
+		try {
+			client.dropUserFavoriteCatalog("user", "catalog");
+		} catch (Exception ex) {
+			logger.info("Client failed as expected: {}", ex.toString());
+		}
+		try {
 			client.getSolutionRatings("solutionId", new RestPageRequest());
 		} catch (ResourceAccessException ex) {
 			logger.info("Client failed as expected: {}", ex.toString());
@@ -1018,6 +1033,21 @@ public class ClientMethodTest {
 		}
 		try {
 			client.dropSolutionFromCatalog("solutionId", "catalogId");
+		} catch (ResourceAccessException ex) {
+			logger.info("Client failed as expected: {}", ex.toString());
+		}
+		try {
+			client.addPeerAccessCatalog("peer", "catalog");
+		} catch (ResourceAccessException ex) {
+			logger.info("Client failed as expected: {}", ex.toString());
+		}
+		try {
+			client.isPeerAccessToSolution("peerId", "solutionId");
+		} catch (ResourceAccessException ex) {
+			logger.info("Client failed as expected: {}", ex.toString());
+		}
+		try {
+			client.dropPeerAccessCatalog("peer", "catalog");
 		} catch (ResourceAccessException ex) {
 			logger.info("Client failed as expected: {}", ex.toString());
 		}

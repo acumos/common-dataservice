@@ -2727,6 +2727,19 @@ public interface ICommonDataServiceRestClient {
 	void dropPeerAccessCatalog(String peerId, String catalogId) throws RestClientResponseException;
 
 	/**
+	 * Checks if the specified peer can read the specified solution.
+	 * 
+	 * @param peerId
+	 *                       peer ID
+	 * @param solutionId
+	 *                       solution ID
+	 * @return true if the solution is in a public catalog; OR the solution is in a
+	 *         restricted catalog to which the peer has access.
+	 * @throws RestClientResponseException
+	 */
+	boolean isPeerAccessToSolution(String peerId, String solutionId) throws RestClientResponseException;
+
+	/**
 	 * Gets the list of catalog IDs that are favorites of the specified user.
 	 * 
 	 * @param userId

@@ -1943,7 +1943,7 @@ public class CdsControllerTest {
 			Assert.assertNotNull("User ID", cu.getUserId());
 			logger.info("Created user {}", cu);
 
-			pr = new MLPPeer("Peer-Name-Restr-Cat", "cat.fqdn.subject.name.a.b.c", "http://peer-api", true, false,
+			pr = new MLPPeer("Peer-Name-Test-Cat", "cat.fqdn.subject.name.a.b.c", "http://peer-api", true, false,
 					"contact", "AC");
 			pr = client.createPeer(pr);
 			Assert.assertNotNull("Peer ID", pr.getPeerId());
@@ -1957,7 +1957,6 @@ public class CdsControllerTest {
 			ca = client.createCatalog(new MLPCatalog("PB", true, "unicorn", "http://pub.org"));
 			Assert.assertNotNull("Catalog ID", ca.getCatalogId());
 			logger.info("Created catalog {}", ca);
-
 			ca.setDescription("Catalog description");
 			client.updateCatalog(ca);
 
@@ -1974,7 +1973,9 @@ public class CdsControllerTest {
 			MLPCatalog c2 = client.getCatalog(ca.getCatalogId());
 			Assert.assertEquals(ca, c2);
 
+			Assert.assertFalse(client.isPeerAccessToSolution(pr.getPeerId(), cs.getSolutionId()));
 			client.addSolutionToCatalog(cs.getSolutionId(), ca.getCatalogId());
+			Assert.assertTrue(client.isPeerAccessToSolution(pr.getPeerId(), cs.getSolutionId()));
 
 			RestPageResponse<MLPSolution> sols = client.getSolutionsInCatalogs(new String[] { ca.getCatalogId() },
 					new RestPageRequest());

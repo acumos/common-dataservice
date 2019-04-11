@@ -2782,6 +2782,17 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 	}
 
 	@Override
+	public boolean isPeerAccessToSolution(String peerId, String solutionId) {
+		URI uri = buildUri(new String[] { CCDSConstants.PEER_PATH, peerId, CCDSConstants.SOLUTION_PATH, solutionId,
+				CCDSConstants.ACCESS_PATH }, null, null);
+		logger.debug("isPeerAccessToSolution: uri {}", uri);
+		ResponseEntity<CountTransport> response = restTemplate.exchange(uri, HttpMethod.GET, null,
+				new ParameterizedTypeReference<CountTransport>() {
+				});
+		return response.getBody().getCount() != 0;
+	}
+
+	@Override
 	public List<String> getUserFavoriteCatalogIds(String userId) {
 		URI uri = buildUri(new String[] { CCDSConstants.CATALOG_PATH, CCDSConstants.USER_PATH, userId,
 				CCDSConstants.FAVORITE_PATH }, null, null);

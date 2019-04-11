@@ -225,6 +225,7 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 	private List<String> peerAccessCatalogIds;
 	private List<String> userFavoriteCatalogIds;
 	private List<MLPRightToUse> rtusByReference;
+	private boolean peerAccessToSolution;
 
 	/**
 	 * No-argument constructor.
@@ -2059,6 +2060,16 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 	@Override
 	public void dropPeerAccessCatalog(String peerId, String catalogId) {
 		// How to mock?
+	}
+
+	@SuppressWarnings("unused")
+	public void setPeerAccessToSolution(String peerId, String solutionId, boolean access) {
+		this.peerAccessToSolution = access;
+	}
+
+	@Override
+	public boolean isPeerAccessToSolution(String peerId, String solutionId) {
+		return this.peerAccessToSolution;
 	}
 
 	public void setUserFavoriteCatalogIds(List<String> ids) {
