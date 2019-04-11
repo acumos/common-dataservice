@@ -16,6 +16,24 @@
       "revId": "98bf33bf935ec43987f8665f7fed049f466d8824",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5fb6a3da_76bfc0eb",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/repository/SolUserAccMapRepository.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-11T17:57:00Z",
+      "side": 1,
+      "message": "WIP",
+      "parentUuid": "98b62ebe_37da0224",
+      "revId": "98bf33bf935ec43987f8665f7fed049f466d8824",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
