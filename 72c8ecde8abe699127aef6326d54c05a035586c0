@@ -34,6 +34,24 @@
       "revId": "72c8ecde8abe699127aef6326d54c05a035586c0",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3573fcc6_0f753980",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/ICommonDataServiceRestClient.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 3038,
+      "author": {
+        "id": 288
+      },
+      "writtenOn": "2019-04-12T16:15:16Z",
+      "side": 1,
+      "message": "Think of it like role based permissions: a user (peer) has a set of roles (catalogs) each role has a set of permissions (solutions), and both relations are many-to-many.  To determine if a user (peer) has a permission (solution) requires a join of the tables, and that\u0027s usually done more efficiently at the database layer. It\u0027s possible to do it elsewhere, by, for example, fetching all the peer\u0027s catalogs, then fetching each catalog\u0027s solutions, to see if the one you\u0027re interested in is there, but that can be expensive.",
+      "parentUuid": "4645f9d3_151ca650",
+      "revId": "72c8ecde8abe699127aef6326d54c05a035586c0",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
