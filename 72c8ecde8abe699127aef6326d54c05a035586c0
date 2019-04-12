@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4645f9d3_151ca650",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/ICommonDataServiceRestClient.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 3038,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2019-04-12T15:51:16Z",
+      "side": 1,
+      "message": "Can a peer have access to a catalog but only selective access to its constituents solutions? Then only this method is needed I suppose.",
+      "revId": "72c8ecde8abe699127aef6326d54c05a035586c0",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
