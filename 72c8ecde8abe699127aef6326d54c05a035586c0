@@ -16,6 +16,24 @@
       "revId": "72c8ecde8abe699127aef6326d54c05a035586c0",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7e13a14c_60b46475",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/ICommonDataServiceRestClient.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 3038,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-12T15:53:26Z",
+      "side": 1,
+      "message": "The security model is based on catalogs.  A peer with access to a catalog can read every solution in the catalog.\n\nWith that said, this method allows flexible checking of security/access permission.",
+      "parentUuid": "4645f9d3_151ca650",
+      "revId": "72c8ecde8abe699127aef6326d54c05a035586c0",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
