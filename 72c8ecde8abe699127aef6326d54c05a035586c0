@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "183cebd9_6f83b40c",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/AccessController.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-12T17:36:34Z",
+      "side": 1,
+      "message": "Have to transport some indicator.  For convenience I used the count transport model to carry 0 (zero) and 1 (one).  The java client converts to boolean.",
+      "parentUuid": "08a8aa7f_dee88743",
+      "revId": "72c8ecde8abe699127aef6326d54c05a035586c0",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "459a7731_8dcce7c6",
         "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/AccessController.java",
         "patchSetId": 9
@@ -83,6 +101,24 @@
       "writtenOn": "2019-04-12T17:30:54Z",
       "side": 1,
       "message": "Why this method is not boolean? The client prefers this?",
+      "revId": "72c8ecde8abe699127aef6326d54c05a035586c0",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5e236f31_6422d17b",
+        "filename": "cmn-data-svc-server/src/main/java/org/acumos/cds/controller/AccessController.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-12T17:36:34Z",
+      "side": 1,
+      "message": "Same as above.",
+      "parentUuid": "459a7731_8dcce7c6",
       "revId": "72c8ecde8abe699127aef6326d54c05a035586c0",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
