@@ -601,7 +601,12 @@ INSERT INTO C_SITE_CONFIG (CONFIG_KEY, CONFIG_VAL) VALUES
   ('public_validation_workflow', '{"ignore_list":["Text Check"]}'),
   ('local_validation_workflow', '{"ignore_list":[]}');
 INSERT INTO C_SITE_CONTENT (CONTENT_KEY, CONTENT_VAL, MIME_TYPE, CREATED_DATE, MODIFIED_DATE) VALUES
-  ('global.footer.contactInfo','<p>Please enter your team\'s contact details using the Site Admin, Site Content feature of Portal.</p>','application/json','2019-04-01 12:34:56','2019-04-01 12:34:56'),
-  ('global.termsConditions','<p>Please enter your organization\'s terms and conditions using the Site Admin, Site Content feature of Portal.</p>','application/json','2019-04-01 12:34:56','2019-04-01 12:34:56');
+  ('global.discoverAcumos.marketPlace','<p>Acumos is the go-to site for data-powered decision making. With an intuitive easy-to-use Marketplace and Design Studio, Acumos brings Al into the mainstream.</p>','text/html','2019-04-01 12:34:56','2019-04-01 12:34:56'),
+  ('global.discoverAcumos.designStudio','<p>Because Acumos converts models to microservices, you can apply them to different problems and data sources.</p>','text/html','2019-04-01 12:34:56','2019-04-01 12:34:56'),
+  ('global.discoverAcumos.sdnOnap','<p>Many Marketplace solutions originated in the ONAP SDN community and are configured to be directly deployed to SDC.</p>','text/html','2019-04-01 12:34:56','2019-04-01 12:34:56'),
+  ('global.discoverAcumos.preferredToolkit','<p>With a focus on interoperability, Acumos supports diverse Al toolkits. Onboarding tools are available for TensorFlow, SciKitLearn, RCloud,  H2O and generic Java.</p>','text/html','2019-04-01 12:34:56','2019-04-01 12:34:56'),
+  ('global.discoverAcumos.teamUp','<p>Share, experiment and collaborate in an open source ecosystem of people, solutions and ideas.</p>','text/html','2019-04-01 12:34:56','2019-04-01 12:34:56'),
+  ('global.footer.contactInfo','<p>Please enter your team\'s contact details using the Site Admin, Site Content feature of Portal.</p>','text/html','2019-04-01 12:34:56','2019-04-01 12:34:56'),
+  ('global.termsConditions','<p>Please enter your organization\'s terms and conditions using the Site Admin, Site Content feature of Portal.</p>','text/html','2019-04-01 12:34:56','2019-04-01 12:34:56');
 
 -- TODO: Create COMPANY and PUBLIC catalogs
