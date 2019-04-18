@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dd9fd4a4_32a64118",
+        "filename": "cmn-data-svc-server/db-scripts/cds-mysql-upgrade-2.1-to-2.2.sql",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-18T00:06:05Z",
+      "side": 1,
+      "message": "Please make name similar to the RS catalog, also use a better publisher name and URL",
+      "range": {
+        "startLine": 112,
+        "startChar": 57,
+        "endLine": 112,
+        "endChar": 80
+      },
+      "revId": "97801470f78b28a0da3b38f21a67d876fa30236a",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b54368c4_ef51e42b",
+        "filename": "cmn-data-svc-server/db-scripts/cds-mysql-upgrade-2.1-to-2.2.sql",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-18T00:06:05Z",
+      "side": 1,
+      "message": "This is not a valid UUID, which is composed of hex digits 0-f\n\nAlso please use a better publisher name and URL",
+      "range": {
+        "startLine": 115,
+        "startChar": 11,
+        "endLine": 115,
+        "endChar": 47
+      },
+      "revId": "97801470f78b28a0da3b38f21a67d876fa30236a",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6352853f_c972ef83",
+        "filename": "cmn-data-svc-server/db-scripts/cds-mysql-upgrade-2.1-to-2.2.sql",
+        "patchSetId": 1
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-18T00:06:05Z",
+      "side": 1,
+      "message": "see above",
+      "range": {
+        "startLine": 158,
+        "startChar": 27,
+        "endLine": 158,
+        "endChar": 31
+      },
+      "revId": "97801470f78b28a0da3b38f21a67d876fa30236a",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "00a2b790_43891815",
+        "filename": "cmn-data-svc-server/db-scripts/cds-mysql-upgrade-2.1-to-2.2.sql",
+        "patchSetId": 1
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-18T00:06:05Z",
+      "side": 1,
+      "message": "what about PR ?",
+      "range": {
+        "startLine": 163,
+        "startChar": 65,
+        "endLine": 163,
+        "endChar": 67
+      },
+      "revId": "97801470f78b28a0da3b38f21a67d876fa30236a",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e363aca6_e4b65e2a",
+        "filename": "cmn-data-svc-server/db-scripts/cds-mysql-upgrade-2.1-to-2.2.sql",
+        "patchSetId": 1
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-18T00:06:05Z",
+      "side": 1,
+      "message": "see above",
+      "range": {
+        "startLine": 174,
+        "startChar": 27,
+        "endLine": 174,
+        "endChar": 31
+      },
+      "revId": "97801470f78b28a0da3b38f21a67d876fa30236a",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
