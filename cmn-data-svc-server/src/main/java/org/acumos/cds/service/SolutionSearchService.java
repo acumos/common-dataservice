@@ -20,6 +20,7 @@
 
 package org.acumos.cds.service;
 
+import java.time.Instant;
 import java.util.Map;
 
 import org.acumos.cds.domain.MLPSolution;
@@ -115,8 +116,24 @@ public interface SolutionSearchService {
 	 *      boolean, String[], String[], String[], String[], String[],
 	 *      org.acumos.cds.transport.RestPageRequest)
 	 */
-	Page<MLPSolution> findPortalSolutionsByKwAndTags(String[] keywords, boolean active, String[] userIds,
+	Page<MLPSolution> findPublishedSolutionsByKwAndTags(String[] keywords, boolean active, String[] userIds,
 			String[] modelTypeCodes, String[] allTags, String[] anyTags, String[] catalogIds, Pageable pageable);
+
+	/**
+	 * Searches for active solutions in the specified catalog modified after the
+	 * specified point in time. Primarily for federation.
+	 * 
+	 * @param catalogIds
+	 *                       Catalog IDs
+	 * @param modifiedTs
+	 *                       Point in time
+	 * @param pageable
+	 *                       Page and sort info
+	 * @return Page of matches
+	 * @see org.acumos.cds.client.ICommonDataServiceRestClient#findPublishedSolutionsByDate(
+	 *      String[], Instant, org.acumos.cds.transport.RestPageRequest)
+	 */
+	Page<MLPSolution> findPublishedSolutionsByModifiedDate(String[] catalogIds, Instant modifiedTs, Pageable pageable);
 
 	/**
 	 * Searches for solutions editable by one user to populate the My Models page.
