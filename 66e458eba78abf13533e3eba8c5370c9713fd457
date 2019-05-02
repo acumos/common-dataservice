@@ -16,6 +16,24 @@
       "revId": "66e458eba78abf13533e3eba8c5370c9713fd457",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "69e6c19a_a118bb29",
+        "filename": "cmn-data-svc-server/db-scripts/cds-mysql-upgrade-2.1-to-2.2.sql",
+        "patchSetId": 1
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-05-02T21:11:26Z",
+      "side": 1,
+      "message": "Good catch",
+      "parentUuid": "09a397fe_65447e48",
+      "revId": "66e458eba78abf13533e3eba8c5370c9713fd457",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
