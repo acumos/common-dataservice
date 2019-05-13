@@ -24,6 +24,11 @@ The client and server are released together.  The client is available
 as a jar file in the Acumos/LF Nexus repository. The server is
 available as a Docker image in the Acumos/LF Docker registry.
 
+Version 2.2.3, 7 May 2019
+--------------------------
+* Repair DML script for C_ROLE insert (`ACUMOS-2891 <https://jira.acumos.org/browse/ACUMOS-2891>`_)
+* Requires database schema version 2.2
+
 Version 2.2.2, 22 Apr 2019
 --------------------------
 * Add site content to database creation scripts (`ACUMOS-2420 <https://jira.acumos.org/browse/ACUMOS-2420>`_)
