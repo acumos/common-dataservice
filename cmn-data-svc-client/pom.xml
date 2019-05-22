@@ -51,6 +51,11 @@
 	</properties>
 	<!-- No repositories section. Only needs Maven central, aka public. -->
 	<dependencies>
+	    <dependency>
+          <groupId>me.xdrop</groupId>
+          <artifactId>fuzzywuzzy</artifactId>
+          <version>1.2.0</version>
+        </dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>

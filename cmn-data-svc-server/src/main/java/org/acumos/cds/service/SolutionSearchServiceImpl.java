@@ -460,6 +460,9 @@ public class SolutionSearchServiceImpl extends AbstractSearchServiceImpl impleme
 		predicates.add(cb.or(creatorPred, sharePred));
 
 		// Remaining parameters can be null or empty
+		/*
+		 * Comment this block for sorting Fuzzy relevance search in client after results
+		 * are materialized
 		if (nameKeywords != null && nameKeywords.length > 0) {
 			Predicate nameDisjunction = cb.disjunction();
 			for (String n : nameKeywords)
@@ -467,6 +470,7 @@ public class SolutionSearchServiceImpl extends AbstractSearchServiceImpl impleme
 						.add(cb.like(solutionFom.<String>get(MLPSolution_.name), '%' + n + '%'));
 			predicates.add(nameDisjunction);
 		}
+		*/
 		if (modelTypeCodes != null && modelTypeCodes.length > 0) {
 			Predicate mtcInPredicate = solutionFom.<String>get(MLPSolution_.modelTypeCode)
 					.in((Object[]) modelTypeCodes);
