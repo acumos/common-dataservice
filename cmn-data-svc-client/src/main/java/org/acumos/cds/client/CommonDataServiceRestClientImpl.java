@@ -26,10 +26,14 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import org.acumos.cds.CCDSConstants;
 import org.acumos.cds.CodeNameType;
@@ -102,6 +106,8 @@ import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import me.xdrop.fuzzywuzzy.FuzzySearch;
 
 /**
  * <P>
@@ -603,7 +609,46 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 		ResponseEntity<RestPageResponse<MLPSolution>> response = restTemplate.exchange(uri, HttpMethod.GET, null,
 				new ParameterizedTypeReference<RestPageResponse<MLPSolution>>() {
 				});
-		return response.getBody();
+		if(nameKeywords != null && nameKeywords.length > 0) {
+			RestPageResponse<MLPSolution> resp = response.getBody();
+			List<MLPSolution> solutions = resp.getContent();
+			List<RelevantMLPSolution> rs = solutions.stream()
+			  .collect(
+			    Collectors.mapping(
+			      p -> new RelevantMLPSolution(p, meanScore (nameKeywords, p.getName())),
+			      Collectors.toList()));
+			Comparator<RelevantMLPSolution> solutionScoreComparator
+		      = Comparator.comparingDouble(RelevantMLPSolution::getScore);
+			Collections.sort(rs, solutionScoreComparator.reversed());
+			return new RestPageResponse<>(new ArrayList<MLPSolution>(rs));
+		} else {
+			return response.getBody();
+		}
+	}
+	
+	private double meanScore (String[] keywords, String name) {
+      String keyword = null;
+      double score = 0;
+	  for(int i = 0; i < keywords.length;i++) {
+		  keyword = keywords[i];
+		  score =+ FuzzySearch.ratio(keyword,name);
+	  }
+	  return score/keywords.length;
+	}
+	
+	class RelevantMLPSolution extends MLPSolution {
+		
+		private static final long serialVersionUID = 2011451347716694655L;
+
+		RelevantMLPSolution(MLPSolution solution, double score) {
+			super(solution);
+			this.score = score;
+		}
+		private double score;
+	
+		public double getScore() {
+			return this.score;
+		}
 	}
 
 	@Override
