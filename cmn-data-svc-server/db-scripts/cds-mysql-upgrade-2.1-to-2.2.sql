@@ -175,6 +175,22 @@ INSERT INTO C_REV_CAT_DOC_MAP (CATALOG_ID, REVISION_ID, DOCUMENT_ID)
 SELECT 'pppppppp-pppp-pppp-pppp-pppppppppppp', REVISION_ID, DOCUMENT_ID
 FROM C_SOL_REV_DOC_MAP WHERE ACCESS_TYPE_CD = 'PB';
 
+-- Migrate the solutions with revisions with multiple acces types to restricted catalog  
+
+INSERT INTO c_cat_sol_map (CATALOG_ID, SOLUTION_ID, CREATED_DATE)
+SELECT distinct 'rrrrrrrr-rrrr-rrrr-rrrr-rrrrrrrrrrrr', c_solution_rev.solution_id, NOW() 
+FROM c_solution_rev, c_solution 
+WHERE c_solution_rev.solution_id = c_solution.solution_id AND c_solution.ACTIVE_YN = 'Y' AND
+c_solution_rev.solution_id IN
+(SELECT solution_id
+FROM c_solution_rev
+WHERE solution_id IN (
+    SELECT solution_id
+    FROM c_solution_rev
+    GROUP BY solution_id
+    HAVING COUNT(distinct access_type_cd) > 1
+));
+
 -- Remove the version 2.1 descriptions and revision document maps
 
 ALTER TABLE C_SOLUTION_REV DROP COLUMN ACCESS_TYPE_CD;
