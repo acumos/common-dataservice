@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5cde92c9_996418a7",
+        "filename": "cmn-data-svc-server/db-scripts/cds-mysql-upgrade-2.1-to-2.2.sql",
+        "patchSetId": 2
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-06-25T19:35:06Z",
+      "side": 1,
+      "message": "no need for multiple blank lines",
+      "revId": "9997d15bb89a84c76b12f49ea3de86dc61cd7c79",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "943be4af_3b8c8b45",
+        "filename": "cmn-data-svc-server/db-scripts/cds-mysql-upgrade-2.1-to-2.2.sql",
+        "patchSetId": 2
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-06-25T19:35:06Z",
+      "side": 1,
+      "message": "please add a comment here explaining what this does -- at the very least copy something like he \"-- Migrate the ..\" entries above",
+      "revId": "9997d15bb89a84c76b12f49ea3de86dc61cd7c79",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a781bbd8_4aa71339",
+        "filename": "cmn-data-svc-server/db-scripts/cds-mysql-upgrade-2.1-to-2.2.sql",
+        "patchSetId": 2
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-06-25T19:35:06Z",
+      "side": 1,
+      "message": "please wrap this long line",
+      "range": {
+        "startLine": 181,
+        "startChar": 0,
+        "endLine": 181,
+        "endChar": 122
+      },
+      "revId": "9997d15bb89a84c76b12f49ea3de86dc61cd7c79",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6ead76f9_85c51486",
+        "filename": "cmn-data-svc-server/db-scripts/cds-mysql-upgrade-2.1-to-2.2.sql",
+        "patchSetId": 2
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-06-25T19:35:06Z",
+      "side": 1,
+      "message": "no need for extra blank line, one is enuf",
+      "revId": "9997d15bb89a84c76b12f49ea3de86dc61cd7c79",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
