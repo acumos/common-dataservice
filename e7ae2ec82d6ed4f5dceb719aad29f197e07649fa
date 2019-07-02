@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "164fddbb_e14fcfa5",
+        "filename": "cmn-data-svc-server/db-scripts/cds-mysql-upgrade-2.1-to-2.2-readme.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-07-02T13:57:49Z",
+      "side": 1,
+      "message": "Can these first three lines simply be omitted?",
+      "range": {
+        "startLine": 102,
+        "startChar": 0,
+        "endLine": 104,
+        "endChar": 25
+      },
+      "revId": "e7ae2ec82d6ed4f5dceb719aad29f197e07649fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
