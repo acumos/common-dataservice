@@ -29,6 +29,7 @@ Version 2.2.4, 23 May 2019
 * Restore automatic modified-date updates (`ACUMOS-2949 <https://jira.acumos.org/browse/ACUMOS-2949>`_)
 * Requires database schema version 2.2
 * Extend migration script for solutions with mixed access types (`ACUMOS-3110 <https://jira.acumos.org/browse/ACUMOS-3110>`_)
+* Update default catalog names (`ACUMOS-3209 <https://jira.acumos.org/browse/ACUMOS-3209>`_)
 
 Version 2.2.3, 15 May 2019
 --------------------------
