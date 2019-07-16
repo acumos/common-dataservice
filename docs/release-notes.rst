@@ -24,6 +24,11 @@ The client and server are released together.  The client is available
 as a jar file in the Acumos/LF Nexus repository. The server is
 available as a Docker image in the Acumos/LF Docker registry.
 
+Version 2.2.5, 16 July 2019
+---------------------------
+* Add kernel type CC (`ACUMOS-3147 <https://jira.acumos.org/browse/ACUMOS-3147>`_)
+* Add kernel type JS (`ACUMOS-3148 <https://jira.acumos.org/browse/ACUMOS-3148>`_)
+
 Version 2.2.4, 23 May 2019
 --------------------------
 * Restore automatic modified-date updates (`ACUMOS-2949 <https://jira.acumos.org/browse/ACUMOS-2949>`_)
