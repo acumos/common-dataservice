@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e4566364_b89ec1ab",
+        "filename": "cmn-data-svc-server/db-scripts/cds-mysql-upgrade-2.1-to-2.2.sql",
+        "patchSetId": 3
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-07-17T00:03:28Z",
+      "side": 1,
+      "message": "Farheen just today updated the request to drop the \"My \" prefix, so the catalog name is just \"Public Models\" and \"Company Models\".  I guess you didn\u0027t see that update.  I will add you as a watcher to that Jira issue.",
+      "range": {
+        "startLine": 110,
+        "startChar": 50,
+        "endLine": 110,
+        "endChar": 66
+      },
+      "revId": "ea35921257832abd44d5e1e2feee6766dc6d2f87",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
