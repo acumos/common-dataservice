@@ -54,12 +54,14 @@ public class CCDSConstants {
 	public static final String KEYWORD_PATH = "kw";
 	public static final String KW_TAG_PATH = "kwtag";
 	public static final String NOTEBOOK_PATH = "ntbk";
+	public static final String LICENSE_PATH = "lic";
 	public static final String LOGIN_PROVIDER_PATH = "logprov";
 	public static final String NOTIFICATION_PATH = "notif";
 	public static final String NOTIFICATION_PREF_PATH = "notifpref";
 	public static final String PEER_PATH = "peer";
 	public static final String PIPELINE_PATH = "ppl";
 	public static final String PICTURE_PATH = "pic";
+	public static final String PROFILE_PATH = "pro";
 	public static final String PROJECT_PATH = "proj";
 	public static final String PUBLISHERS_PATH = "pubs";
 	public static final String PUBLISH_REQUEST_PATH = "pubreq";

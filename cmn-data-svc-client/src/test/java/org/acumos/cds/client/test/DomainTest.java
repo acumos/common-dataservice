@@ -31,6 +31,7 @@ import org.acumos.cds.domain.MLPCodeNamePair;
 import org.acumos.cds.domain.MLPComment;
 import org.acumos.cds.domain.MLPCompSolMap;
 import org.acumos.cds.domain.MLPDocument;
+import org.acumos.cds.domain.MLPLicenseProfile;
 import org.acumos.cds.domain.MLPNotebook;
 import org.acumos.cds.domain.MLPNotifUserMap;
 import org.acumos.cds.domain.MLPNotification;
@@ -341,6 +342,41 @@ public class DomainTest extends AbstractModelTest {
 			Assert.assertTrue("Unexpected success", false);
 		} catch (IllegalArgumentException ex) {
 			// bogus URI is rejected
+		}
+	}
+
+	private void checkMLPLicenseProfile(MLPLicenseProfile m) {
+		Assert.assertEquals(t1, m.getCreated());
+		Assert.assertEquals(s1, m.getLicense());
+		Assert.assertEquals(s2, m.getLicenseId());
+		Assert.assertEquals(t2, m.getModified());
+		Assert.assertEquals(l1, (Long) m.getPriority());
+		Assert.assertEquals(s3, m.getUserId());
+	}
+
+	@Test
+	public void testMLPLicenseProfile() {
+		MLPLicenseProfile m = new MLPLicenseProfile(s1, s1, i1, s1);
+		m = new MLPLicenseProfile();
+		m.setCreated(t1);
+		m.setLicense(s1);
+		m.setLicenseId(s2);
+		m.setModified(t2);
+		m.setPriority(l1);
+		m.setUserId(s3);
+		checkMLPLicenseProfile(m);
+		m = new MLPLicenseProfile(m);
+		checkMLPLicenseProfile(m);
+		Assert.assertFalse(m.equals(null));
+		Assert.assertFalse(m.equals(new Object()));
+		Assert.assertTrue(m.equals(m));
+		Assert.assertNotNull(m.hashCode());
+		logger.info(m.toString());
+		try {
+			new MLPLicenseProfile(null, null, -1, null);
+			Assert.assertTrue("Unexpected success", false);
+		} catch (IllegalArgumentException iae) {
+			// null arg is rejected
 		}
 	}
 

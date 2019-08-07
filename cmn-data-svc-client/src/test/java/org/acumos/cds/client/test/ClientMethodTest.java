@@ -31,6 +31,7 @@ import org.acumos.cds.client.ICommonDataServiceRestClient;
 import org.acumos.cds.domain.MLPArtifact;
 import org.acumos.cds.domain.MLPCatalog;
 import org.acumos.cds.domain.MLPComment;
+import org.acumos.cds.domain.MLPLicenseProfile;
 import org.acumos.cds.domain.MLPNotebook;
 import org.acumos.cds.domain.MLPNotification;
 import org.acumos.cds.domain.MLPPasswordChangeRequest;
@@ -1250,6 +1251,32 @@ public class ClientMethodTest {
 		} catch (ResourceAccessException ex) {
 			logger.info("Client failed as expected: {}", ex.toString());
 		}
+		try {
+			client.getLicenseProfiles(new RestPageRequest());
+		} catch (ResourceAccessException ex) {
+			logger.info("Client failed as expected: {}", ex.toString());
+		}
+		try {
+			client.getLicenseProfile("id");
+		} catch (ResourceAccessException ex) {
+			logger.info("Client failed as expected: {}", ex.toString());
+		}
+		try {
+			client.createLicenseProfile(new MLPLicenseProfile());
+		} catch (ResourceAccessException ex) {
+			logger.info("Client failed as expected: {}", ex.toString());
+		}
+		try {
+			client.updateLicenseProfile(new MLPLicenseProfile());
+		} catch (IllegalArgumentException ex) {
+			logger.info("Client failed as expected: {}", ex.toString());
+		}
+		try {
+			client.deleteLicenseProfile("id");
+		} catch (ResourceAccessException ex) {
+			logger.info("Client failed as expected: {}", ex.toString());
+		}
 
 	}
+
 }

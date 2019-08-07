@@ -36,6 +36,7 @@ import org.acumos.cds.domain.MLPCodeNamePair;
 import org.acumos.cds.domain.MLPComment;
 import org.acumos.cds.domain.MLPCompSolMap;
 import org.acumos.cds.domain.MLPDocument;
+import org.acumos.cds.domain.MLPLicenseProfile;
 import org.acumos.cds.domain.MLPNotebook;
 import org.acumos.cds.domain.MLPNotifUserMap;
 import org.acumos.cds.domain.MLPNotification;
@@ -80,6 +81,7 @@ import org.acumos.cds.repository.CatalogRepository;
 import org.acumos.cds.repository.CommentRepository;
 import org.acumos.cds.repository.CompSolMapRepository;
 import org.acumos.cds.repository.DocumentRepository;
+import org.acumos.cds.repository.LicenseProfileRepository;
 import org.acumos.cds.repository.NotebookRepository;
 import org.acumos.cds.repository.NotifUserMapRepository;
 import org.acumos.cds.repository.NotificationRepository;
@@ -162,6 +164,8 @@ public class CdsRepositoryServiceTest {
 	private CommentRepository commentRepository;
 	@Autowired
 	private CompSolMapRepository compSolMapRepository;
+	@Autowired
+	private LicenseProfileRepository licenseProfileRepository;
 	@Autowired
 	private NotificationRepository notificationRepository;
 	@Autowired
@@ -583,8 +587,8 @@ public class CdsRepositoryServiceTest {
 			Assert.assertTrue(taggedSol.getTags().contains(solTag1) && taggedSol.getTags().contains(solTag2));
 
 			String[] kw = { "Big", "Data" };
-			Page<MLPSolution> kwSearchResult = solutionSearchService.findPublishedSolutionsByKwAndTags(kw, active, userIds,
-					modelTypeCodes, searchTags, null, null, PageRequest.of(0, 2, Direction.ASC, "name"));
+			Page<MLPSolution> kwSearchResult = solutionSearchService.findPublishedSolutionsByKwAndTags(kw, active,
+					userIds, modelTypeCodes, searchTags, null, null, PageRequest.of(0, 2, Direction.ASC, "name"));
 			Assert.assertNotEquals(0, kwSearchResult.getNumberOfElements());
 			logger.info("Found models by kw total " + kwSearchResult.getTotalElements());
 
@@ -1542,6 +1546,27 @@ public class CdsRepositoryServiceTest {
 			userRepository.delete(cu);
 		} catch (Exception ex) {
 			logger.error("testWorkbenchArtifacts failed", ex);
+			throw ex;
+		}
+	}
+
+	@Test
+	public void testLicenseStuff() throws Exception {
+		try {
+			MLPUser cu = null;
+			cu = new MLPUser();
+			cu.setActive(true);
+			cu.setLoginName("lum_user");
+			cu.setEmail("testLumUser@acumos.org");
+			cu = userRepository.save(cu);
+			Assert.assertNotNull(cu.getUserId());
+			MLPLicenseProfile lp = new MLPLicenseProfile("lic id", " { \"foo\":\"bar\" }", 1, cu.getUserId());
+			lp = licenseProfileRepository.save(lp);
+			Assert.assertNotNull(lp.getCreated());
+			licenseProfileRepository.deleteById(lp.getLicenseId());
+			userRepository.delete(cu);
+		} catch (Exception ex) {
+			logger.error("testLicenseStuff failed", ex);
 			throw ex;
 		}
 	}

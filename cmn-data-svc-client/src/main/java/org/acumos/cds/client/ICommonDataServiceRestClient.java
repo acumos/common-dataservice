@@ -30,6 +30,7 @@ import org.acumos.cds.domain.MLPCatalog;
 import org.acumos.cds.domain.MLPCodeNamePair;
 import org.acumos.cds.domain.MLPComment;
 import org.acumos.cds.domain.MLPDocument;
+import org.acumos.cds.domain.MLPLicenseProfile;
 import org.acumos.cds.domain.MLPNotebook;
 import org.acumos.cds.domain.MLPNotification;
 import org.acumos.cds.domain.MLPPasswordChangeRequest;
@@ -3137,5 +3138,51 @@ public interface ICommonDataServiceRestClient {
 	 *                                         Error message is in the response body
 	 */
 	void dropSolutionUserAccess(String solutionId, String userId) throws RestClientResponseException;
+
+	/**
+	 * Gets a page of license profiles.
+	 * 
+	 * @param pageRequest
+	 *                        Page index, page size and sort information; defaults
+	 *                        to page 0 of size 20 if null.
+	 * @return Page of license profiles, which may be empty
+	 */
+	RestPageResponse<MLPLicenseProfile> getLicenseProfiles(RestPageRequest pageRequest);
+
+	/**
+	 * Gets the license profile with the specified ID.
+	 * 
+	 * @param licenseId
+	 *                      License profile ID
+	 * @return license profile object
+	 */
+	MLPLicenseProfile getLicenseProfile(String licenseId);
+
+	/**
+	 * Creates a new license profile. Answers bad request if the ID is known.
+	 * 
+	 * @param licenseProfile
+	 *                           License profile data with a new, unique ID
+	 * @return Complete object
+	 */
+	MLPLicenseProfile createLicenseProfile(MLPLicenseProfile licenseProfile);
+
+	/**
+	 * Updates an existing license profile with the supplied data. Answers bad
+	 * request if the ID is not known.
+	 * 
+	 * @param licenseProfile
+	 *                           License profile data
+	 */
+	void updateLicenseProfile(MLPLicenseProfile licenseProfile);
+
+	/**
+	 * Deletes the license profile with the specified ID. Answers bad request if the
+	 * ID is not known.
+	 * 
+	 * @param licenseId
+	 *                      license profile ID
+	 */
+	void deleteLicenseProfile(String licenseId);
 
 }

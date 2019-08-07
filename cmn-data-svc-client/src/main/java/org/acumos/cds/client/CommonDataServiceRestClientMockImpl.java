@@ -33,6 +33,7 @@ import org.acumos.cds.domain.MLPCatalog;
 import org.acumos.cds.domain.MLPCodeNamePair;
 import org.acumos.cds.domain.MLPComment;
 import org.acumos.cds.domain.MLPDocument;
+import org.acumos.cds.domain.MLPLicenseProfile;
 import org.acumos.cds.domain.MLPNotebook;
 import org.acumos.cds.domain.MLPNotification;
 import org.acumos.cds.domain.MLPPasswordChangeRequest;
@@ -230,6 +231,8 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 	private boolean peerAccessToCatalog;
 	private List<String> catalogPublishers;
 	private RestPageResponse<MLPSolution> publishedSolutionsByDate;
+	private RestPageResponse<MLPLicenseProfile> licenseProfiles;
+	private MLPLicenseProfile licenseProfile;
 
 	/**
 	 * No-argument constructor.
@@ -2131,6 +2134,40 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 
 	@Override
 	public void dropUserFavoriteCatalog(String userId, String catalogId) {
+		// How to mock?
+	}
+
+	public void setLicenseProfiles(RestPageResponse<MLPLicenseProfile> profiles) {
+		this.licenseProfiles = profiles;
+	}
+
+	@Override
+	public RestPageResponse<MLPLicenseProfile> getLicenseProfiles(RestPageRequest pageRequest) {
+		return licenseProfiles;
+	}
+
+	public void setLicenseProfile(MLPLicenseProfile profile) {
+		this.licenseProfile = profile;
+	}
+
+	@Override
+	public MLPLicenseProfile getLicenseProfile(String licenseId) {
+		return licenseProfile;
+	}
+
+	@Override
+	public MLPLicenseProfile createLicenseProfile(MLPLicenseProfile licenseProfile) {
+		this.licenseProfile = licenseProfile;
+		return licenseProfile;
+	}
+
+	@Override
+	public void updateLicenseProfile(MLPLicenseProfile licenseProfile) {
+		this.licenseProfile = licenseProfile;
+	}
+
+	@Override
+	public void deleteLicenseProfile(String licenseId) {
 		// How to mock?
 	}
 

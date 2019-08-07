@@ -40,6 +40,7 @@ import org.acumos.cds.domain.MLPCatalog;
 import org.acumos.cds.domain.MLPCodeNamePair;
 import org.acumos.cds.domain.MLPComment;
 import org.acumos.cds.domain.MLPDocument;
+import org.acumos.cds.domain.MLPLicenseProfile;
 import org.acumos.cds.domain.MLPNotebook;
 import org.acumos.cds.domain.MLPNotifUserMap;
 import org.acumos.cds.domain.MLPNotification;
@@ -2868,6 +2869,51 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 		URI uri = buildUri(new String[] { CCDSConstants.ACCESS_PATH, CCDSConstants.SOLUTION_PATH, solutionId,
 				CCDSConstants.USER_PATH, userId, }, null, null);
 		logger.debug("dropSolutionUserAccess: url {}", uri);
+		restTemplate.delete(uri);
+	}
+
+	@Override
+	public RestPageResponse<MLPLicenseProfile> getLicenseProfiles(RestPageRequest pageRequest) {
+		URI uri = buildUri(new String[] { CCDSConstants.LICENSE_PATH, CCDSConstants.PROFILE_PATH }, null, pageRequest);
+		logger.debug("getLicenseProfiles: uri {}", uri);
+		ResponseEntity<RestPageResponse<MLPLicenseProfile>> response = restTemplate.exchange(uri, HttpMethod.GET, null,
+				new ParameterizedTypeReference<RestPageResponse<MLPLicenseProfile>>() {
+				});
+		return response.getBody();
+	}
+
+	@Override
+	public MLPLicenseProfile getLicenseProfile(String licenseId) {
+		URI uri = buildUri(new String[] { CCDSConstants.LICENSE_PATH, CCDSConstants.PROFILE_PATH, licenseId }, null,
+				null);
+		logger.debug("getLicenseProfile: uri {}", uri);
+		ResponseEntity<MLPLicenseProfile> response = restTemplate.exchange(uri, HttpMethod.GET, null,
+				new ParameterizedTypeReference<MLPLicenseProfile>() {
+				});
+		return response.getBody();
+	}
+
+	@Override
+	public MLPLicenseProfile createLicenseProfile(MLPLicenseProfile licenseProfile) {
+		URI uri = buildUri(new String[] { CCDSConstants.LICENSE_PATH, CCDSConstants.PROFILE_PATH }, null, null);
+		logger.debug("createLicenseProfile: url {}", uri);
+		return restTemplate.postForObject(uri, licenseProfile, MLPLicenseProfile.class);
+	}
+
+	@Override
+	public void updateLicenseProfile(MLPLicenseProfile licenseProfile) {
+		URI uri = buildUri(
+				new String[] { CCDSConstants.LICENSE_PATH, CCDSConstants.PROFILE_PATH, licenseProfile.getLicenseId() },
+				null, null);
+		logger.debug("updateLicenseProfile: uri {}", uri);
+		restTemplate.put(uri, licenseProfile);
+	}
+
+	@Override
+	public void deleteLicenseProfile(String licenseId) {
+		URI uri = buildUri(new String[] { CCDSConstants.LICENSE_PATH, CCDSConstants.PROFILE_PATH, licenseId }, null,
+				null);
+		logger.debug("deleteLicenseProfile: url {}", uri);
 		restTemplate.delete(uri);
 	}
 
