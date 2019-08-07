@@ -30,6 +30,7 @@ import org.acumos.cds.domain.MLPCatalog;
 import org.acumos.cds.domain.MLPCodeNamePair;
 import org.acumos.cds.domain.MLPComment;
 import org.acumos.cds.domain.MLPDocument;
+import org.acumos.cds.domain.MLPLicenseProfileTemplate;
 import org.acumos.cds.domain.MLPNotebook;
 import org.acumos.cds.domain.MLPNotification;
 import org.acumos.cds.domain.MLPPasswordChangeRequest;
@@ -3151,5 +3152,51 @@ public interface ICommonDataServiceRestClient {
 	 *                                         Error message is in the response body
 	 */
 	void dropSolutionUserAccess(String solutionId, String userId) throws RestClientResponseException;
+
+	/**
+	 * Gets a page of license templates.
+	 * 
+	 * @param pageRequest
+	 *                        Page index, page size and sort information; defaults
+	 *                        to page 0 of size 20 if null.
+	 * @return Page of license templates, which may be empty
+	 */
+	RestPageResponse<MLPLicenseProfileTemplate> getLicenseTemplates(RestPageRequest pageRequest);
+
+	/**
+	 * Gets the license template with the specified ID.
+	 * 
+	 * @param licenseId
+	 *                      License template ID
+	 * @return license template object
+	 */
+	MLPLicenseProfileTemplate getLicenseTemplate(long licenseId);
+
+	/**
+	 * Creates a new license template. Answers bad request if the ID is known.
+	 * 
+	 * @param licenseTemplate
+	 *                            License template data with a new, unique ID
+	 * @return Complete object
+	 */
+	MLPLicenseProfileTemplate createLicenseTemplate(MLPLicenseProfileTemplate licenseTemplate);
+
+	/**
+	 * Updates an existing license template with the supplied data. Answers bad
+	 * request if the ID is not known.
+	 * 
+	 * @param licenseTemplate
+	 *                            License template data
+	 */
+	void updateLicenseTemplate(MLPLicenseProfileTemplate licenseTemplate);
+
+	/**
+	 * Deletes the license template with the specified ID. Answers bad request if
+	 * the ID is not known.
+	 * 
+	 * @param licenseId
+	 *                      license template ID
+	 */
+	void deleteLicenseTemplate(long licenseId);
 
 }

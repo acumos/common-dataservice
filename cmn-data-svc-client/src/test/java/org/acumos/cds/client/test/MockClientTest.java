@@ -31,6 +31,7 @@ import org.acumos.cds.domain.MLPArtifact;
 import org.acumos.cds.domain.MLPCatalog;
 import org.acumos.cds.domain.MLPComment;
 import org.acumos.cds.domain.MLPDocument;
+import org.acumos.cds.domain.MLPLicenseProfileTemplate;
 import org.acumos.cds.domain.MLPNotebook;
 import org.acumos.cds.domain.MLPNotification;
 import org.acumos.cds.domain.MLPPasswordChangeRequest;
@@ -627,6 +628,16 @@ public class MockClientTest {
 		client.addUserFavoriteCatalog("user", "catalog");
 		client.dropUserFavoriteCatalog("user", "catalog");
 
+		RestPageResponse<MLPLicenseProfileTemplate> licenseProfiles = new RestPageResponse<>();
+		client.setLicenseTemplates(licenseProfiles);
+		Assert.assertEquals(licenseProfiles, client.getLicenseTemplates(new RestPageRequest()));
+		MLPLicenseProfileTemplate licenseProfile = new MLPLicenseProfileTemplate("abc", "def", 0, "ghi");
+		client.setLicenseTemplate(licenseProfile);
+		Assert.assertEquals(licenseProfile, client.getLicenseTemplate(1L));
+		client.setLicenseTemplate(licenseProfile);
+		client.createLicenseTemplate(licenseProfile);
+		client.updateLicenseTemplate(licenseProfile);
+		client.deleteLicenseTemplate(1L);
 	}
 
 }
