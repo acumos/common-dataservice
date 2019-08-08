@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b4bf15fd_dd92df39",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPLicenseProfileTemplate.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2019-08-08T19:04:34Z",
+      "side": 1,
+      "message": "If priority is missing, then also an exception should be thrown, right?",
+      "revId": "96a931b0a56d55a24949b3cac5c9dcd19e6c8063",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": true
+    }
+  ]
+}
