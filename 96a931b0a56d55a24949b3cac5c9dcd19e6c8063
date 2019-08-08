@@ -16,6 +16,24 @@
       "revId": "96a931b0a56d55a24949b3cac5c9dcd19e6c8063",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89d0d92c_e930fb4c",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/domain/MLPLicenseProfileTemplate.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-08-08T19:06:44Z",
+      "side": 1,
+      "message": "well, it\u0027s difficult to omit an parameter of type \"int\" -- a programmer cannot send null.  And there was no requirement, so the entity doesn\u0027t check if the value is negative or positive.",
+      "parentUuid": "b4bf15fd_dd92df39",
+      "revId": "96a931b0a56d55a24949b3cac5c9dcd19e6c8063",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": true
     }
   ]
 }
