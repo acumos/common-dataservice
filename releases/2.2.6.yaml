@@ -1,0 +1,6 @@
+---
+distribution_type: maven
+version: 2.2.6
+project: common-dataservice
+log_dir: common-dataservice-maven-dl-stage-master/634
+maven_central_url: nexus.acumos.org
