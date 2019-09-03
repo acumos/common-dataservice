@@ -1,0 +1,6 @@
+---
+distribution_type: container
+project: common-dataservice
+containers:
+    - name: common-dataservice
+      version: 3.0.0
