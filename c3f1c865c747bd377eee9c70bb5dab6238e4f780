@@ -70,6 +70,30 @@
       "revId": "c3f1c865c747bd377eee9c70bb5dab6238e4f780",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ddc7e62_e0eab26c",
+        "filename": "releases/3.0.0-container.yaml",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 85
+      },
+      "writtenOn": "2019-09-03T20:45:06Z",
+      "side": 1,
+      "message": "I just double checked the code...\nThe version in #4 should be the version we will releases the images with. In this case 3.0.0 is what will be released as\nThe one in line #7 should be what is expected to be pulled. In ONAP\u0027s case for example would be \"3.0.0-20190903123456Z\"\n\nWe can always work on the variable names. The file name can be anything..",
+      "parentUuid": "d753a7da_5e642625",
+      "range": {
+        "startLine": 7,
+        "startChar": 6,
+        "endLine": 7,
+        "endChar": 13
+      },
+      "revId": "c3f1c865c747bd377eee9c70bb5dab6238e4f780",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": true
     }
   ]
 }
