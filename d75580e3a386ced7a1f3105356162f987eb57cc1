@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "11a882dd_361344d2",
+        "filename": "releases/3.0.0-container.yaml",
+        "patchSetId": 5
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 85
+      },
+      "writtenOn": "2019-09-03T21:04:33Z",
+      "side": 1,
+      "message": "This ref is what is expected to be tagged. The maven files done not require this, but the docker does for now since we were trying to cover a case in ONAP. I think we can figure this out transparently for the user but we need to make more tests. For now, lets add it.",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 45
+      },
+      "revId": "d75580e3a386ced7a1f3105356162f987eb57cc1",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
