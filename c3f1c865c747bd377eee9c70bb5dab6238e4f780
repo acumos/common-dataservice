@@ -46,6 +46,30 @@
       "revId": "c3f1c865c747bd377eee9c70bb5dab6238e4f780",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d753a7da_5e642625",
+        "filename": "releases/3.0.0-container.yaml",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-09-03T20:40:11Z",
+      "side": 1,
+      "message": "In ONAP the containers sometimes have tags that are version + big timestamp.  Like 3.0.0-20190903123456Z. Based on the examples in Aric\u0027s RST, I thought that maybe the first version string must match the file name, and the second string must match the exact tag??",
+      "parentUuid": "c93c32ba_77ff82cc",
+      "range": {
+        "startLine": 7,
+        "startChar": 6,
+        "endLine": 7,
+        "endChar": 13
+      },
+      "revId": "c3f1c865c747bd377eee9c70bb5dab6238e4f780",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": true
     }
   ]
 }
