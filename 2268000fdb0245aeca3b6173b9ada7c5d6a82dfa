@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c60303ba_77dbfc27",
+        "filename": "releases/3.0.0-container.yaml",
+        "patchSetId": 4
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 85
+      },
+      "writtenOn": "2019-09-03T20:57:36Z",
+      "side": 1,
+      "message": "This is what is expected to be pulled.. so either \"3.0.0-b652\" or \"3.0.0\" would work since the image was staged with both tags.. is up to you what is your preference. Let me know if you want it to be 3.0.0",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 25
+      },
+      "revId": "2268000fdb0245aeca3b6173b9ada7c5d6a82dfa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
