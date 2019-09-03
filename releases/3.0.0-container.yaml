@@ -1,0 +1,8 @@
+---
+distribution_type: container
+project: common-dataservice
+version: 3.0.0
+log_dir: common-dataservice-maven-dl-stage-master/652
+containers:
+    - name: common-dataservice
+      version: 3.0.0-b652
