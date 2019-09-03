@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8d1b01a4_8fe71ab7",
+        "filename": "releases/3.0.0-container.yaml",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-09-03T20:30:23Z",
+      "side": 1,
+      "message": "Is this actually a docker tag?  Would you possibly consider changing the key to \u0027tag\u0027 instead?",
+      "range": {
+        "startLine": 7,
+        "startChar": 6,
+        "endLine": 7,
+        "endChar": 13
+      },
+      "revId": "c3f1c865c747bd377eee9c70bb5dab6238e4f780",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": true
+    }
+  ]
+}
