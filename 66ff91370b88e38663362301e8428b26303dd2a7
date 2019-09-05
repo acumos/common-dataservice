@@ -1,0 +1,8 @@
+Code-Review+1: Jessica Wagantall <jwagantall@linuxfoundation.org>
+Verified+1: Acumos Jobbuilder <acumos-jobbuilder@jenkins.acumos.org>
+Code-Review+2: Chris Lott <cl778h@att.com>
+Submitted-by: Chris Lott <cl778h@att.com>
+Submitted-at: Thu, 05 Sep 2019 12:46:29 +0000
+Reviewed-on: https://gerrit.acumos.org/r/c/common-dataservice/+/5150
+Project: common-dataservice
+Branch: refs/heads/master
