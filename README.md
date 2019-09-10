@@ -26,8 +26,9 @@ then launch the server using the following modified command much like above:
 ## Developers
 
 Eclipse and Spring Tool Suite IDE users should install the plugin "m2e-apt" from the
-Eclipe Marketplace, then add folder "target/generated-sources/annotations" to the build 
-path in *both* the client and server projects.
+Eclipe Marketplace. Depending on the version, either set the Eclipse preferences under
+Maven > Annotation Processing, OR add folder "target/generated-sources/annotations" to
+the build path in *both* the client and server projects.
 
 ## License
 

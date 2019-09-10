@@ -53,8 +53,8 @@ public class MLPPipeline extends MLPAbstractWorkbenchArtifact implements Seriali
 	@ApiModelProperty(value = "UUID; omit for system-generated value", example = "12345678-abcd-90ab-cdef-1234567890ab")
 	private String pipelineId;
 
-	@Column(name = "SERVICE_URL", columnDefinition = "VARCHAR(512)")
-	@Size(max = 512)
+	@Column(name = "SERVICE_URL", columnDefinition = "VARCHAR(1024)")
+	@Size(max = 1024)
 	@ApiModelProperty(value = "Service URL", example = "http://my.company.com/svc/pipeline1")
 	private String serviceUrl;
 

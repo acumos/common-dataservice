@@ -1633,7 +1633,7 @@ public class DomainTest extends AbstractModelTest {
 		Assert.assertEquals(s4, m.getFirstName());
 		Assert.assertEquals(t2, m.getLastLogin());
 		Assert.assertEquals(s5, m.getLastName());
-		Assert.assertEquals(new Short((short) 0), m.getLoginFailCount());
+		Assert.assertEquals(Short.valueOf((short) 0), m.getLoginFailCount());
 		Assert.assertEquals(t3, m.getLoginFailDate());
 		Assert.assertEquals(s6, m.getLoginHash());
 		Assert.assertEquals(s7, m.getLoginName());

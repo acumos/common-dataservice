@@ -65,8 +65,8 @@ public class MLPNotebook extends MLPAbstractWorkbenchArtifact implements Seriali
 	@ApiModelProperty(value = "Two-character kernel type code", example = "AB")
 	private String kernelTypeCode;
 
-	@Column(name = "SERVICE_URL", columnDefinition = "VARCHAR(512)")
-	@Size(max = 512)
+	@Column(name = "SERVICE_URL", columnDefinition = "VARCHAR(1024)")
+	@Size(max = 1024)
 	@ApiModelProperty(value = "Service URL", example = "http://my.company.com/svc/pipeline1")
 	private String serviceUrl;
 
