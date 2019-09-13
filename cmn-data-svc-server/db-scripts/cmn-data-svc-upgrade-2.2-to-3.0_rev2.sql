@@ -31,5 +31,11 @@ CREATE TABLE C_LICENSE_PROFILE_TEMPLATE (
   CONSTRAINT C_LICENSE_PROFILE_TEMPLATE_C_USER FOREIGN KEY (USER_ID) REFERENCES C_USER (USER_ID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- This requires an admin user; change the IDs as needed
+INSERT INTO C_LICENSE_PROFILE_TEMPLATE (TEMPLATE_NAME, PRIORITY, USER_ID, CREATED_DATE, MODIFIED_DATE, TEMPLATE) VALUES 
+ ('Apache-2.0', 0, '12345678-abcd-90ab-cdef-1234567890ab', NOW(), NOW(), '{ "keyword": "Apache-2.0", "licenseName": "Apache License 2.0", "copyright": { "year": 2019, "company": "Company A", "suffix": "All Rights Reserved" }, "softwareType": "Machine Learning Model", "companyName": "Company A", "contact": { "name": "Company A Team Member", "URL": "http://companya.com", "email": "support@companya.com" }}'),
+ ('Vendor-A-OSS', 1, '12345678-abcd-90ab-cdef-1234567890ab', NOW(), NOW(), '{ "keyword": "Vendor-A-OSS", "licenseName": "Vendor A Open Source Software License", "copyright": { "year": 2019, "company": "Vendor A", "suffix": "All Rights Reserved" }, "softwareType": "Machine Learning Model", "companyName": "Vendor A", "contact": { "name": "Vendor A Team", "URL": "http://Vendor-A.com", "email": "support@Vendor-A.com" }, "additionalInfo": "http://Vendor-A.com/licenses/Vendor-A-OSS"}'),
+ ('Company-B-Proprietary', 2, '12345678-abcd-90ab-cdef-1234567890ab', NOW(), NOW(), '{ "keyword": "Company-B-Proprietary", "licenseName": "Company B Proprietary License", "copyright": { "year": 2019, "company": "Company B", "suffix": "All Rights Reserved" }, "softwareType": "Machine Learning Model", "companyName": "Company B", "contact": { "name": "Company B Team Member", "URL": "http://Company-B.com", "email": "support@Company-B.com" }, "additionalInfo": "http://Company-B.com/licenses/Company-B-Proprietary"}');
+
 -- Record this action in the history
 INSERT INTO C_HISTORY (COMMENT, CREATED_DATE) VALUES ('cmn-data-svc-upgrade-2.2-to-3.0', NOW());
