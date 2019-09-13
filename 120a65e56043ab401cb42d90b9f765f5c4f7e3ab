@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c7a96b6a_710d64dd",
+        "filename": "docs/release-notes.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-09-13T17:53:33Z",
+      "side": 1,
+      "message": "Is it 3.0.1? maybe this is a 3.0.0-rev2?",
+      "revId": "120a65e56043ab401cb42d90b9f765f5c4f7e3ab",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": true
+    }
+  ]
+}
