@@ -16,6 +16,24 @@
       "revId": "120a65e56043ab401cb42d90b9f765f5c4f7e3ab",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "477e16af_90f2b052",
+        "filename": "docs/release-notes.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-09-13T18:35:26Z",
+      "side": 1,
+      "message": "I only bump versions when the client library and/or the server image changes.  The database scripts are adjunct material and sometimes get tweaked out-of-cycle with software changes.  This is one of those cases. We are just adding data.  There are no interface or schema changes.",
+      "parentUuid": "c7a96b6a_710d64dd",
+      "revId": "120a65e56043ab401cb42d90b9f765f5c4f7e3ab",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
