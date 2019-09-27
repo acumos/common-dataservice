@@ -24,8 +24,12 @@ The client and server are released together.  The client is available
 as a jar file in the Acumos/LF Nexus repository. The server is
 available as a Docker image in the Acumos/LF Docker registry.
 
-Version 3.0.0, 02 Oct 2019
---------------------------
+Version 3.0.0, 3 Oct 2019
+-------------------------
+* Extend 2.1-to-2.2 migration script discover-Acumos entries (`ACUMOS-3392 <https://jira.acumos.org/browse/ACUMOS-3392>`_)
+
+Version 3.0.0, 2 Oct 2019
+-------------------------
 * Update license profile templates data to include $schema & rtuRequired (`ACUMOS-3510 <https://jira.acumos.org/browse/ACUMOS-3510>`_)
 
 Version 3.0.0, 13 Sep 2019
