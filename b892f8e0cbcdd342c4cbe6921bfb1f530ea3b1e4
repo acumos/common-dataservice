@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "90ee9415_ff907885",
+        "filename": "docs/release-notes.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 291
+      },
+      "writtenOn": "2019-10-02T18:36:43Z",
+      "side": 1,
+      "message": "@Chris is this change requires to bump up the version to 3.0.1?\nKindly suggest as I\u0027m not aware of CDS release plan.",
+      "revId": "b892f8e0cbcdd342c4cbe6921bfb1f530ea3b1e4",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": true
+    }
+  ]
+}
