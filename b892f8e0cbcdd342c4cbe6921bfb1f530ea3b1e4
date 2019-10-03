@@ -16,6 +16,24 @@
       "revId": "b892f8e0cbcdd342c4cbe6921bfb1f530ea3b1e4",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a109c10_f9c5cd1b",
+        "filename": "docs/release-notes.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-10-03T15:32:53Z",
+      "side": 1,
+      "message": "If the packaged software does not change, in other words if only database scripts change, then I do not bump the version.",
+      "parentUuid": "90ee9415_ff907885",
+      "revId": "b892f8e0cbcdd342c4cbe6921bfb1f530ea3b1e4",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": true
     }
   ]
 }
