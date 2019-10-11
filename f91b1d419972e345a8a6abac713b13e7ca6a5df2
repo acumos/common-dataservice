@@ -16,6 +16,24 @@
       "revId": "f91b1d419972e345a8a6abac713b13e7ca6a5df2",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91838536_47a3ecf0",
+        "filename": "docs/release-notes.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-10-11T14:33:22Z",
+      "side": 1,
+      "message": "Good catch, I missed that. Patch coming shortly.",
+      "parentUuid": "b1286695_49cf7414",
+      "revId": "f91b1d419972e345a8a6abac713b13e7ca6a5df2",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": true
     }
   ]
 }
