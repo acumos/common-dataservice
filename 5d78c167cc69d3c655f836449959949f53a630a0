@@ -16,6 +16,24 @@
       "revId": "5d78c167cc69d3c655f836449959949f53a630a0",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd827dec_4908bc55",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/CommonDataServiceRestClientImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2484,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-11-11T16:41:29Z",
+      "side": 0,
+      "message": "I didn\u0027t. Scroll up.  The diff output doesn\u0027t always mark a block of changes quite how you and I would like to see it.",
+      "parentUuid": "0786bf84_642d6e1f",
+      "revId": "5d78c167cc69d3c655f836449959949f53a630a0",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": true
     }
   ]
 }
