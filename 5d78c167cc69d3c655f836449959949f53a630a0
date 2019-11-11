@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0786bf84_642d6e1f",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/CommonDataServiceRestClientImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2484,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2019-11-11T16:39:26Z",
+      "side": 0,
+      "message": "Why are you removing the below annotation when it is not related to RTUs method?",
+      "revId": "5d78c167cc69d3c655f836449959949f53a630a0",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": true
+    }
+  ]
+}
