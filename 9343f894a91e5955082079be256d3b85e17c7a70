@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6db60282_a539052f",
+        "filename": "cmn-data-svc-server/db-scripts/cmn-data-svc-ddl-dml-3.1-rev1.sql",
+        "patchSetId": 1
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2019-11-11T16:53:53Z",
+      "side": 1,
+      "message": "So no change in C_LICENSE_PROFILE_TEMPLATE needed although this has RTU related keys in it?",
+      "revId": "9343f894a91e5955082079be256d3b85e17c7a70",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": true
+    }
+  ]
+}
