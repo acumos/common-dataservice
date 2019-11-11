@@ -16,6 +16,24 @@
       "revId": "9343f894a91e5955082079be256d3b85e17c7a70",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f860864_10c625c3",
+        "filename": "cmn-data-svc-server/db-scripts/cmn-data-svc-ddl-dml-3.1-rev1.sql",
+        "patchSetId": 1
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-11-11T17:57:48Z",
+      "side": 1,
+      "message": "The LUM team requested no changes here.  I believe those keys refer to the LUM team\u0027s RTU system, external to Acumos.",
+      "parentUuid": "6db60282_a539052f",
+      "revId": "9343f894a91e5955082079be256d3b85e17c7a70",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": true
     }
   ]
 }
