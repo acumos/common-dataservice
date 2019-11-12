@@ -234,6 +234,8 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 	private List<MLPPeer> catalogAccessPeers;
 	private RestPageResponse<MLPLicenseProfileTemplate> licenseTemplates;
 	private MLPLicenseProfileTemplate licenseTemplate;
+	private List<MLPRole> catalogRoles;
+	private long roleCatalogsCount;
 
 	/**
 	 * No-argument constructor.
@@ -2179,6 +2181,39 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 	@Override
 	public void deleteLicenseProfileTemplate(long licenseId) {
 		// How to mock?
+	}
+
+	public void setCatalogRoles(List<MLPRole> roles) {
+		this.catalogRoles = roles;
+	}
+
+	@Override
+	public List<MLPRole> getCatalogRoles(String catalogId) {
+		return catalogRoles;
+	}
+
+	@Override
+	public void addCatalogRole(String catalogId, String roleId) {
+		// How to mock?
+	}
+
+	@Override
+	public void updateCatalogRoles(String catalogId, List<String> roleIds) {
+		// How to mock?
+	}
+
+	@Override
+	public void dropCatalogRole(String catalogId, String roleId) {
+		// How to mock?
+	}
+
+	public void setRoleCatalogsCount(long count) {
+		this.roleCatalogsCount = count;
+	}
+
+	@Override
+	public long getRoleCatalogsCount(String roleId) {
+		return roleCatalogsCount;
 	}
 
 }

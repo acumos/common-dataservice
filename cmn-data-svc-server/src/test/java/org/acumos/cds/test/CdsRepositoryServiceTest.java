@@ -30,6 +30,7 @@ import javax.validation.ConstraintViolationException;
 
 import org.acumos.cds.CodeNameType;
 import org.acumos.cds.domain.MLPArtifact;
+import org.acumos.cds.domain.MLPCatRoleMap;
 import org.acumos.cds.domain.MLPCatSolMap;
 import org.acumos.cds.domain.MLPCatalog;
 import org.acumos.cds.domain.MLPCodeNamePair;
@@ -78,6 +79,7 @@ import org.acumos.cds.domain.MLPUserRoleMap;
 import org.acumos.cds.repository.ArtifactRepository;
 import org.acumos.cds.repository.CatSolMapRepository;
 import org.acumos.cds.repository.CatalogRepository;
+import org.acumos.cds.repository.CatalogRoleMapRepository;
 import org.acumos.cds.repository.CommentRepository;
 import org.acumos.cds.repository.CompSolMapRepository;
 import org.acumos.cds.repository.DocumentRepository;
@@ -156,6 +158,8 @@ public class CdsRepositoryServiceTest {
 	private ArtifactRepository artifactRepository;
 	@Autowired
 	private CatalogRepository catalogRepository;
+	@Autowired
+	private CatalogRoleMapRepository catalogRoleMapRepository;
 	@Autowired
 	private CatalogSearchService catalogSearchService;
 	@Autowired
@@ -1153,6 +1157,11 @@ public class CdsRepositoryServiceTest {
 	@Test
 	public void testRoleAndFunctions() throws Exception {
 		try {
+			MLPCatalog cat = new MLPCatalog("RS", true, "name", "pname", "http://pub.org");
+			cat = catalogRepository.save(cat);
+			Assert.assertNotNull("Catalog ID", cat.getCatalogId());
+			logger.info("Created restricted catalog {}", cat);
+
 			MLPUser cu = null;
 			cu = new MLPUser();
 			cu.setActive(true);
@@ -1176,12 +1185,6 @@ public class CdsRepositoryServiceTest {
 			Page<MLPRole> emptyRoles = roleSearchService.findRoles("bogus", Boolean.TRUE, false, PageRequest.of(0, 5));
 			Assert.assertTrue(emptyRoles.isEmpty());
 
-			logger.info("Assigning role to user");
-			userRoleMapRepository.save(new MLPUserRoleMap(cu.getUserId(), cr.getRoleId()));
-
-			Iterable<MLPRole> roles = roleRepository.findByUser(cu.getUserId());
-			Assert.assertTrue(roles.iterator().hasNext());
-
 			MLPRoleFunction crf = new MLPRoleFunction();
 			final String roleFuncName = "My test role function";
 			crf.setName(roleFuncName);
@@ -1198,11 +1201,27 @@ public class CdsRepositoryServiceTest {
 			MLPRoleFunction roleFuncOne = resrf.iterator().next();
 			Assert.assertEquals(roleFuncName, roleFuncOne.getName());
 
+			logger.info("Assigning role to catalog");
+			catalogRoleMapRepository.save(new MLPCatRoleMap(cat.getCatalogId(), cr.getRoleId()));
+			Iterable<MLPRole> catRoles = roleRepository.findByCatalog(cat.getCatalogId());
+			Assert.assertTrue(catRoles.iterator().hasNext());
+
+			logger.info("Assigning role to user");
+			userRoleMapRepository.save(new MLPUserRoleMap(cu.getUserId(), cr.getRoleId()));
+			Iterable<MLPRole> userRoles = roleRepository.findByUser(cu.getUserId());
+			Assert.assertTrue(userRoles.iterator().hasNext());
+
+			logger.info("Removing catalog from role");
+			catalogRoleMapRepository.deleteById(new MLPCatRoleMap.CatalogRoleMapPK(cat.getCatalogId(), cr.getRoleId()));
+
 			logger.info("Removing user from role");
 			userRoleMapRepository.deleteById(new MLPUserRoleMap.UserRoleMapPK(cu.getUserId(), cr.getRoleId()));
 
 			logger.info("Deleting test user");
 			userRepository.deleteById(cu.getUserId());
+
+			logger.info("Deleting test catalog");
+			catalogRepository.deleteById(cat.getCatalogId());
 
 			logger.info("Deleting test role function");
 			roleFunctionRepository.delete(roleFuncOne);

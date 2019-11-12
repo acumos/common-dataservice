@@ -638,6 +638,15 @@ public class MockClientTest {
 		client.createLicenseProfileTemplate(template);
 		client.updateLicenseProfileTemplate(template);
 		client.deleteLicenseProfileTemplate(1L);
+		
+		List<MLPRole> catRoleList = new ArrayList<>();
+		client.setCatalogRoles(catRoleList);
+		Assert.assertTrue(catRoleList == client.getCatalogRoles("id"));
+		client.addCatalogRole("id", "id");
+		client.updateCatalogRoles("id", stringList);
+		client.dropCatalogRole("user", "role");
+		client.setRoleCatalogsCount(count);
+		Assert.assertTrue(count == client.getRoleCatalogsCount("role"));
 	}
 
 }
