@@ -27,6 +27,7 @@ available as a Docker image in the Acumos/LF Docker registry.
 Version 3.1.0, 15 Nov 2019
 --------------------------
 * Drop Right To Use entities and controller (`ACUMOS-3460 <https://jira.acumos.org/browse/ACUMOS-3460>`_)
+* Add catalog-role mappings (`ACUMOS-3681 <https://jira.acumos.org/browse/ACUMOS-3681>`_)
 * Upgrade to Spring-Boot version 2.1.10.RELEASE
 * Requires database schema version 3.1
 
