@@ -24,6 +24,12 @@ The client and server are released together.  The client is available
 as a jar file in the Acumos/LF Nexus repository. The server is
 available as a Docker image in the Acumos/LF Docker registry.
 
+
+Version 3.1.0, 15 Nov 2019
+--------------------------
+* Add catalog-role mappings (`ACUMOS-3681 <https://jira.acumos.org/browse/ACUMOS-3681>`_)
+* Requires database schema version 3.1
+
 Version 3.0.1, 29 Oct 2019
 --------------------------
 * Add database script to set password expiration date (`ACUMOS-3605 <https://jira.acumos.org/browse/ACUMOS-3605>`_)

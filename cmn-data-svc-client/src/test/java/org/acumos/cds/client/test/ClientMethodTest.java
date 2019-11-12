@@ -1288,7 +1288,26 @@ public class ClientMethodTest {
 		} catch (ResourceAccessException ex) {
 			logger.info("Client failed as expected: {}", ex.toString());
 		}
-
+		try {
+			client.getCatalogRoles("catalogId");
+		} catch (ResourceAccessException ex) {
+			logger.info("Client failed as expected: {}", ex.toString());
+		}
+		try {
+			client.addCatalogRole("catalogId", "roleId");
+		} catch (ResourceAccessException ex) {
+			logger.info("Client failed as expected: {}", ex.toString());
+		}
+		try {
+			client.updateCatalogRoles("catalogId", new ArrayList<String>());
+		} catch (Exception ex) {
+			logger.info("Client failed as expected: {}", ex.toString());
+		}
+		try {
+			client.dropCatalogRole("catalogId", "roleId");
+		} catch (ResourceAccessException ex) {
+			logger.info("Client failed as expected: {}", ex.toString());
+		}
 	}
 
 }
