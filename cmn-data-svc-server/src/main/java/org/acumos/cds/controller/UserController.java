@@ -57,12 +57,12 @@ import org.acumos.cds.repository.UserRepository;
 import org.acumos.cds.repository.UserRoleMapRepository;
 import org.acumos.cds.repository.UserTagMapRepository;
 import org.acumos.cds.service.UserSearchService;
+import org.acumos.cds.transport.BatchIdRoleRequest;
 import org.acumos.cds.transport.CountTransport;
 import org.acumos.cds.transport.ErrorTransport;
 import org.acumos.cds.transport.LoginTransport;
 import org.acumos.cds.transport.MLPTransportModel;
 import org.acumos.cds.transport.SuccessTransport;
-import org.acumos.cds.transport.UsersRoleRequest;
 import org.acumos.cds.util.ApiPageable;
 import org.jasypt.util.text.BasicTextEncryptor;
 import org.slf4j.Logger;
@@ -676,29 +676,29 @@ public class UserController extends AbstractController {
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = CCDSConstants.ROLE_PATH + "/{roleId}", method = RequestMethod.PUT)
 	public MLPTransportModel addOrDropUsersInRole(@PathVariable("roleId") String roleId,
-			@RequestBody UsersRoleRequest usersRoleRequest, HttpServletResponse response) {
+			@RequestBody BatchIdRoleRequest usersRoleRequest, HttpServletResponse response) {
 		if (logger.isDebugEnabled())
 			logger.debug("addOrDropUsersInRole: role {} users {}", roleId,
-					String.join(", ", usersRoleRequest.getUserIds()));
+					String.join(", ", usersRoleRequest.getIds()));
 		// Validate entire request before making any change
 		if (!roleRepository.findById(roleId).isPresent()) {
 			logger.warn("addOrDropUsersInRole unknown role ID {}", roleId);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + roleId, null);
 		}
-		if (usersRoleRequest.getUserIds().isEmpty()) {
+		if (usersRoleRequest.getIds().isEmpty()) {
 			logger.warn("addOrDropUsersInRole empty user ids");
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "No users", null);
 		}
-		for (String userId : usersRoleRequest.getUserIds()) {
+		for (String userId : usersRoleRequest.getIds()) {
 			if (!userRepository.findById(userId).isPresent()) {
 				logger.warn("addOrDropUsersInRole unknown user ID {}", userId);
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + userId, null);
 			}
 		}
-		for (String userId : usersRoleRequest.getUserIds()) {
+		for (String userId : usersRoleRequest.getIds()) {
 			MLPUserRoleMap.UserRoleMapPK pk = new MLPUserRoleMap.UserRoleMapPK(userId, roleId);
 			boolean exists = userRoleMapRepository.findById(pk).isPresent();
 			if (exists && usersRoleRequest.isAdd()) {
@@ -711,7 +711,7 @@ public class UserController extends AbstractController {
 				return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "User not in role " + userId, null);
 			}
 		}
-		for (String userId : usersRoleRequest.getUserIds()) {
+		for (String userId : usersRoleRequest.getIds()) {
 			if (usersRoleRequest.isAdd())
 				userRoleMapRepository.save(new MLPUserRoleMap(userId, roleId));
 			else
