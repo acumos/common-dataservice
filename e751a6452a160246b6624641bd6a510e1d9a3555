@@ -16,6 +16,24 @@
       "revId": "e751a6452a160246b6624641bd6a510e1d9a3555",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63f88db0_78546fc7",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/ICommonDataServiceRestClient.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 3016,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-11-13T19:49:47Z",
+      "side": 1,
+      "message": "I think you\u0027re asking, why didn\u0027t I add methods addCatalogsInRole() and dropCatalogsInRole()? These would support bulk-update operations, which seem likely use cases for users (addUsersInRole, dropUsersInRole) but unlikely for catalogs.  \n\ntl;dr -- nobody asked for it and I just didn\u0027t think it was needed.",
+      "parentUuid": "749baa3a_2e592390",
+      "revId": "e751a6452a160246b6624641bd6a510e1d9a3555",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": true
     }
   ]
 }
