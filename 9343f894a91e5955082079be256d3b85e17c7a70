@@ -34,6 +34,24 @@
       "revId": "9343f894a91e5955082079be256d3b85e17c7a70",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4abc7aa4_4a8b02ed",
+        "filename": "cmn-data-svc-server/db-scripts/cmn-data-svc-ddl-dml-3.1-rev1.sql",
+        "patchSetId": 1
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-11-13T16:06:45Z",
+      "side": 1,
+      "message": "Please no changes to license profile templates... only removing rtu cds support.",
+      "parentUuid": "0f860864_10c625c3",
+      "revId": "9343f894a91e5955082079be256d3b85e17c7a70",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": true
     }
   ]
 }
