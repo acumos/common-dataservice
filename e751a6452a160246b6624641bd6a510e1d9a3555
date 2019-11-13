@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "749baa3a_2e592390",
+        "filename": "cmn-data-svc-client/src/main/java/org/acumos/cds/client/ICommonDataServiceRestClient.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 3016,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2019-11-13T19:45:34Z",
+      "side": 1,
+      "message": "Don\u0027t we need a method to add a list of catalogs to a role?",
+      "revId": "e751a6452a160246b6624641bd6a510e1d9a3555",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": true
+    }
+  ]
+}
