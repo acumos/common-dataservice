@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8209d40b_85d5a282",
+        "filename": "cmn-data-svc-server/db-scripts/cmn-data-svc-ddl-dml-3.1-rev1.sql",
+        "patchSetId": 4
+      },
+      "lineNbr": 565,
+      "author": {
+        "id": 220
+      },
+      "writtenOn": "2019-11-20T04:06:39Z",
+      "side": 1,
+      "message": "in defect ACUMOS-3659 point number 2 \u0026 3 talks about add/delete access role where are we capturing that?",
+      "range": {
+        "startLine": 558,
+        "startChar": 0,
+        "endLine": 565,
+        "endChar": 0
+      },
+      "revId": "3b8a0f32922a99917585bd2edaba4ec339a4b1a3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": true
+    }
+  ]
+}
