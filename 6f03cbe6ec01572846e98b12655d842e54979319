@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c309028e_4c872b37",
+        "filename": "docs/release-notes.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 212
+      },
+      "writtenOn": "2019-12-03T13:32:25Z",
+      "side": 1,
+      "message": "just a little typo \"toolkit\" intead of \"tookit\"",
+      "revId": "6f03cbe6ec01572846e98b12655d842e54979319",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": true
+    }
+  ]
+}
