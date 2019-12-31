@@ -2843,14 +2843,18 @@ public interface ICommonDataServiceRestClient {
 	 * must have a restricted access-type code.
 	 * 
 	 * @param catalogId
-	 *                      Catalog ID
-	 * @return List of peers, which may be empty
+	 *                        Catalog ID
+	 * @param pageRequest
+	 *                        Page index, page size and sort information; defaults
+	 *                        to page 0 of size 20 if null.
+	 * @return Page of peers, which may be empty
 	 * @throws RestClientResponseException
 	 *                                         Error message is in the response
-	 *                                         body; is thrown if the catalog is not
-	 *                                         restricted
+	 *                                         body; is thrown if the catalog does
+	 *                                         not exist or is not restricted
 	 */
-	List<MLPPeer> getCatalogAccessPeers(String catalogId) throws RestClientResponseException;
+	RestPageResponse<MLPPeer> getCatalogAccessPeers(String catalogId, RestPageRequest pageRequest)
+			throws RestClientResponseException;
 
 	/**
 	 * Add read access to the specified catalog for the specified peer. The catalog

@@ -1079,7 +1079,7 @@ public class ClientMethodTest {
 			logger.info("Client failed as expected: {}", ex.toString());
 		}
 		try {
-			client.getCatalogAccessPeers("catalogId");
+			client.getCatalogAccessPeers("catalogId", new RestPageRequest());
 		} catch (ResourceAccessException ex) {
 			logger.info("Client failed as expected: {}", ex.toString());
 		}

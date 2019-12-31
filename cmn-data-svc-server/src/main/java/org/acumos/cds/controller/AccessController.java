@@ -185,12 +185,14 @@ public class AccessController extends AbstractController {
 		return peerCatAccMapRepository.findCatalogIdsByPeerId(peerId);
 	}
 
-	@ApiOperation(value = "Gets the list of peers with access to the specified restricted catalog; empty if none are found.", //
-			response = MLPPeer.class, responseContainer = "List")
+	@ApiOperation(value = "Gets a page of peers with access to the specified restricted catalog; empty if none are found.", //
+			response = MLPPeer.class, responseContainer = "Page")
+	@ApiPageable
 	@ApiResponses({ @ApiResponse(code = 400, message = "Bad request", response = ErrorTransport.class) })
 	@RequestMapping(value = CCDSConstants.CATALOG_PATH + "/{catalogId}/"
 			+ CCDSConstants.PEER_PATH, method = RequestMethod.GET)
-	public Object getCatalogAccessPeers(@PathVariable("catalogId") String catalogId, HttpServletResponse response) {
+	public Object getCatalogAccessPeers(@PathVariable("catalogId") String catalogId, Pageable pageable,
+			HttpServletResponse response) {
 		logger.debug("getCatalogAccessPeers catalogId {}", catalogId);
 		Optional<MLPCatalog> cat = catalogRepository.findById(catalogId);
 		if (!cat.isPresent() || !"RS".equals(cat.get().getAccessTypeCode())) {
@@ -198,7 +200,7 @@ public class AccessController extends AbstractController {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, NO_ENTRY_WITH_ID + catalogId, null);
 		}
-		return peerCatAccMapRepository.findPeersByCatalogId(catalogId);
+		return peerCatAccMapRepository.findPeersByCatalogId(catalogId, pageable);
 	}
 
 	@ApiOperation(value = "Checks if the specified peer can read the specified catalog. Returns non-zero if yes, zero if no.", //

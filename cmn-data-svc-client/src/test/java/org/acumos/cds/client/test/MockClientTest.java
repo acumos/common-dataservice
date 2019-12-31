@@ -593,9 +593,9 @@ public class MockClientTest {
 		client.isPeerAccessToSolution("peerId", "solutionId");
 		client.dropPeerAccessCatalog("peer", "catalog");
 
-		List<MLPPeer> accessPeers = new ArrayList<>();
+		RestPageResponse<MLPPeer> accessPeers = new RestPageResponse<>();
 		client.setCatalogAccessPeers(accessPeers);
-		Assert.assertEquals(accessPeers, client.getCatalogAccessPeers("catId"));
+		Assert.assertEquals(accessPeers, client.getCatalogAccessPeers("catId", new RestPageRequest()));
 
 		client.setUserFavoriteCatalogIds(catalogIds);
 		Assert.assertEquals(catalogIds, client.getUserFavoriteCatalogIds("userId"));

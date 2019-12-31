@@ -2080,8 +2080,9 @@ public class CdsControllerTest {
 			client.addPeerAccessCatalog(pr.getPeerId(), catRes.getCatalogId());
 			List<String> peerAcc = client.getPeerAccessCatalogIds(pr.getPeerId());
 			Assert.assertEquals(1, peerAcc.size());
-			List<MLPPeer> accessPeers = client.getCatalogAccessPeers(catRes.getCatalogId());
-			Assert.assertEquals(1, accessPeers.size());
+			RestPageResponse<MLPPeer> accessPeers = client.getCatalogAccessPeers(catRes.getCatalogId(),
+					new RestPageRequest());
+			Assert.assertEquals(1, accessPeers.getNumberOfElements());
 
 			client.addUserFavoriteCatalog(cu.getUserId(), ca.getCatalogId());
 			List<String> userFavs = client.getUserFavoriteCatalogIds(cu.getUserId());
