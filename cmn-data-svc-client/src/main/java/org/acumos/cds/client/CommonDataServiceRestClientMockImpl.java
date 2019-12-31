@@ -223,7 +223,7 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 	private boolean peerAccessToCatalog;
 	private List<String> catalogPublishers;
 	private RestPageResponse<MLPSolution> publishedSolutionsByDate;
-	private List<MLPPeer> catalogAccessPeers;
+	private RestPageResponse<MLPPeer> catalogAccessPeers;
 	private RestPageResponse<MLPLicenseProfileTemplate> licenseTemplates;
 	private MLPLicenseProfileTemplate licenseTemplate;
 	private List<MLPRole> catalogRoles;
@@ -1984,12 +1984,12 @@ public class CommonDataServiceRestClientMockImpl implements ICommonDataServiceRe
 		return this.peerAccessCatalogIds;
 	}
 
-	public void setCatalogAccessPeers(List<MLPPeer> peers) {
+	public void setCatalogAccessPeers(RestPageResponse<MLPPeer> peers) {
 		this.catalogAccessPeers = peers;
 	}
 
 	@Override
-	public List<MLPPeer> getCatalogAccessPeers(String catalogId) {
+	public RestPageResponse<MLPPeer> getCatalogAccessPeers(String catalogId, RestPageRequest pageRequest) {
 		return this.catalogAccessPeers;
 	}
 

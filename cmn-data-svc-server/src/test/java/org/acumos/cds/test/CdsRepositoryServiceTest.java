@@ -1438,7 +1438,8 @@ public class CdsRepositoryServiceTest {
 
 		Iterable<String> peerCatIds = peerCatAccMapRepository.findCatalogIdsByPeerId(pr.getPeerId());
 		Assert.assertFalse(peerCatIds.iterator().hasNext());
-		Iterable<MLPPeer> accessPeers = peerCatAccMapRepository.findPeersByCatalogId(caRst.getCatalogId());
+		Iterable<MLPPeer> accessPeers = peerCatAccMapRepository.findPeersByCatalogId(caRst.getCatalogId(),
+				PageRequest.of(0, 3));
 		Assert.assertFalse(accessPeers.iterator().hasNext());
 
 		long accRst = peerCatAccMapRepository.countCatalogsByPeerAccessAndSolution(pr.getPeerId(), cs2.getSolutionId());
@@ -1450,7 +1451,7 @@ public class CdsRepositoryServiceTest {
 
 		peerCatIds = peerCatAccMapRepository.findCatalogIdsByPeerId(pr.getPeerId());
 		Assert.assertTrue(peerCatIds.iterator().hasNext());
-		accessPeers = peerCatAccMapRepository.findPeersByCatalogId(caRst.getCatalogId());
+		accessPeers = peerCatAccMapRepository.findPeersByCatalogId(caRst.getCatalogId(), PageRequest.of(0, 3));
 		Assert.assertTrue(accessPeers.iterator().hasNext());
 
 		MLPUserCatFavMap ucfm = new MLPUserCatFavMap(cu.getUserId(), caPub.getCatalogId());

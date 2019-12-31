@@ -2643,12 +2643,12 @@ public class CommonDataServiceRestClientImpl implements ICommonDataServiceRestCl
 	}
 
 	@Override
-	public List<MLPPeer> getCatalogAccessPeers(String catalogId) {
+	public RestPageResponse<MLPPeer> getCatalogAccessPeers(String catalogId, RestPageRequest pageRequest) {
 		URI uri = buildUri(new String[] { CCDSConstants.ACCESS_PATH, CCDSConstants.CATALOG_PATH, catalogId,
-				CCDSConstants.PEER_PATH }, null, null);
+				CCDSConstants.PEER_PATH }, null, pageRequest);
 		logger.debug("getCatalogAccessPeers: uri {}", uri);
-		ResponseEntity<List<MLPPeer>> response = restTemplate.exchange(uri, HttpMethod.GET, null,
-				new ParameterizedTypeReference<List<MLPPeer>>() {
+		ResponseEntity<RestPageResponse<MLPPeer>> response = restTemplate.exchange(uri, HttpMethod.GET, null,
+				new ParameterizedTypeReference<RestPageResponse<MLPPeer>>() {
 				});
 		return response.getBody();
 	}

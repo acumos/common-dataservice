@@ -22,6 +22,8 @@ package org.acumos.cds.repository;
 
 import org.acumos.cds.domain.MLPPeer;
 import org.acumos.cds.domain.MLPPeerCatAccMap;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -59,17 +61,19 @@ public interface PeerCatAccMapRepository extends CrudRepository<MLPPeerCatAccMap
 	long countCatalogsByPeerAccessAndSolution(@Param("peerId") String peerId, @Param("solutionId") String solutionId);
 
 	/**
-	 * Gets the peers with access to the specified catalog defined in the access-map
-	 * relation. The access-type code on the catalog is SUPPOSED to be restricted
-	 * ('RS') but that's not checked here.
+	 * Gets a page of peers with access to the specified catalog defined in the
+	 * access-map relation. The access-type code on the catalog is SUPPOSED to be
+	 * restricted ('RS') but that's not checked here.
 	 * 
 	 * @param catalogId
 	 *                      Catalog ID
-	 * @return Iterable of MLPPeer
+	 * @param pageable
+	 *                      Page and sort criteria
+	 * @return Page of MLPPeer
 	 */
 	@Query(value = "select p FROM MLPPeer p, MLPPeerCatAccMap m " //
 			+ " WHERE p.peerId = m.peerId " //
 			+ "   AND m.catalogId = :catalogId")
-	Iterable<MLPPeer> findPeersByCatalogId(@Param("catalogId") String catalogId);
+	Page<MLPPeer> findPeersByCatalogId(@Param("catalogId") String catalogId, Pageable pageable);
 
 }
