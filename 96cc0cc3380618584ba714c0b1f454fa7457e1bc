@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c4f3513f_fd8bf3de",
+        "filename": "cmn-data-svc-server/config/application-mariadb.properties",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2020-01-02T18:28:48Z",
+      "side": 0,
+      "message": "Is there a way to automatically account for this time zone difference of 1 hour for every DST change?",
+      "revId": "96cc0cc3380618584ba714c0b1f454fa7457e1bc",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": true
+    }
+  ]
+}
