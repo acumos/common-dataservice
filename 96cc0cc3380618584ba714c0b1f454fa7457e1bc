@@ -16,6 +16,24 @@
       "revId": "96cc0cc3380618584ba714c0b1f454fa7457e1bc",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c654d78f_a4480db2",
+        "filename": "cmn-data-svc-server/config/application-mariadb.properties",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2020-01-02T19:11:11Z",
+      "side": 0,
+      "message": "I don\u0027t know any way of automatically accounting for this.  One step I did was to revise test cases that involve time, to increase their window size from 1 hour to 2 hours, then it will keep working if the time zone difference is zero or one hour(s).",
+      "parentUuid": "c4f3513f_fd8bf3de",
+      "revId": "96cc0cc3380618584ba714c0b1f454fa7457e1bc",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": true
     }
   ]
 }
