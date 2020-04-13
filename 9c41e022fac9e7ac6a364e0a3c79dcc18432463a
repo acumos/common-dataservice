@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0bb21880_eed6efa2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2020-04-13T18:20:45Z",
+      "side": 1,
+      "message": "Issue-",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 5
+      },
+      "revId": "9c41e022fac9e7ac6a364e0a3c79dcc18432463a",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "437e05ce_4054a165",
+        "filename": "cmn-data-svc/cmn-data-svc-server/db-scripts/cmn-data-svc-ddl-dml-3.1-rev2.sql",
+        "patchSetId": 1
+      },
+      "lineNbr": 618,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2020-04-13T18:20:45Z",
+      "side": 1,
+      "message": "text does not match file name",
+      "range": {
+        "startLine": 618,
+        "startChar": 55,
+        "endLine": 618,
+        "endChar": 84
+      },
+      "revId": "9c41e022fac9e7ac6a364e0a3c79dcc18432463a",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2bc0ffd1_0c534258",
+        "filename": "cmn-data-svc/cmn-data-svc-server/db-scripts/cmn-data-svc-upgrade-3.1-rev1-to-3.1-rev2.sql",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2020-04-13T18:20:45Z",
+      "side": 1,
+      "message": "comment does not match the file name",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 1
+      },
+      "revId": "9c41e022fac9e7ac6a364e0a3c79dcc18432463a",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef66b2b5_23155ec4",
+        "filename": "cmn-data-svc/cmn-data-svc-server/db-scripts/cmn-data-svc-upgrade-3.1-rev1-to-3.1-rev2.sql",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2020-04-13T18:20:45Z",
+      "side": 1,
+      "message": "text does not match the file name",
+      "range": {
+        "startLine": 37,
+        "startChar": 55,
+        "endLine": 37,
+        "endChar": 91
+      },
+      "revId": "9c41e022fac9e7ac6a364e0a3c79dcc18432463a",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "316af801_c8ded877",
+        "filename": "docs/release-notes.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2020-04-13T18:20:45Z",
+      "side": 1,
+      "message": "You don\u0027t change the software version when you add a database script",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 1
+      },
+      "revId": "9c41e022fac9e7ac6a364e0a3c79dcc18432463a",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": true
+    }
+  ]
+}
