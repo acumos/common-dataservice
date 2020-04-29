@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "660d5748_1d21abf3",
+        "filename": "cmn-data-svc/cmn-data-svc-server/db-scripts/cmn-data-svc-upgrade-3.1-rev1-to-3.1-rev2.sql",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2020-04-29T18:01:24Z",
+      "side": 1,
+      "message": "Yes",
+      "parentUuid": "24d84c37_9a86b8ab",
+      "revId": "b4ea318f15e14e9e0f4a5b7a09b73e457deca934",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b461083c_8cb3cd44",
         "filename": "cmn-data-svc/cmn-data-svc-server/db-scripts/cmn-data-svc-upgrade-3.1-rev1-to-3.1-rev2.sql",
         "patchSetId": 2
@@ -30,6 +48,30 @@
       "writtenOn": "2020-04-22T00:31:12Z",
       "side": 1,
       "message": "Drop table? what\u0027s going on here?  These look like commands from the 3.0-to-3.1 upgrade script.  But judging by the name of this script, this script MUST NOT drop or create tables.  What am I missing?",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 4
+      },
+      "revId": "b4ea318f15e14e9e0f4a5b7a09b73e457deca934",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc14192b_f46136c7",
+        "filename": "cmn-data-svc/cmn-data-svc-server/db-scripts/cmn-data-svc-upgrade-3.1-rev1-to-3.1-rev2.sql",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2020-04-29T18:01:24Z",
+      "side": 1,
+      "message": "Removed",
+      "parentUuid": "b461083c_8cb3cd44",
       "range": {
         "startLine": 23,
         "startChar": 0,
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "dcb40acd_9f968d0a",
+        "filename": "cmn-data-svc/cmn-data-svc-server/db-scripts/cmn-data-svc-upgrade-3.1-rev1-to-3.1-rev2.sql",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2020-04-29T18:01:24Z",
+      "side": 1,
+      "message": "Removed",
+      "parentUuid": "63311a84_b705f84b",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 9
+      },
+      "revId": "b4ea318f15e14e9e0f4a5b7a09b73e457deca934",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "02e848c6_230b0a14",
         "filename": "cmn-data-svc/cmn-data-svc-server/db-scripts/cmn-data-svc-upgrade-3.1-rev1-to-3.1-rev2.sql",
         "patchSetId": 2
@@ -76,6 +142,30 @@
       "writtenOn": "2020-04-22T00:31:12Z",
       "side": 1,
       "message": "Only these last 3 lines look appropriate.\n\nPut the insert-into-history line dead last.",
+      "range": {
+        "startLine": 37,
+        "startChar": 1,
+        "endLine": 41,
+        "endChar": 135
+      },
+      "revId": "b4ea318f15e14e9e0f4a5b7a09b73e457deca934",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ebfc9bbd_85ae4b21",
+        "filename": "cmn-data-svc/cmn-data-svc-server/db-scripts/cmn-data-svc-upgrade-3.1-rev1-to-3.1-rev2.sql",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2020-04-29T18:01:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "02e848c6_230b0a14",
       "range": {
         "startLine": 37,
         "startChar": 1,
